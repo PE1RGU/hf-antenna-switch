@@ -1,0 +1,12 @@
+{
+  "board": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/test-pieces/rf-isolation/kicad/rf-iso-card/rf-iso-card.kicad_pcb",
+  "timestamp": "2026-09-26T22:35:45",
+  "total_violations": 0,
+  "violation_counts": {},
+  "severity_counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "violations": []
+}

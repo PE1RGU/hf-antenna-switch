@@ -1,0 +1,14 @@
+nets to route 156 connections 405 grid 1603 x 1593
+  return vias placed 0, beyond 0.0 mm or none: 0
+pass 1: failed 2 ['LATCHED', 'KILL_S'] | vias 414 | 161 s
+  return vias placed 0, beyond 0.0 mm or none: 0
+pass 2: failed 1 ['BAND_D'] | vias 424 | 310 s
+  return vias placed 0, beyond 0.0 mm or none: 0
+pass 3: failed 1 ['SW_STOP_N'] | vias 429 | 452 s
+  return vias placed 0, beyond 0.0 mm or none: 0
+pass 4: failed 0 [] | vias 428 | 584 s
+short segments merged: 4
+chamfered corners: 247 T-junction fillets: 15 (pieces that fail the clearance check are left out)
+narrowed: {'+3V3': [0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254]}
+connections without the minimum segment length (nets): ['+3V3', 'BAND_D', 'LATCHED', 'SW_STOP_N']
+nets 156 routed 156 failed 0 | F 3705 mm In2 2238 mm | vias 428 | 585 s

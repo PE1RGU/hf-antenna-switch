@@ -1,0 +1,728 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-25T11:20:24",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.5",
+    "schematic_parity": [],
+    "source": "rf-board.kicad_pcb",
+    "unconnected_items": [
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K307-Pad12)] of K307",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 181.795
+                    },
+                    "uuid": "02b611bb-7afb-4e52-8454-95e69358b903"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K307-Pad12)] of K307",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 189.295
+                    },
+                    "uuid": "1649421f-19ff-418f-994f-3ed799d0e1e6"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K211-Pad12)] of K211",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 133.794999
+                    },
+                    "uuid": "91bf9a4d-b764-4a14-aeba-9b1f1103cbf2"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K211-Pad12)] of K211",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 141.294999
+                    },
+                    "uuid": "dc05fd27-ddd6-49e3-b91f-338412272ae0"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K105-Pad12)] of K105",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 61.795
+                    },
+                    "uuid": "4dedcf41-61f1-4b33-92dd-b99b67da20fe"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K105-Pad12)] of K105",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 69.295
+                    },
+                    "uuid": "401df13c-51fd-4bbc-95d2-80bf92c809a8"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K109-Pad12)] of K109",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 85.795
+                    },
+                    "uuid": "08430d97-43c5-4527-af0f-6b6eb33f87ea"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K109-Pad12)] of K109",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 93.295
+                    },
+                    "uuid": "40907437-a56c-418a-8522-678095ac5a93"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K106-Pad12)] of K106",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 61.795
+                    },
+                    "uuid": "9bbfd402-8c4d-4e7a-8b21-e5cedabf45ef"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K106-Pad12)] of K106",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 69.295
+                    },
+                    "uuid": "ad27fe74-1022-424b-ba02-1a6b689f017e"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K103-Pad12)] of K103",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 61.795
+                    },
+                    "uuid": "e0f51808-91f4-49bf-9525-b20b849403ae"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K103-Pad12)] of K103",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 69.295
+                    },
+                    "uuid": "e3871acb-9b86-422b-9596-1d3818693e36"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K108-Pad12)] of K108",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 85.795
+                    },
+                    "uuid": "a19f5122-f5a2-4441-a691-f15dd1d9d132"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K108-Pad12)] of K108",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 93.295
+                    },
+                    "uuid": "97a283e2-41e6-4a25-aeeb-e6cff8624dcc"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K202-Pad12)] of K202",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 109.795
+                    },
+                    "uuid": "e3c004df-dd79-40f8-91ca-e51d035aeeaa"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K202-Pad12)] of K202",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 117.295
+                    },
+                    "uuid": "47b96a77-2fd6-4433-854c-4a80d5ea8012"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K210-Pad12)] of K210",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 133.794999
+                    },
+                    "uuid": "62d62420-dd80-41d3-8bcb-78b23429ff21"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K210-Pad12)] of K210",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 141.294999
+                    },
+                    "uuid": "e13c5c4f-3ea7-47ae-8ae9-7e2ac13efafa"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K208-Pad12)] of K208",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 133.794999
+                    },
+                    "uuid": "be3fa661-ce2f-437d-a872-81888f012eb4"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K208-Pad12)] of K208",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 141.294999
+                    },
+                    "uuid": "74f122f0-9136-4969-9690-40c62ba7a031"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K303-Pad12)] of K303",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 157.795
+                    },
+                    "uuid": "9ab0d0e6-41a5-4a0a-bb20-c5ac20d84813"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K303-Pad12)] of K303",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 165.295
+                    },
+                    "uuid": "9a52d39f-986b-4538-b104-ef78e0c25dde"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K308-Pad12)] of K308",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 181.795
+                    },
+                    "uuid": "db835423-74b4-437a-9119-801bfaa89126"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K308-Pad12)] of K308",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 189.295
+                    },
+                    "uuid": "cc617e2b-2c83-4728-b15f-da24c3439a44"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K107-Pad12)] of K107",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 85.795
+                    },
+                    "uuid": "50ca057c-9835-46a6-b4f7-9564038bc580"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K107-Pad12)] of K107",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 93.295
+                    },
+                    "uuid": "78411fa4-945a-4203-82f5-7836abfb3f9b"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K302-Pad12)] of K302",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 157.795
+                    },
+                    "uuid": "2cfa4467-7d21-40c0-817a-48e2f0f29e36"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K302-Pad12)] of K302",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 165.295
+                    },
+                    "uuid": "a6c6f478-95d7-4aa1-ac9d-f2de7f9ac316"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K304-Pad12)] of K304",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 157.795
+                    },
+                    "uuid": "00b6ec80-d4df-4351-b142-bc7ef0f54f1d"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K304-Pad12)] of K304",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 165.295
+                    },
+                    "uuid": "eec1f1b9-c691-44b2-a5fd-9e467dca8137"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K104-Pad12)] of K104",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 61.795
+                    },
+                    "uuid": "c20b9432-44bf-4ecf-9c6a-88f8b0459471"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K104-Pad12)] of K104",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 69.295
+                    },
+                    "uuid": "203516d5-ebb3-4b18-b879-e855d8565c74"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K311-Pad12)] of K311",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 181.795
+                    },
+                    "uuid": "58c2965d-ed4d-4944-8636-1fb602fb66bc"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K311-Pad12)] of K311",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 189.295
+                    },
+                    "uuid": "f1f3e45b-33d8-40b1-ba6c-df3b3b0dca43"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K206-Pad12)] of K206",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 109.795
+                    },
+                    "uuid": "99f33360-a76c-464a-b37a-631f33f43542"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K206-Pad12)] of K206",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 117.295
+                    },
+                    "uuid": "fbab97d7-7c08-4157-8842-40fdd623c5ff"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K111-Pad12)] of K111",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 85.795
+                    },
+                    "uuid": "2ffdc043-d4d9-4016-802f-c34d6d1f6fdb"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K111-Pad12)] of K111",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 93.295
+                    },
+                    "uuid": "e42f4078-4cab-4b2a-9d0a-0e2f667d8758"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K110-Pad12)] of K110",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 85.795
+                    },
+                    "uuid": "c19f1d73-8526-4c30-a3a8-6248587cb36e"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K110-Pad12)] of K110",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 93.295
+                    },
+                    "uuid": "527eedd8-da65-4230-a109-0d924c0030f5"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K306-Pad12)] of K306",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 157.795
+                    },
+                    "uuid": "8bc643d2-2ef2-48f9-9a5e-04f20ffd44e0"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K306-Pad12)] of K306",
+                    "pos": {
+                        "x": 45.805,
+                        "y": 165.295
+                    },
+                    "uuid": "c7fcb777-53e3-40d4-95c9-6805a10bf2a6"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K309-Pad12)] of K309",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 181.795
+                    },
+                    "uuid": "d0b871db-9abd-4085-9bee-8091b4608a32"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K309-Pad12)] of K309",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 189.295
+                    },
+                    "uuid": "a073f9ef-a665-4cba-9e1b-3ee9084347c6"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K310-Pad12)] of K310",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 181.795
+                    },
+                    "uuid": "4c740668-0ab7-4791-9f54-b7d87695bac4"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K310-Pad12)] of K310",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 189.295
+                    },
+                    "uuid": "30f34a8d-003a-4221-bfa3-35f8e6ba3545"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K205-Pad12)] of K205",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 109.795
+                    },
+                    "uuid": "d984d8bb-ed36-4d03-8b62-5bebcc4ab542"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K205-Pad12)] of K205",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 117.295
+                    },
+                    "uuid": "0b957ed3-0881-4fe0-8b64-453700ba3332"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K209-Pad12)] of K209",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 133.794999
+                    },
+                    "uuid": "16e29aca-55fb-4f9f-bb5d-d3238104369a"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K209-Pad12)] of K209",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 141.294999
+                    },
+                    "uuid": "73488df8-c575-45f5-85c1-a27488c66c9a"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K102-Pad12)] of K102",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 61.795
+                    },
+                    "uuid": "e860f9dd-1cd1-4b2e-88f6-b8808b6026fa"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K102-Pad12)] of K102",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 69.295
+                    },
+                    "uuid": "e22addfa-956c-48f1-b2d5-18ecfb382a25"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K207-Pad12)] of K207",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 133.794999
+                    },
+                    "uuid": "25b02395-b0b3-428a-884b-93d2b7d43478"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K207-Pad12)] of K207",
+                    "pos": {
+                        "x": 141.805,
+                        "y": 141.294999
+                    },
+                    "uuid": "d28571ef-57fe-4055-8d34-c4babf0ca376"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K203-Pad12)] of K203",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 109.795
+                    },
+                    "uuid": "021bfb28-7da8-456a-855f-dac0bbb68177"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K203-Pad12)] of K203",
+                    "pos": {
+                        "x": 179.805,
+                        "y": 117.295
+                    },
+                    "uuid": "28547df1-c802-4734-9109-5b0e11074dfc"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K305-Pad12)] of K305",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 157.795
+                    },
+                    "uuid": "fbf1be7a-9c16-45de-ba77-e8f30f745f63"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K305-Pad12)] of K305",
+                    "pos": {
+                        "x": 255.805,
+                        "y": 165.295
+                    },
+                    "uuid": "8152f22e-d701-4626-9fc4-b675c71dcdf6"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        },
+        {
+            "description": "Missing connection between items",
+            "items": [
+                {
+                    "description": "PTH pad 12 [unconnected-(K204-Pad12)] of K204",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 109.795
+                    },
+                    "uuid": "12ca84f9-71a3-4c0a-b655-7845e20b117f"
+                },
+                {
+                    "description": "PTH pad 12 [unconnected-(K204-Pad12)] of K204",
+                    "pos": {
+                        "x": 217.805,
+                        "y": 117.295
+                    },
+                    "uuid": "ff592d07-6d6b-4743-bf7b-412c8dc4c0b5"
+                }
+            ],
+            "severity": "error",
+            "type": "unconnected_items"
+        }
+    ],
+    "violations": []
+}

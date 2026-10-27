@@ -1,0 +1,16 @@
+./src/common/stdpbase.cpp(59): assert ""traits"" failed in Get(): create wxApp before calling this
+stage-a.ses exit 0 time 275 s | 0' was completed in 0.23 seconds with the score of 974.68 (6 unrouted), using 35765.74 CPU seconds and 226837 MB memory.
+Traceback (most recent call last):
+  File "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/unit/controller-board/routing/route.py", line 24, in <module>
+    run(DSN + "+" + SES_A, SES, ["--router.layers.routable=true,true", "--router.via_costs=200"])
+  File "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/unit/controller-board/routing/route.py", line 18, in run
+    r = subprocess.run(["java", "-jar", JAR, "-de", inp, "-do", out, "-mp", PASSES, "-inc", "GND", "-da",
+  File "/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/3.9/lib/python3.9/subprocess.py", line 507, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1134, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1980, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1178, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['java', '-jar', '/Users/pdoornek/.kicad-mcp/freerouting.jar', '-de', 'controller-board.dsn+stage-a.ses', '-do', 'controller-board.ses', '-mp', '30', '-inc', 'GND', '-da', '--gui.enabled=false', '--router.layers.routable=true,true', '--router.via_costs=200']' timed out after 1700 seconds

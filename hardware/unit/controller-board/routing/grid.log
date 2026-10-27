@@ -1,0 +1,3 @@
+pass 1: failed 0 [] | vias 104 | 25 s
+narrowed: {'+3V3': [0.254]}
+nets 59 routed 59 failed 0 | L1 1149 mm L3 1201 mm vias 104 | 25 s

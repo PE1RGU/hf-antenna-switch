@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="785.19685pt" height="333.070866pt" viewBox="0 0 785.19685 333.070866" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-07T09:41:39.831186</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 333.070866 
+L 785.19685 333.070866 
+L 785.19685 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="line2d_1">
+    <path d="M 175.748031 96.944882 
+L 756.850394 96.944882 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #e2e2e2; stroke-width: 0.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 175.748031 93.543307 
+L 204.80315 93.543307 
+L 204.80315 77.725984 
+L 756.850394 77.725984 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 175.748031 122.456693 
+L 756.850394 122.456693 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #e2e2e2; stroke-width: 0.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 175.748031 119.055118 
+L 205.529528 119.055118 
+L 205.529528 103.237795 
+L 756.850394 103.237795 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #0b6b2e; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_5">
+    <path d="M 175.748031 147.968504 
+L 756.850394 147.968504 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #e2e2e2; stroke-width: 0.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 175.748031 128.749606 
+L 205.529528 128.749606 
+L 205.529528 144.566929 
+L 756.850394 144.566929 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 175.748031 173.480315 
+L 756.850394 173.480315 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #e2e2e2; stroke-width: 0.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 175.748031 170.07874 
+L 205.674803 170.07874 
+L 205.674803 154.261417 
+L 756.850394 154.261417 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_9">
+    <path d="M 175.748031 198.992126 
+L 756.850394 198.992126 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #e2e2e2; stroke-width: 0.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_10">
+    <path d="M 175.748031 195.590551 
+L 379.133858 195.590551 
+L 379.133858 179.773228 
+L 756.850394 179.773228 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #0b6b2e; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_11">
+    <path d="M 175.748031 224.503937 
+L 756.850394 224.503937 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #e2e2e2; stroke-width: 0.4; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_12">
+    <path d="M 175.748031 221.102362 
+L 422.716535 221.102362 
+L 422.716535 205.285039 
+L 756.850394 205.285039 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #b3261e; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_13">
+    <path d="M 204.80315 73.700787 
+L 204.80315 226.771654 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke-dasharray: 1,1; stroke-dashoffset: 0; stroke: #6b6b6b; stroke-width: 0.5"/>
+   </g>
+   <g id="line2d_14">
+    <path d="M 379.133858 62.362205 
+L 379.133858 226.771654 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke-dasharray: 1,1; stroke-dashoffset: 0; stroke: #6b6b6b; stroke-width: 0.5"/>
+   </g>
+   <g id="line2d_15">
+    <path d="M 422.716535 73.700787 
+L 422.716535 226.771654 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke-dasharray: 1,1; stroke-dashoffset: 0; stroke: #6b6b6b; stroke-width: 0.5"/>
+   </g>
+   <g id="line2d_16">
+    <path d="M 175.748031 238.110236 
+L 756.850394 238.110236 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_17">
+    <path d="M 175.748031 238.110236 
+L 175.748031 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_18">
+    <path d="M 233.858268 238.110236 
+L 233.858268 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_19">
+    <path d="M 291.968504 238.110236 
+L 291.968504 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_20">
+    <path d="M 350.07874 238.110236 
+L 350.07874 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_21">
+    <path d="M 408.188976 238.110236 
+L 408.188976 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_22">
+    <path d="M 466.299213 238.110236 
+L 466.299213 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_23">
+    <path d="M 524.409449 238.110236 
+L 524.409449 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_24">
+    <path d="M 582.519685 238.110236 
+L 582.519685 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_25">
+    <path d="M 640.629921 238.110236 
+L 640.629921 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_26">
+    <path d="M 698.740157 238.110236 
+L 698.740157 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_27">
+    <path d="M 756.850394 238.110236 
+L 756.850394 241.511811 
+" clip-path="url(#p10e346f771)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.6; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="28.504155" transform="rotate(-0 22.677165 28.504155)">T4  R1 (FT-710) PTT path in hardware: TX GND to K0, against the QSK delay (D-63, C-20, F7)</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 6.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #6b6b6b" x="22.677165" y="320.61506" transform="rotate(-0 22.677165 320.61506)">PE1RGU Shack Relay Matrix rev C  |  T4_ptt_r1  |  2026-10-06</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: end" x="167.244094" y="87.766139" transform="rotate(-0 167.244094 87.766139)">FT-710 TX GND</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: end" x="167.244094" y="113.27795" transform="rotate(-0 167.244094 113.27795)">Loop 2 current</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: end" x="167.244094" y="138.69148" transform="rotate(-0 167.244094 138.69148)">PTT_N (U2)</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: end" x="167.244094" y="164.146978" transform="rotate(-0 167.244094 164.146978)">TX_ANY, R1_K0_DRV</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: end" x="167.244094" y="189.813383" transform="rotate(-0 167.244094 189.813383)">K0 contact (R1)</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: end" x="167.244094" y="215.325194" transform="rotate(-0 167.244094 215.325194)">FT-710 RF (QSK 15 ms)</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #6b6b6b" x="204.80315" y="70.866142" transform="rotate(-0 204.80315 70.866142)">TX GND closes</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #6b6b6b" x="379.133858" y="59.527559" transform="rotate(-0 379.133858 59.527559)">K0 settled (8 + 4 ms)</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #6b6b6b" x="422.716535" y="70.866142" transform="rotate(-0 422.716535 70.866142)">RF after 15 ms</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="175.748031" y="248.031496" transform="rotate(-0 175.748031 248.031496)">0</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="233.858268" y="248.031496" transform="rotate(-0 233.858268 248.031496)">4</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="291.968504" y="248.031496" transform="rotate(-0 291.968504 248.031496)">8</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="350.07874" y="248.031496" transform="rotate(-0 350.07874 248.031496)">12</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="408.188976" y="248.031496" transform="rotate(-0 408.188976 248.031496)">16</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="466.299213" y="248.031496" transform="rotate(-0 466.299213 248.031496)">20</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="524.409449" y="248.031496" transform="rotate(-0 524.409449 248.031496)">24</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="582.519685" y="248.031496" transform="rotate(-0 582.519685 248.031496)">28</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="640.629921" y="248.031496" transform="rotate(-0 640.629921 248.031496)">32</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="698.740157" y="248.031496" transform="rotate(-0 698.740157 248.031496)">36</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: middle" x="756.850394" y="248.031496" transform="rotate(-0 756.850394 248.031496)">40</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 6px; font-family: 'DejaVu Sans'; text-anchor: end" x="756.850394" y="257.952756" transform="rotate(-0 756.850394 257.952756)">ms</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="274.154339" transform="rotate(-0 22.677165 274.154339)">R1 does not use the handshake: its K0 follows the FT-710 TX GND through loop 2 and the U5 inverter, with no MCU in the path (R51 fitted).</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="285.492921" transform="rotate(-0 22.677165 285.492921)">Margin: K0 settled 12 ms after TX GND; the FT-710 QSK DELAY TIME is 15 ms minimum (C-20): about 3 ms. Opto and gate delays are below 0.1 ms (M-10).</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="296.831504" transform="rotate(-0 22.677165 296.831504)">TX INH of R1 still needs PERMIT_R1 and TX_EN at the shack (L3).</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p10e346f771">
+   <rect x="0" y="0" width="785.19685" height="333.070866"/>
+  </clipPath>
+ </defs>
+</svg>

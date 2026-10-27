@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "rf-board")(type "KiCad")(uri "${KIPRJMOD}/rf-board.pretty")(options "")(descr "Shack Relay Matrix rev C"))
+)

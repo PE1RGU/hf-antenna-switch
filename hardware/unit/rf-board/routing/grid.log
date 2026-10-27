@@ -1,0 +1,18 @@
+nets to route 168 connections 483 grid 2683 x 2303
+  return vias placed 310, beyond 1.5 mm or none: 5
+pass 1: failed 6 ['A4_K1_DRV', 'Net-(D301-A)', 'TX_ANY', 'CLAMP_RLY', 'Net-(D201-A)', 'R2_K0_DRV'] | vias 1098 | 754 s
+  return vias placed 279, beyond 1.5 mm or none: 7
+pass 2: failed 5 ['R2_TX4_DRV', 'R1_TX4_DRV', 'R1_RX4_DRV', 'Net-(D311-A)', 'R2_RX4_DRV'] | vias 1017 | 1464 s
+  return vias placed 290, beyond 1.5 mm or none: 7
+pass 3: failed 6 ['Net-(D202-A)', '+5V', 'Net-(D101-A)', 'R3_TX4_DRV', 'R3_RX4_DRV', 'TX_ANY_J'] | vias 1064 | 2241 s
+  return vias placed 295, beyond 1.5 mm or none: 8
+pass 4: failed 2 ['RLY_EN', 'R2_RX2_DRV'] | vias 1051 | 2962 s
+  return vias placed 288, beyond 1.5 mm or none: 9
+pass 5: failed 3 ['EXP_INT', 'R1_K0_DRV', 'SDA_J'] | vias 1061 | 3600 s
+  return vias placed 302, beyond 1.5 mm or none: 4
+pass 6: failed 0 [] | vias 1074 | 4229 s
+short segments merged: 18
+chamfered corners: 631 T-junction fillets: 26 (pieces that fail the clearance check are left out)
+narrowed: {'CLAMP_SW': [0.254, 0.254, 0.254, 0.254, 0.254, 0.254], 'CLAMP_RLY': [0.254, 0.254], '+5V': [0.254, 0.254, 0.254, 0.254], '+3V3': [0.254]}
+connections without the minimum segment length (nets): ['+12V_RLY', '+3V3', '+5V', 'CLAMP_SW', 'EXP_INT', 'Net-(D101-A)', 'Net-(D107-A)', 'Net-(D201-A)', 'Net-(D202-A)', 'Net-(D207-A)', 'Net-(D301-A)', 'Net-(D302-A)', 'Net-(D306-A)', 'R1_K0_DRV', 'R1_RX2_DRV', 'R2_K0_DRV', 'R2_RX2_DRV', 'R3_K0_DRV', 'RLY_EN', 'RLY_EN_J', 'SDA_J', 'TX_ANY', 'TX_ANY_J']
+nets 168 routed 168 failed 0 | F 1972 mm In2 8601 mm In3 7170 mm | vias 1074 | 4232 s

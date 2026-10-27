@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -30 620 730" width="620" height="730" font-family="Helvetica, Arial, sans-serif" font-size="11">
+  <rect x="-40" y="-30" width="620" height="730" fill="#ffffff"/>
+  <!-- scale: 1 px = 1 mm, y down; inner box about 460 x 560 -->
+  <text x="0" y="-12" font-size="13" font-weight="bold">RVS box, front view (door open). Concept, inner size about 460 x 560 mm (to confirm)</text>
+  <rect x="0" y="0" width="460" height="560" fill="none" stroke="#333" stroke-width="2"/>
+
+  <!-- upper zone -->
+  <rect x="15" y="15" width="415" height="210" fill="#f2f2f2" stroke="#999"/>
+  <text x="25" y="35" font-weight="bold">Upper zone: PSU and mains</text>
+  <text x="25" y="52">Linear PSU: toroid, bridge, regulators +12V_RLY, +12V_AUX, +5V</text>
+  <text x="25" y="67">Mains terminal and fuse. PSU heat rises away from the cards</text>
+  <text x="25" y="82">To the backplane: 2 x XT60 (12 V rails), 1 x XT30 (+5V)</text>
+  <text x="25" y="97">Free space for later parts</text>
+
+  <!-- card cage -->
+  <text x="62" y="243" font-weight="bold">Card cage: 11 slots x 6 HP = 335 mm, cards 100 x 100 mm</text>
+  <text x="62" y="258" font-size="9">Backplane on the back wall, about 345 x 115 mm. Antenna cards: 90 V GDT (2nd stage)</text>
+  <rect x="62" y="265" width="336" height="100" fill="#e6eef8" stroke="#3a6ea5" stroke-width="1.5"/>
+  <g stroke="#3a6ea5" stroke-width="0.8">
+    <line x1="92.5" y1="265" x2="92.5" y2="365"/><line x1="123" y1="265" x2="123" y2="365"/><line x1="153.4" y1="265" x2="153.4" y2="365"/>
+    <line x1="183.9" y1="265" x2="183.9" y2="365"/><line x1="214.4" y1="265" x2="214.4" y2="365"/><line x1="244.9" y1="265" x2="244.9" y2="365"/>
+    <line x1="275.4" y1="265" x2="275.4" y2="365"/><line x1="305.8" y1="265" x2="305.8" y2="365"/><line x1="336.3" y1="265" x2="336.3" y2="365"/>
+    <line x1="366.8" y1="265" x2="366.8" y2="365"/>
+  </g>
+  <g font-size="9" text-anchor="middle">
+    <text x="77" y="312">Link</text><text x="108" y="312">R1</text><text x="138" y="312">R2</text><text x="168" y="312">R3</text><text x="199" y="312">R4</text>
+    <text x="230" y="312">A1</text><text x="260" y="312">A2</text><text x="290" y="312">A3</text><text x="321" y="312">A4</text><text x="352" y="312">A5</text><text x="382" y="312">A6</text>
+    <text x="108" y="324" fill="#555">FT-710</text><text x="138" y="324" fill="#555">Airspy</text>
+    <text x="230" y="324" fill="#555">G5RV</text><text x="260" y="324" fill="#555">vert.</text><text x="382" y="324" fill="#555">LoG</text>
+  </g>
+
+  <!-- SO-239 on card bottom edges -->
+  <g fill="#555">
+    <rect x="102" y="365" width="12" height="7"/><rect x="132" y="365" width="12" height="7"/>
+    <rect x="224" y="365" width="12" height="7"/><rect x="254" y="365" width="12" height="7"/><rect x="376" y="365" width="12" height="7"/>
+  </g>
+  <!-- coax jumpers down to the arrestors -->
+  <g stroke="#555" stroke-width="3" fill="none">
+    <path d="M108 372 V486"/><path d="M138 372 V486"/><path d="M230 372 V486"/><path d="M260 372 V486"/><path d="M382 372 V486"/>
+  </g>
+  <!-- ferrite chokes (FT240-31) on each coax -->
+  <g fill="none" stroke="#7a4a1a" stroke-width="2.5">
+    <ellipse cx="108" cy="440" rx="9" ry="4"/><ellipse cx="138" cy="440" rx="9" ry="4"/><ellipse cx="230" cy="440" rx="9" ry="4"/>
+    <ellipse cx="260" cy="440" rx="9" ry="4"/><ellipse cx="382" cy="440" rx="9" ry="4"/>
+  </g>
+  <text x="282" y="444" font-size="9" fill="#7a4a1a">chokes FT240-31</text>
+
+  <!-- Cat6 link, up to the link card -->
+  <g stroke="#2e7d32" stroke-width="2" fill="none"><path d="M40 486 V400 H77 V365"/><path d="M52 486 V410"/></g>
+  <ellipse cx="46" cy="455" rx="12" ry="4" fill="none" stroke="#7a4a1a" stroke-width="2.5"/>
+  <text x="58" y="472" font-size="8" fill="#2e7d32">Cat6</text>
+
+  <!-- VHF straight through -->
+  <g stroke="#555" stroke-width="3" fill="none"><path d="M412 486 V455 H432 V486"/></g>
+  <ellipse cx="422" cy="455" rx="9" ry="4" fill="none" stroke="#7a4a1a" stroke-width="2.5"/>
+  <text x="384" y="480" font-size="8">VHF</text>
+
+  <!-- mains -->
+  <g stroke="#b71c1c" stroke-width="2" fill="none"><path d="M448 530 V60 H440"/></g>
+  <text x="442" y="150" font-size="9" fill="#b71c1c" text-anchor="middle" transform="rotate(-90 442 150)">230 V (RCD circuit) to the PSU</text>
+
+  <!-- entry zone -->
+  <rect x="10" y="484" width="432" height="62" fill="#fbeee6" stroke="#c0703a"/>
+  <!-- spark arrestors (bulkhead GDT type) on the bottom wall -->
+  <g fill="#ffffff" stroke="#c0703a" stroke-width="1.5">
+    <rect x="98" y="488" width="20" height="24"/><rect x="128" y="488" width="20" height="24"/>
+    <rect x="220" y="488" width="20" height="24"/><rect x="250" y="488" width="20" height="24"/><rect x="372" y="488" width="20" height="24"/>
+    <rect x="30" y="488" width="32" height="24"/>
+  </g>
+  <g font-size="8" text-anchor="middle" fill="#c0703a">
+    <text x="108" y="503">SA</text><text x="138" y="503">SA</text><text x="230" y="503">SA</text><text x="260" y="503">SA</text><text x="382" y="503">SA</text>
+    <text x="46" y="499">GDT</text><text x="46" y="508">per pair</text>
+  </g>
+  <!-- VHF bulkheads -->
+  <g fill="#ffffff" stroke="#555" stroke-width="1.5"><rect x="405" y="488" width="14" height="14"/><rect x="425" y="488" width="14" height="14"/></g>
+  <!-- earth bar and straps -->
+  <rect x="20" y="528" width="415" height="6" fill="#b87333"/>
+  <g stroke="#b87333" stroke-width="2">
+    <line x1="108" y1="512" x2="108" y2="528"/><line x1="138" y1="512" x2="138" y2="528"/><line x1="230" y1="512" x2="230" y2="528"/>
+    <line x1="260" y1="512" x2="260" y2="528"/><line x1="382" y1="512" x2="382" y2="528"/><line x1="46" y1="512" x2="46" y2="528"/>
+    <line x1="412" y1="502" x2="412" y2="528"/><line x1="432" y1="502" x2="432" y2="528"/>
+  </g>
+  <!-- cables leaving the bottom -->
+  <g stroke="#555" stroke-width="3"><line x1="108" y1="546" x2="108" y2="575"/><line x1="138" y1="546" x2="138" y2="575"/><line x1="230" y1="546" x2="230" y2="575"/><line x1="260" y1="546" x2="260" y2="575"/><line x1="382" y1="546" x2="382" y2="575"/><line x1="412" y1="546" x2="412" y2="575"/><line x1="432" y1="546" x2="432" y2="575"/></g>
+  <g stroke="#2e7d32" stroke-width="2"><line x1="40" y1="546" x2="40" y2="575"/><line x1="52" y1="546" x2="52" y2="575"/></g>
+  <line x1="448" y1="546" x2="448" y2="575" stroke="#b71c1c" stroke-width="2"/>
+  <line x1="20" y1="534" x2="20" y2="575" stroke="#b87333" stroke-width="3"/>
+  <g font-size="8" text-anchor="middle">
+    <text x="108" y="586">coax 1</text><text x="138" y="586">coax 2</text><text x="230" y="586">G5RV</text><text x="260" y="586">vertical</text><text x="382" y="586">LoG</text>
+    <text x="422" y="586">coax 3 / GP-6N</text><text x="46" y="586">2 x Cat6</text><text x="20" y="598">mast earth</text><text x="452" y="598">230 V</text>
+  </g>
+
+  <!-- dims -->
+  <g stroke="#999" stroke-width="0.8"><line x1="0" y1="615" x2="460" y2="615"/><line x1="0" y1="610" x2="0" y2="620"/><line x1="460" y1="610" x2="460" y2="620"/>
+  <line x1="-20" y1="0" x2="-20" y2="560"/><line x1="-25" y1="0" x2="-15" y2="0"/><line x1="-25" y1="560" x2="-15" y2="560"/></g>
+  <text x="230" y="630" text-anchor="middle">about 460 mm inner (500 mm outer)</text>
+  <text x="-26" y="280" text-anchor="middle" transform="rotate(-90 -26 280)">about 560 mm inner (600 mm outer)</text>
+  <text x="0" y="655" font-size="10">PE1RGU - Shack Relay Matrix. Concept 2026-09-26, rev 2 (spark arrestors, chokes, earth bar). Dimensions are estimates.</text>
+  <text x="0" y="683" font-size="10">SA = coax spark arrestor (bulkhead, GDT type), strapped to the earth bar. Earth bar bonded to the mast earth.</text>
+  <text x="0" y="669" font-size="10">Lightning protection stays at the mast base and the shed entry; the arrestors here protect the matrix.</text>
+</svg>

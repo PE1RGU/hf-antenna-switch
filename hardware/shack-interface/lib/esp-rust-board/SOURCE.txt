@@ -1,0 +1,1 @@
+Source: github.com/esp-rs/esp-rust-board commit efe1e8ad5c (2025-05-20). Files unchanged. Licence CERN-OHL (LICENSE-CERN-OHL).

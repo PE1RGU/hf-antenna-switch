@@ -1,0 +1,302 @@
+<title>Shack Relay Matrix</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#f2f3ef; --panel:#fbfbf8; --ink:#1c232b; --ink2:#5b6570; --line:#8e979f; --grid:#d8dbd4;
+  --ctl:#2b7a78; --ctl-soft:#2b7a7833; --rf:#1c232b; --on:#d9642a; --spare:#a9b0b6;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --ctl-soft:#4fb3ad33; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+} }
+:root[data-theme="dark"] {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --ctl-soft:#4fb3ad33; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+}
+body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.5; }
+main { max-width:1120px; margin:0 auto; padding:32px 24px 64px; }
+header { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 24px; margin-bottom:20px; }
+h1 { font-size:26px; font-weight:600; margin:0; letter-spacing:-0.01em; text-wrap:balance; }
+h2 { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink2); margin:36px 0 10px; }
+.eyebrow { font-family:var(--mono); font-size:12px; color:var(--ctl); letter-spacing:0.04em; }
+.lede { color:var(--ink2); max-width:70ch; margin:0 0 20px; }
+figure { margin:0; background:var(--panel); border:1px solid var(--grid); border-radius:4px; padding:16px; overflow-x:auto; }
+figure svg { display:block; min-width:900px; width:100%; height:auto; color:var(--ink); }
+figcaption { font-size:13px; color:var(--ink2); margin-top:12px; display:flex; flex-wrap:wrap; gap:6px 22px; }
+.key { display:inline-flex; align-items:center; gap:6px; }
+.key i { display:inline-block; width:14px; height:3px; background:var(--rf); }
+.key i.ctl { background:var(--ctl); height:8px; opacity:.55; }
+.key i.ptt { background:repeating-linear-gradient(90deg,var(--rf) 0 3px,transparent 3px 6px); }
+.key b { display:inline-block; width:12px; height:12px; border-radius:50%; border:2px solid var(--ink); box-sizing:border-box; }
+.key b.on { background:var(--on); border-color:var(--on); }
+.key b.sp { border-color:var(--spare); border-style:dashed; }
+/* svg classes */
+.mod { fill:var(--panel); stroke:var(--ink); stroke-width:1.4; }
+.ext { fill:none; stroke:var(--line); stroke-width:1.2; stroke-dasharray:none; }
+.mod.spare, .ext.spare { stroke:var(--spare); stroke-dasharray:5 4; }
+.bus { fill:var(--ctl-soft); stroke:var(--ctl); stroke-width:1; }
+.buslbl { font-family:var(--mono); font-size:10px; fill:var(--ctl); }
+.stub { stroke:var(--ctl); stroke-width:2; }
+.stub.spare { stroke:var(--spare); }
+.rf { stroke:var(--rf); stroke-width:2; fill:none; }
+.rf.spare { stroke:var(--spare); stroke-dasharray:6 5; }
+.wire { stroke:var(--rf); stroke-width:1.4; fill:none; }
+.ant.spare .wire, .wire.spare { stroke:var(--spare); stroke-dasharray:6 5; }
+.ptt { stroke:var(--rf); stroke-width:1.4; stroke-dasharray:3 3; }
+.hop { fill:var(--panel); }
+.relay { fill:var(--panel); stroke:var(--ink); stroke-width:1.6; }
+.relay.spare { stroke:var(--spare); stroke-dasharray:2 2; }
+.relay.on { fill:var(--on); stroke:var(--on); }
+.t { font-family:var(--sans); font-size:12px; font-weight:600; fill:var(--ink); }
+.d { font-family:var(--mono); font-size:10px; fill:var(--ink2); }
+.t.spare, .d.spare { fill:var(--spare); }
+/* tables */
+.grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:24px 40px; }
+table { border-collapse:collapse; width:100%; font-size:14px; }
+th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink2); font-weight:600; padding:6px 10px 6px 0; border-bottom:1px solid var(--line); }
+td { padding:8px 10px 8px 0; border-bottom:1px solid var(--grid); vertical-align:top; }
+td:first-child { font-weight:600; white-space:nowrap; }
+code { font-family:var(--mono); font-size:12.5px; color:var(--ctl); }
+p { max-width:70ch; }
+ol { max-width:70ch; padding-left:20px; }
+ol li { margin-bottom:6px; }
+</style>
+<main>
+<header>
+  <span class="eyebrow">NOWOS shack · HF antenna switch · rev A block diagram</span>
+  <h1>Shack Relay Matrix</h1>
+</header>
+<p class="lede">A 4-slot × 6-line radio-by-antenna crossbar. Every card plugs into one I2C control backplane; RF stays on a separate matrix. Adding a radio or an antenna is one more card, no controller change. The picture shows today's example state: FT-710 transmitting on the doublet and receiving on the vertical, Airspy listening on the Loop-on-Ground.</p>
+
+<figure>
+<svg viewBox="0 0 1160 880" role="img" aria-label="Radio-by-antenna relay matrix: radio port modules in rows, antenna bus lines in columns, one relay at every crossing, all modules on a shared I2C control backplane">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<rect class="bus" x="176" y="128" width="14" height="684"/>
+<rect class="bus" x="176" y="128" width="956" height="14"/>
+<text class="buslbl" x="198" y="123">control backplane (I2C + PTT bus + power)</text>
+<text class="buslbl" x="196" y="806">+12V RLY · +5V · SDA/SCL · /INT · PTT[1..4] · /RLY_EN · SLOT_ID</text>
+<rect class="ext" x="18" y="34" width="138" height="56" rx="3"/>
+<text class="t" x="87.0" y="56" text-anchor="middle">Host PC</text>
+<text class="d" x="87.0" y="72" text-anchor="middle">log · CAT band data</text>
+<line class="wire" x1="87.0" y1="90" x2="87.0" y2="156" marker-end="url(#arr)" marker-start="url(#arr)"/>
+<text class="d" x="93.0" y="126">USB-C</text>
+<rect class="mod" x="18" y="158" width="138" height="98" rx="3"/>
+<text class="t" x="26" y="176">Controller Module</text>
+<text class="d" x="26" y="193">MCU · I2C master</text>
+<text class="d" x="26" y="210">USB-UART / CDC</text>
+<text class="d" x="26" y="227">watchdog → /RLY_EN</text>
+<text class="d" x="26" y="244">OLED+encoder (opt)</text>
+<line class="stub" x1="156" y1="200" x2="176" y2="200"/>
+<rect class="mod" x="18" y="268" width="138" height="60" rx="3"/>
+<text class="t" x="26" y="286">Power Module</text>
+<text class="d" x="26" y="303">13.8 V in · fuse</text>
+<text class="d" x="26" y="320">12 V relay · 5 V / 3V3</text>
+<line class="stub" x1="156" y1="298" x2="176" y2="298"/>
+<g class="ant"><line class="wire" x1="557.0" y1="60" x2="557.0" y2="158"/><line class="wire" x1="545.0" y1="44" x2="557.0" y2="60"/><line class="wire" x1="569.0" y1="44" x2="557.0" y2="60"/><line class="wire" x1="545.0" y1="44" x2="569.0" y2="44"/></g>
+<rect class="hop" x="553.0" y="127" width="8" height="16"/>
+<line class="wire" x1="557.0" y1="127" x2="557.0" y2="143"/>
+<text class="t" x="564.0" y="80">A1 · Doublet</text>
+<text class="d" x="564.0" y="96">TX/RX</text>
+<rect class="mod" x="512" y="158" width="90" height="90" rx="3"/>
+<text class="t" x="557.0" y="176" text-anchor="middle">Ant Port 1</text>
+<text class="d" x="557.0" y="194" text-anchor="middle">SO-239 + surge</text>
+<text class="d" x="557.0" y="210" text-anchor="middle">idle→GND relay</text>
+<text class="d" x="557.0" y="226" text-anchor="middle">I2C @ SLOT_ID</text>
+<line class="stub" x1="590" y1="142" x2="590" y2="158"/>
+<line class="rf" x1="557.0" y1="248" x2="557.0" y2="800"/>
+<g class="ant"><line class="wire" x1="657.0" y1="60" x2="657.0" y2="158"/><line class="wire" x1="645.0" y1="44" x2="657.0" y2="60"/><line class="wire" x1="669.0" y1="44" x2="657.0" y2="60"/><line class="wire" x1="645.0" y1="44" x2="669.0" y2="44"/></g>
+<rect class="hop" x="653.0" y="127" width="8" height="16"/>
+<line class="wire" x1="657.0" y1="127" x2="657.0" y2="143"/>
+<text class="t" x="664.0" y="80">A2 · LoG</text>
+<text class="d" x="664.0" y="96">RX only</text>
+<rect class="mod" x="612" y="158" width="90" height="90" rx="3"/>
+<text class="t" x="657.0" y="176" text-anchor="middle">Ant Port 2</text>
+<text class="d" x="657.0" y="194" text-anchor="middle">SO-239 + surge</text>
+<text class="d" x="657.0" y="210" text-anchor="middle">idle→GND relay</text>
+<text class="d" x="657.0" y="226" text-anchor="middle">RX-only lock</text>
+<line class="stub" x1="690" y1="142" x2="690" y2="158"/>
+<line class="rf" x1="657.0" y1="248" x2="657.0" y2="800"/>
+<g class="ant"><line class="wire" x1="757.0" y1="60" x2="757.0" y2="158"/><line class="wire" x1="745.0" y1="44" x2="757.0" y2="60"/><line class="wire" x1="769.0" y1="44" x2="757.0" y2="60"/><line class="wire" x1="745.0" y1="44" x2="769.0" y2="44"/></g>
+<rect class="hop" x="753.0" y="127" width="8" height="16"/>
+<line class="wire" x1="757.0" y1="127" x2="757.0" y2="143"/>
+<text class="t" x="764.0" y="80">A3 · Vertical</text>
+<text class="d" x="764.0" y="96">planned</text>
+<rect class="mod" x="712" y="158" width="90" height="90" rx="3"/>
+<text class="t" x="757.0" y="176" text-anchor="middle">Ant Port 3</text>
+<text class="d" x="757.0" y="194" text-anchor="middle">SO-239 + surge</text>
+<text class="d" x="757.0" y="210" text-anchor="middle">idle→GND relay</text>
+<text class="d" x="757.0" y="226" text-anchor="middle">I2C @ SLOT_ID</text>
+<line class="stub" x1="790" y1="142" x2="790" y2="158"/>
+<line class="rf" x1="757.0" y1="248" x2="757.0" y2="800"/>
+<g class="ant spare"><line class="wire" x1="857.0" y1="60" x2="857.0" y2="158"/><line class="wire" x1="845.0" y1="44" x2="857.0" y2="60"/><line class="wire" x1="869.0" y1="44" x2="857.0" y2="60"/><line class="wire" x1="845.0" y1="44" x2="869.0" y2="44"/></g>
+<rect class="hop" x="853.0" y="127" width="8" height="16"/>
+<line class="wire spare" x1="857.0" y1="127" x2="857.0" y2="143"/>
+<text class="t spare" x="864.0" y="80">A4 · spare</text>
+<rect class="mod spare" x="812" y="158" width="90" height="90" rx="3"/>
+<text class="t spare" x="857.0" y="176" text-anchor="middle">Ant Port 4</text>
+<text class="d spare" x="857.0" y="194" text-anchor="middle">SO-239 + surge</text>
+<text class="d spare" x="857.0" y="210" text-anchor="middle">idle→GND relay</text>
+<text class="d spare" x="857.0" y="226" text-anchor="middle">I2C @ SLOT_ID</text>
+<line class="stub spare" x1="890" y1="142" x2="890" y2="158"/>
+<line class="rf spare" x1="857.0" y1="248" x2="857.0" y2="800"/>
+<g class="ant spare"><line class="wire" x1="957.0" y1="60" x2="957.0" y2="158"/><line class="wire" x1="945.0" y1="44" x2="957.0" y2="60"/><line class="wire" x1="969.0" y1="44" x2="957.0" y2="60"/><line class="wire" x1="945.0" y1="44" x2="969.0" y2="44"/></g>
+<rect class="hop" x="953.0" y="127" width="8" height="16"/>
+<line class="wire spare" x1="957.0" y1="127" x2="957.0" y2="143"/>
+<text class="t spare" x="964.0" y="80">A5 · spare</text>
+<rect class="mod spare" x="912" y="158" width="90" height="90" rx="3"/>
+<text class="t spare" x="957.0" y="176" text-anchor="middle">Ant Port 5</text>
+<text class="d spare" x="957.0" y="194" text-anchor="middle">SO-239 + surge</text>
+<text class="d spare" x="957.0" y="210" text-anchor="middle">idle→GND relay</text>
+<text class="d spare" x="957.0" y="226" text-anchor="middle">I2C @ SLOT_ID</text>
+<line class="stub spare" x1="990" y1="142" x2="990" y2="158"/>
+<line class="rf spare" x1="957.0" y1="248" x2="957.0" y2="800"/>
+<g class="ant spare"><line class="wire" x1="1057.0" y1="60" x2="1057.0" y2="158"/><line class="wire" x1="1045.0" y1="44" x2="1057.0" y2="60"/><line class="wire" x1="1069.0" y1="44" x2="1057.0" y2="60"/><line class="wire" x1="1045.0" y1="44" x2="1069.0" y2="44"/></g>
+<rect class="hop" x="1053.0" y="127" width="8" height="16"/>
+<line class="wire spare" x1="1057.0" y1="127" x2="1057.0" y2="143"/>
+<text class="t spare" x="1064.0" y="80">A6 · spare</text>
+<rect class="mod spare" x="1012" y="158" width="90" height="90" rx="3"/>
+<text class="t spare" x="1057.0" y="176" text-anchor="middle">Ant Port 6</text>
+<text class="d spare" x="1057.0" y="194" text-anchor="middle">SO-239 + surge</text>
+<text class="d spare" x="1057.0" y="210" text-anchor="middle">idle→GND relay</text>
+<text class="d spare" x="1057.0" y="226" text-anchor="middle">I2C @ SLOT_ID</text>
+<line class="stub spare" x1="1090" y1="142" x2="1090" y2="158"/>
+<line class="rf spare" x1="1057.0" y1="248" x2="1057.0" y2="800"/>
+<rect class="ext" x="18" y="368" width="138" height="76" rx="3"/>
+<text class="t" x="26" y="388">R1 · Yaesu FT-710</text>
+<text class="d" x="26" y="405">100 W · PTT out (OC)</text>
+<rect class="hop" x="175" y="390.0" width="16" height="8"/>
+<line class="rf" x1="156" y1="394.0" x2="214" y2="394.0"/>
+<rect class="hop" x="175" y="416.0" width="16" height="8"/>
+<line class="ptt" x1="156" y1="420.0" x2="214" y2="420.0"/>
+<text class="d" x="159" y="390.0">coax</text>
+<text class="d" x="159" y="432.0">PTT</text>
+<rect class="mod" x="214" y="360" width="256" height="92" rx="3"/>
+<text class="t" x="222" y="378">Radio Port Module · slot 1</text>
+<text class="d" x="222" y="395">PTT changeover relay: TX path / RX path</text>
+<text class="d" x="222" y="411">2× 6 SPST relays, max 1 closed / path</text>
+<text class="d" x="222" y="427">PTT in (opto) → PTT bus · TX sense</text>
+<text class="d" x="222" y="443">I2C exp @ SLOT_ID · drv · /RLY_EN</text>
+<line class="stub" x1="190" y1="444" x2="214" y2="444"/>
+<line class="rf" x1="470" y1="390.0" x2="1100" y2="390.0"/>
+<text class="d" x="475" y="386.0">TX path</text>
+<circle class="relay on" cx="557.0" cy="390.0" r="7"/>
+<circle class="relay" cx="657.0" cy="390.0" r="5"/>
+<circle class="relay" cx="757.0" cy="390.0" r="5"/>
+<circle class="relay spare" cx="857.0" cy="390.0" r="5"/>
+<circle class="relay spare" cx="957.0" cy="390.0" r="5"/>
+<circle class="relay spare" cx="1057.0" cy="390.0" r="5"/>
+<line class="rf" x1="470" y1="422.0" x2="1100" y2="422.0"/>
+<text class="d" x="475" y="418.0">RX path</text>
+<circle class="relay" cx="557.0" cy="422.0" r="5"/>
+<circle class="relay" cx="657.0" cy="422.0" r="5"/>
+<circle class="relay on" cx="757.0" cy="422.0" r="7"/>
+<circle class="relay spare" cx="857.0" cy="422.0" r="5"/>
+<circle class="relay spare" cx="957.0" cy="422.0" r="5"/>
+<circle class="relay spare" cx="1057.0" cy="422.0" r="5"/>
+<rect class="ext" x="18" y="474" width="138" height="76" rx="3"/>
+<text class="t" x="26" y="494">R2 · Airspy HF+</text>
+<text class="d" x="26" y="511">receive-only SDR</text>
+<rect class="hop" x="175" y="496.0" width="16" height="8"/>
+<line class="rf" x1="156" y1="500.0" x2="214" y2="500.0"/>
+<text class="d" x="159" y="496.0">coax</text>
+<rect class="mod" x="214" y="466" width="256" height="92" rx="3"/>
+<text class="t" x="222" y="484">Radio Port · RX variant · slot 2</text>
+<text class="d" x="222" y="501">6× SPST RF relays, max 1 closed</text>
+<text class="d" x="222" y="517">TX-mute relay ← PTT bus (hw)</text>
+<text class="d" x="222" y="533">I2C exp @ SLOT_ID · drv · /RLY_EN</text>
+<line class="stub" x1="190" y1="550" x2="214" y2="550"/>
+<line class="rf" x1="470" y1="512.0" x2="1100" y2="512.0"/>
+<circle class="relay" cx="557.0" cy="512.0" r="5"/>
+<circle class="relay on" cx="657.0" cy="512.0" r="7"/>
+<circle class="relay" cx="757.0" cy="512.0" r="5"/>
+<circle class="relay spare" cx="857.0" cy="512.0" r="5"/>
+<circle class="relay spare" cx="957.0" cy="512.0" r="5"/>
+<circle class="relay spare" cx="1057.0" cy="512.0" r="5"/>
+<rect class="ext spare" x="18" y="580" width="138" height="76" rx="3"/>
+<text class="t spare" x="26" y="600">R3 · spare slot</text>
+<rect class="hop" x="175" y="602.0" width="16" height="8"/>
+<line class="rf spare" x1="156" y1="606.0" x2="214" y2="606.0"/>
+<text class="d spare" x="159" y="602.0">coax</text>
+<rect class="mod spare" x="214" y="572" width="256" height="92" rx="3"/>
+<text class="t spare" x="222" y="590">Radio Port Module · slot 3</text>
+<text class="d spare" x="222" y="607">same card, not fitted</text>
+<line class="stub spare" x1="190" y1="656" x2="214" y2="656"/>
+<line class="rf spare" x1="470" y1="618.0" x2="1100" y2="618.0"/>
+<circle class="relay spare" cx="557.0" cy="618.0" r="5"/>
+<circle class="relay spare" cx="657.0" cy="618.0" r="5"/>
+<circle class="relay spare" cx="757.0" cy="618.0" r="5"/>
+<circle class="relay spare" cx="857.0" cy="618.0" r="5"/>
+<circle class="relay spare" cx="957.0" cy="618.0" r="5"/>
+<circle class="relay spare" cx="1057.0" cy="618.0" r="5"/>
+<rect class="ext spare" x="18" y="686" width="138" height="76" rx="3"/>
+<text class="t spare" x="26" y="706">R4 · spare slot</text>
+<rect class="hop" x="175" y="708.0" width="16" height="8"/>
+<line class="rf spare" x1="156" y1="712.0" x2="214" y2="712.0"/>
+<text class="d spare" x="159" y="708.0">coax</text>
+<rect class="mod spare" x="214" y="678" width="256" height="92" rx="3"/>
+<text class="t spare" x="222" y="696">Radio Port Module · slot 4</text>
+<text class="d spare" x="222" y="713">same card, not fitted</text>
+<line class="stub spare" x1="190" y1="762" x2="214" y2="762"/>
+<line class="rf spare" x1="470" y1="724.0" x2="1100" y2="724.0"/>
+<circle class="relay spare" cx="557.0" cy="724.0" r="5"/>
+<circle class="relay spare" cx="657.0" cy="724.0" r="5"/>
+<circle class="relay spare" cx="757.0" cy="724.0" r="5"/>
+<circle class="relay spare" cx="857.0" cy="724.0" r="5"/>
+<circle class="relay spare" cx="957.0" cy="724.0" r="5"/>
+<circle class="relay spare" cx="1057.0" cy="724.0" r="5"/>
+<text class="d" x="1100" y="814" text-anchor="end">RF matrix · 4 radio slots × 6 antenna lines · one SPST relay per crossing</text>
+</svg>
+<figcaption>
+  <span class="key"><i></i> RF path (coax / matrix)</span>
+  <span class="key"><i class="ptt"></i> PTT, open-collector</span>
+  <span class="key"><i class="ctl"></i> control backplane</span>
+  <span class="key"><b class="on"></b> relay closed (example state)</span>
+  <span class="key"><b></b> relay open</span>
+  <span class="key"><b class="sp"></b> not fitted yet</span>
+</figcaption>
+</figure>
+
+<div class="grid2">
+<section>
+<h2>Modules</h2>
+<table>
+<tr><th>Card</th><th>What is on it</th></tr>
+<tr><td>Controller</td><td>MCU (I2C master), USB-C with UART/CDC and a plain ASCII command set, hardware watchdog driving <code>/RLY_EN</code>, optional OLED + encoder front panel, header for a later Ethernet/Wi-Fi add-on. Holds the routing table and the interlock rules.</td></tr>
+<tr><td>Power</td><td>13.8 V station supply in, fuse, 12 V relay rail, 5 V and 3V3 for logic. Separate returns for relay and logic current, joined at one point.</td></tr>
+<tr><td>Radio Port</td><td>One SO-239 for the radio, then a PTT-driven SPDT changeover relay that steers the radio to a TX path (keyed) or an RX path (unkeyed). Each path has six SPST RF relays, one per antenna line; firmware allows at most one closed per path. Same antenna on both paths gives ordinary single-antenna operation. Opto-isolated PTT input drives that slot's <code>PTT[n]</code> line on the backplane. RF sense (diode detector) confirms TX is actually present. I2C expander addressed by the slot's hardwired <code>SLOT_ID</code>, relay drivers gated by <code>/RLY_EN</code>.</td></tr>
+<tr><td>Radio Port, RX variant</td><td>Same card without the PTT input. Adds a TX-mute relay that shorts the receiver port whenever any <code>PTT[n]</code> is active. That is hardwired from the PTT bus, not via firmware, so a hung MCU cannot leave the Airspy exposed.</td></tr>
+<tr><td>Antenna Port</td><td>One SO-239, gas-discharge surge arrestor, relay that grounds the antenna when no radio is routed to it. An antenna flagged RX-only (the LoG) is refused to any TX-capable radio in firmware.</td></tr>
+<tr><td>Backplane</td><td>Passive PCB. Control signals only, no RF. Slot position sets <code>SLOT_ID</code>, so cards need no jumpers and any card fits any slot of its type.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>Backplane signals</h2>
+<table>
+<tr><th>Signal</th><th>Purpose</th></tr>
+<tr><td><code>+12V RLY</code></td><td>Relay coil rail, fused per card.</td></tr>
+<tr><td><code>+5V / +3V3</code></td><td>Logic supply.</td></tr>
+<tr><td><code>SDA / SCL</code></td><td>I2C, controller is the only master. Up to 8 expanders per bus; more via a mux if a second chassis is ever daisy-chained.</td></tr>
+<tr><td><code>/INT</code></td><td>Wired-OR interrupt from expanders (PTT edge, fault).</td></tr>
+<tr><td><code>PTT[1..4]</code></td><td>One line per radio slot, driven by that slot's Radio Port card, readable by every card. Carries the hardware RX protection.</td></tr>
+<tr><td><code>/RLY_EN</code></td><td>Global relay enable from the controller watchdog. Released, every antenna-select relay opens and every antenna port falls to ground: the safe state.</td></tr>
+<tr><td><code>SLOT_ID[2:0]</code></td><td>Hardwired per slot, read by the card to set its I2C address.</td></tr>
+</table>
+
+<h2>Rules the controller enforces</h2>
+<ol>
+<li>One radio per antenna line, one antenna per radio. Two TX radios can never share a line.</li>
+<li>No antenna-select relay moves while that radio's <code>PTT</code> is active (hot-switch lockout). RX-mute relays are exempt because they are driven straight from the PTT bus.</li>
+<li>Break before make, with a settle delay between opening the old path and closing the new one.</li>
+<li>RX-only antennas may sit on a radio's RX path, never on its TX path.</li>
+<li>The changeover relay is driven from the PTT bus in hardware. The radio's TX delay (FT-710 menu, external-amp keying delay) must exceed the relay transfer time so RF never hits a moving contact.</li>
+<li>Loss of watchdog kick, USB command timeout or brown-out drops <code>/RLY_EN</code>.</li>
+</ol>
+</section>
+</div>
+
+<h2>Expansion path</h2>
+<p>Second transceiver: fit a Radio Port card in slot 3, run its PTT to the card, add one line to the routing table. Vertical antenna: fit Antenna Port 3, which is already wired to line A3. Beyond 4 × 6, either a second chassis on the same USB host with its own controller, or a controller firmware option to drive a second backplane through an I2C mux. Remote relay boxes at the mast base would replace the I2C link with RS-485 on the same card footprint; the backplane signal set is chosen so that swap is a transceiver change, not a redesign.</p>
+</main>

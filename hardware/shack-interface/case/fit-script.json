@@ -1,0 +1,60 @@
+{
+ "commands": [
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/hammond/1455T1601.stp",
+    "name": "Hammond 1455T1601",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     -1,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/ref-shack-interface.step",
+    "name": "Shack interface 3D",
+    "matrix": [
+     -1,
+     0,
+     0,
+     80,
+     0,
+     -1,
+     0,
+     -79.5,
+     0,
+     0,
+     1,
+     10.93
+    ]
+   }
+  },
+  {
+   "command": "inspect.clearance",
+   "params": {
+    "skip_within": "component",
+    "clearance": 3.0,
+    "min_volume": 0.001
+   }
+  }
+ ]
+}

@@ -1,0 +1,3422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/unit/controller-board/controller-board.kicad_sch</source>
+    <date>2026-10-22T20:39:38</date>
+    <tool>Eeschema 10.0.5</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Controller board: overview and connectors</title>
+        <company>PE1RGU - Shack Relay Matrix</company>
+        <rev>C</rev>
+        <date>2026-10-19</date>
+        <source>controller-board.kicad_sch</source>
+        <comment number="1" value="Design: Prins Doornekamp, PE1RGU"/>
+        <comment number="2" value="ESP32-C3 Rust board in sockets (D-55, D-95), RJ45 LINK 4 opto loops (D-56, D-57)"/>
+        <comment number="3" value="J2 2x12 to RF board J14 (D-51, D-52). PTT to K0 in hardware (no MCU)"/>
+        <comment number="4" value="2 layers, 1.6 mm, L2 solid GND, routed power (D-131). No controlled impedance"/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="2" name="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/">
+      <title_block>
+        <title>Controller board: link to the shack and PTT</title>
+        <company>PE1RGU - Shack Relay Matrix</company>
+        <rev>C</rev>
+        <date>2026-10-19</date>
+        <source>link.kicad_sch</source>
+        <comment number="1" value="Design: Prins Doornekamp, PE1RGU"/>
+        <comment number="2" value="ESP32-C3 Rust board in sockets (D-55, D-95), RJ45 LINK 4 opto loops (D-56, D-57)"/>
+        <comment number="3" value="J2 2x12 to RF board J14 (D-51, D-52). PTT to K0 in hardware (no MCU)"/>
+        <comment number="4" value="2 layers, 1.6 mm, L2 solid GND, routed power (D-131). No controlled impedance"/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="3" name="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/">
+      <title_block>
+        <title>Controller board: MCU, 3.3 V and safety gate</title>
+        <company>PE1RGU - Shack Relay Matrix</company>
+        <rev>C</rev>
+        <date>2026-10-19</date>
+        <source>mcu.kicad_sch</source>
+        <comment number="1" value="Design: Prins Doornekamp, PE1RGU"/>
+        <comment number="2" value="ESP32-C3 Rust board in sockets (D-55, D-95), RJ45 LINK 4 opto loops (D-56, D-57)"/>
+        <comment number="3" value="J2 2x12 to RF board J14 (D-51, D-52). PTT to K0 in hardware (no MCU)"/>
+        <comment number="4" value="2 layers, 1.6 mm, L2 solid GND, routed power (D-131). No controlled impedance"/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="H1">
+      <value>M3 CHASSIS</value>
+      <footprint>MountingHole:MountingHole_3.2mm_M3_Pad</footprint>
+      <description>Plated M3 lug: short wire to the RVS box earth bar. GDT surge path (D-57)</description>
+      <fields>
+        <field name="Footprint">MountingHole:MountingHole_3.2mm_M3_Pad</field>
+        <field name="Datasheet"/>
+        <field name="Description">Plated M3 lug: short wire to the RVS box earth bar. GDT surge path (D-57)</field>
+      </fields>
+      <libsource lib="Mechanical" part="MountingHole_Pad" description="Mounting Hole with connection"/>
+      <property name="Sheetname" value="controller-board"/>
+      <property name="Sheetfile" value="controller-board.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="mounting hole"/>
+      <property name="ki_fp_filters" value="MountingHole*Pad*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>686549ee-911d-5d56-84d9-642a64c72284</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="J1">
+      <value>RJ45 LINK</value>
+      <footprint>controller-board:RJ45_8P8C_Unshielded_TabDown</footprint>
+      <description>RJ45 LINK, Cat6 #1 UTP to the shack (D-56, D-57). Unshielded, tab down: Wurth 615008137121, second source Molex 95501-2881 (D-138)</description>
+      <fields>
+        <field name="MPN">615008137121</field>
+        <field name="Footprint">controller-board:RJ45_8P8C_Unshielded_TabDown</field>
+        <field name="Datasheet"/>
+        <field name="Description">RJ45 LINK, Cat6 #1 UTP to the shack (D-56, D-57). Unshielded, tab down: Wurth 615008137121, second source Molex 95501-2881 (D-138)</field>
+      </fields>
+      <libsource lib="Connector" part="8P8C" description="RJ connector, 8P8C (8 positions 8 connected), RJ31/RJ32/RJ33/RJ34/RJ35/RJ41/RJ45/RJ49/RJ61"/>
+      <property name="MPN" value="615008137121"/>
+      <property name="Sheetname" value="controller-board"/>
+      <property name="Sheetfile" value="controller-board.kicad_sch"/>
+      <property name="ki_keywords" value="8P8C RJ socket connector"/>
+      <property name="ki_fp_filters" value="8P8C* RJ31* RJ32* RJ33* RJ34* RJ35* RJ41* RJ45* RJ49* RJ61*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>9a6f7732-3b5d-51e8-a16b-7e92613bf9e3</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="8"/>
+            <pin num="7"/>
+            <pin num="6"/>
+            <pin num="5"/>
+            <pin num="4"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="J2">
+      <value>to RF board J14</value>
+      <footprint>Connector_PinSocket_2.54mm:PinSocket_2x12_P2.54mm_Vertical</footprint>
+      <description>Board-to-board elevated socket on the controller board underside, onto RF board J14 (D-51, D-52, D-139): Samtec ESQ-112-33-G-D, 16.13 mm high; second source ESW-112-33-G-D. +5V from the RF board on pins 2 and 4</description>
+      <fields>
+        <field name="MPN">ESQ-112-33-G-D</field>
+        <field name="Footprint">Connector_PinSocket_2.54mm:PinSocket_2x12_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">Board-to-board elevated socket on the controller board underside, onto RF board J14 (D-51, D-52, D-139): Samtec ESQ-112-33-G-D, 16.13 mm high; second source ESW-112-33-G-D. +5V from the RF board on pins 2 and 4</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_02x12_Odd_Even" description="Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="MPN" value="ESQ-112-33-G-D"/>
+      <property name="Sheetname" value="controller-board"/>
+      <property name="Sheetfile" value="controller-board.kicad_sch"/>
+      <property name="ki_keywords" value="connector"/>
+      <property name="ki_fp_filters" value="Connector*:*_2x??_*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>547a378b-d2b9-52b1-8a24-d0fc66bb36a6</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="5"/>
+            <pin num="7"/>
+            <pin num="9"/>
+            <pin num="11"/>
+            <pin num="13"/>
+            <pin num="15"/>
+            <pin num="17"/>
+            <pin num="19"/>
+            <pin num="21"/>
+            <pin num="23"/>
+            <pin num="2"/>
+            <pin num="4"/>
+            <pin num="6"/>
+            <pin num="8"/>
+            <pin num="10"/>
+            <pin num="12"/>
+            <pin num="14"/>
+            <pin num="16"/>
+            <pin num="18"/>
+            <pin num="20"/>
+            <pin num="22"/>
+            <pin num="24"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C1">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>VO2611 U1 VCC decoupling, at the part</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">VO2611 U1 VCC decoupling, at the part</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>5492b835-daac-5769-be62-3bc0264809bd</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C2">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>VO2611 U2 VCC decoupling, at the part</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">VO2611 U2 VCC decoupling, at the part</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>8dfb0f2a-33ee-5cf8-93b6-364ebed3faed</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C3">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>VO2611 U3 VCC decoupling, at the part</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">VO2611 U3 VCC decoupling, at the part</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>95aa7b14-81a9-597a-bd54-2ebc5a489649</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C4">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>74LVC1G14 U5 decoupling, at the part</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">74LVC1G14 U5 decoupling, at the part</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>15eaec28-c89d-5570-b92b-b8da5fc08151</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C5">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>74LVC1G08 U16 decoupling, at the part</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">74LVC1G08 U16 decoupling, at the part</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>51552647-3ba2-5a80-b09e-86b622600a66</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C21">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>a01579ed-8524-5e00-a9c5-08dfa04e8799</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C22">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>N wire to CHASSIS behind the choke, footprint only (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">N wire to CHASSIS behind the choke, footprint only (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>b98a4437-00ba-5b8f-86c7-285b7eda8570</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C23">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>9b9c345b-b5ab-5c0d-9233-fa8466bb6639</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C24">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>N wire to CHASSIS behind the choke, footprint only (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">N wire to CHASSIS behind the choke, footprint only (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>864c4a81-08c3-5884-bcf4-03c228e0ec0f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C25">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>6e0eaeca-94f3-52a2-b1f2-ec0ff96d28dd</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C26">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>N wire to CHASSIS behind the choke, footprint only (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">N wire to CHASSIS behind the choke, footprint only (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>30460de9-9da1-5eb9-aebe-c5d3d7252e1c</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C27">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>ae177e79-3382-5550-9e28-0dcc0c5654ba</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C28">
+      <value>DNP 1n 1kV</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</footprint>
+      <description>N wire to CHASSIS behind the choke, footprint only (D-130)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">N wire to CHASSIS behind the choke, footprint only (D-130)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>9b5b8ee5-308c-52d3-87d2-fa7130e0a37a</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D11">
+      <value>SMBJ15CA</value>
+      <footprint>Diode_SMD:D_SMB</footprint>
+      <description>Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</description>
+      <fields>
+        <field name="MPN">SMBJ15CA</field>
+        <field name="Footprint">Diode_SMD:D_SMB</field>
+        <field name="Datasheet"/>
+        <field name="Description">Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</field>
+      </fields>
+      <libsource lib="Device" part="D_TVS" description="Bidirectional transient-voltage-suppression diode"/>
+      <property name="MPN" value="SMBJ15CA"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode TVS thyrector"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>3f0062ab-c512-5bb3-b2d6-88baef9970fc</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D12">
+      <value>1N4148W</value>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <description>Anti-parallel diode: LED reverse voltage (VR 5 V) and negative pulses</description>
+      <fields>
+        <field name="MPN">1N4148W</field>
+        <field name="Footprint">Diode_SMD:D_SOD-123</field>
+        <field name="Datasheet"/>
+        <field name="Description">Anti-parallel diode: LED reverse voltage (VR 5 V) and negative pulses</field>
+      </fields>
+      <libsource lib="Device" part="D" description="Diode"/>
+      <property name="MPN" value="1N4148W"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>42fdc86a-a612-5e65-b84d-2d6f0529417d</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D21">
+      <value>SMBJ15CA</value>
+      <footprint>Diode_SMD:D_SMB</footprint>
+      <description>Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</description>
+      <fields>
+        <field name="MPN">SMBJ15CA</field>
+        <field name="Footprint">Diode_SMD:D_SMB</field>
+        <field name="Datasheet"/>
+        <field name="Description">Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</field>
+      </fields>
+      <libsource lib="Device" part="D_TVS" description="Bidirectional transient-voltage-suppression diode"/>
+      <property name="MPN" value="SMBJ15CA"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode TVS thyrector"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>4493a68a-49a7-5f41-a474-137008091010</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D22">
+      <value>1N4148W</value>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <description>Anti-parallel diode: LED reverse voltage (VR 5 V) and negative pulses</description>
+      <fields>
+        <field name="MPN">1N4148W</field>
+        <field name="Footprint">Diode_SMD:D_SOD-123</field>
+        <field name="Datasheet"/>
+        <field name="Description">Anti-parallel diode: LED reverse voltage (VR 5 V) and negative pulses</field>
+      </fields>
+      <libsource lib="Device" part="D" description="Diode"/>
+      <property name="MPN" value="1N4148W"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>3d956765-2524-522b-8a08-26f00bc4085a</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D31">
+      <value>SMBJ15CA</value>
+      <footprint>Diode_SMD:D_SMB</footprint>
+      <description>Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</description>
+      <fields>
+        <field name="MPN">SMBJ15CA</field>
+        <field name="Footprint">Diode_SMD:D_SMB</field>
+        <field name="Datasheet"/>
+        <field name="Description">Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</field>
+      </fields>
+      <libsource lib="Device" part="D_TVS" description="Bidirectional transient-voltage-suppression diode"/>
+      <property name="MPN" value="SMBJ15CA"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode TVS thyrector"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>ebb63a25-b402-5406-bd59-470d2569e911</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D32">
+      <value>1N4148W</value>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <description>Anti-parallel diode: LED reverse voltage (VR 5 V) and negative pulses</description>
+      <fields>
+        <field name="MPN">1N4148W</field>
+        <field name="Footprint">Diode_SMD:D_SOD-123</field>
+        <field name="Datasheet"/>
+        <field name="Description">Anti-parallel diode: LED reverse voltage (VR 5 V) and negative pulses</field>
+      </fields>
+      <libsource lib="Device" part="D" description="Diode"/>
+      <property name="MPN" value="1N4148W"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>3e4fd0c9-0960-5d86-a4f5-6e54640ae4aa</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D41">
+      <value>SMBJ15CA</value>
+      <footprint>Diode_SMD:D_SMB</footprint>
+      <description>Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</description>
+      <fields>
+        <field name="MPN">SMBJ15CA</field>
+        <field name="Footprint">Diode_SMD:D_SMB</field>
+        <field name="Datasheet"/>
+        <field name="Description">Bidirectional TVS 600 W across the pair, VR 15 V (Littelfuse SMBJ, multi-source)</field>
+      </fields>
+      <libsource lib="Device" part="D_TVS" description="Bidirectional transient-voltage-suppression diode"/>
+      <property name="MPN" value="SMBJ15CA"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode TVS thyrector"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>480ee943-09b6-51bc-833f-d539ce011c0f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="D42">
+      <value>1N4148W</value>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <description>Series diode: protects the PC817 transistor against reverse polarity (VECO 6 V)</description>
+      <fields>
+        <field name="MPN">1N4148W</field>
+        <field name="Footprint">Diode_SMD:D_SOD-123</field>
+        <field name="Datasheet"/>
+        <field name="Description">Series diode: protects the PC817 transistor against reverse polarity (VECO 6 V)</field>
+      </fields>
+      <libsource lib="Device" part="D" description="Diode"/>
+      <property name="MPN" value="1N4148W"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="diode"/>
+      <property name="ki_fp_filters" value="TO-???* *_Diode_* *SingleDiode* D_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>209a545e-3371-5e11-99c8-87fd0b6584bf</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="GD1">
+      <value>2036-09-B2LF</value>
+      <footprint>controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</footprint>
+      <description>3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</description>
+      <fields>
+        <field name="MPN">2036-09-B2LF</field>
+        <field name="Footprint">controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</field>
+        <field name="Datasheet"/>
+        <field name="Description">3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</field>
+      </fields>
+      <libsource lib="Device" part="GDT_3Pin" description="Gas Discharge Tube with 3 Pins"/>
+      <property name="MPN" value="2036-09-B2LF"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="gdt"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>ecfd0696-7854-5bb6-9b5e-2ce0db11374f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="GD2">
+      <value>2036-09-B2LF</value>
+      <footprint>controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</footprint>
+      <description>3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</description>
+      <fields>
+        <field name="MPN">2036-09-B2LF</field>
+        <field name="Footprint">controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</field>
+        <field name="Datasheet"/>
+        <field name="Description">3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</field>
+      </fields>
+      <libsource lib="Device" part="GDT_3Pin" description="Gas Discharge Tube with 3 Pins"/>
+      <property name="MPN" value="2036-09-B2LF"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="gdt"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>c4df4ce3-a606-56e1-b666-00de24051b3e</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="GD3">
+      <value>2036-09-B2LF</value>
+      <footprint>controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</footprint>
+      <description>3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</description>
+      <fields>
+        <field name="MPN">2036-09-B2LF</field>
+        <field name="Footprint">controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</field>
+        <field name="Datasheet"/>
+        <field name="Description">3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</field>
+      </fields>
+      <libsource lib="Device" part="GDT_3Pin" description="Gas Discharge Tube with 3 Pins"/>
+      <property name="MPN" value="2036-09-B2LF"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="gdt"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>429b7a63-621b-57d7-8c71-7e7f2d75032d</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="GD4">
+      <value>2036-09-B2LF</value>
+      <footprint>controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</footprint>
+      <description>3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</description>
+      <fields>
+        <field name="MPN">2036-09-B2LF</field>
+        <field name="Footprint">controller-board:GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R</field>
+        <field name="Datasheet"/>
+        <field name="Description">3-electrode GDT 90 V, THT (Bourns 2036 Rev B 01/26): DC sparkover 72 to 108 V, impulse 550 V at 1 kV/us, 10 kA 8/20 us x10, glow 70 V (loop 12 V cannot hold an arc). Second source Littelfuse SL1003A090R-001 on the same footprint (D-149)</field>
+      </fields>
+      <libsource lib="Device" part="GDT_3Pin" description="Gas Discharge Tube with 3 Pins"/>
+      <property name="MPN" value="2036-09-B2LF"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="gdt"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>3986d45f-9203-5495-ac63-80c82ac02f7f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="L1">
+      <value>51u CMC</value>
+      <footprint>controller-board:L_CMC_TDK_ACT45B</footprint>
+      <description>Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</description>
+      <fields>
+        <field name="MPN">ACT45B-510-2P-TL003</field>
+        <field name="Footprint">controller-board:L_CMC_TDK_ACT45B</field>
+        <field name="Datasheet"/>
+        <field name="Description">Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</field>
+      </fields>
+      <libsource lib="Device" part="L_Coupled" description="Coupled inductor"/>
+      <property name="MPN" value="ACT45B-510-2P-TL003"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="inductor choke coil reactor magnetic coupled"/>
+      <property name="ki_fp_filters" value="Choke_* *Coil* Inductor_* L_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>f1f5d641-409f-5a21-8fd8-a01baa71c3b8</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="L2">
+      <value>51u CMC</value>
+      <footprint>controller-board:L_CMC_TDK_ACT45B</footprint>
+      <description>Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</description>
+      <fields>
+        <field name="MPN">ACT45B-510-2P-TL003</field>
+        <field name="Footprint">controller-board:L_CMC_TDK_ACT45B</field>
+        <field name="Datasheet"/>
+        <field name="Description">Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</field>
+      </fields>
+      <libsource lib="Device" part="L_Coupled" description="Coupled inductor"/>
+      <property name="MPN" value="ACT45B-510-2P-TL003"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="inductor choke coil reactor magnetic coupled"/>
+      <property name="ki_fp_filters" value="Choke_* *Coil* Inductor_* L_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>91297737-7e6b-53e1-ad03-92278f4f7539</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="L3">
+      <value>51u CMC</value>
+      <footprint>controller-board:L_CMC_TDK_ACT45B</footprint>
+      <description>Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</description>
+      <fields>
+        <field name="MPN">ACT45B-510-2P-TL003</field>
+        <field name="Footprint">controller-board:L_CMC_TDK_ACT45B</field>
+        <field name="Datasheet"/>
+        <field name="Description">Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</field>
+      </fields>
+      <libsource lib="Device" part="L_Coupled" description="Coupled inductor"/>
+      <property name="MPN" value="ACT45B-510-2P-TL003"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="inductor choke coil reactor magnetic coupled"/>
+      <property name="ki_fp_filters" value="Choke_* *Coil* Inductor_* L_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>8ffccbf0-ab64-54bc-80cd-4601682812d0</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="L4">
+      <value>51u CMC</value>
+      <footprint>controller-board:L_CMC_TDK_ACT45B</footprint>
+      <description>Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</description>
+      <fields>
+        <field name="MPN">ACT45B-510-2P-TL003</field>
+        <field name="Footprint">controller-board:L_CMC_TDK_ACT45B</field>
+        <field name="Datasheet"/>
+        <field name="Description">Common-mode choke per Cat6 pair at the entry, after the GDT (D-130): 51 uH CAN type, 1812. TDK ACT45B-510-2P-TL003; TDK land pattern, winding starts at the top (D-149). Second sources Murata DLW43SH510XK2L, Coilcraft 1812CAN-513: same geometry, mount by position (D-151)</field>
+      </fields>
+      <libsource lib="Device" part="L_Coupled" description="Coupled inductor"/>
+      <property name="MPN" value="ACT45B-510-2P-TL003"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="inductor choke coil reactor magnetic coupled"/>
+      <property name="ki_fp_filters" value="Choke_* *Coil* Inductor_* L_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>b96c8797-018b-54fc-a7cd-53400acbf79c</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="Q4">
+      <value>BSS138BK</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23</footprint>
+      <description>N-MOSFET 60 V, RDS(on) specified at VGS 2.5 V (BSS138BK, Nexperia). Second source Diotec MMFTN138K (same limits and pin-out, D-134)</description>
+      <fields>
+        <field name="MPN">BSS138BK</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23</field>
+        <field name="Datasheet"/>
+        <field name="Description">N-MOSFET 60 V, RDS(on) specified at VGS 2.5 V (BSS138BK, Nexperia). Second source Diotec MMFTN138K (same limits and pin-out, D-134)</field>
+      </fields>
+      <libsource lib="Transistor_FET" part="Q_NMOS_GSD" description="N-MOSFET transistor, gate/source/drain"/>
+      <property name="MPN" value="BSS138BK"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="transistor NMOS N-MOS N-MOSFET"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>34d66dd8-a43f-5cd6-8ca9-c56dd06eee5f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R11">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>5bc30e55-62cb-513e-84fd-a467bb12c0d6</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R12">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>As R above, N wire</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">As R above, N wire</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>28e5d9e8-546c-5917-b59f-ad992ea834e0</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R13">
+      <value>220R</value>
+      <footprint>Resistor_SMD:R_MiniMELF_MMA-0204</footprint>
+      <description>LED series resistor: limits the LED pulse to (28 - 1.7) / 220 = 0.12 A while the TVS clamps (VO2611: 200 mA for 100 us)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MiniMELF_MMA-0204</field>
+        <field name="Datasheet"/>
+        <field name="Description">LED series resistor: limits the LED pulse to (28 - 1.7) / 220 = 0.12 A while the TVS clamps (VO2611: 200 mA for 100 us)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>097ef500-62ff-53b3-8026-ffeaac3593cc</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R14">
+      <value>4.7k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>Open-drain pull-up to 3.3 V</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Open-drain pull-up to 3.3 V</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>74756f7b-51be-571c-b6be-7fc6e990e8e7</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R21">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>2a951573-581b-50e8-b803-2b666239eaa6</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R22">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>As R above, N wire</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">As R above, N wire</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>683d4594-51ac-5fa9-b392-1ca5f32693fe</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R23">
+      <value>220R</value>
+      <footprint>Resistor_SMD:R_MiniMELF_MMA-0204</footprint>
+      <description>LED series resistor: limits the LED pulse to (28 - 1.7) / 220 = 0.12 A while the TVS clamps (VO2611: 200 mA for 100 us)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MiniMELF_MMA-0204</field>
+        <field name="Datasheet"/>
+        <field name="Description">LED series resistor: limits the LED pulse to (28 - 1.7) / 220 = 0.12 A while the TVS clamps (VO2611: 200 mA for 100 us)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>e1a977e1-c057-5e55-8ffd-1b593165e6b3</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R24">
+      <value>4.7k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>Open-drain pull-up to 3.3 V</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Open-drain pull-up to 3.3 V</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>83b33e87-178e-5a08-a7e0-c1dde9021acd</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R31">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>fdc3ef96-54a8-585a-b23a-e3a903b222f3</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R32">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>As R above, N wire</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">As R above, N wire</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>fab428d7-7326-5972-947f-3a62ba54edff</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R33">
+      <value>220R</value>
+      <footprint>Resistor_SMD:R_MiniMELF_MMA-0204</footprint>
+      <description>LED series resistor: limits the LED pulse to (28 - 1.7) / 220 = 0.12 A while the TVS clamps (VO2611: 200 mA for 100 us)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MiniMELF_MMA-0204</field>
+        <field name="Datasheet"/>
+        <field name="Description">LED series resistor: limits the LED pulse to (28 - 1.7) / 220 = 0.12 A while the TVS clamps (VO2611: 200 mA for 100 us)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>bafc2ff0-2d04-55b4-bf58-0122be7f744f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R34">
+      <value>4.7k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>Open-drain pull-up to 3.3 V</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Open-drain pull-up to 3.3 V</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>752c8e59-ba33-5bfe-aac4-1e42d66096cd</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R35">
+      <value>240R</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>READY LED drive about 7 mA from the 3.3 V gate (as C-22): (3.3 - 1.4 - 0.2) / 240</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">READY LED drive about 7 mA from the 3.3 V gate (as C-22): (3.3 - 1.4 - 0.2) / 240</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>9bb3ca2f-c9b3-5d59-be29-9442811dd336</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R36">
+      <value>100k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>RF_A2_N pull-down: J2 open or RF board missing = READY open (fail-safe). RF board pull-up 10k (D-104)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">RF_A2_N pull-down: J2 open or RF board missing = READY open (fail-safe). RF board pull-up 10k (D-104)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>eace9439-9d8f-5786-b673-847ef988fc24</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R41">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">Pulse-proof series resistor (thin-film MELF 0207, Vishay MMB 0207; second source TE Neohm SMA-A 0207, D-151): the GDT fires first. Pulse check C-39</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>487e294b-59cd-53d7-8b05-c7e5cb9c3d89</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R42">
+      <value>47R</value>
+      <footprint>Resistor_SMD:R_MELF_MMB-0207</footprint>
+      <description>As R above, N wire</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_MELF_MMB-0207</field>
+        <field name="Datasheet"/>
+        <field name="Description">As R above, N wire</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>768ef383-7b9a-56fa-9c1b-ca3c5ae65689</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R43">
+      <value>220R</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>LED current: (5 - 1.2 - 0.1) / 220 = 17 mA (IF max 50 mA). Gives 10 mA loop current over CTR spread and ageing (C-18)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">LED current: (5 - 1.2 - 0.1) / 220 = 17 mA (IF max 50 mA). Gives 10 mA loop current over CTR spread and ageing (C-18)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>83f883aa-9236-5fad-a33f-9abc71caed79</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R44">
+      <value>100k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>Gate pull-down: LED off (loop open = break) while the MCU is not running</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Gate pull-down: LED off (loop open = break) while the MCU is not running</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>54db6ce6-c5e5-50ef-8763-4ffb68bd9ee7</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R51">
+      <value>0R</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>K0 drive select: R1 FT-710 follows its own PTT (fitted, D-63)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">K0 drive select: R1 FT-710 follows its own PTT (fitted, D-63)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>fb2e8a2a-2d96-581b-b1d9-bb2020a55ac2</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R52">
+      <value>0R</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>K0 drive select R2: not fitted. R2 K0 comes from RF board U903 IO1_3 after the TX handshake (D-63); fit only for TX mute by PTT</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">K0 drive select R2: not fitted. R2 K0 comes from RF board U903 IO1_3 after the TX handshake (D-63); fit only for TX mute by PTT</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>26ebec76-a1c8-587a-9022-8d971542f3b2</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R53">
+      <value>0R</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>K0 drive select R3: not fitted. R3 K0 comes from RF board U903 IO1_4 after the TX handshake (D-63); fit only for TX mute by PTT</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">K0 drive select R3: not fitted. R3 K0 comes from RF board U903 IO1_4 after the TX handshake (D-63); fit only for TX mute by PTT</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>b73e888c-7bb0-5b60-8cff-a166ab20231c</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP4">
+      <value>RF_A2_N</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point RF_A2_N (D-120)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point RF_A2_N (D-120)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>84125a9b-582a-5a97-8e32-266d39cc6855</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP9">
+      <value>TX_ANY</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point TX_ANY (D-141)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point TX_ANY (D-141)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>93f7dace-dd9a-5621-a270-af52dbec5099</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U1">
+      <value>VO2611</value>
+      <footprint>Package_DIP:DIP-8_W7.62mm</footprint>
+      <description>10 MBd opto, open-drain output, 15 kV/us CMTI (Vishay VO2611, Rev 2.2 2023-03-15; 6N137 pin-out). Second source Broadcom HCPL-2611. IF 10 mA (max 20 mA), IFH max 5 mA</description>
+      <fields>
+        <field name="MPN">VO2611-X007T</field>
+        <field name="Footprint">Package_DIP:DIP-8_W7.62mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">10 MBd opto, open-drain output, 15 kV/us CMTI (Vishay VO2611, Rev 2.2 2023-03-15; 6N137 pin-out). Second source Broadcom HCPL-2611. IF 10 mA (max 20 mA), IFH max 5 mA</field>
+      </fields>
+      <libsource lib="Isolator" part="HCPL-261A" description="Single High Speed HCMOS/LSTTL/TTL Compatible Optocoupler with enable, dV/dt 1000/us, VCM 50, -0.5V to 7V VCC, DIP-8"/>
+      <property name="MPN" value="VO2611-X007T"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="High speed optically coupled gates enable"/>
+      <property name="ki_fp_filters" value="DIP*W7.62mm*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>02f25bec-cd31-5c93-a626-7686500efec4</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="8"/>
+            <pin num="5"/>
+            <pin num="7"/>
+            <pin num="6"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U2">
+      <value>VO2611</value>
+      <footprint>Package_DIP:DIP-8_W7.62mm</footprint>
+      <description>10 MBd opto, open-drain output, 15 kV/us CMTI (Vishay VO2611, Rev 2.2 2023-03-15; 6N137 pin-out). Second source Broadcom HCPL-2611. IF 10 mA (max 20 mA), IFH max 5 mA</description>
+      <fields>
+        <field name="MPN">VO2611-X007T</field>
+        <field name="Footprint">Package_DIP:DIP-8_W7.62mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">10 MBd opto, open-drain output, 15 kV/us CMTI (Vishay VO2611, Rev 2.2 2023-03-15; 6N137 pin-out). Second source Broadcom HCPL-2611. IF 10 mA (max 20 mA), IFH max 5 mA</field>
+      </fields>
+      <libsource lib="Isolator" part="HCPL-261A" description="Single High Speed HCMOS/LSTTL/TTL Compatible Optocoupler with enable, dV/dt 1000/us, VCM 50, -0.5V to 7V VCC, DIP-8"/>
+      <property name="MPN" value="VO2611-X007T"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="High speed optically coupled gates enable"/>
+      <property name="ki_fp_filters" value="DIP*W7.62mm*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>43da181b-3d14-508e-8c2f-2edbe675ee56</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="8"/>
+            <pin num="5"/>
+            <pin num="7"/>
+            <pin num="6"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U3">
+      <value>VO2611</value>
+      <footprint>Package_DIP:DIP-8_W7.62mm</footprint>
+      <description>10 MBd opto, open-drain output, 15 kV/us CMTI (Vishay VO2611, Rev 2.2 2023-03-15; 6N137 pin-out). Second source Broadcom HCPL-2611. IF 10 mA (max 20 mA), IFH max 5 mA</description>
+      <fields>
+        <field name="MPN">VO2611-X007T</field>
+        <field name="Footprint">Package_DIP:DIP-8_W7.62mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">10 MBd opto, open-drain output, 15 kV/us CMTI (Vishay VO2611, Rev 2.2 2023-03-15; 6N137 pin-out). Second source Broadcom HCPL-2611. IF 10 mA (max 20 mA), IFH max 5 mA</field>
+      </fields>
+      <libsource lib="Isolator" part="HCPL-261A" description="Single High Speed HCMOS/LSTTL/TTL Compatible Optocoupler with enable, dV/dt 1000/us, VCM 50, -0.5V to 7V VCC, DIP-8"/>
+      <property name="MPN" value="VO2611-X007T"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="High speed optically coupled gates enable"/>
+      <property name="ki_fp_filters" value="DIP*W7.62mm*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>537f9919-b760-52fd-84d4-7ed185427eb9</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="8"/>
+            <pin num="5"/>
+            <pin num="7"/>
+            <pin num="6"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U4">
+      <value>PC817X</value>
+      <footprint>Package_DIP:DIP-4_W7.62mm</footprint>
+      <description>Phototransistor opto, VCEO 80 V, 5 kV (Sharp D2-A03101EN). CTR rank B or better. Lite-On LTV-817, Everlight EL817</description>
+      <fields>
+        <field name="MPN">PC817X2NSZ9F</field>
+        <field name="Footprint">Package_DIP:DIP-4_W7.62mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Phototransistor opto, VCEO 80 V, 5 kV (Sharp D2-A03101EN). CTR rank B or better. Lite-On LTV-817, Everlight EL817</field>
+      </fields>
+      <libsource lib="Isolator" part="PC817" description="DC Optocoupler, Vce 35V, CTR 50-300%, DIP-4"/>
+      <property name="MPN" value="PC817X2NSZ9F"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <property name="ki_keywords" value="NPN DC Optocoupler"/>
+      <property name="ki_fp_filters" value="DIP*W7.62mm*"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>e265c2c9-7872-5e0e-ae9f-832cf0960a12</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="4"/>
+            <pin num="3"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U5">
+      <value>74LVC1G14</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5</footprint>
+      <description>Schmitt inverter: PTT_N (low = key down) to PTT. Nexperia, TI, Diodes</description>
+      <fields>
+        <field name="MPN">74LVC1G14GV</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet"/>
+        <field name="Description">Schmitt inverter: PTT_N (low = key down) to PTT. Nexperia, TI, Diodes</field>
+      </fields>
+      <libsource lib="controller-board" part="74LVC1G14_IEC" description="Single Schmitt inverter, IEC 60617 symbol"/>
+      <property name="MPN" value="74LVC1G14GV"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>dda127a2-9e6c-5c6c-82ab-fd8ceecc7702</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="2"/>
+            <pin num="1"/>
+            <pin num="5"/>
+            <pin num="3"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U6">
+      <value>TLP176AM</value>
+      <footprint>controller-board:SOP-4_P2.54mm_PhotoRelay_LongPad</footprint>
+      <description>READY switch in the SAFE loop: closed only while NOR(MCU_EN_N, FAULT) is high and no RF is on A2 (D-62, D-101, D-104). Form A, 60 V, 0.7 A, RON max 2 ohm, IFT max 3 mA, 3750 Vrms (Toshiba Rev 7.0.A). Second source Panasonic AQY212G3HS</description>
+      <fields>
+        <field name="MPN">TLP176AM(TPL,E)</field>
+        <field name="Footprint">controller-board:SOP-4_P2.54mm_PhotoRelay_LongPad</field>
+        <field name="Datasheet"/>
+        <field name="Description">READY switch in the SAFE loop: closed only while NOR(MCU_EN_N, FAULT) is high and no RF is on A2 (D-62, D-101, D-104). Form A, 60 V, 0.7 A, RON max 2 ohm, IFT max 3 mA, 3750 Vrms (Toshiba Rev 7.0.A). Second source Panasonic AQY212G3HS</field>
+      </fields>
+      <libsource lib="controller-board" part="TLP176AM" description="1-form-A photorelay 60 V 0.7 A, 2.54 mm pitch (Toshiba TLP176AM Rev 7.0.A). Symbol pins = SOP4 positions 1 A, 2 K, 3 and 4 load = TLP176AM pins 1, 3, 4, 6. Second source Panasonic AQY212G3HS"/>
+      <property name="MPN" value="TLP176AM(TPL,E)"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>90241156-c5b5-5ef3-87c9-58b53ce16390</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="4"/>
+            <pin num="3"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U16">
+      <value>74LVC1G08</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5</footprint>
+      <description>2-input AND: READY LED drive = READY_ON AND RF_A2_N (D-104). Nexperia, TI, Diodes</description>
+      <fields>
+        <field name="MPN">74LVC1G08GV</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet"/>
+        <field name="Description">2-input AND: READY LED drive = READY_ON AND RF_A2_N (D-104). Nexperia, TI, Diodes</field>
+      </fields>
+      <libsource lib="controller-board" part="74LVC1G08_IEC" description="Single 2-input AND, IEC 60617 symbol (TI SN74LVC1G08, Nexperia 74LVC1G08)"/>
+      <property name="MPN" value="74LVC1G08GV"/>
+      <property name="Sheetname" value="Link and PTT"/>
+      <property name="Sheetfile" value="link.kicad_sch"/>
+      <sheetpath names="/Link and PTT/" tstamps="/93ffd079-69d1-57eb-b8fc-49534572f5f8/"/>
+      <tstamps>c312feeb-106d-5cdf-bcec-53586b35d50b</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="5"/>
+            <pin num="3"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="A1">
+      <value>ESP32-C3-DevKit-RUST-1</value>
+      <footprint>controller-board:ESP32-C3-DevKit-RUST_Socket</footprint>
+      <description>ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 2-1</description>
+      <fields>
+        <field name="Footprint">controller-board:ESP32-C3-DevKit-RUST_Socket</field>
+        <field name="Datasheet"/>
+        <field name="Description">ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 2-1</field>
+      </fields>
+      <libsource lib="controller-board" part="ESP32-C3-DevKit-RUST" description="ESP32-C3 Rust board (DevKit-RUST-1 Rev 1.2a or DevKit-RUST-2 Rev 2.0) in two socket headers. Pads as the esp-rs Rust_Board footprint, 1..28"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>1e83d61f-a5f9-5b33-b832-63545b41bb7d</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="7"/>
+            <pin num="8"/>
+            <pin num="9"/>
+            <pin num="10"/>
+            <pin num="11"/>
+            <pin num="12"/>
+            <pin num="13"/>
+            <pin num="14"/>
+            <pin num="15"/>
+            <pin num="16"/>
+            <pin num="28"/>
+            <pin num="27"/>
+            <pin num="26"/>
+            <pin num="25"/>
+            <pin num="24"/>
+            <pin num="23"/>
+            <pin num="22"/>
+            <pin num="21"/>
+            <pin num="20"/>
+            <pin num="19"/>
+            <pin num="18"/>
+            <pin num="17"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C11">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>LDO input</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">LDO input</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>d436db17-a46d-5d8f-bdab-adcd68d9c7ae</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C12">
+      <value>10n</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>LDO noise bypass</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">LDO noise bypass</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>29b5bc30-3eee-5cd7-afb3-10909530b830</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C13">
+      <value>4.7u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <description>LDO output: at least 2.2 uF effective at 3.3 V (legacy LP2985 die, LD2985)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">LDO output: at least 2.2 uF effective at 3.3 V (legacy LP2985 die, LD2985)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>85b0df4f-c9e5-51bc-9b9d-1ea43d603526</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C14">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>U12 decoupling, at the part (one value, D-127)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">U12 decoupling, at the part (one value, D-127)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>4b267830-76e7-511a-90ea-773d4624c2e4</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C15">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>U13 decoupling, at the part (one value, D-127)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">U13 decoupling, at the part (one value, D-127)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>4f8208bf-7501-5ccd-9da1-7a5bebdcfdf6</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C16">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>U14 decoupling, at the part (one value, D-127)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">U14 decoupling, at the part (one value, D-127)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>7855aee4-2ca9-5dd4-a073-74807fd20c89</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="C17">
+      <value>1u 16V X7R</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>U15 decoupling, at the part (one value, D-127)</description>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">U15 decoupling, at the part (one value, D-127)</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>379e79c2-775c-5206-b845-bc80ec782eb3</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="JP11">
+      <value>SDA SEL</value>
+      <footprint>Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels</footprint>
+      <description>SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match</description>
+      <fields>
+        <field name="Footprint">Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels</field>
+        <field name="Datasheet"/>
+        <field name="Description">SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match</field>
+      </fields>
+      <libsource lib="controller-board" part="SolderJumper_3_Open" description="Solder jumper, 3 pads, open; bridge 2-1 or 2-3"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>f91b96a3-d751-5725-870b-4cd2e7369dea</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R61">
+      <value>1k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>WDI pull-down: a floating WDI would disable the watchdog (TPS3823 datasheet 7.3.4)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">WDI pull-down: a floating WDI would disable the watchdog (TPS3823 datasheet 7.3.4)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>a784bf1f-4962-5f3a-96ff-d52cf50de663</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R62">
+      <value>100k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>LATCH_CLR pull-down: no clock edge while the MCU is in reset</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">LATCH_CLR pull-down: no clock edge while the MCU is in reset</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>0ded1636-0a7d-53f4-a981-16053dad9157</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R63">
+      <value>100k</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>MCU_EN_N pull-up: relays off while the MCU is in reset or not fitted</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">MCU_EN_N pull-up: relays off while the MCU is in reset or not fitted</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>a1373389-44cf-5e7a-b465-6986e12d1c4d</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R64">
+      <value>0R</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</footprint>
+      <description>Watchdog link (D-123): fitted in use. Open on the bench: U12 WDI floats, so the watchdog is off (TPS3823 SLVS165O 7.3.4); the supply supervisor stays active</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Watchdog link (D-123): fitted in use. Open on the bench: U12 WDI floats, so the watchdog is off (TPS3823 SLVS165O 7.3.4); the supply supervisor stays active</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>7138a16f-f8bd-5bff-a580-94a4430977b5</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="R65">
+      <value>0R</value>
+      <footprint>Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder</footprint>
+      <description>+3V3 current-measurement link: lift to measure the 3.3 V load (D-120)</description>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">+3V3 current-measurement link: lift to measure the 3.3 V load (D-120)</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>7c2f6812-f61a-530b-8c8e-a757f2c79cc8</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP1">
+      <value>+5V</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point +5V (D-120)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point +5V (D-120)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>ecca03a6-7ade-5f23-8633-544780ff8333</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP2">
+      <value>+3V3</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point +3V3 (D-120)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point +3V3 (D-120)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>808feb0d-cb8c-56f7-82b1-6b9bea4d19c7</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP3">
+      <value>FAULT</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point FAULT, the fault latch Q (D-120)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point FAULT, the fault latch Q (D-120)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>5825e8b4-0b7d-5322-9eb3-095de31bd440</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP5">
+      <value>SCL</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point SCL (D-141)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point SCL (D-141)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>e7d33abe-79ce-5d5a-84d8-68f114287dc0</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP6">
+      <value>SDA</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point SDA (D-141)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point SDA (D-141)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>fe17b140-69b8-5f35-946a-840ba8e0c5c5</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP7">
+      <value>EXP_INT</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point EXP_INT (D-141)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point EXP_INT (D-141)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>ef6a6a0e-6bc5-55a0-890d-486e04cbf935</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="TP8">
+      <value>RLY_EN</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>Test point RLY_EN (D-141)</description>
+      <fields>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Test point RLY_EN (D-141)</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>1b2834f0-7558-5f28-b382-22d54c900344</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U11">
+      <value>LP2985-33</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5</footprint>
+      <description>3.3 V LDO, 150 mA, VIN max 16 V. Second source ST LD2985BM33R. ON/OFF tied to VIN (D-55)</description>
+      <fields>
+        <field name="MPN">LP2985-33DBVR</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet"/>
+        <field name="Description">3.3 V LDO, 150 mA, VIN max 16 V. Second source ST LD2985BM33R. ON/OFF tied to VIN (D-55)</field>
+      </fields>
+      <libsource lib="controller-board" part="LP2985-3.3" description="150mA 16V Low-noise Low-dropout Regulator With Shutdown, 1.8V output voltage, SOT-23-5"/>
+      <property name="MPN" value="LP2985-33DBVR"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="LDO regulator linear  SOT-23-5"/>
+      <property name="ki_fp_filters" value="SOT?23*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>f499eea4-c6f3-5d3b-a51f-c521ff009de9</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="5"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U12">
+      <value>TPS3823A-33</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5</footprint>
+      <description>Supervisor 2.93 V + watchdog 0.9 to 2.5 s, push-pull RESET_N, -40 to 125 C (TI SLVS165O). A version: no latch-up on WDI pulses during reset</description>
+      <fields>
+        <field name="MPN">TPS3823A-33DBVR</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet"/>
+        <field name="Description">Supervisor 2.93 V + watchdog 0.9 to 2.5 s, push-pull RESET_N, -40 to 125 C (TI SLVS165O). A version: no latch-up on WDI pulses during reset</field>
+      </fields>
+      <libsource lib="Power_Supervisor" part="TPS3823-xxDBV" description="Supervisory Circuit with watchdog &amp; manual reset, push-pull ~{RESET} output, SOT-23-6"/>
+      <property name="MPN" value="TPS3823A-33DBVR"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="Texas-Instruments supply-voltage TPS3823-25DBV TPS3823-30DBV TPS3823-33DBV TPS3823-50DBV"/>
+      <property name="ki_fp_filters" value="SOT?23*"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>4df3cc75-3c36-5705-a9c2-16ec85750066</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="4"/>
+            <pin num="3"/>
+            <pin num="5"/>
+            <pin num="2"/>
+            <pin num="1"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U13">
+      <value>74LVC1G74</value>
+      <footprint>Package_SO:SSOP-8_2.95x2.8mm_P0.65mm</footprint>
+      <description>D flip-flop, fault latch. D = GND, CLR_N = 3V3, PRE_N = RESET_N. -40 to 125 C (TI SCES794G, DCT). Second source Nexperia 74LVC1G74DC</description>
+      <fields>
+        <field name="MPN">SN74LVC1G74DCTR</field>
+        <field name="Footprint">Package_SO:SSOP-8_2.95x2.8mm_P0.65mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">D flip-flop, fault latch. D = GND, CLR_N = 3V3, PRE_N = RESET_N. -40 to 125 C (TI SCES794G, DCT). Second source Nexperia 74LVC1G74DC</field>
+      </fields>
+      <libsource lib="controller-board" part="74LVC1G74_IEC" description="Single D flip-flop with preset and clear, IEC 60617 symbol (TI SN74LVC1G74 DCT/DCU, Nexperia 74LVC1G74DC)"/>
+      <property name="MPN" value="SN74LVC1G74DCTR"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>7d1b152a-6449-5e8a-8b20-17a504fcc911</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="6"/>
+            <pin num="7"/>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="8"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="3"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U14">
+      <value>74LVC1G27</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-6</footprint>
+      <description>3-input NOR, relay enable gate. -40 to 125 C (TI SCES488E). Second source Nexperia 74LVC1G27GW</description>
+      <fields>
+        <field name="MPN">SN74LVC1G27DBVR</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-6</field>
+        <field name="Datasheet"/>
+        <field name="Description">3-input NOR, relay enable gate. -40 to 125 C (TI SCES488E). Second source Nexperia 74LVC1G27GW</field>
+      </fields>
+      <libsource lib="controller-board" part="74LVC1G27_IEC" description="Single 3-input NOR, IEC 60617 symbol (TI SN74LVC1G27, Nexperia 74LVC1G27)"/>
+      <property name="MPN" value="SN74LVC1G27DBVR"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>75726524-bb9d-54b1-ad08-bb39c03fdff2</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="6"/>
+            <pin num="1"/>
+            <pin num="3"/>
+            <pin num="5"/>
+            <pin num="2"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U15">
+      <value>74LVC1G02</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5</footprint>
+      <description>2-input NOR, READY gate: READY_ON = NOR(MCU_EN_N, FAULT) (D-62). Nexperia, TI, Diodes</description>
+      <fields>
+        <field name="MPN">74LVC1G02GV</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet"/>
+        <field name="Description">2-input NOR, READY gate: READY_ON = NOR(MCU_EN_N, FAULT) (D-62). Nexperia, TI, Diodes</field>
+      </fields>
+      <libsource lib="controller-board" part="74LVC1G02_IEC" description="Single 2-input NOR, IEC 60617 symbol (TI SN74LVC1G02, Nexperia 74LVC1G02)"/>
+      <property name="MPN" value="74LVC1G02GV"/>
+      <property name="Sheetname" value="MCU and safety gate"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <sheetpath names="/MCU and safety gate/" tstamps="/6efcfdd3-b192-5236-8b01-1f2c86853060/"/>
+      <tstamps>0f772022-abc0-53f3-9237-0081be9e96d8</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="5"/>
+            <pin num="3"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Connector" part="8P8C">
+      <description>RJ connector, 8P8C (8 positions 8 connected), RJ31/RJ32/RJ33/RJ34/RJ35/RJ41/RJ45/RJ49/RJ61</description>
+      <footprints>
+        <fp>8P8C*</fp>
+        <fp>RJ31*</fp>
+        <fp>RJ32*</fp>
+        <fp>RJ33*</fp>
+        <fp>RJ34*</fp>
+        <fp>RJ35*</fp>
+        <fp>RJ41*</fp>
+        <fp>RJ45*</fp>
+        <fp>RJ49*</fp>
+        <fp>RJ61*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">8P8C</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">RJ connector, 8P8C (8 positions 8 connected), RJ31/RJ32/RJ33/RJ34/RJ35/RJ41/RJ45/RJ49/RJ61</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+        <pin num="3" name="" type="passive"/>
+        <pin num="4" name="" type="passive"/>
+        <pin num="5" name="" type="passive"/>
+        <pin num="6" name="" type="passive"/>
+        <pin num="7" name="" type="passive"/>
+        <pin num="8" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector" part="TestPoint">
+      <description>test point</description>
+      <footprints>
+        <fp>Pin*</fp>
+        <fp>Test*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">TestPoint</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_02x12_Odd_Even">
+      <description>Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <footprints>
+        <fp>Connector*:*_2x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_02x12_Odd_Even</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+        <pin num="9" name="Pin_9" type="passive"/>
+        <pin num="10" name="Pin_10" type="passive"/>
+        <pin num="11" name="Pin_11" type="passive"/>
+        <pin num="12" name="Pin_12" type="passive"/>
+        <pin num="13" name="Pin_13" type="passive"/>
+        <pin num="14" name="Pin_14" type="passive"/>
+        <pin num="15" name="Pin_15" type="passive"/>
+        <pin num="16" name="Pin_16" type="passive"/>
+        <pin num="17" name="Pin_17" type="passive"/>
+        <pin num="18" name="Pin_18" type="passive"/>
+        <pin num="19" name="Pin_19" type="passive"/>
+        <pin num="20" name="Pin_20" type="passive"/>
+        <pin num="21" name="Pin_21" type="passive"/>
+        <pin num="22" name="Pin_22" type="passive"/>
+        <pin num="23" name="Pin_23" type="passive"/>
+        <pin num="24" name="Pin_24" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="D">
+      <description>Diode</description>
+      <footprints>
+        <fp>TO-???*</fp>
+        <fp>*_Diode_*</fp>
+        <fp>*SingleDiode*</fp>
+        <fp>D_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">D</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Diode</field>
+        <field name="Sim.Device">D</field>
+        <field name="Sim.Pins">1=K 2=A</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="D_TVS">
+      <description>Bidirectional transient-voltage-suppression diode</description>
+      <footprints>
+        <fp>TO-???*</fp>
+        <fp>*_Diode_*</fp>
+        <fp>*SingleDiode*</fp>
+        <fp>D_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">D_TVS</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Bidirectional transient-voltage-suppression diode</field>
+      </fields>
+      <pins>
+        <pin num="1" name="A1" type="passive"/>
+        <pin num="2" name="A2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="GDT_3Pin">
+      <description>Gas Discharge Tube with 3 Pins</description>
+      <fields>
+        <field name="Reference">GD</field>
+        <field name="Value">GDT_3Pin</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Gas Discharge Tube with 3 Pins</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+        <pin num="3" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="L_Coupled">
+      <description>Coupled inductor</description>
+      <footprints>
+        <fp>Choke_*</fp>
+        <fp>*Coil*</fp>
+        <fp>Inductor_*</fp>
+        <fp>L_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">L</field>
+        <field name="Value">L_Coupled</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Coupled inductor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Resistor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Isolator" part="HCPL-261A">
+      <description>Single High Speed HCMOS/LSTTL/TTL Compatible Optocoupler with enable, dV/dt 1000/us, VCM 50, -0.5V to 7V VCC, DIP-8</description>
+      <docs>https://docs.broadcom.com/doc/AV02-0391EN</docs>
+      <footprints>
+        <fp>DIP*W7.62mm*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">HCPL-261A</field>
+        <field name="Footprint">Package_DIP:DIP-8_W7.62mm</field>
+        <field name="Datasheet">https://docs.broadcom.com/doc/AV02-0391EN</field>
+        <field name="Description">Single High Speed HCMOS/LSTTL/TTL Compatible Optocoupler with enable, dV/dt 1000/us, VCM 50, -0.5V to 7V VCC, DIP-8</field>
+      </fields>
+      <pins>
+        <pin num="1" name="NC" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+        <pin num="3" name="C" type="passive"/>
+        <pin num="4" name="NC" type="passive"/>
+        <pin num="5" name="GND" type="power_in"/>
+        <pin num="6" name="VO" type="open_collector"/>
+        <pin num="7" name="EN" type="input"/>
+        <pin num="8" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Isolator" part="PC817">
+      <description>DC Optocoupler, Vce 35V, CTR 50-300%, DIP-4</description>
+      <docs>http://www.soselectronic.cz/a_info/resource/d/pc817.pdf</docs>
+      <footprints>
+        <fp>DIP*W7.62mm*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">PC817</field>
+        <field name="Footprint">Package_DIP:DIP-4_W7.62mm</field>
+        <field name="Datasheet">http://www.soselectronic.cz/a_info/resource/d/pc817.pdf</field>
+        <field name="Description">DC Optocoupler, Vce 35V, CTR 50-300%, DIP-4</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+        <pin num="3" name="" type="passive"/>
+        <pin num="4" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Mechanical" part="MountingHole_Pad">
+      <description>Mounting Hole with connection</description>
+      <footprints>
+        <fp>MountingHole*Pad*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">H</field>
+        <field name="Value">MountingHole_Pad</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Mounting Hole with connection</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="Power_Supervisor" part="TPS3823-xxDBV">
+      <description>Supervisory Circuit with watchdog &amp; manual reset, push-pull ~{RESET} output, SOT-23-6</description>
+      <docs>https://www.ti.com/lit/ds/symlink/tps3823.pdf</docs>
+      <footprints>
+        <fp>SOT?23*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">TPS3823-xxDBV</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/tps3823.pdf</field>
+        <field name="Description">Supervisory Circuit with watchdog &amp; manual reset, push-pull ~{RESET} output, SOT-23-6</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~{RESET}" type="output"/>
+        <pin num="2" name="GND" type="power_in"/>
+        <pin num="3" name="~{MR}" type="input"/>
+        <pin num="4" name="WDI" type="input"/>
+        <pin num="5" name="V_{DD}" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Transistor_FET" part="Q_NMOS_GSD">
+      <description>N-MOSFET transistor, gate/source/drain</description>
+      <fields>
+        <field name="Reference">Q</field>
+        <field name="Value">Q_NMOS_GSD</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">N-MOSFET transistor, gate/source/drain</field>
+      </fields>
+      <pins>
+        <pin num="1" name="G" type="input"/>
+        <pin num="2" name="S" type="passive"/>
+        <pin num="3" name="D" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="74LVC1G02_IEC">
+      <description>Single 2-input NOR, IEC 60617 symbol (TI SN74LVC1G02, Nexperia 74LVC1G02)</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74LVC1G02_IEC</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Single 2-input NOR, IEC 60617 symbol (TI SN74LVC1G02, Nexperia 74LVC1G02)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="input"/>
+        <pin num="2" name="" type="input"/>
+        <pin num="3" name="" type="power_in"/>
+        <pin num="4" name="" type="output"/>
+        <pin num="5" name="" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="74LVC1G08_IEC">
+      <description>Single 2-input AND, IEC 60617 symbol (TI SN74LVC1G08, Nexperia 74LVC1G08)</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74LVC1G08_IEC</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Single 2-input AND, IEC 60617 symbol (TI SN74LVC1G08, Nexperia 74LVC1G08)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="input"/>
+        <pin num="2" name="" type="input"/>
+        <pin num="3" name="" type="power_in"/>
+        <pin num="4" name="" type="output"/>
+        <pin num="5" name="" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="74LVC1G14_IEC">
+      <description>Single Schmitt inverter, IEC 60617 symbol</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74LVC1G14_IEC</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Single Schmitt inverter, IEC 60617 symbol</field>
+      </fields>
+      <pins>
+        <pin num="1" name="NC" type="no_connect"/>
+        <pin num="2" name="" type="input"/>
+        <pin num="3" name="" type="power_in"/>
+        <pin num="4" name="" type="output"/>
+        <pin num="5" name="" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="74LVC1G27_IEC">
+      <description>Single 3-input NOR, IEC 60617 symbol (TI SN74LVC1G27, Nexperia 74LVC1G27)</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74LVC1G27_IEC</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Single 3-input NOR, IEC 60617 symbol (TI SN74LVC1G27, Nexperia 74LVC1G27)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="input"/>
+        <pin num="2" name="" type="power_in"/>
+        <pin num="3" name="" type="input"/>
+        <pin num="4" name="" type="output"/>
+        <pin num="5" name="" type="power_in"/>
+        <pin num="6" name="" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="74LVC1G74_IEC">
+      <description>Single D flip-flop with preset and clear, IEC 60617 symbol (TI SN74LVC1G74 DCT/DCU, Nexperia 74LVC1G74DC)</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74LVC1G74_IEC</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Single D flip-flop with preset and clear, IEC 60617 symbol (TI SN74LVC1G74 DCT/DCU, Nexperia 74LVC1G74DC)</field>
+      </fields>
+      <pins>
+        <pin num="1" name="C1" type="input"/>
+        <pin num="2" name="1D" type="input"/>
+        <pin num="3" name="" type="output"/>
+        <pin num="4" name="" type="power_in"/>
+        <pin num="5" name="" type="output"/>
+        <pin num="6" name="R" type="input"/>
+        <pin num="7" name="S" type="input"/>
+        <pin num="8" name="" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="ESP32-C3-DevKit-RUST">
+      <description>ESP32-C3 Rust board (DevKit-RUST-1 Rev 1.2a or DevKit-RUST-2 Rev 2.0) in two socket headers. Pads as the esp-rs Rust_Board footprint, 1..28</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">ESP32-C3-DevKit-RUST</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">ESP32-C3 Rust board (DevKit-RUST-1 Rev 1.2a or DevKit-RUST-2 Rev 2.0) in two socket headers. Pads as the esp-rs Rust_Board footprint, 1..28</field>
+      </fields>
+      <pins>
+        <pin num="1" name="RST" type="passive"/>
+        <pin num="2" name="3V3" type="passive"/>
+        <pin num="3" name="NC" type="passive"/>
+        <pin num="4" name="GND" type="passive"/>
+        <pin num="5" name="IO0" type="passive"/>
+        <pin num="6" name="IO1" type="passive"/>
+        <pin num="7" name="IO2" type="passive"/>
+        <pin num="8" name="IO3" type="passive"/>
+        <pin num="9" name="IO4" type="passive"/>
+        <pin num="10" name="IO5" type="passive"/>
+        <pin num="11" name="IO6" type="passive"/>
+        <pin num="12" name="IO7" type="passive"/>
+        <pin num="13" name="IO8/SCL" type="passive"/>
+        <pin num="14" name="IO21/TXD" type="passive"/>
+        <pin num="15" name="IO20/RXD" type="passive"/>
+        <pin num="16" name="IO9/BOOT" type="passive"/>
+        <pin num="17" name="IO10/SDA" type="passive"/>
+        <pin num="18" name="IO8/SCL" type="passive"/>
+        <pin num="19" name="IO19/D+" type="passive"/>
+        <pin num="20" name="IO18/D-" type="passive"/>
+        <pin num="21" name="NC" type="passive"/>
+        <pin num="22" name="NC" type="passive"/>
+        <pin num="23" name="NC" type="passive"/>
+        <pin num="24" name="NC" type="passive"/>
+        <pin num="25" name="NC" type="passive"/>
+        <pin num="26" name="VBUS" type="passive"/>
+        <pin num="27" name="EN" type="passive"/>
+        <pin num="28" name="VBAT" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="LP2985-3.3">
+      <description>150mA 16V Low-noise Low-dropout Regulator With Shutdown, 1.8V output voltage, SOT-23-5</description>
+      <docs>http://www.ti.com/lit/ds/symlink/lp2985.pdf</docs>
+      <footprints>
+        <fp>SOT?23*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">LP2985-3.3</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23-5</field>
+        <field name="Datasheet">http://www.ti.com/lit/ds/symlink/lp2985.pdf</field>
+        <field name="Description">150mA 16V Low-noise Low-dropout Regulator With Shutdown, 1.8V output voltage, SOT-23-5</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VIN" type="power_in"/>
+        <pin num="2" name="GND" type="power_in"/>
+        <pin num="3" name="ON/~{OFF}" type="input"/>
+        <pin num="4" name="BP" type="input"/>
+        <pin num="5" name="VOUT" type="power_out"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="SolderJumper_3_Open">
+      <description>Solder jumper, 3 pads, open; bridge 2-1 or 2-3</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SolderJumper_3_Open</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">Solder jumper, 3 pads, open; bridge 2-1 or 2-3</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+        <pin num="3" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="controller-board" part="TLP176AM">
+      <description>1-form-A photorelay 60 V 0.7 A, 2.54 mm pitch (Toshiba TLP176AM Rev 7.0.A). Symbol pins = SOP4 positions 1 A, 2 K, 3 and 4 load = TLP176AM pins 1, 3, 4, 6. Second source Panasonic AQY212G3HS</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">TLP176AM</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description">1-form-A photorelay 60 V 0.7 A, 2.54 mm pitch (Toshiba TLP176AM Rev 7.0.A). Symbol pins = SOP4 positions 1 A, 2 K, 3 and 4 load = TLP176AM pins 1, 3, 4, 6. Second source Panasonic AQY212G3HS</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+        <pin num="3" name="" type="passive"/>
+        <pin num="4" name="" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Connector">
+      <uri>${KICAD10_SYMBOL_DIR}/Connector.kicad_sym</uri>
+    </library>
+    <library logical="Connector_Generic">
+      <uri>${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym</uri>
+    </library>
+    <library logical="Device">
+      <uri>${KICAD10_SYMBOL_DIR}/Device.kicad_sym</uri>
+    </library>
+    <library logical="Isolator">
+      <uri>${KICAD10_SYMBOL_DIR}/Isolator.kicad_sym</uri>
+    </library>
+    <library logical="Mechanical">
+      <uri>${KICAD10_SYMBOL_DIR}/Mechanical.kicad_sym</uri>
+    </library>
+    <library logical="Power_Supervisor">
+      <uri>${KICAD10_SYMBOL_DIR}/Power_Supervisor.kicad_sym</uri>
+    </library>
+    <library logical="Transistor_FET">
+      <uri>${KICAD10_SYMBOL_DIR}/Transistor_FET.kicad_sym</uri>
+    </library>
+    <library logical="controller-board">
+      <uri>${KIPRJMOD}/controller-board.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="+3V3" class="Power">
+      <node ref="A1" pin="2" pinfunction="3V3_2" pintype="passive"/>
+      <node ref="C14" pin="1" pintype="passive"/>
+      <node ref="C15" pin="1" pintype="passive"/>
+      <node ref="C16" pin="1" pintype="passive"/>
+      <node ref="C17" pin="1" pintype="passive"/>
+      <node ref="C4" pin="1" pintype="passive"/>
+      <node ref="C5" pin="1" pintype="passive"/>
+      <node ref="R14" pin="1" pintype="passive"/>
+      <node ref="R24" pin="1" pintype="passive"/>
+      <node ref="R34" pin="1" pintype="passive"/>
+      <node ref="R63" pin="1" pintype="passive"/>
+      <node ref="R65" pin="2" pintype="passive"/>
+      <node ref="TP2" pin="1" pinfunction="1_1" pintype="passive"/>
+      <node ref="U12" pin="5" pinfunction="V_{DD}_5" pintype="power_in"/>
+      <node ref="U13" pin="6" pinfunction="R_6" pintype="input"/>
+      <node ref="U13" pin="8" pintype="power_in"/>
+      <node ref="U14" pin="5" pintype="power_in"/>
+      <node ref="U15" pin="5" pintype="power_in"/>
+      <node ref="U16" pin="5" pintype="power_in"/>
+      <node ref="U5" pin="5" pintype="power_in"/>
+    </net>
+    <net code="2" name="+5V" class="Power">
+      <node ref="C1" pin="1" pintype="passive"/>
+      <node ref="C11" pin="1" pintype="passive"/>
+      <node ref="C2" pin="1" pintype="passive"/>
+      <node ref="C3" pin="1" pintype="passive"/>
+      <node ref="J2" pin="2" pinfunction="Pin_2_2" pintype="passive"/>
+      <node ref="J2" pin="4" pinfunction="Pin_4_4" pintype="passive"/>
+      <node ref="R43" pin="1" pintype="passive"/>
+      <node ref="TP1" pin="1" pinfunction="1_1" pintype="passive"/>
+      <node ref="U1" pin="7" pinfunction="EN_7" pintype="input"/>
+      <node ref="U1" pin="8" pinfunction="VCC_8" pintype="power_in"/>
+      <node ref="U11" pin="1" pinfunction="VIN_1" pintype="power_in"/>
+      <node ref="U11" pin="3" pinfunction="ON/~{OFF}_3" pintype="input"/>
+      <node ref="U2" pin="7" pinfunction="EN_7" pintype="input"/>
+      <node ref="U2" pin="8" pinfunction="VCC_8" pintype="power_in"/>
+      <node ref="U3" pin="7" pinfunction="EN_7" pintype="input"/>
+      <node ref="U3" pin="8" pinfunction="VCC_8" pintype="power_in"/>
+    </net>
+    <net code="3" name="/Link and PTT/CHASSIS" class="Loop">
+      <node ref="C21" pin="1" pintype="passive"/>
+      <node ref="C22" pin="2" pintype="passive"/>
+      <node ref="C23" pin="1" pintype="passive"/>
+      <node ref="C24" pin="2" pintype="passive"/>
+      <node ref="C25" pin="1" pintype="passive"/>
+      <node ref="C26" pin="2" pintype="passive"/>
+      <node ref="C27" pin="1" pintype="passive"/>
+      <node ref="C28" pin="2" pintype="passive"/>
+      <node ref="GD1" pin="2" pintype="passive"/>
+      <node ref="GD2" pin="2" pintype="passive"/>
+      <node ref="GD3" pin="2" pintype="passive"/>
+      <node ref="GD4" pin="2" pintype="passive"/>
+      <node ref="H1" pin="1" pinfunction="1_1" pintype="input"/>
+    </net>
+    <net code="4" name="/Link and PTT/DATA_RX" class="Default">
+      <node ref="A1" pin="15" pinfunction="IO20/RXD_15" pintype="passive"/>
+      <node ref="R14" pin="2" pintype="passive"/>
+      <node ref="U1" pin="6" pinfunction="VO_6" pintype="open_collector"/>
+    </net>
+    <net code="5" name="/Link and PTT/KILL" class="Default">
+      <node ref="A1" pin="10" pinfunction="IO5_10" pintype="passive"/>
+      <node ref="R34" pin="2" pintype="passive"/>
+      <node ref="U14" pin="3" pintype="input"/>
+      <node ref="U3" pin="6" pinfunction="VO_6" pintype="open_collector"/>
+    </net>
+    <net code="6" name="/Link and PTT/L1N" class="Entry">
+      <node ref="GD1" pin="1" pintype="passive"/>
+      <node ref="J1" pin="5" pintype="passive"/>
+      <node ref="L1" pin="3" pinfunction="3_3" pintype="passive"/>
+    </net>
+    <net code="7" name="/Link and PTT/L1P" class="Entry">
+      <node ref="GD1" pin="3" pintype="passive"/>
+      <node ref="J1" pin="4" pintype="passive"/>
+      <node ref="L1" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="8" name="/Link and PTT/L2N" class="Entry">
+      <node ref="GD2" pin="1" pintype="passive"/>
+      <node ref="J1" pin="2" pintype="passive"/>
+      <node ref="L2" pin="3" pinfunction="3_3" pintype="passive"/>
+    </net>
+    <net code="9" name="/Link and PTT/L2P" class="Entry">
+      <node ref="GD2" pin="3" pintype="passive"/>
+      <node ref="J1" pin="1" pintype="passive"/>
+      <node ref="L2" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="10" name="/Link and PTT/L3N" class="Entry">
+      <node ref="GD3" pin="1" pintype="passive"/>
+      <node ref="J1" pin="6" pintype="passive"/>
+      <node ref="L3" pin="3" pinfunction="3_3" pintype="passive"/>
+    </net>
+    <net code="11" name="/Link and PTT/L3P" class="Entry">
+      <node ref="GD3" pin="3" pintype="passive"/>
+      <node ref="J1" pin="3" pintype="passive"/>
+      <node ref="L3" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="12" name="/Link and PTT/L4N" class="Entry">
+      <node ref="GD4" pin="1" pintype="passive"/>
+      <node ref="J1" pin="8" pintype="passive"/>
+      <node ref="L4" pin="3" pinfunction="3_3" pintype="passive"/>
+    </net>
+    <net code="13" name="/Link and PTT/L4P" class="Entry">
+      <node ref="GD4" pin="3" pintype="passive"/>
+      <node ref="J1" pin="7" pintype="passive"/>
+      <node ref="L4" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="14" name="/Link and PTT/PTT_N" class="Default">
+      <node ref="R24" pin="2" pintype="passive"/>
+      <node ref="U2" pin="6" pinfunction="VO_6" pintype="open_collector"/>
+      <node ref="U5" pin="2" pintype="input"/>
+    </net>
+    <net code="15" name="/Link and PTT/R1_K0_DRV" class="Default">
+      <node ref="J2" pin="11" pinfunction="Pin_11_11" pintype="passive"/>
+      <node ref="R51" pin="2" pintype="passive"/>
+    </net>
+    <net code="16" name="/Link and PTT/R2_K0_DRV" class="Default">
+      <node ref="J2" pin="13" pinfunction="Pin_13_13" pintype="passive"/>
+      <node ref="R52" pin="2" pintype="passive"/>
+    </net>
+    <net code="17" name="/Link and PTT/R3_K0_DRV" class="Default">
+      <node ref="J2" pin="15" pinfunction="Pin_15_15" pintype="passive"/>
+      <node ref="R53" pin="2" pintype="passive"/>
+    </net>
+    <net code="18" name="/Link and PTT/READY_ON" class="Default">
+      <node ref="U15" pin="4" pintype="output"/>
+      <node ref="U16" pin="1" pintype="input"/>
+    </net>
+    <net code="19" name="/Link and PTT/RF_A2_N" class="Default">
+      <node ref="J2" pin="17" pinfunction="Pin_17_17" pintype="passive"/>
+      <node ref="R36" pin="1" pintype="passive"/>
+      <node ref="TP4" pin="1" pinfunction="1_1" pintype="passive"/>
+      <node ref="U16" pin="2" pintype="input"/>
+    </net>
+    <net code="20" name="/Link and PTT/TX_ANY" class="Default">
+      <node ref="J2" pin="9" pinfunction="Pin_9_9" pintype="passive"/>
+      <node ref="R51" pin="1" pintype="passive"/>
+      <node ref="R52" pin="1" pintype="passive"/>
+      <node ref="R53" pin="1" pintype="passive"/>
+      <node ref="TP9" pin="1" pinfunction="1_1" pintype="passive"/>
+      <node ref="U5" pin="4" pintype="output"/>
+    </net>
+    <net code="21" name="/MCU and safety gate/DATA_TX" class="Default">
+      <node ref="A1" pin="14" pinfunction="IO21/TXD_14" pintype="passive"/>
+      <node ref="Q4" pin="1" pinfunction="G_1" pintype="input"/>
+      <node ref="R44" pin="1" pintype="passive"/>
+    </net>
+    <net code="22" name="/MCU and safety gate/EXP_INT" class="Default">
+      <node ref="A1" pin="5" pinfunction="IO0_5" pintype="passive"/>
+      <node ref="J2" pin="5" pinfunction="Pin_5_5" pintype="passive"/>
+      <node ref="TP7" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="23" name="/MCU and safety gate/FAULT" class="Default">
+      <node ref="TP3" pin="1" pinfunction="1_1" pintype="passive"/>
+      <node ref="U13" pin="5" pintype="output"/>
+      <node ref="U14" pin="6" pintype="input"/>
+      <node ref="U15" pin="2" pintype="input"/>
+    </net>
+    <net code="24" name="/MCU and safety gate/LATCH_CLR" class="Default">
+      <node ref="A1" pin="8" pinfunction="IO3_8" pintype="passive"/>
+      <node ref="R62" pin="2" pintype="passive"/>
+      <node ref="U13" pin="1" pinfunction="C1_1" pintype="input"/>
+    </net>
+    <net code="25" name="/MCU and safety gate/MCU_EN_N" class="Default">
+      <node ref="A1" pin="9" pinfunction="IO4_9" pintype="passive"/>
+      <node ref="R63" pin="2" pintype="passive"/>
+      <node ref="U14" pin="1" pintype="input"/>
+      <node ref="U15" pin="1" pintype="input"/>
+    </net>
+    <net code="26" name="/MCU and safety gate/RESET_N" class="Default">
+      <node ref="U12" pin="1" pinfunction="~{RESET}_1" pintype="output"/>
+      <node ref="U13" pin="7" pinfunction="S_7" pintype="input"/>
+    </net>
+    <net code="27" name="/MCU and safety gate/RLY_EN" class="Default">
+      <node ref="J2" pin="7" pinfunction="Pin_7_7" pintype="passive"/>
+      <node ref="TP8" pin="1" pinfunction="1_1" pintype="passive"/>
+      <node ref="U14" pin="4" pintype="output"/>
+    </net>
+    <net code="28" name="/MCU and safety gate/SCL" class="Default">
+      <node ref="A1" pin="13" pinfunction="IO8/SCL_13" pintype="passive"/>
+      <node ref="J2" pin="1" pinfunction="Pin_1_1" pintype="passive"/>
+      <node ref="TP5" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="29" name="/MCU and safety gate/SDA" class="Default">
+      <node ref="J2" pin="3" pinfunction="Pin_3_3" pintype="passive"/>
+      <node ref="JP11" pin="2" pintype="passive"/>
+      <node ref="TP6" pin="1" pinfunction="1_1" pintype="passive"/>
+    </net>
+    <net code="30" name="/MCU and safety gate/SDA_IO7" class="Default">
+      <node ref="A1" pin="12" pinfunction="IO7_12" pintype="passive"/>
+      <node ref="JP11" pin="1" pintype="passive"/>
+    </net>
+    <net code="31" name="/MCU and safety gate/SDA_IO10" class="Default">
+      <node ref="A1" pin="17" pinfunction="IO10/SDA_17" pintype="passive"/>
+      <node ref="JP11" pin="3" pintype="passive"/>
+    </net>
+    <net code="32" name="/MCU and safety gate/WDI" class="Default">
+      <node ref="A1" pin="6" pinfunction="IO1_6" pintype="passive"/>
+      <node ref="R61" pin="1" pintype="passive"/>
+      <node ref="R64" pin="1" pintype="passive"/>
+    </net>
+    <net code="33" name="GND" class="GND">
+      <node ref="A1" pin="27" pinfunction="EN_27" pintype="passive"/>
+      <node ref="A1" pin="4" pinfunction="GND_4" pintype="passive"/>
+      <node ref="C1" pin="2" pintype="passive"/>
+      <node ref="C11" pin="2" pintype="passive"/>
+      <node ref="C12" pin="2" pintype="passive"/>
+      <node ref="C13" pin="2" pintype="passive"/>
+      <node ref="C14" pin="2" pintype="passive"/>
+      <node ref="C15" pin="2" pintype="passive"/>
+      <node ref="C16" pin="2" pintype="passive"/>
+      <node ref="C17" pin="2" pintype="passive"/>
+      <node ref="C2" pin="2" pintype="passive"/>
+      <node ref="C3" pin="2" pintype="passive"/>
+      <node ref="C4" pin="2" pintype="passive"/>
+      <node ref="C5" pin="2" pintype="passive"/>
+      <node ref="J2" pin="10" pinfunction="Pin_10_10" pintype="passive"/>
+      <node ref="J2" pin="12" pinfunction="Pin_12_12" pintype="passive"/>
+      <node ref="J2" pin="14" pinfunction="Pin_14_14" pintype="passive"/>
+      <node ref="J2" pin="16" pinfunction="Pin_16_16" pintype="passive"/>
+      <node ref="J2" pin="18" pinfunction="Pin_18_18" pintype="passive"/>
+      <node ref="J2" pin="20" pinfunction="Pin_20_20" pintype="passive"/>
+      <node ref="J2" pin="22" pinfunction="Pin_22_22" pintype="passive"/>
+      <node ref="J2" pin="24" pinfunction="Pin_24_24" pintype="passive"/>
+      <node ref="J2" pin="6" pinfunction="Pin_6_6" pintype="passive"/>
+      <node ref="J2" pin="8" pinfunction="Pin_8_8" pintype="passive"/>
+      <node ref="Q4" pin="2" pinfunction="S_2" pintype="passive"/>
+      <node ref="R36" pin="2" pintype="passive"/>
+      <node ref="R44" pin="2" pintype="passive"/>
+      <node ref="R61" pin="2" pintype="passive"/>
+      <node ref="R62" pin="1" pintype="passive"/>
+      <node ref="U1" pin="5" pinfunction="GND_5" pintype="power_in"/>
+      <node ref="U11" pin="2" pinfunction="GND_2" pintype="power_in"/>
+      <node ref="U12" pin="2" pinfunction="GND_2" pintype="power_in"/>
+      <node ref="U13" pin="2" pinfunction="1D_2" pintype="input"/>
+      <node ref="U13" pin="4" pintype="power_in"/>
+      <node ref="U14" pin="2" pintype="power_in"/>
+      <node ref="U15" pin="3" pintype="power_in"/>
+      <node ref="U16" pin="3" pintype="power_in"/>
+      <node ref="U2" pin="5" pinfunction="GND_5" pintype="power_in"/>
+      <node ref="U3" pin="5" pinfunction="GND_5" pintype="power_in"/>
+      <node ref="U5" pin="3" pintype="power_in"/>
+      <node ref="U6" pin="2" pintype="passive"/>
+    </net>
+    <net code="34" name="Net-(C21-Pad2)" class="Loop">
+      <node ref="C21" pin="2" pintype="passive"/>
+      <node ref="L1" pin="2" pinfunction="2_2" pintype="passive"/>
+      <node ref="R11" pin="1" pintype="passive"/>
+    </net>
+    <net code="35" name="Net-(C22-Pad1)" class="Loop">
+      <node ref="C22" pin="1" pintype="passive"/>
+      <node ref="L1" pin="4" pinfunction="4_4" pintype="passive"/>
+      <node ref="R12" pin="1" pintype="passive"/>
+    </net>
+    <net code="36" name="Net-(C23-Pad2)" class="Loop">
+      <node ref="C23" pin="2" pintype="passive"/>
+      <node ref="L2" pin="2" pinfunction="2_2" pintype="passive"/>
+      <node ref="R21" pin="1" pintype="passive"/>
+    </net>
+    <net code="37" name="Net-(C24-Pad1)" class="Loop">
+      <node ref="C24" pin="1" pintype="passive"/>
+      <node ref="L2" pin="4" pinfunction="4_4" pintype="passive"/>
+      <node ref="R22" pin="1" pintype="passive"/>
+    </net>
+    <net code="38" name="Net-(C25-Pad2)" class="Loop">
+      <node ref="C25" pin="2" pintype="passive"/>
+      <node ref="L3" pin="2" pinfunction="2_2" pintype="passive"/>
+      <node ref="R31" pin="1" pintype="passive"/>
+    </net>
+    <net code="39" name="Net-(C26-Pad1)" class="Loop">
+      <node ref="C26" pin="1" pintype="passive"/>
+      <node ref="L3" pin="4" pinfunction="4_4" pintype="passive"/>
+      <node ref="R32" pin="1" pintype="passive"/>
+    </net>
+    <net code="40" name="Net-(C27-Pad2)" class="Loop">
+      <node ref="C27" pin="2" pintype="passive"/>
+      <node ref="L4" pin="2" pinfunction="2_2" pintype="passive"/>
+      <node ref="R41" pin="1" pintype="passive"/>
+    </net>
+    <net code="41" name="Net-(C28-Pad1)" class="Loop">
+      <node ref="C28" pin="1" pintype="passive"/>
+      <node ref="L4" pin="4" pinfunction="4_4" pintype="passive"/>
+      <node ref="R42" pin="1" pintype="passive"/>
+    </net>
+    <net code="42" name="Net-(D11-A1)" class="Loop">
+      <node ref="D11" pin="1" pinfunction="A1_1" pintype="passive"/>
+      <node ref="D12" pin="2" pinfunction="A_2" pintype="passive"/>
+      <node ref="R12" pin="2" pintype="passive"/>
+      <node ref="U1" pin="3" pinfunction="C_3" pintype="passive"/>
+    </net>
+    <net code="43" name="Net-(D11-A2)" class="Loop">
+      <node ref="D11" pin="2" pinfunction="A2_2" pintype="passive"/>
+      <node ref="R11" pin="2" pintype="passive"/>
+      <node ref="R13" pin="1" pintype="passive"/>
+    </net>
+    <net code="44" name="Net-(D12-K)" class="Loop">
+      <node ref="D12" pin="1" pinfunction="K_1" pintype="passive"/>
+      <node ref="R13" pin="2" pintype="passive"/>
+      <node ref="U1" pin="2" pinfunction="A_2" pintype="passive"/>
+    </net>
+    <net code="45" name="Net-(D21-A1)" class="Loop">
+      <node ref="D21" pin="1" pinfunction="A1_1" pintype="passive"/>
+      <node ref="D22" pin="2" pinfunction="A_2" pintype="passive"/>
+      <node ref="R22" pin="2" pintype="passive"/>
+      <node ref="U2" pin="3" pinfunction="C_3" pintype="passive"/>
+    </net>
+    <net code="46" name="Net-(D21-A2)" class="Loop">
+      <node ref="D21" pin="2" pinfunction="A2_2" pintype="passive"/>
+      <node ref="R21" pin="2" pintype="passive"/>
+      <node ref="R23" pin="1" pintype="passive"/>
+    </net>
+    <net code="47" name="Net-(D22-K)" class="Loop">
+      <node ref="D22" pin="1" pinfunction="K_1" pintype="passive"/>
+      <node ref="R23" pin="2" pintype="passive"/>
+      <node ref="U2" pin="2" pinfunction="A_2" pintype="passive"/>
+    </net>
+    <net code="48" name="Net-(D31-A1)" class="Loop">
+      <node ref="D31" pin="1" pinfunction="A1_1" pintype="passive"/>
+      <node ref="R32" pin="2" pintype="passive"/>
+      <node ref="U6" pin="4" pintype="passive"/>
+    </net>
+    <net code="49" name="Net-(D31-A2)" class="Loop">
+      <node ref="D31" pin="2" pinfunction="A2_2" pintype="passive"/>
+      <node ref="R31" pin="2" pintype="passive"/>
+      <node ref="R33" pin="1" pintype="passive"/>
+    </net>
+    <net code="50" name="Net-(D32-A)" class="Loop">
+      <node ref="D32" pin="2" pinfunction="A_2" pintype="passive"/>
+      <node ref="U3" pin="3" pinfunction="C_3" pintype="passive"/>
+      <node ref="U6" pin="3" pintype="passive"/>
+    </net>
+    <net code="51" name="Net-(D32-K)" class="Loop">
+      <node ref="D32" pin="1" pinfunction="K_1" pintype="passive"/>
+      <node ref="R33" pin="2" pintype="passive"/>
+      <node ref="U3" pin="2" pinfunction="A_2" pintype="passive"/>
+    </net>
+    <net code="52" name="Net-(D41-A1)" class="Loop">
+      <node ref="D41" pin="1" pinfunction="A1_1" pintype="passive"/>
+      <node ref="R42" pin="2" pintype="passive"/>
+      <node ref="U4" pin="3" pintype="passive"/>
+    </net>
+    <net code="53" name="Net-(D41-A2)" class="Loop">
+      <node ref="D41" pin="2" pinfunction="A2_2" pintype="passive"/>
+      <node ref="D42" pin="2" pinfunction="A_2" pintype="passive"/>
+      <node ref="R41" pin="2" pintype="passive"/>
+    </net>
+    <net code="54" name="Net-(D42-K)" class="Loop">
+      <node ref="D42" pin="1" pinfunction="K_1" pintype="passive"/>
+      <node ref="U4" pin="4" pintype="passive"/>
+    </net>
+    <net code="55" name="Net-(Q4-D)" class="Default">
+      <node ref="Q4" pin="3" pinfunction="D_3" pintype="passive"/>
+      <node ref="U4" pin="2" pintype="passive"/>
+    </net>
+    <net code="56" name="Net-(R35-Pad1)" class="Default">
+      <node ref="R35" pin="1" pintype="passive"/>
+      <node ref="U6" pin="1" pintype="passive"/>
+    </net>
+    <net code="57" name="Net-(R35-Pad2)" class="Default">
+      <node ref="R35" pin="2" pintype="passive"/>
+      <node ref="U16" pin="4" pintype="output"/>
+    </net>
+    <net code="58" name="Net-(R43-Pad2)" class="Default">
+      <node ref="R43" pin="2" pintype="passive"/>
+      <node ref="U4" pin="1" pintype="passive"/>
+    </net>
+    <net code="59" name="Net-(U11-BP)" class="Default">
+      <node ref="C12" pin="1" pintype="passive"/>
+      <node ref="U11" pin="4" pinfunction="BP_4" pintype="input"/>
+    </net>
+    <net code="60" name="Net-(U11-VOUT)" class="Power">
+      <node ref="C13" pin="1" pintype="passive"/>
+      <node ref="R65" pin="1" pintype="passive"/>
+      <node ref="U11" pin="5" pinfunction="VOUT_5" pintype="power_out"/>
+    </net>
+    <net code="61" name="Net-(U12-WDI)" class="Default">
+      <node ref="R64" pin="2" pintype="passive"/>
+      <node ref="U12" pin="4" pinfunction="WDI_4" pintype="input"/>
+    </net>
+    <net code="62" name="unconnected-(A1-IO2-Pad7)" class="Default">
+      <node ref="A1" pin="7" pinfunction="IO2_7" pintype="passive+no_connect"/>
+    </net>
+    <net code="63" name="unconnected-(A1-IO6-Pad11)" class="Default">
+      <node ref="A1" pin="11" pinfunction="IO6_11" pintype="passive+no_connect"/>
+    </net>
+    <net code="64" name="unconnected-(A1-IO8/SCL-Pad18)" class="Default">
+      <node ref="A1" pin="18" pinfunction="IO8/SCL_18" pintype="passive+no_connect"/>
+    </net>
+    <net code="65" name="unconnected-(A1-IO9/BOOT-Pad16)" class="Default">
+      <node ref="A1" pin="16" pinfunction="IO9/BOOT_16" pintype="passive+no_connect"/>
+    </net>
+    <net code="66" name="unconnected-(A1-IO18/D--Pad20)" class="Default">
+      <node ref="A1" pin="20" pinfunction="IO18/D-_20" pintype="passive+no_connect"/>
+    </net>
+    <net code="67" name="unconnected-(A1-IO19/D+-Pad19)" class="Default">
+      <node ref="A1" pin="19" pinfunction="IO19/D+_19" pintype="passive+no_connect"/>
+    </net>
+    <net code="68" name="unconnected-(A1-NC-Pad3)" class="Default">
+      <node ref="A1" pin="3" pinfunction="NC_3" pintype="passive+no_connect"/>
+    </net>
+    <net code="69" name="unconnected-(A1-NC-Pad21)" class="Default">
+      <node ref="A1" pin="21" pinfunction="NC_21" pintype="passive+no_connect"/>
+    </net>
+    <net code="70" name="unconnected-(A1-NC-Pad22)" class="Default">
+      <node ref="A1" pin="22" pinfunction="NC_22" pintype="passive+no_connect"/>
+    </net>
+    <net code="71" name="unconnected-(A1-NC-Pad23)" class="Default">
+      <node ref="A1" pin="23" pinfunction="NC_23" pintype="passive+no_connect"/>
+    </net>
+    <net code="72" name="unconnected-(A1-NC-Pad24)" class="Default">
+      <node ref="A1" pin="24" pinfunction="NC_24" pintype="passive+no_connect"/>
+    </net>
+    <net code="73" name="unconnected-(A1-NC-Pad25)" class="Default">
+      <node ref="A1" pin="25" pinfunction="NC_25" pintype="passive+no_connect"/>
+    </net>
+    <net code="74" name="unconnected-(A1-RST-Pad1)" class="Default">
+      <node ref="A1" pin="1" pinfunction="RST_1" pintype="passive+no_connect"/>
+    </net>
+    <net code="75" name="unconnected-(A1-VBAT-Pad28)" class="Default">
+      <node ref="A1" pin="28" pinfunction="VBAT_28" pintype="passive+no_connect"/>
+    </net>
+    <net code="76" name="unconnected-(A1-VBUS-Pad26)" class="Default">
+      <node ref="A1" pin="26" pinfunction="VBUS_26" pintype="passive+no_connect"/>
+    </net>
+    <net code="77" name="unconnected-(J2-Pin_19-Pad19)" class="Default">
+      <node ref="J2" pin="19" pinfunction="Pin_19_19" pintype="passive+no_connect"/>
+    </net>
+    <net code="78" name="unconnected-(J2-Pin_21-Pad21)" class="Default">
+      <node ref="J2" pin="21" pinfunction="Pin_21_21" pintype="passive+no_connect"/>
+    </net>
+    <net code="79" name="unconnected-(J2-Pin_23-Pad23)" class="Default">
+      <node ref="J2" pin="23" pinfunction="Pin_23_23" pintype="passive+no_connect"/>
+    </net>
+    <net code="80" name="unconnected-(U1-NC-Pad1)" class="Default">
+      <node ref="U1" pin="1" pinfunction="NC_1" pintype="passive+no_connect"/>
+    </net>
+    <net code="81" name="unconnected-(U1-NC-Pad4)" class="Default">
+      <node ref="U1" pin="4" pinfunction="NC_4" pintype="passive+no_connect"/>
+    </net>
+    <net code="82" name="unconnected-(U2-NC-Pad1)" class="Default">
+      <node ref="U2" pin="1" pinfunction="NC_1" pintype="passive+no_connect"/>
+    </net>
+    <net code="83" name="unconnected-(U2-NC-Pad4)" class="Default">
+      <node ref="U2" pin="4" pinfunction="NC_4" pintype="passive+no_connect"/>
+    </net>
+    <net code="84" name="unconnected-(U3-NC-Pad1)" class="Default">
+      <node ref="U3" pin="1" pinfunction="NC_1" pintype="passive+no_connect"/>
+    </net>
+    <net code="85" name="unconnected-(U3-NC-Pad4)" class="Default">
+      <node ref="U3" pin="4" pinfunction="NC_4" pintype="passive+no_connect"/>
+    </net>
+    <net code="86" name="unconnected-(U5-NC-Pad1)" class="Default">
+      <node ref="U5" pin="1" pinfunction="NC_1" pintype="no_connect"/>
+    </net>
+    <net code="87" name="unconnected-(U12-~{MR}-Pad3)" class="Default">
+      <node ref="U12" pin="3" pinfunction="~{MR}_3" pintype="input+no_connect"/>
+    </net>
+    <net code="88" name="unconnected-(U13-Pad3)" class="Default">
+      <node ref="U13" pin="3" pintype="output+no_connect"/>
+    </net>
+  </nets>
+</export>

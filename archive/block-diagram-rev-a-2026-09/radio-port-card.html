@@ -1,0 +1,262 @@
+<title>Radio Port Card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#f2f3ef; --panel:#fbfbf8; --ink:#1c232b; --ink2:#5b6570; --line:#8e979f; --grid:#d8dbd4;
+  --ctl:#2b7a78; --ctl-soft:#2b7a7833; --rf:#1c232b; --on:#d9642a; --spare:#a9b0b6;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --ctl-soft:#4fb3ad33; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+} }
+:root[data-theme="dark"] {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --ctl-soft:#4fb3ad33; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+}
+body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.5; }
+main { max-width:1120px; margin:0 auto; padding:32px 24px 64px; }
+header { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 24px; margin-bottom:20px; }
+h1 { font-size:26px; font-weight:600; margin:0; letter-spacing:-0.01em; }
+h2 { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink2); margin:36px 0 10px; }
+.eyebrow { font-family:var(--mono); font-size:12px; color:var(--ctl); letter-spacing:0.04em; }
+.lede { color:var(--ink2); max-width:70ch; margin:0 0 20px; }
+.lede a { color:var(--ctl); }
+figure { margin:0; background:var(--panel); border:1px solid var(--grid); border-radius:4px; padding:16px; overflow-x:auto; }
+figure svg { display:block; min-width:900px; width:100%; height:auto; color:var(--ink); }
+figcaption { font-size:13px; color:var(--ink2); margin-top:12px; display:flex; flex-wrap:wrap; gap:6px 22px; }
+.key { display:inline-flex; align-items:center; gap:6px; }
+.key i { display:inline-block; width:14px; height:3px; background:var(--rf); }
+.key i.ctl { background:var(--ctl); }
+.key i.sp { background:repeating-linear-gradient(90deg,var(--spare) 0 4px,transparent 4px 7px); }
+.mod { fill:var(--panel); stroke:var(--ink); stroke-width:1.4; }
+.mod.ext { stroke:var(--line); stroke-width:1.2; }
+.mod.spare { stroke:var(--spare); stroke-dasharray:5 4; }
+.rf { stroke:var(--rf); stroke-width:2.2; fill:none; }
+.rf6 { stroke:var(--rf); stroke-width:6; fill:none; opacity:.85; }
+.wire { stroke:var(--rf); stroke-width:1.4; fill:none; }
+.wire.spare { stroke:var(--spare); stroke-dasharray:5 4; }
+.ctl { stroke:var(--ctl); stroke-width:1.6; fill:none; }
+.ctl.spare { stroke:var(--spare); stroke-dasharray:5 4; }
+.bus { fill:var(--ctl-soft); stroke:var(--ctl); stroke-width:1; }
+.buslbl { font-family:var(--mono); font-size:10px; fill:var(--ctl); }
+.node { fill:var(--rf); }
+.hop { fill:var(--panel); }
+.t { font-family:var(--sans); font-size:12px; font-weight:600; fill:var(--ink); }
+.t.spare { fill:var(--spare); }
+.d { font-family:var(--mono); font-size:10px; fill:var(--ink2); }
+.d.spare { fill:var(--spare); }
+.pin { font-family:var(--mono); font-size:9.5px; fill:var(--ink); }
+.sec { font-family:var(--mono); font-size:11px; fill:var(--ctl); letter-spacing:.06em; text-transform:uppercase; }
+.grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:24px 40px; }
+table { border-collapse:collapse; width:100%; font-size:14px; }
+th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink2); font-weight:600; padding:6px 10px 6px 0; border-bottom:1px solid var(--line); }
+td { padding:8px 10px 8px 0; border-bottom:1px solid var(--grid); vertical-align:top; }
+td:first-child { font-weight:600; white-space:nowrap; }
+code { font-family:var(--mono); font-size:12.5px; color:var(--ctl); }
+p, ol { max-width:70ch; }
+ol { padding-left:20px; } ol li { margin-bottom:6px; }
+</style>
+<main>
+<header>
+  <span class="eyebrow">Shack Relay Matrix · card architecture · rev A</span>
+  <h1>Radio Port Card</h1>
+</header>
+<p class="lede">One card per radio slot. The radio's single antenna socket comes in, a PTT-driven changeover relay splits it into a TX path and an RX path, and each path has its own row of six relays onto the RF bus lines. One PCB serves both the FT-710 and the Airspy: the RX-only build leaves the TX row empty and moves one jumper. Parent: <a href="https://claude.ai/code/artifact/e27126d0-6c2e-44ee-a48c-11e5d0845b2e">Shack Relay Matrix</a> · sibling: <a href="https://claude.ai/code/artifact/e87b98e8-e594-4f4e-8697-b0068ad870c9">Antenna Port Card</a>.</p>
+
+<figure>
+<svg viewBox="0 0 1160 600" role="img" aria-label="Radio Port card: radio SO-239 into a PTT-driven SPDT changeover relay K0, TX path to a bank of six power relays and RX path to a bank of six signal relays, both banks onto the six RF bus lines; control section with PTT opto, K0 drive select, I2C expander, EEPROM, DIP, relay drivers behind an RLY_EN-gated rail switch, on the backplane rail">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<text class="sec" x="30" y="30" text-anchor="start">RF · 50 Ω · 100 W HF</text>
+<rect class="mod ext" x="30" y="87" width="100" height="56" rx="3"/>
+<text class="t ext" x="80.0" y="104" text-anchor="middle">SO-239</text>
+<text class="d ext" x="80.0" y="120" text-anchor="middle">radio in</text>
+<text class="d ext" x="80.0" y="134" text-anchor="middle">shell → chassis</text>
+<line class="rf" x1="130" y1="115" x2="200" y2="115"/>
+<circle class="node" cx="160" cy="115" r="3.5"/>
+<rect class="mod" x="200" y="83" width="160" height="64" rx="3"/>
+<text class="t" x="280.0" y="100" text-anchor="middle">K0 · SPDT changeover</text>
+<text class="d" x="280.0" y="116" text-anchor="middle">COM = radio</text>
+<text class="d" x="280.0" y="130" text-anchor="middle">NO = TX path (keyed)</text>
+<text class="d" x="280.0" y="144" text-anchor="middle">NC = RX path (idle)</text>
+<text class="pin" x="356" y="103" text-anchor="end">NO</text>
+<text class="pin" x="356" y="137" text-anchor="end">NC</text>
+<polyline class="rf" points="360,100 400,100 400,70 440,70"/>
+<polyline class="rf" points="360,130 400,130 400,160 440,160"/>
+<text class="d" x="366" y="94" text-anchor="start">TX path</text>
+<text class="d" x="366" y="147" text-anchor="start">RX path</text>
+<rect class="mod" x="440" y="42" width="200" height="56" rx="3"/>
+<text class="t" x="540.0" y="59" text-anchor="middle">TX row · K1–K6</text>
+<text class="d" x="540.0" y="75" text-anchor="middle">6× SPST power relays · 100 W</text>
+<text class="d" x="540.0" y="89" text-anchor="middle">one per line · max 1 closed</text>
+<rect class="mod" x="440" y="132" width="200" height="56" rx="3"/>
+<text class="t" x="540.0" y="149" text-anchor="middle">RX row · K7–K12</text>
+<text class="d" x="540.0" y="165" text-anchor="middle">6× SPST signal relays</text>
+<text class="d" x="540.0" y="179" text-anchor="middle">max 1 closed · JP: open on PTT</text>
+<line class="rf6" x1="640" y1="70" x2="780" y2="70"/>
+<text class="d" x="710" y="62" text-anchor="middle">×6</text>
+<line class="rf6" x1="640" y1="160" x2="780" y2="160"/>
+<text class="d" x="710" y="152" text-anchor="middle">×6</text>
+<rect class="mod" x="780" y="42" width="100" height="146" rx="3"/>
+<text class="t" x="830" y="60" text-anchor="middle">RF bus edge</text>
+<text class="d" x="830" y="74" text-anchor="middle">TX ∥ RX per line</text>
+<text class="pin" x="830" y="95" text-anchor="middle">A1</text>
+<line class="wire" x1="880" y1="92" x2="940" y2="92"/>
+<text class="pin" x="830" y="112" text-anchor="middle">A2</text>
+<line class="wire" x1="880" y1="109" x2="940" y2="109"/>
+<text class="pin" x="830" y="129" text-anchor="middle">A3</text>
+<line class="wire" x1="880" y1="126" x2="940" y2="126"/>
+<text class="pin" x="830" y="146" text-anchor="middle">A4</text>
+<line class="wire" x1="880" y1="143" x2="940" y2="143"/>
+<text class="pin" x="830" y="163" text-anchor="middle">A5</text>
+<line class="wire" x1="880" y1="160" x2="940" y2="160"/>
+<text class="pin" x="830" y="180" text-anchor="middle">A6</text>
+<line class="wire" x1="880" y1="177" x2="940" y2="177"/>
+<rect class="mod ext" x="940" y="42" width="120" height="146" rx="3"/>
+<text class="t ext" x="1000.0" y="59" text-anchor="middle">RF bus board</text>
+<text class="d ext" x="1000.0" y="75" text-anchor="middle">6 antenna lines</text>
+<text class="d ext" x="1000.0" y="89" text-anchor="middle">shared by all</text>
+<text class="d ext" x="1000.0" y="103" text-anchor="middle">radio slots</text>
+<text class="d ext" x="1000.0" y="117" text-anchor="middle"></text>
+<text class="d ext" x="1000.0" y="131" text-anchor="middle">→ Antenna Port</text>
+<text class="d ext" x="1000.0" y="145" text-anchor="middle">cards</text>
+<line class="ctl" x1="300" y1="147" x2="300" y2="178"/>
+<text class="d" x="306" y="168" text-anchor="start">coil</text>
+<rect class="mod" x="200" y="178" width="180" height="54" rx="3"/>
+<text class="t" x="290.0" y="195" text-anchor="middle">K0 driver</text>
+<text class="d" x="290.0" y="211" text-anchor="middle">unswitched 12 V rail</text>
+<text class="d" x="290.0" y="225" text-anchor="middle">JP: local PTT | OR(PTT[1..4])</text>
+<line class="wire" x1="160" y1="115" x2="160" y2="262" marker-end="url(#arr)"/>
+<text class="d" x="166" y="256" text-anchor="start">TX sense tap</text>
+<text class="sec" x="30" y="242" text-anchor="start">Control · 3V3 logic · 12 V relay rail</text>
+<rect class="mod" x="30" y="262" width="150" height="56" rx="3"/>
+<text class="t" x="105.0" y="279" text-anchor="middle">TX sense detector</text>
+<text class="d" x="105.0" y="295" text-anchor="middle">Schottky + comparator</text>
+<text class="d" x="105.0" y="309" text-anchor="middle">→ RF_DET, /INT</text>
+<rect class="mod" x="30" y="340" width="150" height="56" rx="3"/>
+<text class="t" x="105.0" y="357" text-anchor="middle">Opto isolator</text>
+<text class="d" x="105.0" y="373" text-anchor="middle">sinks OC PTT · 80 mA ok</text>
+<text class="d" x="105.0" y="387" text-anchor="middle">→ PTT[n] · K0 · expander</text>
+<rect class="mod ext" x="30" y="418" width="150" height="56" rx="3"/>
+<text class="t ext" x="105.0" y="435" text-anchor="middle">PTT in</text>
+<text class="d ext" x="105.0" y="451" text-anchor="middle">3.5 mm jack · front</text>
+<text class="d ext" x="105.0" y="465" text-anchor="middle">open-collector / contact</text>
+<line class="ctl" x1="105" y1="418" x2="105" y2="396" marker-end="url(#arr)"/>
+<polyline class="ctl" points="180,356 195,356 195,205 200,205" marker-end="url(#arr)"/>
+<polyline class="ctl" points="180,380 188,380 188,520" marker-end="url(#arr)"/>
+<text class="d" x="194" y="505" text-anchor="start">drives PTT[n]</text>
+<rect class="hop" x="193" y="284" width="4" height="12"/>
+<polyline class="ctl" points="180,290 205,290 205,446 220,446" marker-end="url(#arr)"/>
+<rect class="mod" x="220" y="262" width="150" height="56" rx="3"/>
+<text class="t" x="295.0" y="279" text-anchor="middle">Status LEDs</text>
+<text class="d" x="295.0" y="295" text-anchor="middle">RX · TX · fault</text>
+<text class="d" x="295.0" y="309" text-anchor="middle">from expander</text>
+<rect class="mod" x="220" y="340" width="150" height="56" rx="3"/>
+<text class="t" x="295.0" y="357" text-anchor="middle">DIP override</text>
+<text class="d" x="295.0" y="373" text-anchor="middle">RX-only card</text>
+<text class="d" x="295.0" y="387" text-anchor="middle">RX row opens on PTT</text>
+<line class="ctl" x1="295" y1="396" x2="295" y2="418" marker-end="url(#arr)"/>
+<rect class="mod" x="220" y="418" width="150" height="56" rx="3"/>
+<text class="t" x="295.0" y="435" text-anchor="middle">I2C GPIO expander</text>
+<text class="d" x="295.0" y="451" text-anchor="middle">PCA9555 · addr = SLOT_ID</text>
+<text class="d" x="295.0" y="465" text-anchor="middle">12 out · in: PTT, DET, DIP</text>
+<polyline class="ctl" points="295,474 295,520" marker-end="url(#arr)"/>
+<text class="d" x="301" y="505" text-anchor="start">I2C · /INT · SLOT_ID</text>
+<line class="ctl" x1="370" y1="446" x2="400" y2="446" marker-end="url(#arr)"/>
+<text class="d" x="376" y="440" text-anchor="start">12</text>
+<rect class="mod" x="400" y="418" width="150" height="56" rx="3"/>
+<text class="t" x="475.0" y="435" text-anchor="middle">Relay drivers</text>
+<text class="d" x="475.0" y="451" text-anchor="middle">12-ch low-side</text>
+<text class="d" x="475.0" y="465" text-anchor="middle">K1–K6 · K7–K12</text>
+<polyline class="ctl" points="475,418 475,215 540,215 540,188" marker-end="url(#arr)"/>
+<text class="d" x="552" y="236" text-anchor="start">12 coils · switched +12V</text>
+<rect class="mod" x="570" y="340" width="150" height="56" rx="3"/>
+<text class="t" x="645.0" y="357" text-anchor="middle">ID EEPROM</text>
+<text class="d" x="645.0" y="373" text-anchor="middle">24C02 · name · TX/RX</text>
+<text class="d" x="645.0" y="387" text-anchor="middle">max P · TX delay</text>
+<polyline class="ctl" points="570,368 560,368 560,520" marker-end="url(#arr)"/>
+<text class="d" x="566" y="505" text-anchor="start">I2C</text>
+<rect class="mod" x="570" y="418" width="150" height="56" rx="3"/>
+<text class="t" x="645.0" y="435" text-anchor="middle">Relay rail switch</text>
+<text class="d" x="645.0" y="451" text-anchor="middle">high-side FET on +12V RLY</text>
+<text class="d" x="645.0" y="465" text-anchor="middle">EN = /RLY_EN (hardware)</text>
+<polyline class="ctl" points="720,446 730,446 730,215 475,215"/>
+<polyline class="ctl" points="645,474 645,520" marker-end="url(#arr)"/>
+<text class="d" x="651" y="505" text-anchor="start">/RLY_EN</text>
+<rect class="mod" x="740" y="262" width="150" height="56" rx="3"/>
+<text class="t" x="815.0" y="279" text-anchor="middle">Card power</text>
+<text class="d" x="815.0" y="295" text-anchor="middle">polyfuse on +12V RLY</text>
+<text class="d" x="815.0" y="309" text-anchor="middle">LC filter · decoupling</text>
+<polyline class="ctl" points="890,290 900,290 900,520" marker-end="url(#arr)"/>
+<text class="d" x="906" y="505" text-anchor="start">+12V RLY · +3V3</text>
+<rect class="mod spare" x="740" y="418" width="150" height="56" rx="3"/>
+<text class="t spare" x="815.0" y="435" text-anchor="middle">TX inhibit out</text>
+<text class="d spare" x="815.0" y="451" text-anchor="middle">option · OC to radio</text>
+<text class="d spare" x="815.0" y="465" text-anchor="middle">on while /RLY_EN released</text>
+<polyline class="ctl spare" points="815,474 815,520" marker-end="url(#arr)"/>
+<text class="d spare" x="821" y="505" text-anchor="start">/RLY_EN</text>
+<rect class="bus" x="30" y="520" width="1090" height="16"/>
+<text class="buslbl" x="1114" y="532" text-anchor="end">backplane · 2×10 IDC</text>
+<text class="d" x="30" y="556" text-anchor="start">+12V RLY · +5V · +3V3 · GND ×4 · SDA · SCL · /INT · /RLY_EN · SLOT_ID[2:0] · PTT[1..4] (drives own, reads all) · spare ×2</text>
+</svg>
+<figcaption>
+  <span class="key"><i></i> RF path</span>
+  <span class="key"><i class="ctl"></i> control / power</span>
+  <span class="key"><i class="sp"></i> option</span>
+</figcaption>
+</figure>
+
+<div class="grid2">
+<section>
+<h2>Blocks</h2>
+<table>
+<tr><th>Block</th><th>Function and choice</th></tr>
+<tr><td>K0 changeover</td><td>SPDT, COM to the radio, NO to the TX path, NC to the RX path. Idle is receive. Its coil is driven straight from the PTT opto, not through the MCU, and from the unswitched 12 V rail: the radio's own PTT decides which path it is on, always. Power-relay class, since it carries 100 W on every over. Needs the radio's TX delay to exceed its transfer time (FT-710: external-amp keying delay, set 20 to 30 ms).</td></tr>
+<tr><td>TX row K1–K6</td><td>Six SPST power relays, one per RF bus line. Firmware closes at most one. Unpopulated on an RX-only card.</td></tr>
+<tr><td>RX row K7–K12</td><td>Six SPST signal relays, one per line. Cheaper and better isolation than the power relays; they never carry transmit power on purpose. Jumper option: the row's driver enable is <code>/PTT</code>, so the RX antenna is disconnected during transmit. That protects the K0 NC contact from full TX voltage when TX and RX antenna are the same line, and stops the RX antenna re-radiating into the receiver path.</td></tr>
+<tr><td>RF bus edge</td><td>Six edge connections to the RF bus board, one per antenna line. On the card, TX relay and RX relay for a line join at the edge pin. Keep the fan-out stubs short: five open relays hang on every line as capacitance.</td></tr>
+<tr><td>TX sense detector</td><td>Tap on the radio side of K0. RF present without PTT (VOX, CW keying not wired) or PTT without RF are both logged; RF while a matrix relay is mid-switch drops <code>/RLY_EN</code>.</td></tr>
+<tr><td>PTT in + opto</td><td>Front 3.5 mm jack, opto-isolated input that sinks the radio's open-collector or contact PTT (FT-710 TX GND, 80 mA rated). The opto output drives three things in hardware: this slot's <code>PTT[n]</code> line on the backplane (open-drain), the K0 driver, and an expander input for firmware lockout.</td></tr>
+<tr><td>K0 drive select</td><td>Jumper. TX radio: K0 follows local PTT. RX-only card: K0 follows the diode-OR of all four <code>PTT[1..4]</code> lines, so the receiver is lifted off its antenna whenever anything in the shack transmits. That is the TX-mute function, without a second relay.</td></tr>
+<tr><td>I2C expander</td><td>PCA9555, 16 bit, address from <code>SLOT_ID</code>. Twelve outputs for K1–K12, LEDs; inputs PTT, <code>RF_DET</code>, DIP.</td></tr>
+<tr><td>Relay drivers + rail switch</td><td>12-channel low-side driver for the matrix relays. Their 12 V comes through a high-side MOSFET enabled by <code>/RLY_EN</code>. Firmware can set any pattern it likes; with the enable released no matrix coil has power. K0 is on the unswitched rail on purpose: it must keep following PTT even in a fault, otherwise a keyed radio could be left looking at an open RX path.</td></tr>
+<tr><td>ID EEPROM + DIP</td><td>24C02: radio name, TX-capable, max power, required TX delay. DIP: force RX-only, RX row opens on PTT. Hardware truth beats EEPROM; mismatch logged.</td></tr>
+<tr><td>TX inhibit out</td><td>Option. Open-collector to the radio's TX inhibit or TX REQ input where the radio has one, asserted whenever <code>/RLY_EN</code> is released or a matrix relay is moving. Belt to the TX-delay braces.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>Two builds, one PCB</h2>
+<table>
+<tr><th></th><th>TX radio (FT-710)</th><th>RX-only (Airspy HF+)</th></tr>
+<tr><td>K0</td><td>fitted, follows local PTT</td><td>fitted, follows OR(PTT bus): TX-mute</td></tr>
+<tr><td>TX row</td><td>6 power relays</td><td>not fitted (NO contact open)</td></tr>
+<tr><td>RX row</td><td>6 signal relays</td><td>6 signal relays</td></tr>
+<tr><td>PTT in</td><td>from radio</td><td>not connected</td></tr>
+<tr><td>TX sense</td><td>fitted</td><td>fitted, any RF is a fault</td></tr>
+<tr><td>EEPROM / DIP</td><td>TX-capable</td><td>RX-only</td></tr>
+</table>
+
+<h2>What the controller enforces here</h2>
+<ol>
+<li>At most one relay closed per row. TX row and RX row may point at different lines (split antennas) or the same line (plain single antenna).</li>
+<li>No relay in either row moves while this slot's PTT is active, and not while <code>RF_DET</code> is high.</li>
+<li>Break before make with settle delay between rows and lines.</li>
+<li>The TX row of a TX-capable card is never routed to a line whose Antenna Port card is flagged RX-only.</li>
+<li>Coil budget: K0 plus at most two matrix relays energised per card, so a fully populated chassis stays under about 0.5 A on the relay rail.</li>
+</ol>
+
+<h2>Sequencing on key-down</h2>
+<p>Radio asserts PTT → opto → K0 to TX path and <code>PTT[n]</code> on the bus (≈5 ms relay transfer) → radio's TX delay expires → RF. If the RX-row-opens-on-PTT jumper is set, K7–K12 drop in the same window. Nothing in this chain waits for the MCU. The MCU's only job during a transmission is to refuse to move anything.</p>
+</section>
+</div>
+
+<h2>Open items</h2>
+<ol>
+<li>K0 and TX-row relay part: 100 W at 50 Ω, hot-switch tolerance for the fault case, transfer time under 10 ms.</li>
+<li>Whether the RX-row-opens-on-PTT option is default on. Argues for: protects K0 contact and receiver. Against: relay wear on every over, and a small click on the RX path during break-in operation.</li>
+<li>FT-710 TX inhibit: confirm what the LINEAR jack actually offers (TX GND out, TX REQ in) before committing the option footprint.</li>
+<li>Detector threshold and whether the same detector should also give a coarse power reading via a comparator ladder or an ADC pin on the controller.</li>
+</ol>
+</main>

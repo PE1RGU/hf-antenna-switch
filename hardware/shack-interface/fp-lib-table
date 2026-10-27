@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "shack-interface")(type "KiCad")(uri "${KIPRJMOD}/lib/shack-interface.pretty")(options "")(descr "Shack interface board rev A, project footprints"))
+)

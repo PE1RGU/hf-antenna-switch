@@ -1,0 +1,256 @@
+<title>Antenna Port Card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#f2f3ef; --panel:#fbfbf8; --ink:#1c232b; --ink2:#5b6570; --line:#8e979f; --grid:#d8dbd4;
+  --ctl:#2b7a78; --rf:#1c232b; --on:#d9642a; --spare:#a9b0b6;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+} }
+:root[data-theme="dark"] {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+}
+body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.5; }
+main { max-width:1120px; margin:0 auto; padding:32px 24px 64px; }
+header { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 24px; margin-bottom:20px; }
+h1 { font-size:26px; font-weight:600; margin:0; letter-spacing:-0.01em; }
+h2 { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink2); margin:36px 0 10px; }
+.eyebrow { font-family:var(--mono); font-size:12px; color:var(--ctl); letter-spacing:0.04em; }
+.lede { color:var(--ink2); max-width:70ch; margin:0 0 20px; }
+.lede a { color:var(--ctl); }
+figure { margin:0; background:var(--panel); border:1px solid var(--grid); border-radius:4px; padding:16px; overflow-x:auto; }
+figure svg { display:block; min-width:900px; width:100%; height:auto; color:var(--ink); }
+figcaption { font-size:13px; color:var(--ink2); margin-top:12px; display:flex; flex-wrap:wrap; gap:6px 22px; }
+.key { display:inline-flex; align-items:center; gap:6px; }
+.key i { display:inline-block; width:14px; height:3px; background:var(--rf); }
+.key i.ctl { background:var(--ctl); }
+.key i.sp { background:repeating-linear-gradient(90deg,var(--spare) 0 4px,transparent 4px 7px); }
+.mod { fill:var(--panel); stroke:var(--ink); stroke-width:1.4; }
+.mod.ext { stroke:var(--line); stroke-width:1.2; }
+.mod.spare { stroke:var(--spare); stroke-dasharray:5 4; }
+.rf { stroke:var(--rf); stroke-width:2.2; fill:none; }
+.wire { stroke:var(--rf); stroke-width:1.4; fill:none; }
+.wire.spare { stroke:var(--spare); stroke-dasharray:5 4; }
+.ctl { stroke:var(--ctl); stroke-width:1.6; fill:none; }
+.node { fill:var(--rf); }
+.t { font-family:var(--sans); font-size:12px; font-weight:600; fill:var(--ink); }
+.t.spare { fill:var(--spare); }
+.d { font-family:var(--mono); font-size:10px; fill:var(--ink2); }
+.d.spare { fill:var(--spare); }
+.pin { font-family:var(--mono); font-size:9.5px; fill:var(--ink); }
+.sec { font-family:var(--mono); font-size:11px; fill:var(--ctl); letter-spacing:.06em; text-transform:uppercase; }
+.grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:24px 40px; }
+table { border-collapse:collapse; width:100%; font-size:14px; }
+th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink2); font-weight:600; padding:6px 10px 6px 0; border-bottom:1px solid var(--line); }
+td { padding:8px 10px 8px 0; border-bottom:1px solid var(--grid); vertical-align:top; }
+td:first-child { font-weight:600; white-space:nowrap; }
+code { font-family:var(--mono); font-size:12.5px; color:var(--ctl); }
+p, ol { max-width:70ch; }
+ol { padding-left:20px; } ol li { margin-bottom:6px; }
+</style>
+<main>
+<header>
+  <span class="eyebrow">Shack Relay Matrix · card architecture · rev A</span>
+  <h1>Antenna Port Card</h1>
+</header>
+<p class="lede">One card per antenna line. It does three things: connects the antenna to its matrix line only when told to and only while the controller is alive, grounds it otherwise, and tells the controller what it is and whether RF is present. Same footprint and backplane pinout as the Radio Port card. Parent diagram: <a href="https://claude.ai/code/artifact/e27126d0-6c2e-44ee-a48c-11e5d0845b2e">Shack Relay Matrix</a>.</p>
+
+<figure>
+<svg viewBox="0 0 1160 580" role="img" aria-label="Antenna Port card: RF chain from matrix line through coupler footprint, detector tap, fail-safe SPDT relay and surge arrestor to the SO-239; control section with backplane connector, I2C expander, EEPROM, DIP switch, relay driver gated by RLY_EN">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<text class="sec" x="30" y="40" text-anchor="start">RF chain · 50 Ω · 100 W HF</text>
+<rect class="mod ext" x="30" y="82" width="100" height="56" rx="3"/>
+<text class="t ext" x="80.0" y="99" text-anchor="middle">Matrix line</text>
+<text class="d ext" x="80.0" y="115" text-anchor="middle">A[n] from RF bus</text>
+<text class="d ext" x="80.0" y="129" text-anchor="middle">SMA / edge pin</text>
+<line class="rf" x1="130" y1="110" x2="170" y2="110"/>
+<rect class="mod spare" x="170" y="82" width="120" height="56" rx="3"/>
+<text class="t spare" x="230.0" y="99" text-anchor="middle">Dir. coupler</text>
+<text class="d spare" x="230.0" y="115" text-anchor="middle">footprint only</text>
+<text class="d spare" x="230.0" y="129" text-anchor="middle">fwd / ref taps</text>
+<line class="rf" x1="290" y1="110" x2="350" y2="110"/>
+<circle class="node" cx="320" cy="110" r="3.5"/>
+<rect class="mod spare" x="350" y="82" width="90" height="56" rx="3"/>
+<text class="t spare" x="395.0" y="99" text-anchor="middle">C block</text>
+<text class="d spare" x="395.0" y="115" text-anchor="middle">bias-T option</text>
+<text class="d spare" x="395.0" y="129" text-anchor="middle">else 0 Ω link</text>
+<line class="rf" x1="440" y1="110" x2="480" y2="110"/>
+<rect class="mod" x="480" y="78" width="140" height="64" rx="3"/>
+<text class="t" x="550.0" y="95" text-anchor="middle">K1 · SPDT relay</text>
+<text class="d" x="550.0" y="111" text-anchor="middle">COM = antenna</text>
+<text class="d" x="550.0" y="125" text-anchor="middle">NO = matrix · NC = GND</text>
+<text class="d" x="550.0" y="139" text-anchor="middle">de-energised → GND</text>
+<text class="pin" x="484" y="113" text-anchor="start">NO</text>
+<text class="pin" x="616" y="113" text-anchor="end">COM</text>
+<text class="pin" x="562" y="148" text-anchor="middle">NC</text>
+<line class="wire" x1="560" y1="142" x2="560" y2="170"/>
+<rect class="mod" x="470" y="170" width="110" height="40" rx="3"/>
+<text class="t" x="525.0" y="187" text-anchor="middle">Static bleed</text>
+<text class="d" x="525.0" y="203" text-anchor="middle">1 MΩ ∥ RF choke</text>
+<line class="wire" x1="560" y1="210" x2="560" y2="232"/>
+<line class="wire" x1="560" y1="232" x2="560" y2="242"/>
+<line class="wire" x1="551" y1="242" x2="569" y2="242"/>
+<line class="wire" x1="554" y1="246" x2="566" y2="246"/>
+<line class="wire" x1="557" y1="250" x2="563" y2="250"/>
+<line class="ctl" x1="600" y1="142" x2="600" y2="260"/>
+<text class="d" x="606" y="200" text-anchor="start">coil</text>
+<text class="d" x="606" y="214" text-anchor="start">+12V RLY</text>
+<line class="rf" x1="620" y1="110" x2="880" y2="110"/>
+<circle class="node" cx="700" cy="110" r="3.5"/>
+<circle class="node" cx="800" cy="110" r="3.5"/>
+<line class="wire spare" x1="700" y1="110" x2="700" y2="62"/>
+<rect class="mod spare" x="640" y="22" width="120" height="40" rx="3"/>
+<text class="t spare" x="700.0" y="39" text-anchor="middle">Bias-T inject</text>
+<text class="d spare" x="700.0" y="55" text-anchor="middle">L + 12 V · option</text>
+<line class="wire" x1="800" y1="110" x2="800" y2="160"/>
+<rect class="mod" x="740" y="160" width="120" height="40" rx="3"/>
+<text class="t" x="800.0" y="177" text-anchor="middle">GDT</text>
+<text class="d" x="800.0" y="193" text-anchor="middle">90 V gas arrestor</text>
+<line class="wire" x1="800" y1="200" x2="800" y2="222"/>
+<line class="wire" x1="800" y1="222" x2="800" y2="232"/>
+<line class="wire" x1="791" y1="232" x2="809" y2="232"/>
+<line class="wire" x1="794" y1="236" x2="806" y2="236"/>
+<line class="wire" x1="797" y1="240" x2="803" y2="240"/>
+<text class="d" x="812" y="240" text-anchor="start">chassis</text>
+<rect class="mod ext" x="880" y="82" width="110" height="56" rx="3"/>
+<text class="t ext" x="935.0" y="99" text-anchor="middle">SO-239</text>
+<text class="d ext" x="935.0" y="115" text-anchor="middle">antenna out</text>
+<text class="d ext" x="935.0" y="129" text-anchor="middle">shell → chassis</text>
+<line class="wire" x1="990" y1="110" x2="1040" y2="110"/>
+<line class="wire" x1="1040" y1="110" x2="1040" y2="60"/>
+<line class="wire" x1="1028" y1="44" x2="1040" y2="60"/>
+<line class="wire" x1="1052" y1="44" x2="1040" y2="60"/>
+<line class="wire" x1="1028" y1="44" x2="1052" y2="44"/>
+<text class="d" x="1060" y="66" text-anchor="start">antenna</text>
+<line class="wire" x1="320" y1="110" x2="320" y2="360"/>
+<text class="d" x="326" y="250" text-anchor="start">RF tap</text>
+<line class="wire" x1="320" y1="360" x2="310" y2="360" marker-end="url(#arr)"/>
+<line class="wire spare" x1="180" y1="138" x2="180" y2="430"/>
+<text class="sec" x="30" y="245" text-anchor="start">Control · 3V3 logic · 12 V relay rail</text>
+<rect class="mod" x="30" y="258" width="100" height="272" rx="3"/>
+<text class="t" x="80" y="276" text-anchor="middle">Backplane</text>
+<text class="d" x="80" y="290" text-anchor="middle">2×10 IDC</text>
+<text class="pin" x="80" y="312" text-anchor="middle">+12V RLY</text>
+<text class="pin" x="80" y="334" text-anchor="middle">+5V · +3V3</text>
+<text class="pin" x="80" y="356" text-anchor="middle">GND ×4</text>
+<text class="pin" x="80" y="378" text-anchor="middle">SDA · SCL</text>
+<text class="pin" x="80" y="400" text-anchor="middle">/INT</text>
+<text class="pin" x="80" y="422" text-anchor="middle">/RLY_EN</text>
+<text class="pin" x="80" y="444" text-anchor="middle">SLOT_ID[2:0]</text>
+<text class="pin" x="80" y="466" text-anchor="middle">PTT[1..4] n/c</text>
+<text class="pin" x="80" y="488" text-anchor="middle">spare ×2</text>
+<line class="ctl" x1="130" y1="280" x2="360" y2="280" marker-end="url(#arr)"/>
+<text class="d" x="140" y="274" text-anchor="start">I2C · /INT · SLOT_ID</text>
+<rect class="mod" x="360" y="258" width="150" height="60" rx="3"/>
+<text class="t" x="435.0" y="275" text-anchor="middle">I2C GPIO expander</text>
+<text class="d" x="435.0" y="291" text-anchor="middle">PCA9554 · addr = SLOT_ID</text>
+<text class="d" x="435.0" y="305" text-anchor="middle">in: RF_DET, DIP · out: ROUTE</text>
+<line class="ctl" x1="380" y1="318" x2="380" y2="338"/>
+<rect class="mod" x="360" y="338" width="150" height="50" rx="3"/>
+<text class="t" x="435.0" y="355" text-anchor="middle">ID EEPROM</text>
+<text class="d" x="435.0" y="371" text-anchor="middle">24C02 · addr = SLOT_ID</text>
+<text class="d" x="435.0" y="385" text-anchor="middle">name · RX-only · bias-T</text>
+<rect class="mod" x="190" y="338" width="120" height="50" rx="3"/>
+<text class="t" x="250.0" y="355" text-anchor="middle">RF detector</text>
+<text class="d" x="250.0" y="371" text-anchor="middle">diode + comparator</text>
+<text class="d" x="250.0" y="385" text-anchor="middle">→ RF_DET, /INT</text>
+<polyline class="ctl" points="310,375 330,375 330,300 360,300" marker-end="url(#arr)"/>
+<rect class="mod" x="190" y="408" width="120" height="50" rx="3"/>
+<text class="t" x="250.0" y="425" text-anchor="middle">DIP override</text>
+<text class="d" x="250.0" y="441" text-anchor="middle">RX-only · bias-T</text>
+<text class="d" x="250.0" y="455" text-anchor="middle">→ expander inputs</text>
+<polyline class="ctl" points="310,440 340,440 340,310 360,310" marker-end="url(#arr)"/>
+<rect class="mod spare" x="190" y="478" width="120" height="40" rx="3"/>
+<text class="t spare" x="250.0" y="495" text-anchor="middle">Analog header</text>
+<text class="d spare" x="250.0" y="511" text-anchor="middle">fwd/ref → future ADC</text>
+<polyline class="wire spare" points="180,430 180,498 190,498"/>
+<line class="ctl" x1="510" y1="280" x2="550" y2="280" marker-end="url(#arr)"/>
+<text class="d" x="514" y="274" text-anchor="start">ROUTE</text>
+<rect class="mod" x="550" y="258" width="140" height="60" rx="3"/>
+<text class="t" x="620.0" y="275" text-anchor="middle">Relay driver</text>
+<text class="d" x="620.0" y="291" text-anchor="middle">MOSFET + flyback diode</text>
+<text class="d" x="620.0" y="305" text-anchor="middle">EN = ROUTE AND /RLY_EN</text>
+<line class="ctl" x1="600" y1="258" x2="600" y2="240"/>
+<polyline class="ctl" points="130,470 610,470 610,318" marker-end="url(#arr)"/>
+<text class="d" x="360" y="464" text-anchor="start">/RLY_EN · hardware enable, bypasses firmware</text>
+<polyline class="ctl" points="130,510 720,510" marker-end="url(#arr)"/>
+<text class="d" x="330" y="504" text-anchor="start">+12V RLY · +3V3</text>
+<rect class="mod" x="720" y="480" width="140" height="50" rx="3"/>
+<text class="t" x="790.0" y="497" text-anchor="middle">Card power</text>
+<text class="d" x="790.0" y="513" text-anchor="middle">polyfuse on +12V RLY</text>
+<text class="d" x="790.0" y="527" text-anchor="middle">LC filter · decoupling</text>
+<text class="d" x="870" y="500" text-anchor="start">→ K1 coil, driver,</text>
+<text class="d" x="870" y="514" text-anchor="start">logic, bias-T</text>
+<rect class="mod" x="730" y="258" width="110" height="50" rx="3"/>
+<text class="t" x="785.0" y="275" text-anchor="middle">Status LED</text>
+<text class="d" x="785.0" y="291" text-anchor="middle">green = routed</text>
+<text class="d" x="785.0" y="305" text-anchor="middle">off = grounded</text>
+<line class="ctl" x1="690" y1="290" x2="730" y2="290" marker-end="url(#arr)"/>
+</svg>
+<figcaption>
+  <span class="key"><i></i> RF path</span>
+  <span class="key"><i class="ctl"></i> control / power</span>
+  <span class="key"><i class="sp"></i> option, footprint only on rev A</span>
+</figcaption>
+</figure>
+
+<div class="grid2">
+<section>
+<h2>Blocks</h2>
+<table>
+<tr><th>Block</th><th>Function and choice</th></tr>
+<tr><td>K1 SPDT relay</td><td>The only moving part in the RF path. COM to the antenna, NO to the matrix line, NC to ground through the static bleed. De-energised is grounded, so a dead controller, released <code>/RLY_EN</code> or lost 12 V all leave the antenna parked. 12 V coil, 16 A HF-rated signal relay class (RT2/Omron G2RL or similar), rated well beyond 100 W at 50 Ω.</td></tr>
+<tr><td>Static bleed</td><td>1 MΩ in parallel with an RF choke on the NC side. Drains precipitation static while grounded; the choke keeps the DC path when the bias-T option is fitted.</td></tr>
+<tr><td>GDT</td><td>90 V gas-discharge arrestor from antenna centre to chassis, on the antenna side of K1 so it protects the relay too. Not a lightning solution; that stays at the mast base and the shed entry.</td></tr>
+<tr><td>RF detector</td><td>Capacitive tap after the matrix connector, Schottky detector, comparator with fixed threshold. Gives <code>RF_DET</code> to the expander and pulls <code>/INT</code>. Route verification: RF seen on a card the controller thinks is idle, or on an RX-only card, is a fault and drops <code>/RLY_EN</code>.</td></tr>
+<tr><td>Coupler footprint</td><td>Unpopulated on rev A. Directional coupler plus dual detector lands here; fwd/ref analog goes to the header for a later ADC card or controller input. Per-antenna SWR without a new PCB.</td></tr>
+<tr><td>Bias-T option</td><td>Series DC-block capacitor on the matrix side and an inductor injecting 12 V on the antenna side. Fitted only on a card feeding an active RX antenna. Enable via expander output, flag in EEPROM.</td></tr>
+<tr><td>I2C expander</td><td>PCA9554 class, address from <code>SLOT_ID</code>. Inputs: <code>RF_DET</code>, DIP switches. Outputs: <code>ROUTE</code>, bias-T enable, LED.</td></tr>
+<tr><td>ID EEPROM</td><td>24C02 class, address from <code>SLOT_ID</code>. Holds antenna name, RX-only flag, bias-T flag, card revision. Controller reads it at boot, so the card carries its identity to any slot.</td></tr>
+<tr><td>DIP override</td><td>Two switches: force RX-only, force bias-T off. Hardware truth beats EEPROM when they disagree; controller logs the mismatch.</td></tr>
+<tr><td>Relay driver</td><td>Logic-level MOSFET with flyback diode. Gate is <code>ROUTE</code> AND <code>/RLY_EN</code> in hardware (one gate or a driver with an enable pin). Firmware alone cannot energise K1 when the watchdog has released the bus.</td></tr>
+<tr><td>Card power</td><td>Polyfuse on <code>+12V RLY</code>, LC filter so relay switching does not appear on the RF ground, local 3V3 decoupling. One card failing short does not take the rail down.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>States</h2>
+<table>
+<tr><th>Condition</th><th>K1</th><th>Antenna</th></tr>
+<tr><td>Power off</td><td>de-energised</td><td>grounded</td></tr>
+<tr><td>Idle, no radio routed</td><td>de-energised</td><td>grounded</td></tr>
+<tr><td>Routed, <code>/RLY_EN</code> asserted</td><td>energised</td><td>on matrix line</td></tr>
+<tr><td><code>/RLY_EN</code> released (watchdog, brown-out, fault)</td><td>de-energised</td><td>grounded, regardless of <code>ROUTE</code></td></tr>
+<tr><td>RF detected while idle or RX-only</td><td>controller drops <code>/RLY_EN</code></td><td>all ports grounded, fault logged</td></tr>
+</table>
+
+<h2>Backplane pins used</h2>
+<table>
+<tr><th>Signal</th><th>Use on this card</th></tr>
+<tr><td><code>+12V RLY</code></td><td>K1 coil, bias-T supply. Polyfused.</td></tr>
+<tr><td><code>+3V3</code></td><td>Expander, EEPROM, comparator.</td></tr>
+<tr><td><code>SDA / SCL</code></td><td>Expander and EEPROM.</td></tr>
+<tr><td><code>/INT</code></td><td>Open-drain, pulled on <code>RF_DET</code> edge.</td></tr>
+<tr><td><code>/RLY_EN</code></td><td>Hardware enable into the relay driver.</td></tr>
+<tr><td><code>SLOT_ID[2:0]</code></td><td>I2C address for both chips.</td></tr>
+<tr><td><code>PTT[1..4]</code></td><td>Present on the connector, not connected on this card. Reserved for a variant that opens K1 on PTT of a non-owning radio.</td></tr>
+</table>
+
+<h2>RX-only variant</h2>
+<p>Same PCB. EEPROM flag and DIP set RX-only; bias-T parts fitted if the antenna is active. The controller refuses this card on any TX path. The detector is the hardware tripwire behind that rule: if it ever sees transmit-level RF, the whole matrix goes to safe state.</p>
+</section>
+</div>
+
+<h2>Open items</h2>
+<ol>
+<li>Relay part: confirm contact rating and isolation at 30 MHz for 100 W with the NC side grounded; check hot-switch survival for the fault case.</li>
+<li>Detector threshold: set between the strongest expected receive signal and the lowest transmit power that matters, roughly 0 dBm to +20 dBm at the tap.</li>
+<li>Whether the coupler footprint uses a Tandem Match (two ferrite transformers) or a stripline coupler; footprint size differs.</li>
+<li>Card edge: 100 × 80 mm Eurocard-half with the SO-239 on the front edge, or a rear-panel bulkhead SO-239 with a short coax jumper to the card.</li>
+</ol>
+</main>

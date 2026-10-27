@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "RCA")(type "KiCad")(uri "/Users/pdoornek/Documents/WorkingCopy/Projects/Ham/Kicad_lib/LIB_RCJ_041/RCJ-041.kicad_sym")(options "")(descr ""))
+  (lib (name "SMA")(type "KiCad")(uri "/Users/pdoornek/Documents/WorkingCopy/Projects/Ham/Kicad_lib/LIB_SMA001_C_G/CONSMA001-C-G.kicad_sym")(options "")(descr ""))
+)

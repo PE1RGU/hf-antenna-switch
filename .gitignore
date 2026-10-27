@@ -1,0 +1,49 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# KiCad: backups, local state, caches
+*-backups/
+.history/
+*.kicad_prl
+*.lck
+fp-info-cache
+~*.lck
+
+# Vendor datasheets: not ours to redistribute. The register stays.
+Datasheets/*.pdf
+
+# Working folders, not for publication
+Claude outputs/
+**/_to_delete/
+test-pieces/
+
+# Vendor libraries (SnapEDA, SamacSys, Ultra Librarian): terms do not clearly allow
+# redistribution. See hardware/THIRD-PARTY.md for where to get them.
+hardware/**/lib/snapeda-*/
+hardware/**/lib/samacsys-*/
+hardware/**/lib/ultralibrarian-*/
+hardware/**/lib/3d/
+**/*.3dshapes/
+
+# KiCad generated output (regenerate with kicad-cli; the PDFs stay)
+hardware/**/svg*/
+hardware/**/_sym_export/
+hardware/**/erc.json
+hardware/**/lib/test-3d/
+*.unused
+*.bak-gen
+**/_tmp/
+
+# Netlist exports in the board folders (regenerable). The netlists in
+# hardware/unit/verify/ are inputs of the verification scripts and stay.
+hardware/shack-interface/*.xml
+hardware/unit/controller-board/*.xml
+hardware/unit/controller-board/_sym/*.xml
+hardware/unit/controller-board/_sym/*.pdf
+
+# Editor backups of CAD files
+*.bak

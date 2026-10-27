@@ -1,0 +1,2704 @@
+{
+  "threads": [
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        12.88,
+        0.0,
+        11.880000000000004
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.898326367971917,
+      "feature": 19,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -4.44089205714811e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        31.119999999999983,
+        0.0,
+        11.880000000000015
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 20,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -4.4408920985006124e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        31.12,
+        0.0,
+        30.11999999999999
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 21,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -7.105427330154809e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        12.880000000000033,
+        0.0,
+        30.119999999999926
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.898326367971919,
+      "feature": 22,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.3322676171444366e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        42.879999999999974,
+        0.0,
+        11.880000000000024
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 24,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.3322676752761657e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        61.11999999999999,
+        0.0,
+        11.880000000000008
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000003,
+      "feature": 25,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.3322676171444303e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        61.12,
+        0.0,
+        30.119999999999987
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 26,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -2.220446049250312e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        42.87999999999999,
+        0.0,
+        30.12
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.0000000000000036,
+      "feature": 27,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -2.220446028574055e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        72.87999999999997,
+        0.0,
+        11.880000000000019
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 29,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -4.440892030339093e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        91.12,
+        0.0,
+        11.880000000000006
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 30,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.332267617144451e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        91.12000000000006,
+        0.0,
+        30.11999999999995
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 31,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.332267617144433e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        72.87999999999998,
+        0.0,
+        30.119999999999994
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 32,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -8.88178411429636e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        139.88,
+        0.0,
+        11.880000000000008
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 34,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.3322676295501902e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        158.11999999999995,
+        0.0,
+        11.880000000000035
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 35,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.1102230246251585e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        158.12,
+        0.0,
+        30.119999999999965
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 36,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -5.329070497228768e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        139.88000000000002,
+        0.0,
+        30.119999999999987
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 37,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.332267662041285e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        177.88000000000002,
+        0.0,
+        11.879999999999969
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.0,
+      "feature": 39,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.3322676171443913e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        196.11999999999995,
+        0.0,
+        11.880000000000036
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 40,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -7.105427330154833e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        196.11999999999995,
+        0.0,
+        30.120000000000015
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000003,
+      "feature": 41,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.7763568228592397e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        177.88000000000014,
+        0.0,
+        30.119999999999884
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 42,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 1.3234889992141385e-23
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        215.8800000000001,
+        0.0,
+        11.879999999999914
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 44,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.332267701745979e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        234.12,
+        0.0,
+        11.879999999999978
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 45,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -2.220446173988217e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        234.12000000000006,
+        0.0,
+        30.119999999999933
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000002,
+      "feature": 46,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -7.105427329638404e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        215.88000000000005,
+        0.0,
+        30.119999999999973
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 47,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -5.329070497228878e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        253.87999999999988,
+        0.0,
+        11.880000000000082
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 49,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.1102230246251585e-15
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        272.12,
+        0.0,
+        11.879999999999987
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.0901554808983605,
+      "feature": 50,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -4.4408920303392096e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        272.1200000000001,
+        0.0,
+        30.11999999999991
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.0901554808204015,
+      "feature": 51,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -1.7763569133445274e-16
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        253.87999999999988,
+        0.0,
+        30.12000000000005
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 6.000000000000001,
+      "feature": 52,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -7.105427329638311e-16
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        36.0,
+        15.999999999999995,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 53,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        65.99999999999999,
+        16.000000000000004,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 54,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 10.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        96.0,
+        15.999999999999982,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 55,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 10.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        163.0,
+        15.999999999999986,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 17.999999999998487,
+      "feature": 56,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 10.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        200.99999999999994,
+        16.000000000000043,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 17.999999999998238,
+      "feature": 57,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        238.99999999999994,
+        16.000000000000025,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000007,
+      "feature": 58,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        248.99999999999991,
+        16.00000000000005,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 59,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 10.0
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        175.18000000000004,
+        16.780000000000005
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.0,
+      "feature": 68,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999973
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        183.82000000000002,
+        16.780000000000012
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.0,
+      "feature": 69,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.999999999999998
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        183.82,
+        25.420000000000016
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.000000000000002,
+      "feature": 70,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 2.0
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        175.18000000000006,
+        25.420000000000034
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.0,
+      "feature": 71,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 2.0
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        127.18000000000002,
+        16.780000000000015
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.0,
+      "feature": 74,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999991
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        135.82000000000005,
+        16.780000000000026
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.000000000000003,
+      "feature": 75,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999982
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        135.82000000000002,
+        25.420000000000027
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.0,
+      "feature": 76,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999971
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        127.18000000000002,
+        25.42000000000002
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.000000000000001,
+      "feature": 77,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999991
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        79.18,
+        16.779999999999994
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.000000000000001,
+      "feature": 80,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999996
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        87.82,
+        16.78000000000001
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.000000000000001,
+      "feature": 81,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999991
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        87.82000000000001,
+        25.420000000000016
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.000000000000002,
+      "feature": 82,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999998
+    },
+    {
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "axis_point": [
+        0.0,
+        79.18,
+        25.420000000000012
+      ],
+      "body": "Tray",
+      "designation": "M2",
+      "end": 6.0,
+      "feature": 83,
+      "internal": true,
+      "major_diameter": 2.0,
+      "pitch": 0.4,
+      "start": 1.9999999999999978
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        29.99999999999998,
+        229.99999999999991,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M5",
+      "end": 8.0,
+      "feature": 94,
+      "internal": true,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -1.332267701745941e-15
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        258.00000000000006,
+        230.0,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M5",
+      "end": 8.0,
+      "feature": 95,
+      "internal": true,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -1.3322676295501878e-15
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        30.000000000000007,
+        35.0,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M5",
+      "end": 8.0,
+      "feature": 96,
+      "internal": true,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -1.3322676295501878e-15
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        258.00000000000017,
+        35.00000000000017,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M5",
+      "end": 8.0,
+      "feature": 97,
+      "internal": true,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -8.881785119468985e-16
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        5.999999999999998,
+        6.000000000000004,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 98,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        282.00000000000006,
+        5.999999999999973,
+        0.0
+      ],
+      "body": "Lid",
+      "designation": "M3",
+      "end": 66.00000000000001,
+      "feature": 99,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 62.999999999999986
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        282.0000000000001,
+        243.99999999999974,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 100,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        6.000000000000171,
+        243.99999999999966,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 101,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.999999999999964
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        115.50000000000004,
+        0.0,
+        11.999999999999952
+      ],
+      "body": "Tray",
+      "designation": "M5",
+      "end": 15.000000000000005,
+      "feature": 127,
+      "internal": true,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -2.2204460234014802e-15
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        67.0,
+        4.5000000000000036,
+        0.0
+      ],
+      "body": "Lid",
+      "designation": "M3",
+      "end": 66.00000000000001,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 62.999999999999986
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        128.00000000000003,
+        4.499999999999964,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.000000000000014,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.999999999999986
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        205.99999999999991,
+        4.500000000000074,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.999999999999986
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        223.99999999999997,
+        245.49999999999994,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.499999999999996,
+        45.00000000000001,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.499999999999994,
+        107.50000000000001,
+        0.0
+      ],
+      "body": "Lid",
+      "designation": "M3",
+      "end": 66.00000000000001,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 62.999999999999986
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.500000000000043,
+        155.49999999999994,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.499999999999901,
+        210.0000000000002,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        283.5,
+        44.999999999999986,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        283.49999999999994,
+        107.50000000000004,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        283.50000000000006,
+        155.49999999999994,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        283.5,
+        210.00000000000003,
+        0.0
+      ],
+      "body": "Lid",
+      "designation": "M3",
+      "end": 66.00000000000001,
+      "feature": 159,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 62.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        282.00000000000006,
+        5.999999999999985,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 166,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        205.99999999999991,
+        4.500000000000074,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 167,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.499999999999996,
+        45.00000000000001,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 168,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.499999999999985,
+        107.50000000000003,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999998,
+      "feature": 169,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        4.499999999999901,
+        210.0000000000002,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999998,
+      "feature": 170,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        283.49999999999994,
+        107.50000000000004,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 63.0,
+      "feature": 172,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 55.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        283.50000000000006,
+        155.49999999999994,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 173,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        14.999999999999883,
+        236.00000000000023,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 180,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        159.00000000000006,
+        235.99999999999994,
+        0.0
+      ],
+      "body": "RF board (ref)",
+      "designation": "M3",
+      "end": 19.6,
+      "feature": 181,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 17.999999999999993
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        273.00000000000006,
+        236.0,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 182,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        56.00000000000004,
+        124.49999999999993,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.0,
+      "feature": 183,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        109.00000000000001,
+        124.49999999999997,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 184,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        273.0000000000001,
+        124.49999999999986,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.0,
+      "feature": 185,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        52.49999999999999,
+        0.0,
+        29.999999999999996
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 250.00000000000003,
+      "feature": 193,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 244.99999999999997
+    },
+    {
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "axis_point": [
+        95.49999999999999,
+        0.0,
+        29.999999999999986
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 250.00000000000006,
+      "feature": 194,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 244.99999999999997
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        67.00000000000004,
+        4.499999999999971,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 62.99999999999999,
+      "feature": 1962,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 54.99999999999999
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        13.99999999999997,
+        188.50000000000006,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000007,
+      "feature": 1969,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        14.000000000000007,
+        140.5,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000007,
+      "feature": 1970,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999996
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "axis_point": [
+        14.000000000000016,
+        92.49999999999996,
+        0.0
+      ],
+      "body": "Tray",
+      "designation": "M3",
+      "end": 18.000000000000004,
+      "feature": 1971,
+      "internal": true,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": 9.999999999999998
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1573,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1580,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1587,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1594,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1601,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1608,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1615,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1622,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1629,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1636,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1643,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1650,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1657,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1664,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1671,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1678,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1685,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1692,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1699,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1706,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1713,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1720,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1727,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1734,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1741,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1748,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1755,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1762,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1769,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1776,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1783,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1790,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1797,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1804,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1811,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1818,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1825,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1832,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1839,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1846,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1853,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1860,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        1.2246467991473532e-16,
+        1.0
+      ],
+      "axis_point": [
+        273.0,
+        236.00000000000003,
+        19.52
+      ],
+      "body": "Body1",
+      "designation": "M3",
+      "end": 0.0,
+      "feature": 1867,
+      "internal": false,
+      "major_diameter": 3.0,
+      "pitch": 0.5,
+      "start": -6.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "axis_point": [
+        30.000000000000007,
+        230.0,
+        -10.0
+      ],
+      "body": "Body54",
+      "designation": "M5",
+      "end": 0.0,
+      "feature": 1874,
+      "internal": false,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -16.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "axis_point": [
+        30.000000000000007,
+        230.0,
+        -10.0
+      ],
+      "body": "Body54",
+      "designation": "M5",
+      "end": 0.0,
+      "feature": 1881,
+      "internal": false,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -16.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "axis_point": [
+        30.000000000000007,
+        230.0,
+        -10.0
+      ],
+      "body": "Body54",
+      "designation": "M5",
+      "end": 0.0,
+      "feature": 1888,
+      "internal": false,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -16.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "axis_point": [
+        30.000000000000007,
+        230.0,
+        -10.0
+      ],
+      "body": "Body54",
+      "designation": "M5",
+      "end": 0.0,
+      "feature": 1895,
+      "internal": false,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -16.0
+    },
+    {
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "axis_point": [
+        30.000000000000007,
+        230.0,
+        -10.0
+      ],
+      "body": "Body54",
+      "designation": "M5",
+      "end": 0.0,
+      "feature": 1902,
+      "internal": false,
+      "major_diameter": 5.0,
+      "pitch": 0.8,
+      "start": -16.0
+    }
+  ]
+}

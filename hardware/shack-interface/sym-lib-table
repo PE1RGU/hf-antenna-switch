@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "shack-interface")(type "KiCad")(uri "${KIPRJMOD}/shack-interface.kicad_sym")(options "")(descr "Shack interface board rev A"))
+)

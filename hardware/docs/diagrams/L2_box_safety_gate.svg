@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="785.19685pt" height="453.543307pt" viewBox="0 0 785.19685 453.543307" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-07T09:41:39.004337</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 453.543307 
+L 785.19685 453.543307 
+L 785.19685 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 198.425197 73.700787 
+L 294.80315 73.700787 
+L 294.80315 136.062992 
+L 198.425197 136.062992 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #fff8e1; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 362.834646 68.031496 
+L 413.858268 68.031496 
+L 413.858268 147.401575 
+L 362.834646 147.401575 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #fff8e1; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 362.834646 82.204724 
+L 356.598425 82.204724 
+L 362.834646 77.669291 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #ffffff; stroke: #1d1d1f; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 362.834646 99.212598 
+L 356.598425 99.212598 
+L 362.834646 94.677165 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #ffffff; stroke: #1d1d1f; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 521.574803 113.385827 
+L 555.590551 113.385827 
+L 555.590551 153.070866 
+L 521.574803 153.070866 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #fff8e1; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 555.590551 133.228346 
+L 561.826772 133.228346 
+L 555.590551 128.692913 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #ffffff; stroke: #1d1d1f; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 521.574803 209.76378 
+L 555.590551 209.76378 
+L 555.590551 266.456693 
+L 521.574803 266.456693 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #fff8e1; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 555.590551 238.110236 
+L 561.826772 238.110236 
+L 555.590551 233.574803 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #ffffff; stroke: #1d1d1f; stroke-width: 0.8; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 600.944882 119.055118 
+L 629.291339 119.055118 
+L 629.291339 161.574803 
+L 600.944882 161.574803 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #fff8e1; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 22.677165 87.874016 
+L 198.425197 87.874016 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 22.677165 121.889764 
+L 198.425197 121.889764 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 348.661417 82.204724 
+L 362.834646 82.204724 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 348.661417 99.212598 
+L 362.834646 99.212598 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_5">
+    <path d="M 348.661417 116.220472 
+L 362.834646 116.220472 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_6">
+    <path d="M 348.661417 133.228346 
+L 362.834646 133.228346 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_7">
+    <path d="M 294.80315 104.88189 
+L 317.480315 104.88189 
+L 317.480315 99.212598 
+L 348.661417 99.212598 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_8">
+    <path d="M 22.677165 175.748031 
+L 334.488189 175.748031 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_9">
+    <path d="M 334.488189 175.748031 
+L 334.488189 116.220472 
+L 348.661417 116.220472 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_10">
+    <path d="M 413.858268 82.204724 
+L 476.220472 82.204724 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_11">
+    <path d="M 507.401575 126.614173 
+L 521.574803 126.614173 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_12">
+    <path d="M 507.401575 139.84252 
+L 521.574803 139.84252 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_13">
+    <path d="M 555.590551 133.228346 
+L 572.598425 133.228346 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_14">
+    <path d="M 507.401575 223.937008 
+L 521.574803 223.937008 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_15">
+    <path d="M 507.401575 238.110236 
+L 521.574803 238.110236 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_16">
+    <path d="M 507.401575 252.283465 
+L 521.574803 252.283465 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_17">
+    <path d="M 555.590551 238.110236 
+L 572.598425 238.110236 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_18">
+    <path d="M 476.220472 82.204724 
+L 476.220472 238.110236 
+L 507.401575 238.110236 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_19">
+    <path d="M 476.220472 126.614173 
+L 507.401575 126.614173 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_20">
+    <path d="M 22.677165 270.708661 
+L 493.228346 270.708661 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_21">
+    <path d="M 493.228346 270.708661 
+L 493.228346 139.84252 
+L 507.401575 139.84252 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_22">
+    <path d="M 493.228346 223.937008 
+L 507.401575 223.937008 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_23">
+    <path d="M 22.677165 317.480315 
+L 504.566929 317.480315 
+L 504.566929 252.283465 
+L 507.401575 252.283465 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_24">
+    <path d="M 586.771654 133.228346 
+L 600.944882 133.228346 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_25">
+    <path d="M 586.771654 147.401575 
+L 600.944882 147.401575 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_26">
+    <path d="M 629.291339 140.314961 
+L 646.299213 140.314961 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_27">
+    <path d="M 572.598425 133.228346 
+L 586.771654 133.228346 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_28">
+    <path d="M 586.771654 147.401575 
+L 581.102362 147.401575 
+L 581.102362 181.417323 
+L 623.622047 181.417323 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_29">
+    <path d="M 646.299213 140.314961 
+L 657.637795 140.314961 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="line2d_30">
+    <path d="M 572.598425 238.110236 
+L 623.622047 238.110236 
+" clip-path="url(#pc772cffaf5)" style="fill: none; stroke: #1d1d1f; stroke-width: 0.9"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="28.504155" transform="rotate(-0 22.677165 28.504155)">L2  Box safety gate and READY switch (controller board, D-59, D-62, D-104)</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 6.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #6b6b6b" x="22.677165" y="441.087501" transform="rotate(-0 22.677165 441.087501)">PE1RGU Shack Relay Matrix rev C  |  L2_box_safety_gate  |  2026-10-06</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: middle" x="246.614173" y="100.715201" transform="rotate(-0 246.614173 100.715201)">U12 TPS3823A-33</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #6b6b6b" x="246.614173" y="113.962781" transform="rotate(-0 246.614173 113.962781)">supervisor 2.93 V, watchdog</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: start" x="22.677165" y="83.338583" transform="rotate(-0 22.677165 83.338583)">+3V3</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: start" x="22.677165" y="117.354331" transform="rotate(-0 22.677165 117.354331)">WDI (GPIO1), 1k pull-down</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f4e9c" x="388.346457" y="62.362205" transform="rotate(-0 388.346457 62.362205)">U13  74LVC1G74</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start" x="366.23622" y="84.136287" transform="rotate(-0 366.23622 84.136287)">R</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start" x="366.23622" y="101.144161" transform="rotate(-0 366.23622 101.144161)">S</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start" x="366.23622" y="118.152035" transform="rotate(-0 366.23622 118.152035)">C1</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 7px; font-family: 'DejaVu Sans'; text-anchor: start" x="366.23622" y="135.159909" transform="rotate(-0 366.23622 135.159909)">1D</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: end" x="345.826772" y="84.025912" transform="rotate(-0 345.826772 84.025912)">1</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: end" x="345.826772" y="135.049534" transform="rotate(-0 345.826772 135.049534)">0</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 6.2px; font-family: 'DejaVu Sans'; text-anchor: start" x="297.637795" y="95.244094" transform="rotate(-0 297.637795 95.244094)">RESET_N</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: start" x="22.677165" y="171.212598" transform="rotate(-0 22.677165 171.212598)">LATCH_CLR (GPIO3), 100k pull-down</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'; text-anchor: start" x="419.527559" y="76.535433" transform="rotate(-0 419.527559 76.535433)">FAULT (Q)</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="538.582677" y="124.94013" transform="rotate(-0 538.582677 124.94013)">≥1</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f4e9c" x="538.582677" y="109.454942" transform="rotate(-0 538.582677 109.454942)">U15  74LVC1G02</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="538.582677" y="221.318083" transform="rotate(-0 538.582677 221.318083)">≥1</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f4e9c" x="538.582677" y="205.832894" transform="rotate(-0 538.582677 205.832894)">U14  74LVC1G27</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: start" x="22.677165" y="266.173228" transform="rotate(-0 22.677165 266.173228)">MCU_EN_N (GPIO4), 100k pull-up</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'; text-anchor: start" x="22.677165" y="312.944882" transform="rotate(-0 22.677165 312.944882)">KILL (U3 opto: no loop current = 1, L1)</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="615.11811" y="130.609422" transform="rotate(-0 615.11811 130.609422)">&amp;</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 6.3px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #1f4e9c" x="615.11811" y="115.124233" transform="rotate(-0 615.11811 115.124233)">U16  74LVC1G08</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 5.8px; font-family: 'DejaVu Sans'; text-anchor: start" x="574.015748" y="128.692913" transform="rotate(-0 574.015748 128.692913)">READY_ON</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'" transform="translate(629.291339 179.511023)">RF_A2_N (J2 pin 17): low = RF on A2,</text>
+    <text style="font-size: 6.4px; font-family: 'DejaVu Sans'" transform="translate(629.291339 186.855623)">100k pull-down (D-104, SR-01 H2)</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'" transform="translate(663.307087 138.44087)">240R to the READY</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'" transform="translate(663.307087 145.831426)">switch U6 (L1)</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'" transform="translate(629.291339 236.052583)">RLY_EN: RESET of U901 to U903,</text>
+    <text style="font-size: 6.6px; font-family: 'DejaVu Sans'" transform="translate(629.291339 243.626702)">U1001; +12V_SW switch</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="362.332292" transform="rotate(-0 22.677165 362.332292)">FAULT is set (Q = 1) by RESET_N low: power-up (td 120 to 300 ms), 3V3 below 2.83 to 3.00 V, or no WDI edge for 0.9 to 2.5 s (C-19).</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="373.670875" transform="rotate(-0 22.677165 373.670875)">Only a LATCH_CLR rising edge with RESET_N high clears FAULT. KILL is not latched in the box: the shack latch holds the stop (L3).</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="385.009457" transform="rotate(-0 22.677165 385.009457)">RLY_EN = 1 only with KILL = 0, MCU_EN_N = 0 and FAULT = 0. READY_ON leaves out KILL, so the SAFE loop can close at start-up (F11).</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="396.34804" transform="rotate(-0 22.677165 396.34804)">RF on A2 opens READY: no loop current, so KILL = 1 drops RLY_EN in the box and the shack latch inhibits all radios (D-104).</text>
+   </g>
+   <g id="text_33">
+    <text style="font-size: 6.8px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #1d1d1f" x="22.677165" y="407.686623" transform="rotate(-0 22.677165 407.686623)">Output indicator: polarity triangle (low-active), as in the schematics. Gate delays 5.4 ns max (M-10).</text>
+   </g>
+   <g id="patch_11">
+    <path d="M 476.220472 124.629921 
+C 476.746702 124.629921 477.25145 124.838995 477.62355 125.211095 
+C 477.995651 125.583196 478.204724 126.087943 478.204724 126.614173 
+C 478.204724 127.140403 477.995651 127.645151 477.62355 128.017251 
+C 477.25145 128.389352 476.746702 128.598425 476.220472 128.598425 
+C 475.694243 128.598425 475.189495 128.389352 474.817394 128.017251 
+C 474.445294 127.645151 474.23622 127.140403 474.23622 126.614173 
+C 474.23622 126.087943 474.445294 125.583196 474.817394 125.211095 
+C 475.189495 124.838995 475.694243 124.629921 476.220472 124.629921 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #1d1d1f; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 493.228346 221.952756 
+C 493.754576 221.952756 494.259324 222.161829 494.631424 222.53393 
+C 495.003525 222.90603 495.212598 223.410778 495.212598 223.937008 
+C 495.212598 224.463238 495.003525 224.967985 494.631424 225.340086 
+C 494.259324 225.712187 493.754576 225.92126 493.228346 225.92126 
+C 492.702117 225.92126 492.197369 225.712187 491.825268 225.340086 
+C 491.453168 224.967985 491.244094 224.463238 491.244094 223.937008 
+C 491.244094 223.410778 491.453168 222.90603 491.825268 222.53393 
+C 492.197369 222.161829 492.702117 221.952756 493.228346 221.952756 
+z
+" clip-path="url(#pc772cffaf5)" style="fill: #1d1d1f; stroke: #1d1d1f; stroke-linejoin: miter"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pc772cffaf5">
+   <rect x="0" y="0" width="785.19685" height="453.543307"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,130 @@
+{
+ "_doc": "Shack interface board settings for the general router (p3, M-89). 4 layers: F (L1, V) and In2 (L3, H) routed; In1 and B are planes (GND, RGND islands, CHASSIS); B in the model as an obstacle layer (THT pads). Classes as the controller board (D-143 to D-145, C-35, C-36) with the shack net names. keepout.json (written by gen_shack_pcb.py) keeps interface nets off the RGND islands.",
+ "geom": "geom.json",
+ "out": "routes.json",
+ "grid": 0.1,
+ "margin": 0.12,
+ "edge_keep": 0.4,
+ "via": [
+  0.6,
+  0.3
+ ],
+ "window": 10.0,
+ "window_steps": [
+  10.0,
+  25.0
+ ],
+ "max_states": 150000000,
+ "breakout": 1.5,
+ "passes": 6,
+ "layers": [
+  {
+   "name": "F",
+   "dir": "V",
+   "route": true
+  },
+  {
+   "name": "In2",
+   "dir": "H",
+   "route": true
+  },
+  {
+   "name": "B",
+   "dir": null,
+   "route": false
+  }
+ ],
+ "fixed_nets": [],
+ "rf_clear": {
+  "F": 0.0,
+  "In2": 0.0,
+  "B": 0.0
+ },
+ "spokes": {
+  "nets": [],
+  "keep": 0.5,
+  "layers": [
+   "In2"
+  ]
+ },
+ "classes": [
+  [
+   "GND",
+   [
+    "GND",
+    "CHASSIS",
+    "*/RGND"
+   ],
+   null,
+   null
+  ],
+  [
+   "Power",
+   [
+    "+13V8",
+    "+5V",
+    "+3V3",
+    "*/VIN_P",
+    "Net-(D1-A)",
+    "Net-(U?-OUT)"
+   ],
+   0.508,
+   0.2
+  ],
+  [
+   "Entry",
+   [
+    "*/L?P",
+    "*/L?N"
+   ],
+   1.016,
+   0.5
+  ],
+  [
+   "Loop",
+   [
+    "Net-(C2?-Pad?)"
+   ],
+   0.508,
+   0.5
+  ],
+  [
+   "Default",
+   [
+    "*"
+   ],
+   0.254,
+   0.2
+  ]
+ ],
+ "order": {
+  "Power": 0
+ },
+ "escape": {
+  "pitch": 0.8,
+  "len": 1.0
+ },
+ "rf_pad_clear": 0.0,
+ "join_fixed": false,
+ "costs": {
+  "pref": 1.0,
+  "orth": 3.0,
+  "diag": 4.9497,
+  "bend45": 6.0,
+  "bend90": 8.0,
+  "via": 25.0
+ },
+ "_doc_costs": "Step costs per 0.1 mm grid step and turn costs (Prins 2026-10-24, option A): a 45-degree step costs more than a step against the main direction, and a 90-degree turn less than two 45-degree turns, so branches leave a straight track at right angles (T) and corners get the 45-degree chamfer.",
+ "seg_min": 0.4,
+ "max_states_rl": 80000000,
+ "_doc_seg_min": "Minimum track segment between two bends or a bend and a via, mm (M-78). Connections whose search window is too large for the extra state, or that cannot be routed with it, fall back to the plain search and are reported.",
+ "h_weight": 1.5,
+ "_doc_h_weight": "Weight on the A* heuristic for the search with minimum segment length: about 10 times faster; the path cost is at most h_weight times the optimum (M-78).",
+ "escape_inner": {
+  "len": 0.0,
+  "w": 0.3
+ },
+ "corner_radius": 1.0,
+ "no_narrow": [],
+ "keepout_file": "keepout.json"
+}

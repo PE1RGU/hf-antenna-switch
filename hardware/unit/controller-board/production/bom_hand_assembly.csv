@@ -1,0 +1,37 @@
+Qty per board,References,Value,Footprint,First source,Second source,Specification / note
+1,A1,ESP32-C3-DevKit-RUST-1,ESP32-C3-DevKit-RUST_Socket,Espressif ESP32-C3-DevKit-RUST-1,Espressif ESP32-C3-DevKit-RUST-2 (JP11 2-1),"MCU board; sockets on the lines below (D-55, D-94, D-95)"
+10,C1 C2 C3 C4 C5 C11 C14 C15 C16 C17,1u 16V X7R,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71C105KA12D,Samsung CL10B105KO8NNNC,MLCC 1 uF 16 V X7R 0603 (D-127)
+1,C12,10n,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71H103KA01D,Yageo CC0603KRX7R9BB103,"MLCC 10 nF 50 V X7R 0603, LDO bypass"
+1,C13,4.7u 16V X7R,C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,Murata GRM21BR71C475KE51L,Samsung CL21B475KOFNNNE,"MLCC 4.7 uF 16 V X7R 0805, LDO output (>= 2.2 uF effective)"
+4,D11 D21 D31 D41,SMBJ15CA,D_SMB,ST SMBJ15CA-TR,Littelfuse SMBJ15CA,"TVS 600 W bidirectional, VR 15 V"
+4,D12 D22 D32 D42,1N4148W,D_SOD-123,Diodes 1N4148W-7-F,"Nexperia 1N4148W,115",Small-signal diode SOD-123
+4,GD1 GD2 GD3 GD4,2036-09-B2LF,GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R,Bourns 2036-09-B2LF,Littelfuse SL1003A090R-001,"3-electrode GDT 90 V (D-58, D-149)"
+1,J1,RJ45 LINK,RJ45_8P8C_Unshielded_TabDown,Wurth 615008137121,Molex 95501-2881,"RJ45 8P8C unshielded, tab down (D-138)"
+1,J2,to RF board J14,PinSocket_2x12_P2.54mm_Vertical,Samtec ESQ-112-33-G-D,Samtec ESW-112-33-G-D,"Elevated socket 2 x 12, 16.13 mm, fitted on the bottom side (D-139)"
+1,JP11,SDA SEL,SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels,-,-,Solder jumper: bridge 2-3 for RUST-1 (no part)
+4,L1 L2 L3 L4,51u CMC,L_CMC_TDK_ACT45B,TDK ACT45B-510-2P-TL003,Murata DLW43SH510XK2L / Coilcraft 1812CAN-513NRC,"Common-mode choke 51 uH 1812 (D-149, D-151)"
+1,Q4,BSS138BK,SOT-23,"Nexperia BSS138BK,215",Diotec MMFTN138K,N-MOSFET (D-134)
+8,R11 R12 R21 R22 R31 R32 R41 R42,47R,R_MELF_MMB-0207,Vishay MMB02070C4709FB200,TE Neohm SMA-A 0207 47R 1 %,"Thin-film MELF 0207 1 W, pulse (C-39, D-151)"
+3,R13 R23 R33,220R,R_MiniMELF_MMA-0204,Vishay MMA02040C2200FB300,TE Neohm SMA-A 0204 220R 1 %,"Thin-film MiniMELF 0204, pulse (C-39, D-151)"
+3,R14 R24 R34,4.7k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"4.7k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+1,R35,240R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"240R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+4,R36 R44 R62 R63,100k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"100k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+1,R43,220R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"220R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+2,R51 R64,0R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"0R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+1,R61,1k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"1k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+1,R65,0R,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,generic,generic,"0R 0R jumper 1206 (Yageo RC1206JR-070RL, any maker)"
+3,U1 U2 U3,VO2611,DIP-8_W7.62mm,Vishay VO2611,Broadcom HCPL-2611-000E,"Opto 10 MBd, DIP-8 through hole"
+1,U4,PC817X,DIP-4_W7.62mm,Sharp PC817X2NSZ9F,Lite-On LTV-817B / Everlight EL817(B),"Opto, CTR rank B or better, DIP-4"
+1,U5,74LVC1G14,SOT-23-5,"Nexperia 74LVC1G14GV,125",TI SN74LVC1G14DBVR,Schmitt inverter
+1,U6,TLP176AM,SOP-4_P2.54mm_PhotoRelay_LongPad,"Toshiba TLP176AM(TPL,E)",Panasonic AQY212G3HS,Photorelay form A 60 V (D-101)
+1,U11,LP2985-33,SOT-23-5,TI LP2985-33DBVR,ST LD2985BM33R,LDO 3.3 V 150 mA
+1,U12,TPS3823A-33,SOT-23-5,TI TPS3823A-33DBVR,ADI MAX823SEUK+T / Diodes APX823-29W5G-7,Supervisor and watchdog (D-148)
+1,U13,74LVC1G74,VSSOP-8_2.3x2mm_P0.5mm,TI SN74LVC1G74DCUR,Nexperia 74LVC2G74DC,"D flip-flop, VSSOP-8 0.5 mm (D-154). Same pin-out, JEDEC MO-187 CA"
+1,U14,74LVC1G27,SOT-23-6,TI SN74LVC1G27DBVR,Nexperia 74LVC1G27GV,"3-input NOR, SOT-23-6 / SOT457, same pin-out (D-155). Candidate: Diodes 74LVC1G27W6-7 (pin-out to check)"
+1,U15,74LVC1G02,SOT-23-5,"Nexperia 74LVC1G02GV,125",TI SN74LVC1G02DBVR,2-input NOR
+1,U16,74LVC1G08,SOT-23-5,"Nexperia 74LVC1G08GV,125",TI SN74LVC1G08DBVR,2-input AND
+1,A1 sockets,,,Sullins PPPC161LFBN-RC,-,"Female header 1 x 16 gold, DevKit left side (D-95)"
+1,A1 sockets,,,Sullins PPPC121LFBN-RC,-,"Female header 1 x 12 gold, DevKit right side (D-95)"
+
+Not fitted (DNP): C21 C22 C23 C24 C25 C26 C27 C28 R52 R53
+"No part (pads, holes): H1 TP1 TP2 TP3 TP4 TP5 TP6 TP7 TP8 TP9"

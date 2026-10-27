@@ -1,0 +1,228 @@
+{
+ "_doc": "Board settings for grid_router.py (RF board, p2c, D-156). Layers in stack order; 'dir' is the main direction (V/H) of a routing layer; route false = obstacle only. rf_clear: clearance of routed copper to fixed_nets copper per layer (M-70: DRC does not check it). F is restricted to the logic regions, to boxes around the listed parts, and to pad_breakout around the net's own SMD pads.",
+ "geom": "geom.json",
+ "out": "routes.json",
+ "grid": 0.1,
+ "margin": 0.12,
+ "edge_keep": 0.4,
+ "via": [
+  0.6,
+  0.3
+ ],
+ "window": 10.0,
+ "window_steps": [
+  10.0,
+  25.0
+ ],
+ "max_states": 150000000,
+ "breakout": 1.5,
+ "passes": 6,
+ "layers": [
+  {
+   "name": "F",
+   "dir": "V",
+   "route": true
+  },
+  {
+   "name": "In2",
+   "dir": "H",
+   "route": true
+  },
+  {
+   "name": "In3",
+   "dir": "V",
+   "route": true
+  },
+  {
+   "name": "B",
+   "dir": null,
+   "route": false
+  }
+ ],
+ "fixed_nets": [
+  "/A?_ANTENNA",
+  "/ANT?",
+  "/Antenna port A?/PARK",
+  "/Antenna port A?/PORT",
+  "/R?_EXP",
+  "/R?_RADIO",
+  "/Radio port R?/RXBUS",
+  "/Radio port R?/TXBUS"
+ ],
+ "rf_clear": {
+  "F": 2.0,
+  "In2": 0.5,
+  "In3": 0.5,
+  "B": 2.0
+ },
+ "restrict": {
+  "F": {
+   "rects": [
+    [
+     0,
+     0,
+     268.0,
+     36.0
+    ],
+    [
+     0,
+     181.0,
+     68.0,
+     209.0
+    ],
+    [
+     95.0,
+     181.0,
+     119.3,
+     221.0
+    ]
+   ],
+   "ref_boxes": [
+    [
+     "D401",
+     "C40[345]",
+     "R40[45]"
+    ],
+    [
+     "D501",
+     "C50[345]",
+     "R50[45]"
+    ],
+    [
+     "D601",
+     "C60[345]",
+     "R60[45]"
+    ],
+    [
+     "D701",
+     "C70[345]",
+     "R70[45]"
+    ],
+    [
+     "L402",
+     "C402"
+    ],
+    [
+     "L502",
+     "C502"
+    ],
+    [
+     "L602",
+     "C602"
+    ],
+    [
+     "L702",
+     "C702"
+    ]
+   ],
+   "box_margin": 1.0,
+   "pad_breakout": 1.5
+  }
+ },
+ "spokes": {
+  "nets": [
+   "GND"
+  ],
+  "keep": 0.5,
+  "layers": [
+   "In2",
+   "In3"
+  ]
+ },
+ "classes": [
+  [
+   "GND",
+   [
+    "GND"
+   ],
+   null,
+   null
+  ],
+  [
+   "Power",
+   [
+    "+12V*",
+    "+5V",
+    "+3V3",
+    "CLAMP_*",
+    "*/CHASSIS*"
+   ],
+   0.508,
+   0.2
+  ],
+  [
+   "Default",
+   [
+    "*"
+   ],
+   0.254,
+   0.2
+  ]
+ ],
+ "order": {
+  "Power": 0
+ },
+ "escape": {
+  "pitch": 0.8,
+  "len": 1.0
+ },
+ "rf_pad_clear": 2.0,
+ "join_fixed": false,
+ "costs": {
+  "pref": 1.0,
+  "orth": 3.0,
+  "diag": 4.9497,
+  "bend45": 6.0,
+  "bend90": 8.0,
+  "via": 25.0
+ },
+ "_doc_costs": "Step costs per 0.1 mm grid step and turn costs (Prins 2026-10-24, option A): a 45-degree step costs more than a step against the main direction, and a 90-degree turn less than two 45-degree turns, so branches leave a straight track at right angles (T) and corners get the 45-degree chamfer.",
+ "seg_min": 0.4,
+ "max_states_rl": 80000000,
+ "_doc_seg_min": "Minimum track segment between two bends or a bend and a via, mm (M-78). Connections whose search window is too large for the extra state, or that cannot be routed with it, fall back to the plain search and are reported.",
+ "h_weight": 1.5,
+ "_doc_h_weight": "Weight on the A* heuristic for the search with minimum segment length: about 10 times faster; the path cost is at most h_weight times the optimum (M-78).",
+ "return_vias": {
+  "radius": 1.5,
+  "_doc": "D-156, M-79: a signal via between F/In2 (reference L2) and In3/B (reference L5) gets a GND via within radius mm; the search keeps that room",
+  "radius_logic": 2.5
+ },
+ "escape_inner": {
+  "len": 5.0,
+  "w": 0.3
+ },
+ "corner_radius": 5.0,
+ "no_narrow": [
+  "+12V_RLY",
+  "+12V_SW",
+  "+12V_AUX"
+ ],
+ "_doc_no_narrow": "Nets that keep the class width (coil supply: 0.254 mm over 115 mm of +12V_RLY would drop about 0.2 V at 0.4 A, M-79)",
+ "pairs": [
+  {
+   "_doc": "detector and comparator inputs (victims) against bias, switching and coil lines (aggressors), M-81",
+   "a": [
+    "/A?_DET",
+    "Net-(D?01-K)",
+    "Net-(D?01-COM)",
+    "Net-(C801-Pad1)",
+    "Net-(U801?-+)"
+   ],
+   "b": [
+    "/A?_BIAS",
+    "*/A?_BIAS_EN",
+    "*/A?_BIAS_OK",
+    "Net-(D?02-A)",
+    "+12V_SW",
+    "+12V_RLY",
+    "+12V_AUX",
+    "CLAMP_*",
+    "Net-(D[123]??-A)",
+    "*_DRV",
+    "/SCL",
+    "/SDA"
+   ],
+   "clear": 1.0
+  }
+ ]
+}

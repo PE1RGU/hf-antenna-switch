@@ -1,0 +1,203 @@
+<title>Controller Card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#f2f3ef; --panel:#fbfbf8; --ink:#1c232b; --ink2:#5b6570; --line:#8e979f; --grid:#d8dbd4;
+  --ctl:#2b7a78; --ctl-soft:#2b7a7833; --rf:#1c232b; --on:#d9642a; --spare:#a9b0b6;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --ctl-soft:#4fb3ad33; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+} }
+:root[data-theme="dark"] {
+  --bg:#161a1f; --panel:#1e242a; --ink:#e6e9ec; --ink2:#a5aeb7; --line:#7d868f; --grid:#2c333a;
+  --ctl:#4fb3ad; --ctl-soft:#4fb3ad33; --rf:#e6e9ec; --on:#f08a4b; --spare:#5d666e;
+}
+body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.5; }
+main { max-width:1120px; margin:0 auto; padding:32px 24px 64px; }
+header { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 24px; margin-bottom:20px; }
+h1 { font-size:26px; font-weight:600; margin:0; letter-spacing:-0.01em; }
+h2 { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink2); margin:36px 0 10px; }
+.eyebrow { font-family:var(--mono); font-size:12px; color:var(--ctl); letter-spacing:0.04em; }
+.lede { color:var(--ink2); max-width:70ch; margin:0 0 20px; }
+.lede a { color:var(--ctl); }
+figure { margin:0; background:var(--panel); border:1px solid var(--grid); border-radius:4px; padding:16px; overflow-x:auto; }
+figure svg { display:block; min-width:900px; width:100%; height:auto; color:var(--ink); }
+figcaption { font-size:13px; color:var(--ink2); margin-top:12px; display:flex; flex-wrap:wrap; gap:6px 22px; }
+.key { display:inline-flex; align-items:center; gap:6px; }
+.key i { display:inline-block; width:14px; height:3px; background:var(--rf); }
+.key i.ctl { background:var(--ctl); }
+.mod { fill:var(--panel); stroke:var(--ink); stroke-width:1.4; }
+.mod.ext { stroke:var(--line); stroke-width:1.2; }
+.wire { stroke:var(--rf); stroke-width:1.6; fill:none; }
+.ctl { stroke:var(--ctl); stroke-width:1.6; fill:none; }
+.bus { fill:var(--ctl-soft); stroke:var(--ctl); stroke-width:1; }
+.buslbl { font-family:var(--mono); font-size:10px; fill:var(--ctl); }
+.t { font-family:var(--sans); font-size:12px; font-weight:600; fill:var(--ink); }
+.d { font-family:var(--mono); font-size:10px; fill:var(--ink2); }
+.sec { font-family:var(--mono); font-size:11px; fill:var(--ctl); letter-spacing:.06em; text-transform:uppercase; }
+.grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:24px 40px; }
+table { border-collapse:collapse; width:100%; font-size:14px; }
+th { text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink2); font-weight:600; padding:6px 10px 6px 0; border-bottom:1px solid var(--line); }
+td { padding:8px 10px 8px 0; border-bottom:1px solid var(--grid); vertical-align:top; }
+td:first-child { font-weight:600; white-space:nowrap; }
+code { font-family:var(--mono); font-size:12.5px; color:var(--ctl); }
+p, ol { max-width:70ch; }
+ol { padding-left:20px; } ol li { margin-bottom:6px; }
+</style>
+<main>
+<header>
+  <span class="eyebrow">Shack Relay Matrix · card architecture · rev A</span>
+  <h1>Controller Card</h1>
+</header>
+<p class="lede">Slot 0. An ESP32-S3 holds the routing table and talks to every card over I2C, to the host over USB, and to the shack over Wi-Fi. Around it sits a safety chain built so that the firmware can only ever <em>permit</em> relays to be energised: the external watchdog, the supply supervisor and the gate that produces <code>/RLY_EN</code> are hardware. Parent: <a href="https://claude.ai/code/artifact/e27126d0-6c2e-44ee-a48c-11e5d0845b2e">Shack Relay Matrix</a> · siblings: <a href="https://claude.ai/code/artifact/50071472-129c-4a49-8116-c369629d1050">Radio Port Card</a>, <a href="https://claude.ai/code/artifact/e87b98e8-e594-4f4e-8697-b0068ad870c9">Antenna Port Card</a>.</p>
+
+<figure>
+<svg viewBox="0 0 1160 580" role="img" aria-label="Controller card: ESP32-S3 module with USB-C host link, debug header, Wi-Fi antenna path to a rear SMA, front panel connector; below it the safety chain of external watchdog, supply supervisor and hardware gate that produces RLY_EN, plus the I2C bus buffer and PTT/INT input buffer onto the backplane rail">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<text class="sec" x="30" y="40" text-anchor="start">Compute · host link · panel</text>
+<rect class="mod" x="380" y="60" width="240" height="240" rx="3"/>
+<text class="t" x="500.0" y="77" text-anchor="middle">ESP32-S3-WROOM-1U</text>
+<text class="d" x="500.0" y="93" text-anchor="middle">dual core · 8 MB flash</text>
+<text class="d" x="500.0" y="107" text-anchor="middle">native USB (CDC) · Wi-Fi 2.4 GHz</text>
+<text class="d" x="500.0" y="121" text-anchor="middle">I2C#1 backplane master</text>
+<text class="d" x="500.0" y="135" text-anchor="middle">I2C#2 front panel</text>
+<text class="d" x="500.0" y="149" text-anchor="middle">GPIO: WDT kick, MCU_EN,</text>
+<text class="d" x="500.0" y="163" text-anchor="middle">PTT[1..4], /INT, buttons</text>
+<text class="d" x="500.0" y="177" text-anchor="middle"></text>
+<text class="d" x="500.0" y="191" text-anchor="middle">routing table · interlocks</text>
+<text class="d" x="500.0" y="205" text-anchor="middle">ASCII protocol · web UI</text>
+<rect class="mod ext" x="60" y="60" width="160" height="56" rx="3"/>
+<text class="t ext" x="140.0" y="77" text-anchor="middle">USB-C</text>
+<text class="d ext" x="140.0" y="93" text-anchor="middle">to host PC · ESD array</text>
+<text class="d ext" x="140.0" y="107" text-anchor="middle">5 V not used for logic</text>
+<line class="wire" x1="220" y1="88" x2="380" y2="88" marker-end="url(#arr)"/>
+<text class="d" x="226" y="82" text-anchor="start">USB 2.0 · native CDC</text>
+<rect class="mod" x="60" y="150" width="160" height="56" rx="3"/>
+<text class="t" x="140.0" y="167" text-anchor="middle">Debug header</text>
+<text class="d" x="140.0" y="183" text-anchor="middle">UART0 · BOOT · RESET</text>
+<text class="d" x="140.0" y="197" text-anchor="middle">not on the panel</text>
+<line class="wire" x1="220" y1="178" x2="380" y2="178"/>
+<text class="d" x="226" y="172" text-anchor="start">UART0</text>
+<line class="wire" x1="620" y1="88" x2="680" y2="88"/>
+<text class="d" x="626" y="82" text-anchor="start">RF · U.FL</text>
+<rect class="mod" x="680" y="60" width="160" height="56" rx="3"/>
+<text class="t" x="760.0" y="77" text-anchor="middle">Wi-Fi antenna path</text>
+<text class="d" x="760.0" y="93" text-anchor="middle">U.FL → rear SMA bulkhead</text>
+<text class="d" x="760.0" y="107" text-anchor="middle">antenna outside the box</text>
+<line class="ctl" x1="620" y1="200" x2="680" y2="200" marker-end="url(#arr)"/>
+<text class="d" x="626" y="194" text-anchor="start">I2C#2 · GPIO</text>
+<rect class="mod ext" x="680" y="150" width="160" height="90" rx="3"/>
+<text class="t ext" x="760.0" y="167" text-anchor="middle">Front panel</text>
+<text class="d ext" x="760.0" y="183" text-anchor="middle">OLED 128×64 (I2C)</text>
+<text class="d ext" x="760.0" y="197" text-anchor="middle">encoder + push</text>
+<text class="d ext" x="760.0" y="211" text-anchor="middle">MODE · ACK buttons</text>
+<text class="d ext" x="760.0" y="225" text-anchor="middle">fault LED · ribbon</text>
+<rect class="mod" x="880" y="60" width="220" height="56" rx="3"/>
+<text class="t" x="990.0" y="77" text-anchor="middle">Card power</text>
+<text class="d" x="990.0" y="93" text-anchor="middle">+5V from backplane → 3V3 LDO 1 A</text>
+<text class="d" x="990.0" y="107" text-anchor="middle">clean rail for MCU + panel</text>
+<polyline class="ctl" points="990,116 990,480" marker-end="url(#arr)"/>
+<text class="d" x="996" y="440" text-anchor="start">+5V</text>
+<text class="d" x="880" y="134" text-anchor="start">3V3 → MCU, panel, logic</text>
+<text class="sec" x="30" y="345" text-anchor="start">Safety chain · hardware only</text>
+<rect class="mod" x="60" y="360" width="160" height="60" rx="3"/>
+<text class="t" x="140.0" y="377" text-anchor="middle">External watchdog</text>
+<text class="d" x="140.0" y="393" text-anchor="middle">TPS3823 class · 1.6 s</text>
+<text class="d" x="140.0" y="407" text-anchor="middle">kicked by MCU GPIO</text>
+<polyline class="ctl" points="400,300 400,325 140,325 140,360" marker-end="url(#arr)"/>
+<text class="d" x="148" y="320" text-anchor="start">WDT kick</text>
+<rect class="mod" x="250" y="360" width="150" height="60" rx="3"/>
+<text class="t" x="325.0" y="377" text-anchor="middle">Supply supervisor</text>
+<text class="d" x="325.0" y="393" text-anchor="middle">+3V3 and +12V RLY</text>
+<text class="d" x="325.0" y="407" text-anchor="middle">under-voltage → not OK</text>
+<polyline class="ctl" points="325,420 325,480" marker-end="url(#arr)"/>
+<text class="d" x="331" y="465" text-anchor="start">+12V RLY sense</text>
+<rect class="mod" x="440" y="360" width="220" height="60" rx="3"/>
+<text class="t" x="550.0" y="377" text-anchor="middle">Safety gate</text>
+<text class="d" x="550.0" y="393" text-anchor="middle">/RLY_EN = WDT_OK ∧ PWR_OK ∧ MCU_EN</text>
+<text class="d" x="550.0" y="407" text-anchor="middle">fault latch · MCU clears after ACK</text>
+<line class="ctl" x1="470" y1="300" x2="470" y2="360" marker-end="url(#arr)"/>
+<text class="d" x="476" y="340" text-anchor="start">MCU_EN</text>
+<polyline class="ctl" points="140,420 140,440 500,440 500,420" marker-end="url(#arr)"/>
+<text class="d" x="148" y="435" text-anchor="start">WDT_OK</text>
+<line class="ctl" x1="400" y1="390" x2="440" y2="390" marker-end="url(#arr)"/>
+<text class="d" x="402" y="384" text-anchor="start">PWR_OK</text>
+<polyline class="ctl" points="560,420 560,480" marker-end="url(#arr)"/>
+<text class="d" x="566" y="465" text-anchor="start">/RLY_EN · open-drain</text>
+<polyline class="ctl" points="620,290 720,290 720,360" marker-end="url(#arr)"/>
+<text class="d" x="726" y="340" text-anchor="start">I2C#1</text>
+<rect class="mod" x="680" y="360" width="170" height="60" rx="3"/>
+<text class="t" x="765.0" y="377" text-anchor="middle">I2C bus buffer</text>
+<text class="d" x="765.0" y="393" text-anchor="middle">PCA9517 · strong pull-ups</text>
+<text class="d" x="765.0" y="407" text-anchor="middle">TCA9548 mux footprint</text>
+<polyline class="ctl" points="760,420 760,480" marker-end="url(#arr)"/>
+<text class="d" x="766" y="465" text-anchor="start">SDA · SCL</text>
+<polyline class="ctl" points="620,255 940,255 940,360" marker-end="url(#arr)"/>
+<text class="d" x="626" y="268" text-anchor="start">PTT[1..4] · /INT → GPIO</text>
+<rect class="mod" x="870" y="360" width="150" height="60" rx="3"/>
+<text class="t" x="945.0" y="377" text-anchor="middle">Input buffer</text>
+<text class="d" x="945.0" y="393" text-anchor="middle">PTT[1..4], /INT</text>
+<text class="d" x="945.0" y="407" text-anchor="middle">Schmitt · pull-ups</text>
+<polyline class="ctl" points="920,480 920,420" marker-end="url(#arr)"/>
+<text class="d" x="866" y="465" text-anchor="start">PTT · /INT</text>
+<rect class="bus" x="30" y="480" width="1090" height="16"/>
+<text class="buslbl" x="1114" y="492" text-anchor="end">backplane · 2×10 IDC · slot 0</text>
+<text class="d" x="30" y="516" text-anchor="start">+5V in · +3V3 n/c (own LDO) · GND · SDA/SCL (master) · /INT (in) · /RLY_EN (out) · SLOT_ID n/c · PTT[1..4] (in) · spare: TX_ANY out (option)</text>
+</svg>
+<figcaption>
+  <span class="key"><i></i> data / RF</span>
+  <span class="key"><i class="ctl"></i> control / power</span>
+</figcaption>
+</figure>
+
+<div class="grid2">
+<section>
+<h2>Blocks</h2>
+<table>
+<tr><th>Block</th><th>Function and choice</th></tr>
+<tr><td>ESP32-S3-WROOM-1U</td><td>The -1U variant has a U.FL socket instead of a PCB antenna, so the Wi-Fi antenna goes through a rear bulkhead SMA and sits outside the steel box. Native USB gives the host a CDC serial port with no bridge chip. Two I2C controllers: #1 is the backplane master, #2 drives the front panel, so a wedged card cannot freeze the display.</td></tr>
+<tr><td>USB-C</td><td>Host link only. ESD array on the data pair. The 5 V from the host is not used to power anything; the card runs from the backplane so the switch works with the PC off.</td></tr>
+<tr><td>Card power</td><td>+5 V from the Power module through a 1 A 3V3 LDO on this card. The ESP32 draws 500 mA bursts on Wi-Fi TX; keeping that off the shared backplane 3V3 keeps the card-side expanders and comparators quiet.</td></tr>
+<tr><td>External watchdog</td><td>TPS3823 class, 1.6 s window, kicked from a GPIO in the main loop. The ESP32's internal watchdogs only reset the chip; this one also drops <code>WDT_OK</code>, so a hung MCU takes the relays to safe state before it reboots.</td></tr>
+<tr><td>Supply supervisor</td><td>Watches +3V3 and +12V RLY. Under-voltage on either releases <code>PWR_OK</code>. Relays that lose coil voltage mid-transmission are worse than relays that were never closed.</td></tr>
+<tr><td>Safety gate</td><td>Small logic: <code>/RLY_EN</code> is asserted only while <code>WDT_OK</code>, <code>PWR_OK</code> and <code>MCU_EN</code> are all true and the fault latch is clear. Any of them dropping sets the latch. The MCU can clear the latch only after the ACK button, and only if the inputs are healthy again. Open-drain onto the backplane so a second controller or a panel kill switch could pull it too.</td></tr>
+<tr><td>I2C bus buffer</td><td>PCA9517 between the MCU and the backplane: strong pull-ups on the card side, isolation from a shorted card, and a TCA9548 mux footprint for a second backplane later.</td></tr>
+<tr><td>Input buffer</td><td>Schmitt buffers with pull-ups on <code>PTT[1..4]</code> and <code>/INT</code>. The MCU reads PTT for hot-switch lockout and the display; it never drives those lines.</td></tr>
+<tr><td>Front panel</td><td>Ribbon to the panel: 128×64 OLED on I2C#2, encoder with push for pick-and-confirm, MODE and ACK buttons, fault LED. Enough to run the shack with the PC off.</td></tr>
+<tr><td>Debug header</td><td>UART0, BOOT and RESET on the card edge. Not reachable from the panel.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>What the firmware owns</h2>
+<table>
+<tr><th>Function</th><th>Behaviour</th></tr>
+<tr><td>Discovery</td><td>At boot: scan slots, read each card's EEPROM (type, name, RX-only, bias-T, TX-capable, TX delay). Build the routing table from what is actually plugged in.</td></tr>
+<tr><td>Routing</td><td>Per radio slot: TX line and RX line. Enforce one radio per line, RX-only lines only on RX paths, break-before-make, settle delay, no moves while that slot's PTT or <code>RF_DET</code> is active.</td></tr>
+<tr><td>Host protocol</td><td>ASCII over USB CDC, same protocol over TCP/WebSocket on Wi-Fi. Commands like <code>SET R1 TX A1 RX A2</code>, <code>STATE</code>, <code>FAULT ACK</code>. Host-side band data from CAT can drive per-band presets.</td></tr>
+<tr><td>Web UI</td><td>Matrix view, tap to route, fault log. mDNS so it is <code>relay-matrix.local</code>.</td></tr>
+<tr><td>Faults</td><td>RF on an idle or RX-only line, PTT while a move is in progress, expander not answering, EEPROM/DIP mismatch. Log to flash with timestamp (NTP when Wi-Fi is up).</td></tr>
+<tr><td>Presets</td><td>Named routes stored in NVS, selectable from encoder, host or web.</td></tr>
+</table>
+
+<h2>Boot and fault sequence</h2>
+<ol>
+<li>Power up: <code>/RLY_EN</code> released by default (latch set on power-on). Every antenna port grounded, every matrix relay open.</li>
+<li>MCU boots, scans cards, loads last state, starts kicking the watchdog, raises <code>MCU_EN</code>.</li>
+<li>Firmware clears the latch → <code>/RLY_EN</code> asserted → routes applied in order, RX rows before TX rows.</li>
+<li>On any fault: latch sets, <code>/RLY_EN</code> released within microseconds, K0 relays on the radio cards keep following PTT. Display shows the cause. ACK on the panel or host lets the MCU clear the latch.</li>
+</ol>
+</section>
+</div>
+
+<h2>Open items</h2>
+<ol>
+<li>Wi-Fi radiated and conducted noise into the HF receive chain. Mitigations drawn in: antenna outside the box, LDO on the card, module far from the RF bus board. Verify with the Airspy before committing the enclosure layout. Fallback is a Wi-Fi-off mode.</li>
+<li>Whether <code>TX_ANY</code> (diode-OR of PTT) should be driven onto a spare backplane line by this card or by the Power module; the Radio Port RX variant would prefer a clean single line to read.</li>
+<li>Panel kill switch: a physical switch in series with <code>/RLY_EN</code> on the front panel, or trust the ACK-gated latch.</li>
+<li>ESP32-S3 I2C at 400 kHz across the full backplane with 10 expanders and 10 EEPROMs: check bus capacitance; the PCA9517 helps but the backplane pull-ups need sizing.</li>
+</ol>
+</main>

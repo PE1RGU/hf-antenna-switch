@@ -1,0 +1,4 @@
+./src/common/stdpbase.cpp(59): assert ""traits"" failed in Get(): create wxApp before calling this
+controller-board.ses exit 0 time 166 s | the board has 13 unrouted connection(s) (optimizer only runs on completely routed boards).
+import True
+tracks F.Cu 1907 mm, B.Cu 593 mm, vias 53
