@@ -3,6 +3,8 @@
 Newest first. Board revisions follow the design log IDs.
 
 ## 2026-10-26
+- D-181 (KILL: EAO 84-5340.0020, R75 2k2), D-182 (RESET: C&K 8125SHZBE; Dialight 558 LEDs), A-28 (plates stay 1.6 mm). Schematic a17-display (M-97): R1 to R3 panel LEDs removed, display header J15 on IO2/IO9 and the PCA9539. Layout p6 (M-98): headers moved, routed again, DRC 0. Front plate a3 (M-99): display left, KILL right.
+- D-180: shack interface front plate gets a colour TFT (SPI on IO2/IO9, DC/RST/backlight on the PCA9539) in place of the R1 to R3 LEDs; SAFE and LATCHED LEDs stay in hardware.
 - D-179, M-95: shack interface end plates as black PCBs with white silkscreen (gen_endplates.py): rear plate done (XT60, RJ45, three mini-DIN, labels), front plate with the USB-C slot; DRC 0; SolidCraft fit with the plates in place. A-27: end plate screws to confirm.
 - D-178, M-94: shack interface housing with the cap on top for access to the 7805 and the jumpers; board parts side up in the 2nd slot from the closed bottom; SolidCraft fit check: no overlap.
 - D-177 option A, layout p5 (M-93): panel connectors overhang the board edges by 2.0 mm and J14 sits on a 2.0 mm board tab, so every connector face is 0.3 mm from its end panel; routed again (156 of 156 nets), DRC 0 copper and silk findings; SolidCraft fit check repeated.

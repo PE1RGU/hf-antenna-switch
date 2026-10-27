@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/drc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-10-26T09:18:25",
+    "date": "2026-10-26T23:27:14",
     "ignored_checks": [
         {
             "description": "Footprint has no courtyard defined",
@@ -43,7 +43,7 @@
                         "x": 94.8,
                         "y": 173.65
                     },
-                    "uuid": "2e3e6f1d-ef55-4b5f-a5d8-aa0b93b6fd9e"
+                    "uuid": "562440df-d3c6-4100-9582-737530d9d00c"
                 },
                 {
                     "description": "NPTH pad of J14",
@@ -51,7 +51,7 @@
                         "x": 95.11,
                         "y": 174.725
                     },
-                    "uuid": "836e4d6d-7025-4d6f-a288-370461ed74a6"
+                    "uuid": "2418743d-648a-42cc-94d6-d9d4083e5271"
                 }
             ],
             "severity": "error",
@@ -66,7 +66,7 @@
                         "x": 94.8,
                         "y": 173.65
                     },
-                    "uuid": "f5e2185c-1c9c-4165-9748-570a94a07dd7"
+                    "uuid": "7dd5da55-01be-4808-8f56-dc828180fc27"
                 },
                 {
                     "description": "NPTH pad of J14",
@@ -74,7 +74,7 @@
                         "x": 95.11,
                         "y": 174.725
                     },
-                    "uuid": "836e4d6d-7025-4d6f-a288-370461ed74a6"
+                    "uuid": "2418743d-648a-42cc-94d6-d9d4083e5271"
                 }
             ],
             "severity": "error",
@@ -89,7 +89,7 @@
                         "x": 101.2,
                         "y": 173.65
                     },
-                    "uuid": "172cedfa-6968-43e0-b7a2-cb49f16612dc"
+                    "uuid": "f0770ba5-9332-46fe-b217-3f852c6bb3bd"
                 },
                 {
                     "description": "NPTH pad of J14",
@@ -97,7 +97,7 @@
                         "x": 100.89,
                         "y": 174.725
                     },
-                    "uuid": "46bdcad0-82d0-407c-938f-493d851e3feb"
+                    "uuid": "67217b84-67ba-4377-bf99-b7e9b9ca1d82"
                 }
             ],
             "severity": "error",
@@ -112,7 +112,7 @@
                         "x": 101.2,
                         "y": 173.65
                     },
-                    "uuid": "b3a30ae5-0934-41ea-a9e4-1969b668f0ff"
+                    "uuid": "4f5bb4b5-2bb5-4a4b-b279-a5c626cc8c1a"
                 },
                 {
                     "description": "NPTH pad of J14",
@@ -120,7 +120,7 @@
                         "x": 100.89,
                         "y": 174.725
                     },
-                    "uuid": "46bdcad0-82d0-407c-938f-493d851e3feb"
+                    "uuid": "67217b84-67ba-4377-bf99-b7e9b9ca1d82"
                 }
             ],
             "severity": "error",
@@ -135,76 +135,7 @@
                         "x": 109.0,
                         "y": 26.0
                     },
-                    "uuid": "34761646-06fb-49b5-bd05-d411ff742924"
-                },
-                {
-                    "description": "PTH pad 3 [/Radio port R2/RGND] of JP306",
-                    "pos": {
-                        "x": 140.5,
-                        "y": 66.08
-                    },
-                    "uuid": "266cdd35-5c53-4345-91de-acda5ccac634"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer In1.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [CHASSIS] on In1.Cu, priority 2",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "f4b774ab-e02b-4d2e-a26a-22da14189573"
-                },
-                {
-                    "description": "PTH pad SH [CHASSIS] of J14",
-                    "pos": {
-                        "x": 93.68,
-                        "y": 174.225
-                    },
-                    "uuid": "c45b5507-5c67-4b2f-9d90-f5730724d8df"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer In1.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [CHASSIS] on In1.Cu, priority 2",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "f4b774ab-e02b-4d2e-a26a-22da14189573"
-                },
-                {
-                    "description": "PTH pad SH [CHASSIS] of J14",
-                    "pos": {
-                        "x": 102.32,
-                        "y": 174.225
-                    },
-                    "uuid": "05a1af0c-d0e6-4614-add1-a2c3e0bd08ff"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; 1 spokes connected to isolated island)",
-            "items": [
-                {
-                    "description": "Zone [/Radio port R2/RGND] on F.Cu, priority 1",
-                    "pos": {
-                        "x": 109.0,
-                        "y": 26.0
-                    },
-                    "uuid": "34761646-06fb-49b5-bd05-d411ff742924"
+                    "uuid": "612436a7-84b5-4109-bfa1-fa0f7eb7e963"
                 },
                 {
                     "description": "PTH pad 5 [/Radio port R2/RGND] of J12",
@@ -212,7 +143,7 @@
                         "x": 128.9,
                         "y": 26.5
                     },
-                    "uuid": "86e16720-0331-4785-add4-ebe736bae623"
+                    "uuid": "2e66cf4e-ae64-4bbe-8a5c-dd6554dfc657"
                 }
             ],
             "severity": "error",
@@ -227,7 +158,7 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "bbf7aea6-6718-4e1f-a87a-7cdfcfebe869"
+                    "uuid": "75f7d7de-f9e9-4cb7-8609-495fb5a5a547"
                 },
                 {
                     "description": "PTH pad SH [CHASSIS] of J14",
@@ -235,99 +166,7 @@
                         "x": 93.68,
                         "y": 174.225
                     },
-                    "uuid": "c45b5507-5c67-4b2f-9d90-f5730724d8df"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [CHASSIS] on B.Cu, priority 2",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "7fa9e8fa-90a2-4413-81df-82f7fc30a9cd"
-                },
-                {
-                    "description": "PTH pad SH [CHASSIS] of J14",
-                    "pos": {
-                        "x": 93.68,
-                        "y": 174.225
-                    },
-                    "uuid": "c45b5507-5c67-4b2f-9d90-f5730724d8df"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [CHASSIS] on F.Cu, priority 2",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "bbf7aea6-6718-4e1f-a87a-7cdfcfebe869"
-                },
-                {
-                    "description": "PTH pad SH [CHASSIS] of J14",
-                    "pos": {
-                        "x": 102.32,
-                        "y": 174.225
-                    },
-                    "uuid": "05a1af0c-d0e6-4614-add1-a2c3e0bd08ff"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [CHASSIS] on B.Cu, priority 2",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "7fa9e8fa-90a2-4413-81df-82f7fc30a9cd"
-                },
-                {
-                    "description": "PTH pad SH [CHASSIS] of J14",
-                    "pos": {
-                        "x": 102.32,
-                        "y": 174.225
-                    },
-                    "uuid": "05a1af0c-d0e6-4614-add1-a2c3e0bd08ff"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; 1 spokes connected to isolated island)",
-            "items": [
-                {
-                    "description": "Zone [/Radio port R3/RGND] on F.Cu, priority 1",
-                    "pos": {
-                        "x": 144.0,
-                        "y": 26.0
-                    },
-                    "uuid": "591b5477-7881-4938-8f42-7676987e2a25"
-                },
-                {
-                    "description": "PTH pad 5 [/Radio port R3/RGND] of J13",
-                    "pos": {
-                        "x": 163.9,
-                        "y": 26.5
-                    },
-                    "uuid": "ec366103-5cf3-4ae4-ab5c-6133102ae08d"
+                    "uuid": "beff47ae-207a-4f4a-b197-ea94257db8bf"
                 }
             ],
             "severity": "error",
@@ -337,20 +176,66 @@
             "description": "Thermal relief connection to zone incomplete (layer In1.Cu; zone min spoke count 2; actual 1)",
             "items": [
                 {
-                    "description": "Zone [GND] on In1.Cu, priority 0",
+                    "description": "Zone [CHASSIS] on In1.Cu, priority 2",
                     "pos": {
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "70d95073-049f-4bb1-b115-516b4407a40d"
+                    "uuid": "6b760fdc-7b02-4a12-a34d-33c68636495d"
                 },
                 {
-                    "description": "PTH pad 4 [GND] of J6",
+                    "description": "PTH pad SH [CHASSIS] of J14",
                     "pos": {
-                        "x": 35.5,
-                        "y": 174.5
+                        "x": 93.68,
+                        "y": 174.225
                     },
-                    "uuid": "5c9f0e06-d083-4c27-979e-d1dc331ca8c3"
+                    "uuid": "beff47ae-207a-4f4a-b197-ea94257db8bf"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [CHASSIS] on F.Cu, priority 2",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "75f7d7de-f9e9-4cb7-8609-495fb5a5a547"
+                },
+                {
+                    "description": "PTH pad SH [CHASSIS] of J14",
+                    "pos": {
+                        "x": 102.32,
+                        "y": 174.225
+                    },
+                    "uuid": "a4f99e06-90d2-4b17-8a2d-cdaa05f3b113"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer In1.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [CHASSIS] on In1.Cu, priority 2",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6b760fdc-7b02-4a12-a34d-33c68636495d"
+                },
+                {
+                    "description": "PTH pad SH [CHASSIS] of J14",
+                    "pos": {
+                        "x": 102.32,
+                        "y": 174.225
+                    },
+                    "uuid": "a4f99e06-90d2-4b17-8a2d-cdaa05f3b113"
                 }
             ],
             "severity": "error",
@@ -365,15 +250,15 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
                 },
                 {
-                    "description": "Pad 2 [GND] of R219 on F.Cu",
+                    "description": "Pad 2 [GND] of R419 on F.Cu",
                     "pos": {
-                        "x": 98.5,
+                        "x": 168.5,
                         "y": 60.4125
                     },
-                    "uuid": "5dc745f4-5164-4d57-a070-4ebc9e724f57"
+                    "uuid": "32b15161-a01a-404a-be24-b57c30c510c0"
                 }
             ],
             "severity": "error",
@@ -383,20 +268,43 @@
             "description": "Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)",
             "items": [
                 {
-                    "description": "Zone [GND] on B.Cu, priority 0",
+                    "description": "Zone [CHASSIS] on B.Cu, priority 2",
                     "pos": {
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "7c7f96d3-b351-4b2f-83ee-7528dd58b78d"
+                    "uuid": "3ce8fa0d-dbf1-4027-a707-db2680a74f82"
                 },
                 {
-                    "description": "PTH pad 4 [GND] of J6",
+                    "description": "PTH pad SH [CHASSIS] of J14",
                     "pos": {
-                        "x": 35.5,
-                        "y": 174.5
+                        "x": 93.68,
+                        "y": 174.225
                     },
-                    "uuid": "5c9f0e06-d083-4c27-979e-d1dc331ca8c3"
+                    "uuid": "beff47ae-207a-4f4a-b197-ea94257db8bf"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer B.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [CHASSIS] on B.Cu, priority 2",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "3ce8fa0d-dbf1-4027-a707-db2680a74f82"
+                },
+                {
+                    "description": "PTH pad SH [CHASSIS] of J14",
+                    "pos": {
+                        "x": 102.32,
+                        "y": 174.225
+                    },
+                    "uuid": "a4f99e06-90d2-4b17-8a2d-cdaa05f3b113"
                 }
             ],
             "severity": "error",
@@ -411,191 +319,7 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R220 on F.Cu",
-                    "pos": {
-                        "x": 90.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "079ca16c-f8a0-4487-8ea0-e78f978e7595"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R418 on F.Cu",
-                    "pos": {
-                        "x": 149.8,
-                        "y": 64.4125
-                    },
-                    "uuid": "3e5481b1-6a9b-460a-b2eb-b64b267c0f04"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R320 on F.Cu",
-                    "pos": {
-                        "x": 125.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "afa456b7-fd3a-45a4-ba25-a99d43fb9095"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R420 on F.Cu",
-                    "pos": {
-                        "x": 160.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "dc34d20d-7e11-42bd-b0b2-130bcf7d395d"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R419 on F.Cu",
-                    "pos": {
-                        "x": 168.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "6edb3753-179b-40ea-8827-e9f8bafc5192"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R218 on F.Cu",
-                    "pos": {
-                        "x": 79.8,
-                        "y": 64.4125
-                    },
-                    "uuid": "dd1ec205-68c6-498b-b896-69c89854e559"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R318 on F.Cu",
-                    "pos": {
-                        "x": 114.8,
-                        "y": 64.4125
-                    },
-                    "uuid": "e48f33a1-e816-4281-8b5c-06f26f448389"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "Pad 2 [GND] of R321 on F.Cu",
-                    "pos": {
-                        "x": 121.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "6ba9884c-d4a9-40b2-855e-9d59c191ac25"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
                 },
                 {
                     "description": "Pad 2 [GND] of R319 on F.Cu",
@@ -603,7 +327,7 @@
                         "x": 133.5,
                         "y": 60.4125
                     },
-                    "uuid": "68f745b0-0bd6-4686-b6ae-6a750b82e893"
+                    "uuid": "6778a633-2c83-4b20-a60a-6d8405e2d6f1"
                 }
             ],
             "severity": "error",
@@ -618,7 +342,122 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R420 on F.Cu",
+                    "pos": {
+                        "x": 160.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "a2423cbf-7a9e-4af9-8e3d-4d1bb8d69444"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R418 on F.Cu",
+                    "pos": {
+                        "x": 149.8,
+                        "y": 64.4125
+                    },
+                    "uuid": "bcbc2c06-892e-4472-8892-868f94057b73"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R320 on F.Cu",
+                    "pos": {
+                        "x": 125.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "3c3d8951-2ee2-4e83-9679-891078832f4e"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R219 on F.Cu",
+                    "pos": {
+                        "x": 98.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "8ea8d7a7-d585-4ea4-afe2-415f5bca39f0"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R220 on F.Cu",
+                    "pos": {
+                        "x": 90.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "053d09fc-35db-4633-89d1-879b015a8fe8"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
                 },
                 {
                     "description": "Pad 2 [GND] of R421 on F.Cu",
@@ -626,7 +465,7 @@
                         "x": 156.5,
                         "y": 60.4125
                     },
-                    "uuid": "f0b29a26-ac29-48b8-8597-6e07abb3233d"
+                    "uuid": "065a1f6c-abd4-41da-82ce-157833d4a2f2"
                 }
             ],
             "severity": "error",
@@ -641,7 +480,53 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R318 on F.Cu",
+                    "pos": {
+                        "x": 114.8,
+                        "y": 64.4125
+                    },
+                    "uuid": "fb2b5fdd-824e-4e08-955d-801cfe9a009a"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
+                },
+                {
+                    "description": "Pad 2 [GND] of R218 on F.Cu",
+                    "pos": {
+                        "x": 79.8,
+                        "y": 64.4125
+                    },
+                    "uuid": "34f4b792-3dea-4afc-a1a6-e9ac67fec359"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "6f313994-0853-49ba-89a4-e29d3e58b9db"
                 },
                 {
                     "description": "Pad 2 [GND] of R221 on F.Cu",
@@ -649,30 +534,7 @@
                         "x": 86.5,
                         "y": 60.4125
                     },
-                    "uuid": "6fd4a72e-0de2-42d1-a5dc-fad866f76a10"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "412a5541-24f7-4217-8e5f-565cc8f0e621"
-                },
-                {
-                    "description": "PTH pad 4 [GND] of J6",
-                    "pos": {
-                        "x": 35.5,
-                        "y": 174.5
-                    },
-                    "uuid": "5c9f0e06-d083-4c27-979e-d1dc331ca8c3"
+                    "uuid": "aba98758-066d-4c67-86bd-ff580a9e6f0a"
                 }
             ],
             "severity": "error",
@@ -682,12 +544,12 @@
             "description": "Footprint 'MiniDIN-8_SameSky_MD-80SM_Horizontal' does not match copy in library 'shack-interface'",
             "items": [
                 {
-                    "description": "Footprint J11",
+                    "description": "Footprint J12",
                     "pos": {
-                        "x": 90.5,
+                        "x": 125.5,
                         "y": 18.0
                     },
-                    "uuid": "1b02fbba-2704-4117-ae85-36d105cbecb2"
+                    "uuid": "181ac69f-d04e-4ed3-abe6-de7b37dad301"
                 }
             ],
             "severity": "warning",
@@ -702,7 +564,7 @@
                         "x": 31.5,
                         "y": 34.35
                     },
-                    "uuid": "3d6d020b-d54e-4273-b905-b2354c246c8b"
+                    "uuid": "23873939-42b8-4fef-9ff0-ba9725fe6c21"
                 }
             ],
             "severity": "warning",
@@ -717,7 +579,7 @@
                         "x": 160.5,
                         "y": 18.0
                     },
-                    "uuid": "bf1d7e9d-3319-494f-b5c8-b5911c78758f"
+                    "uuid": "54fa6cfd-6385-45f8-961b-715991752e4f"
                 }
             ],
             "severity": "warning",
@@ -727,12 +589,12 @@
             "description": "Footprint 'MiniDIN-8_SameSky_MD-80SM_Horizontal' does not match copy in library 'shack-interface'",
             "items": [
                 {
-                    "description": "Footprint J12",
+                    "description": "Footprint J11",
                     "pos": {
-                        "x": 125.5,
+                        "x": 90.5,
                         "y": 18.0
                     },
-                    "uuid": "e99d7426-ffc8-47d0-bf95-1406a83ca71e"
+                    "uuid": "9c707a39-990a-4d36-9d17-7ac0d48fa93c"
                 }
             ],
             "severity": "warning",

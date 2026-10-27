@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "shack-interface"
 DATE = "2026-10-19"
-GENERATOR_REV = "a16-fp-entry"
+GENERATOR_REV = "a17-display"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -261,7 +261,7 @@ SYMS = {k: ext(*k.split(":")) for k in (
     "Mechanical:MountingHole_Pad", "power:GND", "power:+12V", "power:+5V", "power:+3V3", "power:PWR_FLAG",
     "Device:Fuse", "Device:D_Schottky", "Device:D_Zener", "Device:C_Polarized", "Regulator_Linear:L7805",
     "Power_Supervisor:TPS3823-xxDBV", "Interface_Expansion:PCA9539xD",
-    "Connector_Generic:Conn_01x04",
+    "Connector_Generic:Conn_01x04", "Connector_Generic:Conn_01x08",
     "Isolator:PC817", "Jumper:SolderJumper_2_Open", "Device:L_Coupled", "Connector:TestPoint")}
 # Schmitt inverter (same as the controller board), AND and NOR gates: IEC 60617 symbols, SOT-23-5 pin-out 1 A, 2 B, 3 GND, 4 Y, 5 VCC
 SYMS["shack-interface:74LVC1G14_IEC"] = mk_sym("74LVC1G14_IEC", "Single Schmitt inverter, IEC 60617 symbol",
@@ -589,10 +589,10 @@ def power_sheet():
 
 # PCA9539 0x74 pin map (D-92): IO0_0..1 to the left edge, IO0_2..IO1_5 to the bottom edge (port group, root order),
 # IO1_6..7 under the chip to the right edge. Directions per bit in firmware; F1 unchanged.
-EXP = ["SW_STOP_N", "R1_TX", "KEY_R1", "BAND_D", "BAND_A", "BAND_B", "BAND_C", "LED_R1",
-       "KEY_R2", "R2_TX", "LED_R2", "KEY_R3", "R3_TX", "LED_R3", "KILL_S", "LATCHED"]          # IO0_0..7, IO1_0..7
-MCU_BOTTOM = ["PERMIT_R1", "KEY_R1", "BAND_D", "BAND_A", "BAND_B", "BAND_C", "LED_R1",
-              "PERMIT_R2", "KEY_R2", "R2_TX", "LED_R2", "PERMIT_R3", "KEY_R3", "R3_TX", "LED_R3"]  # = root MCU block bottom edge
+EXP = ["SW_STOP_N", "R1_TX", "KEY_R1", "BAND_D", "BAND_A", "BAND_B", "BAND_C", "DISP_BL",
+       "KEY_R2", "R2_TX", "DISP_DC", "KEY_R3", "R3_TX", "DISP_RST", "KILL_S", "LATCHED"]      # IO0_0..7, IO1_0..7 (D-180: LED_R1..R3 -> display)
+MCU_BOTTOM = ["PERMIT_R1", "KEY_R1", "BAND_D", "BAND_A", "BAND_B", "BAND_C",
+              "PERMIT_R2", "KEY_R2", "R2_TX", "PERMIT_R3", "KEY_R3", "R3_TX"]                  # = root MCU block bottom edge
 
 def mcu_sheet():
     S = Sheet("Shack interface: MCU, supervisor and expander", "A3", [(PATH["mcu"], 0)], pwr_base=[400])
@@ -602,7 +602,8 @@ def mcu_sheet():
     A1 = S.part("shack-interface:ESP32-C3-DevKit-RUST", ("A", 1), "ESP32-C3-DevKit-RUST-1", "shack-interface:ESP32-C3-DevKit-RUST_Socket", 101.6, 170.18,
                 rp=(-15.24, -27.94), desc="ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12), rows 20.32 mm apart (D-55, D-66, D-93, D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP61 2-1")
     assert A1["1"] == (83.82, 152.4) and A1["16"] == (83.82, 190.5) and A1["28"] == (119.38, 162.56) and A1["17"] == (119.38, 190.5), A1
-    dk = {5: "PERMIT_R1", 6: "WDI", 8: "LATCH_CLR", 9: "PERMIT_R2", 10: "PERMIT_R3", 11: "DATA_TX", 12: "SDA_IO7", 13: "SCL", 15: "DATA_RX"}
+    dk = {5: "PERMIT_R1", 6: "WDI", 7: "DISP_SCK", 8: "LATCH_CLR", 9: "PERMIT_R2", 10: "PERMIT_R3", 11: "DATA_TX", 12: "SDA_IO7", 13: "SCL",
+          15: "DATA_RX", 16: "DISP_MOSI"}                    # IO2 SCK, IO9 MOSI: display SPI (D-180)
     for n in range(1, 29):
         x, y = A1[str(n)]
         if n in dk: S.wire((x, y), (76.2, y)); S.label("L", dk[n], 76.2, y, 180)
@@ -699,6 +700,20 @@ def mcu_sheet():
         else: S.wire(io[nm], (x, io[nm][1]), (x, YBOT))
         S.label("H", nm, x, YBOT, 270)
     assert max(bx.values()) < 223.52, bx
+    # display control from the expander (D-180): short stub and a net label at each pin
+    for nm in ("DISP_BL", "DISP_DC", "DISP_RST"):
+        x, y = io[nm]; S.wire((x, y), (R2(x - 2.54), y)); S.label("L", nm, R2(x - 2.54), y, 180)
+    # display connector J15: the Waveshare 1.9" LCD module cable (P2 order BL, RST, DC, CS, CLK, DIN, GND, VCC), CS tied low
+    S.text("Display J15 (D-180)", 25.4, 205.74)
+    JD = S.part("Connector_Generic:Conn_01x08", ("J", 15), "DISPLAY", "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical",
+                55.88, 223.52, desc="Waveshare 1.9inch LCD Module (ST7789V2, 170 x 320) cable: 1 BL, 2 RST, 3 DC, 4 CS (GND), 5 CLK, 6 DIN, 7 GND, "
+                "8 VCC 3.3 V (module: RT9193-33, TXS0108, backlight about 40 mA max). SPI mode 0 on IO2/IO9, DC/RST/BL on the PCA9539 (D-180)")
+    jp = {n: JD[str(n)] for n in range(1, 9)}
+    assert all(jp[n][0] == jp[1][0] for n in jp) and round(jp[2][1] - jp[1][1], 3) == 2.54, jp
+    for n, nm in ((1, "DISP_BL"), (2, "DISP_RST"), (3, "DISP_DC"), (5, "DISP_SCK"), (6, "DISP_MOSI")):
+        x, y = jp[n]; S.wire((x, y), (R2(x - 5.08), y)); S.label("L", nm, R2(x - 5.08), y, 180)
+    for n, pw in ((4, "GND"), (7, "GND"), (8, "+3V3")):
+        x, y = jp[n]; S.wire((x, y), (R2(x - 5.08), y)); S.power(pw, (R2(x - 5.08), y), rot=270 if pw == "GND" else 90, rp=(-5.08, -2.54, "right"))
     # right edge: LATCHED and KILL_S under the chip
     for nm, xt, yt in (("LATCHED", 226.06, 177.8), ("KILL_S", 223.52, 180.34)):
         S.wire(io[nm], (xt, io[nm][1]), (xt, yt), (XRT, yt)); S.label("H", nm, XRT, yt, 0)
@@ -707,11 +722,12 @@ def mcu_sheet():
            "5V not connected. USB-C to the Mac (Delock 64226) or the Pi (D-68).\\n"
            "Direct GPIO (D-83): IO0 PERMIT_R1, IO1 WDI (kick at least every 0.9 s), IO3 LATCH_CLR (rising edge), IO4 PERMIT_R2, IO5 PERMIT_R3,\\n"
            "IO6 DATA_TX, IO20 DATA_RX, IO21 SAFE_LOST (boot-ROM log pin, 1k series). SDA IO10 or IO7, SCL IO8 (board 10k pull-ups, SHTC3 0x70, IMU 0x68).\\n"
-           "IO2 (WS2812, strapping) and IO9 (BOOT, strapping) not used. Board LED on IO7 (RUST-1) or IO10 (RUST-2): the SDA pin of the other board.\\n"
+           "IO2 DISP_SCK (WS2812 on the board sees only short pulses), IO9 DISP_MOSI (BOOT button: a press only disturbs the picture); both straps keep their pull-ups (D-180).\\n"
+           "Board LED on IO7 (RUST-1) or IO10 (RUST-2): the SDA pin of the other board.\\n"
            "Fault latch (D-59): FAULT set at power-up, brown-out and watchdog time-out; cleared by a LATCH_CLR edge only when RESET_N is high.\\n"
            "FAULT goes to the SAFE sheet and blocks every permit in hardware. RESET_N also resets the PCA9539: keys off, SW_STOP_N released.\\n"
            "PCA9539 0x74 (D-92): IO0_0 SW_STOP_N (out), IO0_1 R1_TX, IO0_2 KEY_R1 (out), IO0_3 BAND_D, IO0_4 BAND_A, IO0_5 BAND_B, IO0_6 BAND_C,\\n"
-           "IO0_7 LED_R1 (out), IO1_0 KEY_R2 (out), IO1_1 R2_TX, IO1_2 LED_R2 (out), IO1_3 KEY_R3 (out), IO1_4 R3_TX, IO1_5 LED_R3 (out),\\n"
+           "IO0_7 DISP_BL (out), IO1_0 KEY_R2 (out), IO1_1 R2_TX, IO1_2 DISP_DC (out), IO1_3 KEY_R3 (out), IO1_4 R3_TX, IO1_5 DISP_RST (out),\\n"
            "IO1_6 KILL_S, IO1_7 LATCHED. Inputs not marked. Write outputs 0 before configuring (F1).", 25.4, 22.86)
     return S.finish()
 
@@ -786,7 +802,8 @@ def safe_sheet():
     S.wire((78.74, 76.2), (78.74, YS), RL1["1"]); S.wire(RL1["2"], (XR, YS)); S.label("H", "LED_SAFE", XR, YS, 0)
     # KILL state: second pole of the KILL switch, closed = run (low)
     S.label("H", "KILL_S", XL, YK, 180); S.wire((XL, YK), (40.64, YK))
-    RK = S.part("Device:R", ("R", 75), "10k", R0603, 40.64, R2(YK - 3.81), rp=(1.27, 0), desc="KILL_S pull-up: open (KILL pressed or switch unplugged) reads high")
+    RK = S.part("Device:R", ("R", 75), "2k2", R0603, 40.64, R2(YK - 3.81), rp=(1.27, 0),
+                desc="KILL_S pull-up: open (KILL pressed or switch unplugged) reads high. 2k2 gives 1.5 mA, above the 1 mA contact minimum of the EAO 84 (D-181)")
     assert RK["2"] == (40.64, YK), RK
     S.power("+3V3", RK["1"])
     for i, what in enumerate(("U6", "U7", "U8", "U9", "U10", "U11")):
@@ -813,7 +830,7 @@ def port_sheet():
     SOT5 = "Package_TO_SOT_SMD:SOT-23-5"
     XR, YT = 368.3, 17.78
     lab_r = lambda n, y: S.label("H", n, XR, y, 0)
-    STX = {"PERMIT": 25.4, "KEY": 27.94, "BAND_D": 30.48, "TX": 33.02, "BAND_A": 35.56, "BAND_B": 38.1, "BAND_C": 40.64, "LED": 43.18}
+    STX = {"PERMIT": 25.4, "KEY": 27.94, "BAND_D": 30.48, "TX": 33.02, "BAND_A": 35.56, "BAND_B": 38.1, "BAND_C": 40.64}
     def top(n, y):
         """Top-edge input n, wired straight down to its row at y. Returns the row start point."""
         x = STX[n]; S.label("H", n, x, YT, 90); S.wire((x, YT), (x, y)); return (x, y)
@@ -833,9 +850,7 @@ def port_sheet():
         if cl:
             clamp(int(name[3]), y)
             S.part("Connector:TestPoint", ("TP", int(name[3])), name, TP_FP, 360.68, y, desc=f"Test point {name}, radio side (D-120)", bom=False, rp=(1.27, -5.08))
-    # --- panel LED (per-radio status, expander output): top row
-    RL = rh(8, "680R", 58.42, 22.86, "Panel LED about 2 mA")
-    S.wire(top("LED", 22.86), RL["1"]); S.wire(RL["2"], (XR, 22.86)); lab_r("PNL_LED", 22.86)
+    # (per-radio panel LED removed: the front display shows the radio states, D-180)
     # --- BAND A to D inputs (FT-710 band data), to the expander (R1 only on the root, D-86)
     def band(k, y, out):
         RS = rh(10 + k, "1k", 76.2, y, "Series resistor: limits the current into the PCA9539 input (5.5 V tolerant, to confirm)")
@@ -984,8 +999,8 @@ def root_sheet():
     # MCU block: the link signals wire straight across (same slots); port signals leave on the bottom edge
     MX, MW = 165.1, 45.72
     mr = ["USB_DP", "USB_DN", "USB_VBUS", "USB_CC1", "USB_CC2"] + [""] * 6 + ["FAULT", "LATCHED", "KILL_S"]
-    G1 = ["PERMIT_R1", "KEY_R1", "BAND_D", "BAND_A", "BAND_B", "BAND_C", "LED_R1"]           # to R1, fans out to the left (port top-edge order)
-    G2 = ["PERMIT_R2", "KEY_R2", "R2_TX", "LED_R2", "PERMIT_R3", "KEY_R3", "R3_TX", "LED_R3"]  # to R2 and R3, fans out to the right
+    G1 = ["PERMIT_R1", "KEY_R1", "BAND_D", "BAND_A", "BAND_B", "BAND_C"]                     # to R1, fans out to the left (port top-edge order)
+    G2 = ["PERMIT_R2", "KEY_R2", "R2_TX", "PERMIT_R3", "KEY_R3", "R3_TX"]                    # to R2 and R3, fans out to the right
     MH = R2(15 * 2.54)
     S.raw(sheet_block("mcu", "MCU and expander", "mcu.kicad_sch", 4, MX, LY, MW, MH, right, mr, file_top=True, bottom=G1 + G2))
     for i in range(len(right)):
@@ -1027,10 +1042,10 @@ def root_sheet():
     PXS = [101.6, 203.2, 304.8]
     DIN = [f"DIN{n}" if n != 5 else "RGND" for n in range(1, 9)]       # pin 5 = radio GND (local net RGND in the port sheet)
     BANDS = ["BAND_A", "BAND_B", "BAND_C", "BAND_D"]
-    tops = [["", "", "", "PERMIT", "KEY", "BAND_D", "TX", "BAND_A", "BAND_B", "BAND_C", "LED"]] * 3        # same order as the port sheet top edge
+    tops = [["", "", "", "PERMIT", "KEY", "BAND_D", "TX", "BAND_A", "BAND_B", "BAND_C"]] * 3        # same order as the port sheet top edge
     bottom = [""] * 9 + ["TX_EN"]
     for k, (px, tp) in enumerate(zip(PXS, tops)):
-        S.raw(sheet_block(f"r{k + 1}", f"Radio port R{k + 1}", "radioport.kicad_sch", 6 + k, px, PY, PW, PH, [], DIN + ["", "PNL_LED"], top=tp, bottom=bottom))
+        S.raw(sheet_block(f"r{k + 1}", f"Radio port R{k + 1}", "radioport.kicad_sch", 6 + k, px, PY, PW, PH, [], DIN, top=tp, bottom=bottom))
         tx = lambda n: R2(px + (tp.index(n) + 1) * 2.54)
         if k > 0:
             for n in BANDS: S.raw(f'\t(no_connect\n\t\t(at {tx(n)} {PY})\n\t\t(uuid "{U()}")\n\t)\n')    # band data from R1 only (D-86)
@@ -1040,11 +1055,6 @@ def root_sheet():
             assert JD[str(n + 1)] == (R2(px + PW + 7.62), R2(PY + (n + 1) * 2.54)), JD
             S.wire((R2(px + PW), R2(PY + (n + 1) * 2.54)), JD[str(n + 1)])
         S.power("CHASSIS", JD["9"])
-        JL = S.part("Connector_Generic:Conn_01x02", ("J", 8 + k), f"R{k + 1} LED", "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
-                    R2(px + PW + 7.62), R2(PY + PH + 2.54), rp=(-10.16, 0, "right"), desc=f"Panel LED R{k + 1}: 1 anode, 2 GND")
-        assert JL["1"] == (R2(px + PW + 2.54), R2(PY + PH + 2.54)), JL
-        S.wire((R2(px + PW), R2(PY + 25.4)), (R2(px + PW + 2.54), R2(PY + 25.4)), JL["1"])
-        S.wire(JL["2"], (R2(px + PW), JL["2"][1]), (R2(px + PW), R2(JL["2"][1] + 2.54))); S.power("GND", (R2(px + PW), R2(JL["2"][1] + 2.54)))
     # fan-out from the MCU bottom edge to the port top edges: one level per signal, no crossings
     # (left-going: leftmost source turns highest; right-going: rightmost source turns highest)
     YB = R2(LY + MH)
@@ -1053,11 +1063,11 @@ def root_sheet():
     dst1 = lambda n: R2(PXS[0] + (tops[0].index(n) + 1) * 2.54)
     S.wire((147.32, slot(4)), (147.32, lev(0)), (dst1("TX"), lev(0)), (dst1("TX"), PY))
     for i, n in enumerate(G1):
-        pin = "PERMIT" if n.startswith("PERMIT") else "KEY" if n.startswith("KEY") else "LED" if n.startswith("LED") else n
+        pin = "PERMIT" if n.startswith("PERMIT") else "KEY" if n.startswith("KEY") else n
         S.wire((mx(i), YB), (mx(i), lev(i + 1)), (dst1(pin), lev(i + 1)), (dst1(pin), PY))
     for j, n in enumerate(G2):
         i = len(G1) + j
-        port = 1 if j < 4 else 2
+        port = 1 if n.endswith("R2") or n.startswith("R2") else 2
         pin = n.split("_")[0] if not n.endswith("_TX") else "TX"
         d = R2(PXS[port] + (tops[port].index(pin) + 1) * 2.54)
         S.wire((mx(i), YB), (mx(i), lev(len(G2) - 1 - j)), (d, lev(len(G2) - 1 - j)), (d, PY))

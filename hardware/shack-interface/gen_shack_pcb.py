@@ -12,8 +12,8 @@ import collections, json, math, os, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p5"
-BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si15.xml"
+REV = "p6"
+BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si16.xml"
 OX, OY = 20.0, 20.0                                  # page offset of the board frame origin
 BW, BH, RC = 160.0, 159.0, 1.0                       # board (D-171): 160 mm slot width; length 159 mm in the 160 +-0.5 mm extrusion (A-25, to confirm on the STEP model)
 SIDE = 3.5                                           # side bands in the extrusion slots and along the wall: no parts
@@ -244,10 +244,14 @@ TABX = (pos("J14")[0] - 6.5, pos("J14")[0] + 6.5)
 for (xa, ya, xb, yb) in ((BW - RC, BH, TABX[1], BH), (TABX[1], BH, TABX[1], BH + OVH), (TABX[1], BH + OVH, TABX[0], BH + OVH),
                          (TABX[0], BH + OVH, TABX[0], BH), (TABX[0], BH, RC, BH)):
     l = pcbnew.PCB_SHAPE(b, pcbnew.SHAPE_T_SEGMENT); l.SetStart(P(xa, ya)); l.SetEnd(P(xb, yb)); edge(l)
-# front edge: panel headers (KILL, RESET and LEDs) facing the front panel
-FRONT_Y = BH - 4.5
-for ref, x in (("J6", 8.0), ("J2", 24.0), ("J7", 38.0), ("J8", 104.0), ("J9", 120.0), ("J10", 136.0)):
+# front panel wire headers (KILL, RESET and LEDs) and the display header J15 (D-180): behind the display module, far enough
+# from the front plate for the module and its cable (about 11 mm deep), so not at the board edge any more (p6)
+FRONT_Y = BH - 12.5
+for ref, x in (("J6", 8.0), ("J2", 21.8), ("J7", 31.6)):    # footprint origin at pin 1; courtyards 0.3 mm apart
     fix(ref, x, FRONT_Y, 0)
+# display header J15 (1x8, 2.54 mm) upright right of the DevKit: no room in the header row left of the DevKit, and the
+# area behind the KILL and RESET bodies (front right) must stay free; the 20 cm Waveshare cable reaches the display
+fix("J15", 124.2, 120.5, 0)
 
 # ---- 6. function zones (D-172) ----
 Z = {"power": (SIDE, 20.0, 22.0, 70.0), "entry": (22.0, 19.0, 55.0, 71.0), "loops": (SIDE, 72.0, 55.0, 100.0),
@@ -337,7 +341,7 @@ fix("U61", _j14[0] - 8.1375, _j14[1] - 4.68, 0)       # fixed: the satellite put
 fix("R65", _a9[0] + 3.6, _a9[1] - 2.85, 90)          # CC2 pull-down right of the fan-out
 fix("R64", _a9[0] - 6.4, _a9[1] - 4.05, 90)          # CC1 pull-down left of the fan-out, above the VBUS link to U61
 # radio ports: one column per port behind its mini-DIN; radio side (RGND) near the connector, logic side toward the middle
-LEDR = ("R208", "R308", "R408")                   # panel LED resistors: at their panel header, not in the port column
+LEDR = ()                                          # (panel LED resistors removed with the R1 to R3 LEDs, D-180)
 def port_refs(k):
     return [r for r in fps if r[-3:].isdigit() and r[0] in "RCDUJQT" and not r.startswith("J1") and r not in LEDR
             and 100 * (k + 2) <= int("".join(ch for ch in r if ch.isdigit())) < 100 * (k + 3)]
@@ -407,10 +411,6 @@ for k, (reg, x) in enumerate(zip(PORT, MDX)):
              for i_, p_ in enumerate(pr) for q_ in pr[i_ + 1:]]
     clash = [c_ for c_ in clash if c_[2] < 0.25]
     print("port template: courtyard gaps below 0.25 mm:", clash)
-# panel LED resistors at their header pin 1 (series resistor at the LED end of the net)
-for r, j in zip(LEDR, ("J8", "J9", "J10")):
-    jx, jy = pos(j)
-    group(j, [r], (jx - 8.0, jy - 9.0, jx + 8.0, BH - 0.5))
 left = [c.get("ref") for c in root.iter("comp") if c.get("ref") not in placed]
 assert not left, left
 
@@ -866,7 +866,7 @@ for name, (x0, y0, x1, y1) in FRAMES:
         SILK_MISS.append(name)
 # connectors, power test points, chassis bond
 for ref, s in (("J1", "CAT6 TO BOX"), ("J3", "13.8 V IN"), ("J11", "R1 RADIO"), ("J12", "R2 RADIO"), ("J13", "R3 RADIO"),
-               ("J14", "USB"), ("J2", "KILL"), ("J7", "KILL STATE"), ("J8", "R1 LED"), ("J9", "R2 LED"), ("J10", "R3 LED"),
+               ("J14", "USB"), ("J2", "KILL"), ("J7", "KILL STATE"), ("J15", "DISPLAY"),
                ("H1", "CHASSIS")):
     x, y = pos(ref); fps[ref].Reference().SetVisible(False)
     near = {"J14": (x + 8.0, y - 2.0)}.get(ref, (x, y + (8.0 if y < BH / 2 else -4.0)))
@@ -930,7 +930,7 @@ else: SILK_MISS.append("stackup legend")
 # references (as gen_rfboard_pcb.py p3): first spot clear of pads (+0.25), silk and texts, the board edge and, if possible,
 # of the other parts' courtyards; the labelled parts above carry their reference in the label
 unplaced = []
-LABELLED = TPS | {"J1", "J2", "J3", "J6", "J7", "J8", "J9", "J10", "J11", "J12", "J13", "J14", "H1"}
+LABELLED = TPS | {"J1", "J2", "J3", "J6", "J7", "J11", "J12", "J13", "J14", "J15", "H1"}
 for ref in sorted(fps, key=lambda r: (not r.startswith("JP"), pos(r)[1], pos(r)[0])):   # jumper references first
     if ref in LABELLED: continue
     f = fps[ref]; fld = f.Reference(); ly = pcbnew.F_SilkS

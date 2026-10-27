@@ -4026,7 +4026,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "2k2"
 			(at 41.91 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4061,7 +4061,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "KILL_S pull-up: open (KILL pressed or switch unplugged) reads high"
+		(property "Description" "KILL_S pull-up: open (KILL pressed or switch unplugged) reads high. 2k2 gives 1.5 mA, above the 1 mA contact minimum of the EAO 84 (D-181)"
 			(at 40.64 161.29 0)
 			(hide yes)
 			(show_name no)

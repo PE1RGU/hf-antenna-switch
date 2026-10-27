@@ -11,7 +11,7 @@ Panel frame: u from the left edge, v from the top edge, both as seen from outsid
 import math
 import pcbnew
 
-REV = "a1"
+REV = "a3"
 MAIN = "../shack-interface.kicad_pcb"
 OX, OY = 20.0, 20.0
 PW, PH, PR = 165.0, 51.13, 3.9                       # plate outline (Hammond STEP: 164.998 x 51.130, R 3.9)
@@ -31,6 +31,14 @@ FACE = {"J3": ("rect", 3.6, 15.5, 1.6, 10.0),          # XT60PW-M housing (chamf
 RECT_M = 0.3                                          # cut-out margin per side (board play in the slot: +-0.2 mm)
 MINIDIN_D = 10.5                                      # plug shell 9.5 mm passes; the overmold stops on the plate
 USBC_SLOT = (13.0, 7.0)                               # D-96: overmold up to 12.35 x 6.5 mm passes
+# front plate controls (D-180 to D-182; a3 after the main board p6). Panel frame (u, v) from outside; board x = u - 2.5.
+# Depth behind the plate: the DevKit (board x 56 to 122, up to y 146) leaves about 13 mm, the free area right of it
+# (board x 122 to 156, front) takes the KILL and RESET bodies; the display (about 11 mm deep with its cable) sits on the
+# left, over the wire headers J6, J2, J7, which moved back to y 146.5 (p6).
+KILL = (146.0, 21.0)                                  # EAO 84-5340.0020: cut-out 22.3 mm with a 3.2 mm key to 24.1 mm, head 32 mm
+RESET = (125.0, 31.0)                                 # C&K 8125SHZBE: 1/4-40 bushing, hole 6.5 mm (body at board x 119 to 126)
+LEDS = {"SAFE": (108.0, 12.0), "LATCHED": (121.0, 12.0)}   # 3 mm panel LEDs, hole 4.0 mm (Dialight 558: 3.94 to 4.01 mm)
+DISP = (12.0, 4.2)                                    # Waveshare 1.9" module top left (51.2 x 27.3); active area x 6.24..48.96, y 2.30..25.01 (module STEP)
 
 
 def main_board():
@@ -113,6 +121,18 @@ def build(side):
             _, dx, w, z0, z1 = FACE[r]; cu, va = panel_uv(side, XPOS[r] + dx, z1); _, vb = panel_uv(side, XPOS[r] + dx, z0)
             u0, u1, v0, v1 = cu - w / 2 - RECT_M, cu + w / 2 + RECT_M, va - RECT_M, vb + RECT_M
             rrect(u0, v0, u1, v1, 0.5); CUTS.append((r, u0, v0, u1, v1))
+    if side == "front":
+        ku, kv = KILL; rk = 22.3 / 2; dn = math.sqrt(rk ** 2 - 1.6 ** 2)
+        arc((ku + 1.6, kv - dn), (ku, kv + rk), (ku - 1.6, kv - dn))          # Ø22.3 with the anti-rotation key upward
+        seg((ku - 1.6, kv - dn), (ku - 1.6, kv - (24.1 - rk))); seg((ku - 1.6, kv - (24.1 - rk)), (ku + 1.6, kv - (24.1 - rk)))
+        seg((ku + 1.6, kv - (24.1 - rk)), (ku + 1.6, kv - dn))
+        CUTS.append(("KILL", ku - rk, kv - (24.1 - rk), ku + rk, kv + rk))
+        circle(*RESET, 6.5); CUTS.append(("RESET", RESET[0] - 3.25, RESET[1] - 3.25, RESET[0] + 3.25, RESET[1] + 3.25))
+        for n, (lu, lv) in LEDS.items():
+            circle(lu, lv, 4.0); CUTS.append((n, lu - 2.0, lv - 2.0, lu + 2.0, lv + 2.0))
+        du, dv = DISP; wu0, wu1 = du + 6.24 - 0.3, du + 48.96 + 0.3; wv0, wv1 = dv + 27.3 - 25.01 - 0.3, dv + 27.3 - 2.30 + 0.3
+        rrect(wu0, wv0, wu1, wv1, 0.5); CUTS.append(("DISPLAY", wu0, wv0, wu1, wv1))
+        rrect(du, dv, du + 51.2, dv + 27.3, 1.0, pcbnew.B_SilkS, 0.15)     # module outline on the inside face (assembly)
     for (r, u0, v0, u1, v1) in CUTS:
         assert WINDOW[0] < u0 and u1 < WINDOW[2] and WINDOW[1] < v0 and v1 < WINDOW[3], (r, "outside the bezel window")
     C = {r: (u0, v0, u1, v1) for (r, u0, v0, u1, v1) in CUTS}
@@ -128,7 +148,7 @@ def build(side):
     # silkscreen, outside face (white on black). Labels above the openings; title along the top.
     def above(r, s, h=1.5, t=0.25, dv=1.8):
         u0, v0, u1, v1 = C[r]; text(s, (u0 + u1) / 2, v0 - dv, h, t)
-    text("SHACK RELAY MATRIX   SHACK INTERFACE", PW / 2, 8.0, 2.0, 0.3)
+    text("SHACK RELAY MATRIX   SHACK INTERFACE", PW / 2, 8.0 if side == "rear" else PH - 5.0, 2.0, 0.3)
     if side == "rear":
         above("J11", "R1  FT-710"); above("J12", "R2"); above("J13", "R3"); above("J1", "CAT6  BOX")
         above("J3", "13.8 V DC")
@@ -140,6 +160,10 @@ def build(side):
             text(s_, u0 - 2.6 if left else u1 + 2.6, (v0 + v1) / 2, 2.5, 0.35)
     else:
         above("J14", "USB")
+        def below(r, s, h=1.5, t=0.25, dv=2.2):
+            u0, v0, u1, v1 = C[r]; text(s, (u0 + u1) / 2, v1 + dv, h, t)
+        text("KILL", KILL[0], KILL[1] + 16.0 + 2.2, 2.0, 0.3)               # below the 32 mm head
+        below("RESET", "RESET"); below("SAFE", "SAFE", 1.2, 0.2, 1.6); below("LATCHED", "LATCHED", 1.2, 0.2, 1.6)
     text("73 de PE1RGU", 9.0, PH - 7.0, 1.0, 0.15, just="l")
     # inside face: identification
     text(f"SRM shack interface {side} plate  rev A ({REV})  2026-10", PW / 2, PH - 8.0, 1.0, 0.15, pcbnew.B_SilkS)
