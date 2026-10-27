@@ -26,7 +26,7 @@ This project has two goals.
 
 The second goal is the main reason the project exists.
 
-The design is a joint effort between me (Prins Doornekamp, PE1RGU) and an AI assistant, Claude by Anthropic.
+The design is a joint effort between me (PE1RGU) and an AI assistant, Claude by Anthropic.
 I set the goals and the requirements. I took the decisions, often after the AI proposed and compared options.
 The AI did much of the research, the calculations, the schematic generation scripts and the verification scripts.
 Many ideas in this design came from the AI, and many were changed or rejected after discussion.
