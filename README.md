@@ -160,6 +160,6 @@ archive/              earlier revisions (card cage and backplane, rev A/B)
 - Python scripts (schematic generators, verification): MIT. See [LICENSE-MIT](LICENSE-MIT).
 - Vendor 3D models and libraries (SnapEDA, SamacSys, Ultra Librarian, Amass, Amphenol) are not in the repository. See [hardware/THIRD-PARTY.md](hardware/THIRD-PARTY.md) for where to get them.
 
-Source Location (required by CERN-OHL-S): https://github.com/PostbodeSiem/hf-antenna-switch
+Source Location (required by CERN-OHL-S): https://github.com/PE1RGU/hf-antenna-switch
 
 73 de PE1RGU
