@@ -12,7 +12,7 @@ use shack_ui::{ANTENNA_LABELS, Page, RadioMode, UiState, Warning, band_name};
 
 /// Smallest area for the full layout.
 pub const MIN_WIDTH: u16 = 56;
-pub const MIN_HEIGHT: u16 = 19;
+pub const MIN_HEIGHT: u16 = 23;
 
 const TX: Color = Color::LightRed;
 const RX: Color = Color::LightGreen;
@@ -54,6 +54,26 @@ impl Pen<'_> {
             .render(r, self.buf);
     }
 
+    /// A line segment: where it crosses another line, draw a crossing.
+    fn line(&mut self, x: u16, y: u16, ch: &str, st: Style) {
+        if y >= self.area.height || x >= self.area.width {
+            return;
+        }
+        let under = self.buf[(self.area.x + x, self.area.y + y)].symbol();
+        let vertical = |c: &str| matches!(c, "│" | "┃");
+        let horizontal = |c: &str| matches!(c, "─" | "━");
+        let ch = if (vertical(under) && horizontal(ch)) || (horizontal(under) && vertical(ch)) {
+            if ch == "━" || ch == "┃" {
+                "╋"
+            } else {
+                "┼"
+            }
+        } else {
+            ch
+        };
+        self.put(x, y, ch, st);
+    }
+
     /// Route: dot, horizontal, turn, vertical, turn, horizontal, arrow head.
     fn route(&mut self, from: (u16, u16), to: (u16, u16), bus: u16, st: Style, heavy: bool) {
         let (h, v) = if heavy {
@@ -70,21 +90,21 @@ impl Pen<'_> {
         let (x1, y1) = to;
         if y0 == y1 {
             for x in x0..x1 {
-                self.put(x, y0, h, st);
+                self.line(x, y0, h, st);
             }
         } else {
             for x in x0..bus {
-                self.put(x, y0, h, st);
+                self.line(x, y0, h, st);
             }
             let down = y1 > y0;
             self.put(bus, y0, if down { down_in } else { up_in }, st);
             let (a, b) = if down { (y0 + 1, y1) } else { (y1 + 1, y0) };
             for y in a..b {
-                self.put(bus, y, v, st);
+                self.line(bus, y, v, st);
             }
             self.put(bus, y1, if down { down_out } else { up_out }, st);
             for x in bus + 1..x1 {
-                self.put(x, y1, h, st);
+                self.line(x, y1, h, st);
             }
         }
         self.put(x0, y0, "●", st);
@@ -173,10 +193,12 @@ fn top_bar(p: &mut Pen, s: &UiState) {
 
 const RW: u16 = 18;
 const AW: u16 = 20;
-const RADIO_Y: [u16; 3] = [2, 7, 12];
+const RADIO_Y: [u16; 3] = [2, 9, 16];
 
+/// Antenna boxes are 4 rows, like the radio boxes: TX enters the upper inner row,
+/// RX the lower one, so a TX and an RX route to one antenna stay apart.
 fn ant_y(i: usize) -> u16 {
-    2 + i as u16 * 3
+    2 + i as u16 * 4
 }
 
 fn flow(p: &mut Pen, s: &UiState) {
@@ -220,7 +242,7 @@ fn flow(p: &mut Pen, s: &UiState) {
         } else {
             Style::new().fg(DIM)
         };
-        p.boxed(ax, y, AW, 3, border);
+        p.boxed(ax, y, AW, 4, border);
         let text = if used[i] { Color::White } else { DIM };
         p.put(
             ax + 2,
@@ -235,12 +257,18 @@ fn flow(p: &mut Pen, s: &UiState) {
             Style::new().fg(if used[i] { SEC } else { DIM }),
         );
         if s.rx_only.contains(col) {
-            p.put(ax + AW - 4, y + 1, "rx", Style::new().fg(RX));
+            p.put(ax + AW - 4, y + 2, "rx", Style::new().fg(RX));
         }
     }
 
     // Routes: RX first, then idle TX, then active TX on top.
-    let bus = |radio: usize, rx: bool| RW + 2 + (radio as u16 * 2 + rx as u16) * 2;
+    // Column of the vertical part. TX starts one row above RX and ends one row above
+    // it. Going down, RX turns first (nearer the radio); going up, TX turns first.
+    // So the two routes of one radio never touch.
+    let bus = |radio: usize, rx: bool, from: u16, to: u16| {
+        let first = (to > from) == rx;
+        RW + 2 + radio as u16 * 5 + if first { 0 } else { 2 }
+    };
     for pass in 0..3 {
         for (i, r) in s.radios.iter().enumerate() {
             if r.mode == RadioMode::Off {
@@ -252,8 +280,8 @@ fn flow(p: &mut Pen, s: &UiState) {
                     if let Some(a) = col_index(r.route.rx) {
                         p.route(
                             (RW, y + 2),
-                            (ax, ant_y(a) + 1),
-                            bus(i, true),
+                            (ax, ant_y(a) + 2),
+                            bus(i, true, y + 2, ant_y(a) + 2),
                             Style::new().fg(RX),
                             false,
                         );
@@ -266,13 +294,25 @@ fn flow(p: &mut Pen, s: &UiState) {
                         } else {
                             Style::new().fg(TX).add_modifier(Modifier::DIM)
                         };
-                        p.route((RW, y + 1), (ax, ant_y(a) + 1), bus(i, false), st, false);
+                        p.route(
+                            (RW, y + 1),
+                            (ax, ant_y(a) + 1),
+                            bus(i, false, y + 1, ant_y(a) + 1),
+                            st,
+                            false,
+                        );
                     }
                 }
                 2 if r.mode == RadioMode::Tx => {
                     if let Some(a) = col_index(r.route.tx) {
                         let st = Style::new().fg(TX).add_modifier(Modifier::BOLD);
-                        p.route((RW, y + 1), (ax, ant_y(a) + 1), bus(i, false), st, true);
+                        p.route(
+                            (RW, y + 1),
+                            (ax, ant_y(a) + 1),
+                            bus(i, false, y + 1, ant_y(a) + 1),
+                            st,
+                            true,
+                        );
                     }
                 }
                 _ => {}
