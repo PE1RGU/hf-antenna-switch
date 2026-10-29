@@ -8,3 +8,9 @@ authors.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+embedded-hal = "1"
+heapless = "0.9.3"
+link-proto = { version = "0.1.0", path = "../link-proto" }
+pca9539 = { version = "0.1.0", path = "../pca9539" }

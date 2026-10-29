@@ -1,0 +1,18 @@
+[package]
+name = "sim-shack"
+version = "0.1.0"
+description = "Runs the shack firmware logic on the shack board model, against a scripted box"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+embedded-hal = "1"
+link-proto = { path = "../../crates/link-proto" }
+shack-core = { path = "../../crates/shack-core" }
+sim-core = { path = "../sim-core" }
+sim-models = { path = "../sim-models" }
+
+[lints]
+workspace = true

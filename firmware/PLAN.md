@@ -73,7 +73,9 @@ Display: the firmware draws with `embedded-graphics`. On the Mac, `embedded-grap
 | P0 | Workspace, toolchain (`riscv32imc-unknown-none-elf`, esp-hal, embassy), CI with `cargo test` and `clippy`. The ESP32-C3 target is built, not flashed. | `./check.sh` passes, including the target build |
 | P1 | Link protocol spec (doc first, [docs/design/link-protocol.md](../docs/design/link-protocol.md)), then `link-proto` crate with property tests (round trip, corrupt frames, lost frames) | Spec reviewed; tests pass |
 | P2 | `sim-core` and the shack board model (PCA9539, latch, ports, KILL, RESET, display). USB moves to P3, with the Mac protocol. | Model tests reproduce the shack checks of verify_system.py |
-| P3 | `shack-core`: start-up, F1 init, 10 ms poll, WDI kick, permits, shack side of the handshake, F14 end rule, Mac protocol, display pages | Shack runs in `sim-shack` against a scripted box stub |
+| P3a | `shack-core`: start-up, F1 init, 10 ms poll, WDI kick, permits, shack side of the handshake, F14 end rule, link loss | Shack runs in `sim-shack` against a scripted box stub |
+| P3b | Mac protocol spec (review first), `host-proto`, USB CDC model | Spec reviewed; Mac commands drive the shack in the simulator |
+| P3c | Display pages (`embedded-graphics`) | Pages render in the simulator |
 | P4 | Box board models: 4 expanders, relays, safety gate, fault latch, RF detectors, bias-T | Model tests reproduce verify_logic.py |
 | P5 | `box-core`: F1, F5, F10, F11, F13, crossbar check (F6), box side of the handshake, link time-out | Box runs against a scripted shack stub |
 | P6 | `sim-system`: both firmwares, both boards, the link. Fault injection. | All scenarios in section 6 pass |

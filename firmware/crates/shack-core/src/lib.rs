@@ -1,5 +1,7 @@
-//! Shack interface logic. No hardware calls: the target and the simulator
-//! feed inputs in and carry actions out.
+//! Shack interface logic. No direct hardware access: the ESP32-C3 target and the
+//! simulator each implement `hw::ShackHw`.
 #![no_std]
 
 pub mod board;
+pub mod hw;
+pub mod shack;
