@@ -19,6 +19,9 @@ pub trait Board {
     fn spi_write(&mut self, data: &[u8]);
     fn uart_write(&mut self, byte: u8);
     fn uart_read(&mut self) -> Option<u8>;
+    /// Host port (USB). Bytes arrive at once: USB is fast against the 10 ms tick.
+    fn usb_write(&mut self, byte: u8);
+    fn usb_read(&mut self) -> Option<u8>;
 }
 
 pub type Shared<B> = Rc<RefCell<B>>;

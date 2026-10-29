@@ -10,6 +10,7 @@ publish = false
 [dependencies]
 embedded-hal = "1"
 link-proto = { path = "../../crates/link-proto" }
+nix = { version = "0.31.3", features = ["term", "fs"] }
 shack-core = { path = "../../crates/shack-core" }
 sim-core = { path = "../sim-core" }
 sim-models = { path = "../sim-models" }

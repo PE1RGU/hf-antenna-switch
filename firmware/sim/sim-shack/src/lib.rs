@@ -53,6 +53,17 @@ impl ShackHw for SimShackHw {
     fn uart_read(&mut self) -> Option<u8> {
         self.board.borrow_mut().uart_read()
     }
+
+    fn usb_write(&mut self, bytes: &[u8]) {
+        let mut b = self.board.borrow_mut();
+        for &x in bytes {
+            b.usb_write(x);
+        }
+    }
+
+    fn usb_read(&mut self) -> Option<u8> {
+        self.board.borrow_mut().usb_read()
+    }
 }
 
 pub struct ShackSim {
@@ -65,6 +76,9 @@ pub struct ShackSim {
     /// False: the MCU hangs (no more ticks).
     pub mcu_running: bool,
     next_tick: Ms,
+    /// Every line the shack sent to the host, with its time.
+    pub host_lines: Vec<(Ms, String)>,
+    host_partial: String,
 }
 
 impl Default for ShackSim {
@@ -89,6 +103,8 @@ impl ShackSim {
             events: Vec::new(),
             mcu_running: true,
             next_tick: 0,
+            host_lines: Vec::new(),
+            host_partial: String::new(),
         }
     }
 
@@ -108,6 +124,36 @@ impl ShackSim {
                 self.events.push((t, e));
             }
         }
+        let out = self.board.borrow_mut().host_take();
+        self.host_partial.push_str(&out);
+        while let Some(i) = self.host_partial.find('\n') {
+            let line: String = self.host_partial.drain(..=i).collect();
+            self.host_lines.push((t, line.trim_end().to_string()));
+        }
+    }
+
+    /// Send one line as the host and return the answer (`ok ...` or `err ...`).
+    pub fn host(&mut self, line: &str) -> String {
+        let from = self.host_lines.len();
+        self.board.borrow_mut().host_send(&format!("{line}\n"));
+        for _ in 0..100 {
+            self.step();
+            if let Some((_, l)) = self.host_lines[from..]
+                .iter()
+                .find(|(_, l)| l.starts_with("ok") || l.starts_with("err"))
+            {
+                return l.clone();
+            }
+        }
+        panic!("no answer to {line:?}");
+    }
+
+    /// Host lines that start with `prefix`, from line index `from`.
+    pub fn host_seen(&self, from: usize, prefix: &str) -> Option<Ms> {
+        self.host_lines[from..]
+            .iter()
+            .find(|(_, l)| l.starts_with(prefix))
+            .map(|(t, _)| *t)
     }
 
     pub fn run(&mut self, ms: Ms) {

@@ -8,6 +8,8 @@
 //! - F14: at TX end, inhibit first, then wait for TX sense inactive and at least 100 ms, then TxEnd.
 //! - Link lost: drop every permit and key at once; the box keeps K0 (F13); TxEnd after the link returns.
 
+mod host;
+
 use crate::board::{EXPANDER_ADDR, ExpPin, exp, expander_config};
 use crate::hw::ShackHw;
 use heapless::Deque;
@@ -59,6 +61,10 @@ pub enum Event {
     PermitLost(Radio),
     /// F14 plausibility: keyed with the permit, but TX sense stays inactive.
     TxSenseFault(Radio),
+    /// Expander lost after start-up: the fault latch is likely set. TX blocked until cleared (C-2).
+    Fault,
+    /// Host keep-alive missed: TX ended, keys released (host-protocol.md section 8).
+    HostTimeout,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -116,6 +122,8 @@ pub struct Shack {
     sw_stop: bool,
     pending: Deque<Command, 8>,
     events: Deque<Event, 16>,
+    fault_known: bool,
+    host: host::HostPort,
 }
 
 impl Default for Shack {
@@ -146,6 +154,8 @@ impl Shack {
             sw_stop: false,
             pending: Deque::new(),
             events: Deque::new(),
+            fault_known: false,
+            host: host::HostPort::new(),
         }
     }
 
@@ -233,6 +243,9 @@ impl Shack {
                 .init(hw.i2c(), self.exp_word(), expander_config())
                 .is_err()
             {
+                // No expander: TX stays off; the host still gets answers.
+                self.host_rx(now, hw);
+                self.host_tx(hw);
                 return;
             }
             self.expander_ready = true;
@@ -252,6 +265,12 @@ impl Shack {
                 self.inputs = None;
                 self.drop_all(hw);
                 self.event(Event::ExpanderLost);
+                if self.latch_cleared && !self.fault_known {
+                    self.fault_known = true;
+                    self.event(Event::Fault);
+                }
+                self.host_rx(now, hw);
+                self.host_tx(hw);
                 return;
             }
         }
@@ -267,6 +286,8 @@ impl Shack {
             self.on_link(now, e);
         }
 
+        self.host_rx(now, hw);
+        self.host_keep_alive(now);
         for r in [Radio::R2, Radio::R3] {
             self.step_tx(now, r);
         }
@@ -282,6 +303,7 @@ impl Shack {
             hw.uart_write(&buf[..n]);
         }
         self.apply_outputs(now, hw);
+        self.host_tx(hw);
     }
 
     fn read_expander<H: ShackHw>(&mut self, hw: &mut H) -> Option<Inputs> {
@@ -471,5 +493,11 @@ impl Shack {
             self.events.pop_front();
         }
         let _ = self.events.push_back(e);
+        self.host_event(e);
+    }
+
+    /// True after a supervisor reset during operation, until `clearfault`.
+    pub fn fault_known(&self) -> bool {
+        self.fault_known
     }
 }

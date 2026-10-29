@@ -17,4 +17,7 @@ pub trait ShackHw {
     /// Data link to the box (UART, 9600 8N1).
     fn uart_write(&mut self, bytes: &[u8]);
     fn uart_read(&mut self) -> Option<u8>;
+    /// Host port (USB Serial/JTAG, host-protocol.md).
+    fn usb_write(&mut self, bytes: &[u8]);
+    fn usb_read(&mut self) -> Option<u8>;
 }

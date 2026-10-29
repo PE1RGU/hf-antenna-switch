@@ -1,5 +1,8 @@
-//! Demo run: start-up, RESET by the operator, R2 routed to A1, one R2 transmission
-//! with an RF tail, end. Prints the timeline of the main signals and box actions.
+//! `sim-shack`: demo run that prints a timeline (start-up, RESET, one R2 transmission).
+//! `sim-shack --pty`: the simulated shack interface in real time on a pseudo-terminal,
+//! for a serial terminal or a host script (docs/design/host-protocol.md).
+
+mod pty;
 
 use link_proto::{Col, Radio, Route};
 use sim_core::TraceKind;
@@ -19,6 +22,10 @@ const SHOWN: [&str; 10] = [
 ];
 
 fn main() {
+    if std::env::args().any(|a| a == "--pty") {
+        pty::run();
+        return;
+    }
     let mut s = ShackSim::new();
     s.start();
     let route = Route {

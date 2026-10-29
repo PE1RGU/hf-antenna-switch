@@ -31,7 +31,8 @@ The same port also carries the ROM boot messages after a reset and is the flash 
 
 Plain ASCII text, one message per line (P3b-01).
 
-- A line ends with LF. CR before LF is ignored. Maximum 120 characters without the line end.
+- A host line ends with CR, LF or CR LF, so a plain serial terminal works (Enter sends CR). An empty line is no command: no answer, but it counts for the keep-alive. Maximum 120 characters without the line end.
+- The shack ends its lines with CR LF. Hosts strip the line end.
 - Words are separated by one or more spaces. Keywords are lower case; radio and column names are not case sensitive.
 - The first character of a line from the shack tells the line type:
 
@@ -112,11 +113,11 @@ Sent on every change (when events are on). One line each.
 
 ```
 ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 band=5 box=ready
-   r1=A1/A1,permit=1 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0
+   r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0
    k1=A1,A3 rfdet=- bias=- boxfault=0
 ```
 
-(One line on the wire; wrapped here for reading. About 190 characters: the 120-character limit is for host lines only.)
+(One line on the wire; wrapped here for reading. About 200 characters: the 120-character limit is for host lines only. Unknown values read `?`, for example `box=?` before the first box status.)
 
 ## 8. Host keep-alive
 

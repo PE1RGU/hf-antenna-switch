@@ -20,6 +20,7 @@ use sim_core::hal::Board;
 use sim_core::i2c::{self, AckStub, I2cDevice};
 use sim_core::uart::UartLine;
 use sim_core::{SimTime, Trace, TraceKind};
+use std::collections::VecDeque;
 
 /// DevKit-RUST-1 on-board parts on the same bus (shack-interface generator notes).
 const SHTC3_ADDR: u8 = 0x70;
@@ -125,6 +126,8 @@ pub struct ShackBoard {
     imu: AckStub,
     to_box: UartLine,
     from_box: UartLine,
+    usb_in: VecDeque<u8>,
+    usb_out: Vec<u8>,
     sig: Signals,
     exp_pins: u16,
     pub trace: Trace,
@@ -147,6 +150,8 @@ impl ShackBoard {
             imu: AckStub,
             to_box: UartLine::new(9600),
             from_box: UartLine::new(9600),
+            usb_in: VecDeque::new(),
+            usb_out: Vec::new(),
             sig: Signals::default(),
             exp_pins: 0,
             trace: Trace::new(),
@@ -197,6 +202,19 @@ impl ShackBoard {
     /// Box end of the data link: next byte that reached the box (pair 1).
     pub fn box_recv(&mut self) -> Option<u8> {
         self.to_box.recv(self.now)
+    }
+
+    /// Host side of the USB port: send text. Lost while the board has no power
+    /// (the DevKit is not fed from USB VBUS, D-96).
+    pub fn host_send(&mut self, text: &str) {
+        if self.env.power {
+            self.usb_in.extend(text.bytes());
+        }
+    }
+
+    /// Host side of the USB port: everything the MCU wrote since the last call.
+    pub fn host_take(&mut self) -> String {
+        String::from_utf8_lossy(&std::mem::take(&mut self.usb_out)).into_owned()
     }
 
     pub fn to_box_line(&mut self) -> &mut UartLine {
@@ -398,5 +416,13 @@ impl Board for ShackBoard {
 
     fn uart_read(&mut self) -> Option<u8> {
         self.from_box.recv(self.now)
+    }
+
+    fn usb_write(&mut self, byte: u8) {
+        self.usb_out.push(byte);
+    }
+
+    fn usb_read(&mut self) -> Option<u8> {
+        self.usb_in.pop_front()
     }
 }

@@ -1,6 +1,6 @@
 # Firmware
 
-Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P3a done (shack logic runs on the board model). Next: P3b, the Mac protocol.
+Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P3b done (Mac protocol, simulated shack on a pty). Next: P3c, the display pages.
 
 Two targets, both on the ESP32-C3-DevKit-RUST:
 
@@ -14,7 +14,16 @@ Firmware rules already defined: see design-log.md (F-rules) and hardware/docs/di
 - `crates/`: no_std logic, one host workspace (`Cargo.toml` here). Tested on the Mac with `cargo test`.
 - `sim/sim-core`: virtual time, trace, I2C and UART plumbing, embedded-hal adapters.
 - `sim/sim-models`: part models (PCA9539, 74LVC1G74, TPS3823, ST7789) and board models (shack interface).
+- `crates/host-proto`: the Mac or Pi text protocol (docs/design/host-protocol.md).
 - `sim/sim-shack`: shack logic on the board model, against a scripted box. `cargo run -p sim-shack` prints a demo timeline.
+
+## Talk to the simulated shack interface
+
+```bash
+cargo run -p sim-shack -- --pty
+```
+
+It prints a pty path, for example `/dev/ttys003`. Open it with a serial terminal or a script, then type host commands (`hello`, `status`, `route R2 A1 A1`, `tx R2 on`, ...). The terminal where `sim-shack` runs controls the outside world: `reset`, `kill on`, `cable off`, `radio R2 on`, `box mute on`, `quit`. The terminal does not echo what you type.
 - `targets/<name>/`: ESP32-C3 binaries, each its own workspace with its own `.cargo/config.toml`. Glue only.
 
 ## Tools
