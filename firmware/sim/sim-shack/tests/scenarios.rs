@@ -2,7 +2,9 @@
 //! References: system-verification.md (E3, F13, F14, rules 1 to 6), link-protocol.md 5.1 and 6.
 
 use link_proto::{Col, Command, Ms, Radio, ResultCode, Route};
-use shack_core::shack::{Event, TX_END_MIN_WAIT, TX_SENSE_PLAUSIBLE, TxState};
+use shack_core::shack::{
+    Event, TX_END_MIN_WAIT, TX_NOPERMIT_DEBOUNCE, TX_NOPERMIT_GRACE, TX_SENSE_PLAUSIBLE, TxState,
+};
 use sim_core::SimTime;
 use sim_core::hal::Board;
 use sim_shack::ShackSim;
@@ -132,7 +134,12 @@ fn tx_end_waits_for_tx_sense_and_100_ms() {
 fn tx_end_with_tail(tail: Ms) {
     let mut s = ShackSim::new();
     r2_transmitting(&mut s);
-    s.board.borrow_mut().set_env(|e| e.radio_tx[1] = true);
+    // A slow radio: after the inhibit its RF goes on until `tail` (it stops when
+    // radio_tx goes false below, well inside its inhibit response time).
+    s.board.borrow_mut().set_env(|e| {
+        e.inh_response[1] = SimTime::ms(tail + 100);
+        e.radio_tx[1] = true;
+    });
     s.run(200);
     let t_end = s.now();
     s.shack.set_tx(Radio::R2, false).unwrap();
@@ -394,4 +401,80 @@ fn watchdog_kick_comes_after_the_checks() {
         }
     }
     assert!(checked > 5);
+}
+
+/// F15 (D-188): a radio without a TX INH input transmits while inhibited. The
+/// shack raises the alarm (event, host line, display warning) and stops nothing.
+#[test]
+fn tx_without_permit_raises_the_alarm() {
+    let mut s = ShackSim::new();
+    s.start();
+    s.host("route R2 A1 A1");
+    s.run(150);
+    assert!(!s.shack.permit(Radio::R2), "no tx request: R2 inhibited");
+    let t0 = s.now();
+    s.board.borrow_mut().set_env(|e| {
+        e.radio_no_inh[1] = true;
+        e.radio_tx[1] = true;
+    });
+    s.run(200);
+    let t = s
+        .has_event(Event::TxWithoutPermit(Radio::R2))
+        .expect("alarm raised");
+    assert!(
+        (t0 + TX_NOPERMIT_DEBOUNCE..=t0 + TX_NOPERMIT_DEBOUNCE + 20).contains(&t),
+        "alarm {} ms after the start of TX",
+        t - t0
+    );
+    assert!(s.host_seen(0, "!txsense R2 nopermit").is_some());
+    let ui = s.shack.ui_state();
+    assert_eq!(
+        ui.warnings.first(),
+        Some(&shack_ui::Warning::TxWithoutPermit(1)),
+        "the first warning on the display"
+    );
+    // Warn only (option A): no software stop, the SAFE loop stays closed.
+    let sig = s.board.borrow().signals();
+    assert!(sig.safe_current && !sig.latched);
+    // Reported once per episode.
+    s.run(1000);
+    let n = s
+        .events
+        .iter()
+        .filter(|(_, e)| *e == Event::TxWithoutPermit(Radio::R2))
+        .count();
+    assert_eq!(n, 1);
+}
+
+/// A radio that obeys TX INH does not transmit while inhibited: no alarm.
+#[test]
+fn inhibited_radio_that_obeys_gives_no_alarm() {
+    let mut s = ShackSim::new();
+    s.start();
+    s.board.borrow_mut().set_env(|e| e.radio_tx[1] = true);
+    s.run(500);
+    assert!(!s.board.borrow().signals().radio_tx_active[1], "blocked");
+    assert!(s.has_event(Event::TxWithoutPermit(Radio::R2)).is_none());
+}
+
+/// The RF tail after a normal end is not an alarm, up to the grace time; a radio
+/// that keeps transmitting longer after its inhibit is.
+#[test]
+fn rf_tail_within_the_grace_is_no_alarm() {
+    for (tail, alarm) in [(300, false), (TX_NOPERMIT_GRACE + 300, true)] {
+        let mut s = ShackSim::new();
+        r2_transmitting(&mut s);
+        s.board.borrow_mut().set_env(|e| {
+            e.inh_response[1] = SimTime::ms(tail);
+            e.radio_tx[1] = true;
+        });
+        s.run(100);
+        s.shack.set_tx(Radio::R2, false).unwrap();
+        s.run(tail + 200);
+        assert_eq!(
+            s.has_event(Event::TxWithoutPermit(Radio::R2)).is_some(),
+            alarm,
+            "tail {tail} ms"
+        );
+    }
 }

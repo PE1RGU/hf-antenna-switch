@@ -351,9 +351,21 @@ impl App {
             ),
             row("F3", "Cat6 cable", state(e.cable_ok, "ok", "cut", false)),
             row("F4", "13.8 V", state(e.power, "on", "off", false)),
-            row("F5", "R1 TX sense", state(e.radio_tx[0], "TX", "rx", true)),
-            row("F6", "R2 TX sense", state(e.radio_tx[1], "TX", "rx", true)),
-            row("F7", "R3 TX sense", state(e.radio_tx[2], "TX", "rx", true)),
+            row(
+                "F5",
+                "R1 PTT",
+                state(e.radio_tx[0], "pressed", "released", true),
+            ),
+            row(
+                "F6",
+                "R2 PTT",
+                state(e.radio_tx[1], "pressed", "released", true),
+            ),
+            row(
+                "F7",
+                "R3 PTT",
+                state(e.radio_tx[2], "pressed", "released", true),
+            ),
             row(
                 "F8",
                 "Box",
@@ -407,10 +419,27 @@ impl App {
             )),
             Line::from(item(s.tx_en, format!("TX_EN      {}", s.tx_en as u8))),
         ];
+        let env = self.env();
         for r in Radio::ALL {
             let i = r.index();
             let k0 = r != Radio::R1 && self.sim.boxs.k0(r);
             let rt = self.sim.boxs.routes[i];
+            // TX: transmits now; blocked: wants to, but inhibited.
+            let tx = if s.radio_tx_active[i] {
+                Span::styled(
+                    " TX",
+                    Style::new().fg(Color::Red).add_modifier(Modifier::BOLD),
+                )
+            } else if env.radio_tx[i] {
+                Span::styled(" blocked", Style::new().fg(Color::Yellow))
+            } else {
+                Span::raw("")
+            };
+            let no_inh = if env.radio_no_inh[i] {
+                Span::styled(" no-INH", Style::new().fg(Color::Yellow))
+            } else {
+                Span::raw("")
+            };
             lines.push(Line::from(vec![
                 dot(!s.inhibit[i]),
                 Span::raw(format!(
@@ -422,6 +451,8 @@ impl App {
                     host_proto::col_name(rt.rx),
                     if k0 { " K0" } else { "" }
                 )),
+                tx,
+                no_inh,
             ]));
         }
         f.render_widget(

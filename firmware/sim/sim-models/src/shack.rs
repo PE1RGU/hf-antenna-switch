@@ -51,8 +51,16 @@ pub struct Env {
     pub cable_ok: bool,
     /// Box READY switch closed (the box side of the SAFE loop).
     pub box_ready: bool,
-    /// Radio TX GND active, per radio R1..R3.
+    /// Radio wants to transmit (PTT pressed, or keyed over CAT), per radio R1..R3.
+    /// It only transmits (TX GND active, the TX sense) when it may: see
+    /// [`Env::radio_no_inh`] and [`Env::inh_response`].
     pub radio_tx: [bool; 3],
+    /// Radio has no TX INH input, or ignores it: it transmits even while inhibited
+    /// (requirements: R2 and R3 may have no TX INH input; firmware rule F15, D-188).
+    pub radio_no_inh: [bool; 3],
+    /// Time a radio takes to stop transmitting after TX INH becomes active (its RF
+    /// tail). To measure per radio (M-12); default 20 ms.
+    pub inh_response: [SimTime; 3],
     /// FT-710 band data, bit 0 = A ... bit 3 = D. No radio: 0b1111 (pull-ups).
     pub band: u8,
     /// R64 fitted: WDI reaches the supervisor (D-123).
@@ -68,6 +76,8 @@ impl Default for Env {
             cable_ok: true,
             box_ready: true,
             radio_tx: [false; 3],
+            radio_no_inh: [false; 3],
+            inh_response: [SimTime::ms(20); 3],
             band: 0b1111,
             wdi_link: true,
         }
@@ -107,10 +117,13 @@ pub struct Signals {
     pub key_contact: [bool; 3],
     /// Cat6 pair 2 current (R1 K0 in the box).
     pub ptt_loop: bool,
+    /// Radio transmits now (its TX GND, the TX sense input), per radio. False while
+    /// it wants to transmit but is inhibited, after its inhibit response time.
+    pub radio_tx_active: [bool; 3],
 }
 
 impl Signals {
-    fn list(&self) -> [(&'static str, bool); 15] {
+    fn list(&self) -> [(&'static str, bool); 18] {
         [
             ("RESET_N", self.reset_n),
             ("POR_N", self.por_n),
@@ -127,6 +140,9 @@ impl Signals {
             ("KEYC_R2", self.key_contact[1]),
             ("KEYC_R3", self.key_contact[2]),
             ("PTT_LOOP", self.ptt_loop),
+            ("TX_R1", self.radio_tx_active[0]),
+            ("TX_R2", self.radio_tx_active[1]),
+            ("TX_R3", self.radio_tx_active[2]),
         ]
     }
 }
@@ -167,6 +183,10 @@ pub struct ShackBoard {
     usb_out: Vec<u8>,
     sig: Signals,
     exp_pins: u16,
+    /// Per radio: transmitting at the last settle, and since when it is inhibited
+    /// while transmitting (for its inhibit response time).
+    radio_on: [bool; 3],
+    inh_since: [Option<SimTime>; 3],
     /// Record of every signal change, I2C transfer and UART byte to the box.
     pub trace: Trace,
 }
@@ -192,6 +212,8 @@ impl ShackBoard {
             usb_out: Vec::new(),
             sig: Signals::default(),
             exp_pins: 0,
+            radio_on: [false; 3],
+            inh_since: [None; 3],
             trace: Trace::new(),
         };
         b.settle();
@@ -314,13 +336,39 @@ impl ShackBoard {
             key_contact[n] = led && self.exp_pin(keys[n]);
         }
 
+        // The radios: one that wants to transmit does so unless it is inhibited.
+        // An inhibit during a transmission stops it after its response time (the RF
+        // tail, F14). A radio without a TX INH input ignores the inhibit (F15).
+        #[allow(
+            clippy::needless_range_loop,
+            reason = "one radio index over six per-radio arrays reads clearest"
+        )]
+        for n in 0..3 {
+            let wants = p && e.radio_tx[n];
+            let on = if !wants {
+                false
+            } else if e.radio_no_inh[n] || !inhibit[n] {
+                true
+            } else if self.radio_on[n] {
+                let since = *self.inh_since[n].get_or_insert(now);
+                now - since < e.inh_response[n]
+            } else {
+                false
+            };
+            if !on || !inhibit[n] {
+                self.inh_since[n] = None;
+            }
+            self.radio_on[n] = on;
+        }
+        let radio_on = self.radio_on;
+
         // Levels the board puts on the expander pins (used while a pin is an input).
         let ext = |pin: ExpPin| -> bool {
             match pin.name {
                 "SW_STOP_N" => true, // R35 pull-up: loop closed while the expander is in reset
-                "R1_TX" => p && e.radio_tx[0],
-                "R2_TX" => p && e.radio_tx[1],
-                "R3_TX" => p && e.radio_tx[2],
+                "R1_TX" => radio_on[0],
+                "R2_TX" => radio_on[1],
+                "R3_TX" => radio_on[2],
                 "BAND_A" => e.band & 1 != 0,
                 "BAND_B" => e.band & 2 != 0,
                 "BAND_C" => e.band & 4 != 0,
@@ -353,7 +401,8 @@ impl ShackBoard {
             tx_en,
             inhibit,
             key_contact,
-            ptt_loop: link && e.radio_tx[0],
+            ptt_loop: link && radio_on[0],
+            radio_tx_active: radio_on,
         };
         self.record(sig);
     }

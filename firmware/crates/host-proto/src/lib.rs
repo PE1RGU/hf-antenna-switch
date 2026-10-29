@@ -625,6 +625,8 @@ pub enum HostEvent {
     PermitLost(Radio),
     /// `!txsense <radio> fault`: keyed with permit for 500 ms without TX sense (F14, C-3).
     TxSenseFault(Radio),
+    /// `!txsense <radio> nopermit`: the radio transmits without its permit (F15).
+    TxWithoutPermit(Radio),
     /// `!route <radio> <tx col> <rx col>`: route as read back from the box.
     Route(Radio, Route),
     /// `!host timeout`: host keep-alive missed; every TX ended and every key
@@ -649,6 +651,7 @@ impl fmt::Display for HostEvent {
             HostEvent::Refused(c, r) => write!(f, "!refused {} {}", LinkCommand(c), result_name(r)),
             HostEvent::PermitLost(r) => write!(f, "!permitlost {}", radio_name(r)),
             HostEvent::TxSenseFault(r) => write!(f, "!txsense {} fault", radio_name(r)),
+            HostEvent::TxWithoutPermit(r) => write!(f, "!txsense {} nopermit", radio_name(r)),
             HostEvent::Route(r, route) => write!(
                 f,
                 "!route {} {} {}",

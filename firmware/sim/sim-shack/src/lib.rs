@@ -430,11 +430,14 @@ impl ShackSim {
             }
             ["box", "mute", v] => self.boxs.mute = on(v),
             ["radio", r, v] => {
-                let i = ["R1", "R2", "R3"]
-                    .iter()
-                    .position(|x| x.eq_ignore_ascii_case(r))
-                    .ok_or_else(|| WORLD_HELP.to_string())?;
+                let i = radio_index(r)?;
                 self.board.borrow_mut().set_env(|e| e.radio_tx[i] = on(v));
+            }
+            ["radio", r, "noinh", v] => {
+                let i = radio_index(r)?;
+                self.board
+                    .borrow_mut()
+                    .set_env(|e| e.radio_no_inh[i] = on(v));
             }
             ["kill", v] => self.board.borrow_mut().set_env(|e| e.kill_pressed = on(v)),
             ["cable", v] => self.board.borrow_mut().set_env(|e| e.cable_ok = on(v)),
@@ -492,8 +495,17 @@ outside world commands (terminal UI: type them with a leading ':')
   kill on|off            KILL switch              F2
   cable on|off           Cat6 intact or cut       F3
   power on|off           13.8 V                   F4
-  radio R1-R3 on|off     radio TX sense           F5-F7
+  radio R1-R3 on|off     radio wants to transmit  F5-F7
+  radio R1-R3 noinh on|off  radio without TX INH input: transmits while inhibited
   box mute on|off        box silent               F8
   shot <file.png>        save the display         F9
   help | ?               this list
 F10 auto keep-alive, Ctrl-C quit. Type help (no ':') for the shack commands.";
+
+/// `R1` to `R3` (any case) to the radio index 0 to 2.
+fn radio_index(r: &str) -> Result<usize, String> {
+    ["R1", "R2", "R3"]
+        .iter()
+        .position(|x| x.eq_ignore_ascii_case(r))
+        .ok_or_else(|| WORLD_HELP.to_string())
+}

@@ -122,6 +122,8 @@ pub enum Warning {
     /// Radio index (0 = R1 to 2 = R3) keyed with its permit for 500 ms, without TX
     /// sense (C-3). TX is not blocked.
     TxSense(usize),
+    /// The radio (index 0 to 2) transmits without its permit (F15, D-188).
+    TxWithoutPermit(usize),
     /// Fault code from the box Status (link-protocol.md 4.2).
     BoxFault(u8),
 }

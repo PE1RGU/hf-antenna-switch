@@ -136,7 +136,7 @@ On the display, red is transmit and green is receive. A thick red route means th
 | F2 | Press or release the KILL switch |
 | F3 | Cut or restore the Cat6 cable |
 | F4 | Switch the 13.8 V supply off or on. Off: the MCU stops. On: it starts from boot, with the stored settings, and the SAFE latch needs RESET |
-| F5, F6, F7 | Radio R1, R2, R3 transmits or stops (its TX sense) |
+| F5, F6, F7 | Radio R1, R2, R3: press or release its PTT. The radio transmits only when it is not inhibited (TX INH), as a real radio; the Board panel shows `TX` or `blocked` |
 | F8 | Box stops or resumes answering (box hang, or the data pair broken) |
 | F9 | Save the display as a PNG at full resolution (`shack-display-1.png`, ...) |
 | F10 | Auto keep-alive on or off (see [Commands](#commands)) |
@@ -190,6 +190,7 @@ Type these with a leading `:`. `:help` or `:?` lists them.
 | `:cable on\|off` | F3 |
 | `:power on\|off` | F4 |
 | `:radio R1-R3 on\|off` | F5 to F7 |
+| `:radio R1-R3 noinh on\|off` | A radio without a TX INH input: it transmits while inhibited (to test rule F15) |
 | `:box mute on\|off` | F8 |
 | `:shot <file.png>` | F9, with a file name |
 
@@ -294,6 +295,8 @@ It prints a device path, for example `/dev/ttys003`. Open it with a serial termi
 | The terminal is scrambled after a crash | Type `reset` and press Enter |
 | `!host timeout` | No host line for 2 s while a radio had `tx` or `key` on. Turn auto keep-alive on (F10), or set `keepalive 60` |
 | `err notforr1` | R1 uses the hardware PTT loop: press F5, or use `key R1 on` |
+| `!txsense R2 nopermit` | R2 transmits without its permit: in the emulator a `noinh` radio; on the station a radio without TX INH, or a wiring fault. A warning only (rule F15, D-188) |
+| A radio shows `blocked` | It wants to transmit but is inhibited: give it a permit (R1: a transmit route; R2, R3: `tx R2 on`), and clear the SAFE latch with RESET |
 | `!refused ... notxroute` | Give the radio a transmit column first (`route R2 A3 A3`) |
 | `!refused ... hazard` | The route breaks a relay matrix rule: a transmit row on the receive-only A2, or two radios on one transmit column |
 | `TCP port 7300 not free` | Another emulator runs, or use `--tcp <port>` |
