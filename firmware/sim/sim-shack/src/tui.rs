@@ -468,12 +468,19 @@ pub struct Options {
     pub text_view: Option<bool>,
 }
 
-/// ratatui-image falls back to half-blocks when the terminal does not report its font
-/// size in pixels, even when it knows the terminal is iTerm2 (seen by Prins in iTerm2).
-/// With an iTerm2 hint in the environment, use iTerm2 images anyway; the font size comes
-/// from the window size (columns, rows, width and height in pixels), else 8 x 16.
+/// iTerm2 needs its own image protocol (seen by Prins, `--probe` in iTerm2):
+/// - iTerm2 answers the kitty graphics query, but its kitty support is partial and the
+///   display stays empty (ratatui-image rules out kitty for WezTerm for the same reason).
+///   Use iTerm2 images with the font size the query found.
+/// - Without a font size from the terminal, ratatui-image falls back to half-blocks.
+///   Use iTerm2 images with the font size from the window size, else 8 x 16.
 pub fn fix_picker(p: Picker, iterm_hint: bool, window: Option<(u16, u16, u16, u16)>) -> Picker {
-    if p.protocol_type() != ProtocolType::Halfblocks || !iterm_hint {
+    if !iterm_hint || p.protocol_type() == ProtocolType::Iterm2 {
+        return p;
+    }
+    if p.protocol_type() != ProtocolType::Halfblocks {
+        let mut p = p;
+        p.set_protocol_type(ProtocolType::Iterm2);
         return p;
     }
     let font = window

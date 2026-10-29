@@ -256,3 +256,30 @@ fn iterm_hint_trusts_term_program_first() {
     assert!(iterm_hint_from(None, Some("iTerm2")), "over ssh");
     assert!(!iterm_hint_from(None, None));
 }
+
+/// iTerm2 answers the kitty query (`--probe`: "query = Kitty, font 7x15"), but kitty
+/// images stay empty there: use iTerm2 images, keep the font size from the query.
+#[test]
+fn iterm2_answering_kitty_gets_iterm2_images() {
+    use ratatui_image::picker::ProtocolType;
+    use sim_shack::tui::fix_picker;
+    for proto in [ProtocolType::Kitty, ProtocolType::Sixel] {
+        let mut q = Picker::halfblocks();
+        q.set_protocol_type(proto);
+        let font = q.font_size();
+        let p = fix_picker(q, true, Some((191, 53, 2674, 1590)));
+        assert_eq!(p.protocol_type(), ProtocolType::Iterm2);
+        assert_eq!(
+            (p.font_size().width, p.font_size().height),
+            (font.width, font.height),
+            "query font size kept"
+        );
+    }
+    // Real kitty (no iTerm2 hint) keeps kitty.
+    let mut q = Picker::halfblocks();
+    q.set_protocol_type(ProtocolType::Kitty);
+    assert_eq!(
+        fix_picker(q, false, None).protocol_type(),
+        ProtocolType::Kitty
+    );
+}
