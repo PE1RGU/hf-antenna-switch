@@ -26,7 +26,7 @@ cargo run --release -p sim-shack
 
 A terminal UI on macOS, Linux and Windows:
 
-- Left: the display as the firmware draws it. Full resolution in terminals with an image protocol (iTerm2, kitty, WezTerm, Windows Terminal 1.22 or later); coloured half-blocks elsewhere (macOS Terminal: readable shapes, small text). F9 saves a PNG at full resolution.
+- Left: the display. Text view: pages B, C and Safe stop drawn with characters, sharp in every terminal (the default in macOS Terminal and the old Windows console). Tab switches to the pixels as the firmware draws them: full resolution in terminals with an image protocol (iTerm2, kitty, WezTerm, Windows Terminal 1.22 or later), coloured half-blocks elsewhere. F9 saves a PNG at full resolution.
 - Right: the outside world on F-keys (F1 RESET, F2 KILL, F3 cable, F4 power, F5 to F7 radio TX sense, F8 box silent, F10 auto keep-alive) and the board signals.
 - Bottom: host traffic and a command line. `help` (or `?`) lists the shack commands, `:help` (or `:?`) the outside-world commands; PgUp and PgDn scroll the log. Type host commands (`route R2 A1 A1`, `tx R2 on`, `name A3 Hexbeam`, `page c`); type `:` commands for the outside world (`:reset`, `:kill on`, `:radio R2 on`).
 - Host tools connect over TCP to 127.0.0.1:7300 (`--tcp <port>`, `--no-tcp`).

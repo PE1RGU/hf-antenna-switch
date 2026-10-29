@@ -2,6 +2,7 @@
 //! Time moves in 1 ms steps; the firmware ticks every `shack::TICK` ms.
 
 pub mod box_stub;
+pub mod textview;
 pub mod tui;
 
 use box_stub::BoxStub;

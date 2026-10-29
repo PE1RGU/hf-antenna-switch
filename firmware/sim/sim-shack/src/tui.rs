@@ -8,6 +8,7 @@
 //!   simulated shack; `:` commands go to the outside world.
 //! - TCP: a host tool can connect to 127.0.0.1:<port> (one client at a time).
 
+use crate::textview::TextView;
 use crate::{ShackSim, WORLD_HELP};
 use image::{DynamicImage, RgbImage};
 use link_proto::{Ms, Radio};
@@ -17,7 +18,7 @@ use ratatui::layout::{Constraint, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Paragraph};
-use ratatui_image::picker::Picker;
+use ratatui_image::picker::{Picker, ProtocolType};
 use ratatui_image::protocol::StatefulProtocol;
 use ratatui_image::{Resize, StatefulImage};
 use std::collections::VecDeque;
@@ -48,6 +49,8 @@ pub struct App {
     shots: u32,
     /// Lines scrolled back in the host log (PgUp, PgDn); 0 = newest at the bottom.
     pub scroll: usize,
+    /// Display as text (sharp in every terminal) or as pixels. Tab switches.
+    pub text_view: bool,
     start: Instant,
 }
 
@@ -58,6 +61,7 @@ impl App {
             l.set_nonblocking(true).ok()?;
             Some(l)
         });
+        let text_view = picker.protocol_type() == ProtocolType::Halfblocks;
         let mut app = App {
             sim,
             picker,
@@ -73,6 +77,7 @@ impl App {
             last_alive: 0,
             shots: 0,
             scroll: 0,
+            text_view,
             start: Instant::now(),
         };
         let note = match (tcp_port, app.tcp_port) {
@@ -206,6 +211,7 @@ impl App {
                 self.note(&format!("auto keep-alive {s}"));
             }
             KeyCode::Esc => self.input.clear(),
+            KeyCode::Tab => self.text_view = !self.text_view,
             KeyCode::PageUp => {
                 self.scroll = (self.scroll + 5).min(self.log.len().saturating_sub(1))
             }
@@ -261,9 +267,26 @@ impl App {
     }
 
     fn draw_display(&mut self, f: &mut Frame, area: Rect) {
-        let block = Block::bordered().title(" Display 320 x 240 ");
+        let title = if self.text_view {
+            " Display (text view, Tab: pixels) "
+        } else {
+            " Display 320 x 240 (Tab: text view) "
+        };
+        let block = Block::bordered().title(title);
         let inner = block.inner(area);
         f.render_widget(block, area);
+        if self.text_view {
+            let state = self.sim.shack.ui_state();
+            let page = self.sim.shack.shown_page(self.sim.now());
+            f.render_widget(
+                TextView {
+                    state: &state,
+                    page,
+                },
+                inner,
+            );
+            return;
+        }
         let screen = self.sim.screen();
         if screen != self.last_screen || self.image.is_none() {
             let mut img = RgbImage::new(shack_ui::WIDTH, shack_ui::HEIGHT);
@@ -331,7 +354,7 @@ impl App {
                 state(self.auto_alive, "on", "off", false),
             ),
             Line::styled(
-                "Ctrl-C quit · PgUp/PgDn log",
+                "Tab text/pixels · PgUp/PgDn log",
                 Style::new().fg(Color::DarkGray),
             ),
         ];

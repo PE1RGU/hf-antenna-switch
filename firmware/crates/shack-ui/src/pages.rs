@@ -2,11 +2,9 @@
 
 use crate::draw::{Target, dot, rect, route, rrect, text, tri};
 use crate::theme::*;
-use crate::{ANTENNA_LABELS, Page, RadioMode, RadioUi, StopCause, UiState, Warning, band_name};
-use core::fmt::Write;
+use crate::{ANTENNA_LABELS, Page, RadioMode, RadioUi, UiState, Warning, band_name};
 use embedded_graphics::pixelcolor::Rgb565;
 use embedded_graphics::text::Alignment::{Center as C, Left as L, Right as R};
-use heapless::String;
 use link_proto::Col;
 
 /// Draw the whole screen for `chosen` (Flow or Cards); Safe stop takes over when due.
@@ -26,7 +24,7 @@ pub fn render<D: Target>(d: &mut D, s: &UiState, chosen: Page) {
     }
 }
 
-const RADIO_LABELS: [&str; 3] = ["R1", "R2", "R3"];
+use crate::wording::{self, RADIO_LABELS};
 
 fn col_index(c: Col) -> Option<usize> {
     (c != Col::None).then(|| c as usize - 1)
@@ -58,21 +56,9 @@ fn top_bar<D: Target>(d: &mut D, s: &UiState) {
 }
 
 fn toast<D: Target>(d: &mut D, s: &UiState) {
-    let Some(w) = s.warnings.first() else { return };
-    let mut msg: String<48> = String::new();
-    let _ = match *w {
-        Warning::LinkDown => write!(msg, "Box link down"),
-        Warning::BiasFault(c) => write!(
-            msg,
-            "{} bias-T · no current",
-            ANTENNA_LABELS[c as usize - 1]
-        ),
-        Warning::TxSense(r) => write!(msg, "{} TX sense · no signal", RADIO_LABELS[r]),
-        Warning::BoxFault(n) => write!(msg, "Box fault {n}"),
+    let Some(msg) = wording::warning_line(s) else {
+        return;
     };
-    if s.warnings.len() > 1 {
-        let _ = write!(msg, "  (+{})", s.warnings.len() - 1);
-    }
     rrect(d, 8, 208, 304, 26, 13, AMBER_TINT);
     dot(d, 22, 221, 14, AMBER);
     text(d, &SMALL, "!", 22, 221, AMBER_TINT, AMBER, C);
@@ -344,25 +330,14 @@ fn route_row<D: Target>(d: &mut D, s: &UiState, surf: Rgb565, y: i32, is_tx: boo
 // ---------------------------------------------------------------- Safe stop
 
 fn stop<D: Target>(d: &mut D, s: &UiState) {
-    let (title, sub, icon) = if s.stop.is_some() {
-        ("Safe stop", "All radios inhibited · relays released", TX)
-    } else {
-        ("Fault", "Supervisor reset · TX blocked", AMBER)
-    };
+    let (title, sub) = wording::stop_title(s);
+    let icon = if s.stop.is_some() { TX } else { AMBER };
     octagon(d, 40, 40, 26, icon);
     rect(d, 28, 37, 24, 7, TEXT);
     text(d, &HUGE, title, 78, 30, TEXT, BG, L);
     text(d, &SMALL, sub, 79, 54, SEC, BG, L);
 
-    let cause = match s.stop {
-        Some(StopCause::PowerUp) => "Power-up",
-        Some(StopCause::Kill) => "KILL switch pressed",
-        Some(StopCause::SoftwareStop) => "Software stop (host)",
-        Some(StopCause::LinkLostStop) => "Box: link lost during TX",
-        Some(StopCause::LoopOpen) => "SAFE loop open (box, cable)",
-        Some(StopCause::LoopBack) => "SAFE loop closed again",
-        None => "Watchdog or brown-out",
-    };
+    let cause = wording::cause(s);
     let rows = [
         ("Cause", cause, AMBER),
         (
@@ -389,14 +364,7 @@ fn stop<D: Target>(d: &mut D, s: &UiState) {
         text(d, &BODY, v, 288, y, TEXT, CARD, R);
     }
 
-    let steps: &[&str] = match s.stop {
-        Some(StopCause::Kill) => &["Release the KILL switch", "Press RESET"],
-        Some(StopCause::SoftwareStop) => &["Host: stop off", "Press RESET"],
-        Some(StopCause::LinkLostStop) => &["Restore the box link", "Press RESET"],
-        Some(StopCause::LoopOpen) => &["Check the box and the cable", "Press RESET"],
-        Some(StopCause::PowerUp | StopCause::LoopBack) => &["Press RESET"],
-        None => &["Check the supply and the log", "Host: clearfault"],
-    };
+    let steps = wording::steps(s);
     rrect(d, 8, 176, 304, 56, 12, AMBER_TINT);
     let y0 = if steps.len() == 1 { 204 } else { 191 };
     for (i, st) in steps.iter().enumerate() {

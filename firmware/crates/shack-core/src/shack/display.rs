@@ -253,4 +253,9 @@ impl Shack {
     pub fn page(&self) -> PageSel {
         self.display.sel
     }
+
+    /// The page the display shows at `now` (Safe stop takes over from the chosen page).
+    pub fn shown_page(&self, now: Ms) -> Page {
+        self.ui_state().page(self.display.chosen(now))
+    }
 }

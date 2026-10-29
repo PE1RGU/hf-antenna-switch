@@ -13,6 +13,7 @@ pub mod fb;
 mod pages;
 pub mod st7789;
 mod theme;
+pub mod wording;
 
 pub use fb::FrameBuffer;
 pub use pages::render;

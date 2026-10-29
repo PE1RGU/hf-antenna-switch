@@ -40,15 +40,22 @@ fn app() -> App {
     App::new(ShackSim::new(), Picker::halfblocks(), None)
 }
 
+fn draw(a: &mut App) -> String {
+    let mut term = Terminal::new(TestBackend::new(120, 40)).unwrap();
+    term.draw(|f| a.draw(f)).unwrap();
+    screen_text(&term)
+}
+
 #[test]
 fn draws_display_world_board_and_host() {
     let mut a = app();
     a.advance(800);
-    let mut term = Terminal::new(TestBackend::new(120, 40)).unwrap();
-    term.draw(|f| a.draw(f)).unwrap();
-    let t = screen_text(&term);
+    assert!(a.text_view, "no image protocol: text view first");
+    let t = draw(&mut a);
     for s in [
-        "Display 320 x 240",
+        "Display (text view",
+        "SAFE STOP",
+        "Press RESET",
         "Outside world",
         "Board",
         "Host (USB)",
@@ -57,10 +64,61 @@ fn draws_display_world_board_and_host() {
     ] {
         assert!(t.contains(s), "missing {s:?}\n{t}");
     }
+    // Tab: the pixels, as half-blocks here.
+    press(&mut a, KeyCode::Tab);
+    let t = draw(&mut a);
+    assert!(t.contains("Display 320 x 240"));
     assert!(
         t.contains('▀') || t.contains('▄'),
         "display drawn as half-blocks"
     );
+}
+
+/// R1 transmits on A1 and receives on A2; R2 receives on A3 (named Hexbeam).
+fn station(a: &mut App) {
+    a.advance(600);
+    press(a, KeyCode::F(1));
+    for l in ["route R1 A1 A2", "route R2 - A3", "name A3 Hexbeam"] {
+        type_line(a, l);
+        a.advance(100);
+    }
+    type_line(a, ":radio R1 on");
+    a.advance(200);
+}
+
+#[test]
+fn text_view_flow_page() {
+    let mut a = app();
+    station(&mut a);
+    let t = draw(&mut a);
+    for s in [
+        "R1", "FT-710", "TX", "G5RV", "Loop", "Hexbeam", "rx", "━", "▶", "─",
+    ] {
+        assert!(t.contains(s), "missing {s:?}\n{t}");
+    }
+}
+
+#[test]
+fn text_view_cards_and_stop() {
+    let mut a = app();
+    station(&mut a);
+    type_line(&mut a, "page c");
+    a.advance(100);
+    let t = draw(&mut a);
+    for s in ["▶", "◀", "A1", "G5RV", "A3", "Hexbeam", "WSPR"] {
+        assert!(t.contains(s), "missing {s:?}\n{t}");
+    }
+    press(&mut a, KeyCode::F(2));
+    a.advance(100);
+    let t = draw(&mut a);
+    for s in [
+        "SAFE STOP",
+        "KILL switch pressed",
+        "1. Release the KILL switch",
+        "2. Press RESET",
+    ] {
+        assert!(t.contains(s), "missing {s:?}\n{t}");
+    }
 }
 
 #[test]
