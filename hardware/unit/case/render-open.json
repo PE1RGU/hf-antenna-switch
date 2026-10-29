@@ -1,0 +1,8 @@
+{"commands":[
+ {"command":"file.insert_step","params":{"path":"/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/unit/case/ref-rf-board.step","name":"RF board render","matrix":[1,0,0,10, 0,1,0,241, 0,0,1,18]}},
+ {"command":"component.activate","params":{"component":"root"}},
+ {"command":"file.insert_step","params":{"path":"/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/unit/case/ref-controller-board.step","name":"Controller board render","matrix":[1,0,0,10, 0,1,0,241, 0,0,1,40]}},
+ {"command":"component.activate","params":{"component":"root"}},
+ {"command":"browser.visibility","params":{"visible":true,"folder":"bodies"}},
+ {"command":"browser.visibility","params":{"visible":false,"items":["Lid","Lid screws M3x10 CSK","RF board (ref)"]}}
+]}
