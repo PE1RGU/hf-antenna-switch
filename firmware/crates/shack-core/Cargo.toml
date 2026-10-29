@@ -10,6 +10,7 @@ authors.workspace = true
 workspace = true
 
 [dependencies]
+crc = "3"
 embedded-hal = "1"
 heapless = "0.9.3"
 host-proto = { version = "0.1.0", path = "../host-proto" }

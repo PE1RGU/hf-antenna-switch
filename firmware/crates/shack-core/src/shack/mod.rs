@@ -13,6 +13,7 @@ pub use display::{AUTO_CARDS_MS, AUTO_FLOW_MS, ROWS_PER_TICK};
 mod host;
 
 use crate::board::{EXPANDER_ADDR, ExpPin, exp, expander_config};
+use crate::config::{CONFIG_MAX, Config};
 use crate::hw::ShackHw;
 use heapless::Deque;
 use link_proto::frame::MAX_WIRE;
@@ -24,6 +25,8 @@ use pca9539::Pca9539;
 pub const TICK: Ms = 10;
 /// F14: minimum time from the inhibit to 'end'.
 pub const TX_END_MIN_WAIT: Ms = 100;
+/// Stored settings are saved this long after the last change.
+pub const CONFIG_SAVE_DELAY: Ms = 2000;
 /// F14 plausibility: keyed this long without TX sense flags the port.
 pub const TX_SENSE_PLAUSIBLE: Ms = 500;
 
@@ -128,6 +131,13 @@ pub struct Shack {
     host: host::HostPort,
     /// The SAFE latch was clear at least once since power-up (Safe stop cause).
     ever_unlatched: bool,
+    /// Stored settings (host-protocol.md 8a).
+    config: Config,
+    config_loaded: bool,
+    /// Time of the last unsaved change.
+    config_dirty: Option<Ms>,
+    /// Send the stored routes and bias once the box is ready (after each link up).
+    restore_pending: bool,
     display: display::Display,
 }
 
@@ -162,6 +172,10 @@ impl Shack {
             fault_known: false,
             host: host::HostPort::new(),
             ever_unlatched: false,
+            config: Config::default(),
+            config_loaded: false,
+            config_dirty: None,
+            restore_pending: false,
             display: display::Display::new(),
         }
     }
@@ -244,6 +258,7 @@ impl Shack {
         self.wdi = !self.wdi;
         hw.set_wdi(self.wdi);
         self.safe_lost = hw.safe_lost();
+        self.load_config(hw);
 
         if !self.expander_ready {
             if EXPANDER
@@ -299,6 +314,7 @@ impl Shack {
 
         self.host_rx(now, hw);
         self.host_keep_alive(now);
+        self.restore_step();
         for r in [Radio::R2, Radio::R3] {
             self.step_tx(now, r);
         }
@@ -316,6 +332,64 @@ impl Shack {
         self.apply_outputs(now, hw);
         self.host_tx(hw);
         self.display_step(now, hw);
+        self.save_config(now, hw);
+    }
+
+    fn load_config<H: ShackHw>(&mut self, hw: &mut H) {
+        if self.config_loaded {
+            return;
+        }
+        self.config_loaded = true;
+        let mut buf = [0u8; CONFIG_MAX];
+        let n = hw.config_load(&mut buf).min(CONFIG_MAX);
+        match Config::decode(&buf[..n]) {
+            Some(c) => self.config = c,
+            None => self.host.log("stored settings not found, defaults used"),
+        }
+        self.display.sel = self.config.page;
+    }
+
+    pub(super) fn config_changed(&mut self, now: Ms) {
+        self.config_dirty = Some(now);
+    }
+
+    /// Save 2 s after the last change: a burst of commands gives one flash write.
+    fn save_config<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
+        if self
+            .config_dirty
+            .is_some_and(|t| now.saturating_sub(t) >= CONFIG_SAVE_DELAY)
+        {
+            let mut buf = [0u8; CONFIG_MAX];
+            let n = self.config.encode(&mut buf);
+            hw.config_save(&buf[..n]);
+            self.config_dirty = None;
+        }
+    }
+
+    /// After a link up, once the box is ready: send the stored routes and bias that
+    /// differ from what the box reports. The box checks them like any command.
+    fn restore_step(&mut self) {
+        let Some(s) = self.status.filter(|s| s.flags.ready) else {
+            return;
+        };
+        if !self.restore_pending || !self.link.is_up() {
+            return;
+        }
+        self.restore_pending = false;
+        for r in Radio::ALL {
+            let want = self.config.routes[r.index()];
+            if want != Route::default() && s.routes[r.index()] != want {
+                let _ = self.set_route(r, want);
+            }
+        }
+        if self.config.bias != s.bias_en {
+            let _ = self.set_bias(self.config.bias);
+        }
+    }
+
+    /// The stored settings in use.
+    pub fn config(&self) -> &Config {
+        &self.config
     }
 
     fn read_expander<H: ShackHw>(&mut self, hw: &mut H) -> Option<Inputs> {
@@ -328,7 +402,10 @@ impl Shack {
 
     fn on_link(&mut self, now: Ms, e: LinkEvent) {
         match e {
-            LinkEvent::Up(_) => self.event(Event::LinkUp),
+            LinkEvent::Up(_) => {
+                self.restore_pending = true;
+                self.event(Event::LinkUp);
+            }
             LinkEvent::VersionMismatch(_) => self.event(Event::VersionMismatch),
             LinkEvent::Lost { .. } => {
                 self.status = None;
@@ -350,6 +427,21 @@ impl Shack {
     fn on_reply(&mut self, now: Ms, cmd: Command, status: Status) {
         self.status = Some(status);
         let ok = status.result == ResultCode::Ok;
+        // Keep the stored settings equal to what the box accepted.
+        match cmd {
+            Command::SetRoute { radio, .. } if ok => {
+                let i = radio.index();
+                if self.config.routes[i] != status.routes[i] {
+                    self.config.routes[i] = status.routes[i];
+                    self.config_changed(now);
+                }
+            }
+            Command::SetBias(_) if ok && self.config.bias != status.bias_en => {
+                self.config.bias = status.bias_en;
+                self.config_changed(now);
+            }
+            _ => {}
+        }
         match cmd {
             Command::SetRoute {
                 radio: Radio::R1, ..

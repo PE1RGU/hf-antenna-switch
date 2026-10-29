@@ -14,6 +14,77 @@ pub const MAX_LINE: usize = 120;
 pub const KEEP_ALIVE_DEFAULT_S: u8 = 2;
 pub const KEEP_ALIVE_MIN_S: u8 = 2;
 pub const KEEP_ALIVE_MAX_S: u8 = 60;
+/// Longest antenna or radio name (fits an antenna box on page B).
+pub const NAME_MAX: usize = 8;
+
+/// A name: 1 to NAME_MAX characters from letters, digits and `-._/`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Name {
+    len: u8,
+    bytes: [u8; NAME_MAX],
+}
+
+impl Name {
+    pub fn new(s: &str) -> Option<Self> {
+        let ok = |c: u8| c.is_ascii_alphanumeric() || b"-._/".contains(&c);
+        if s.is_empty() || s.len() > NAME_MAX || !s.bytes().all(ok) {
+            return None;
+        }
+        let mut bytes = [0; NAME_MAX];
+        bytes[..s.len()].copy_from_slice(s.as_bytes());
+        Some(Name {
+            len: s.len() as u8,
+            bytes,
+        })
+    }
+
+    pub fn as_str(&self) -> &str {
+        // Only ASCII is accepted by `new`.
+        core::str::from_utf8(&self.bytes[..self.len as usize]).unwrap_or("?")
+    }
+}
+
+/// `-` (no name).
+impl Default for Name {
+    fn default() -> Self {
+        let mut bytes = [0; NAME_MAX];
+        bytes[0] = b'-';
+        Name { len: 1, bytes }
+    }
+}
+
+impl fmt::Display for Name {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// What a `name` command names.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum NameTarget {
+    /// A1 to A4 or EXP (never `Col::None`).
+    Antenna(Col),
+    Radio(Radio),
+}
+
+/// `ok A1=... EXP=... R1=... R3=...` (answer to `names`).
+pub struct NamesLine<'a> {
+    pub antennas: &'a [Name; 5],
+    pub radios: &'a [Name; 3],
+}
+
+impl fmt::Display for NamesLine<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("ok")?;
+        for (c, n) in Col::ALL[1..].iter().zip(self.antennas) {
+            write!(f, " {}={n}", col_name(*c))?;
+        }
+        for (r, n) in Radio::ALL.iter().zip(self.radios) {
+            write!(f, " {}={n}", radio_name(*r))?;
+        }
+        Ok(())
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum HostCommand {
@@ -38,6 +109,11 @@ pub enum HostCommand {
     /// Keep-alive time-out in seconds, KEEP_ALIVE_MIN_S to KEEP_ALIVE_MAX_S.
     KeepAlive(u8),
     Page(PageSel),
+    Name {
+        target: NameTarget,
+        name: Name,
+    },
+    Names,
 }
 
 /// Display page selection (`page` command).
@@ -199,6 +275,16 @@ pub fn parse(line: &str) -> Result<HostCommand, ErrorCode> {
         Ok(HostCommand::Bias(col_list(w[1])?))
     } else if is("stop", 2) {
         Ok(HostCommand::Stop(on_off(w[1])?))
+    } else if is("names", 1) {
+        Ok(HostCommand::Names)
+    } else if is("name", 3) {
+        let target = match col(w[1]) {
+            Ok(Col::None) => return Err(ErrorCode::Arg),
+            Ok(c) => NameTarget::Antenna(c),
+            Err(_) => NameTarget::Radio(radio(w[1])?),
+        };
+        let name = Name::new(w[2]).ok_or(ErrorCode::Arg)?;
+        Ok(HostCommand::Name { target, name })
     } else if is("page", 2) {
         [PageSel::Flow, PageSel::Cards, PageSel::Auto]
             .into_iter()
@@ -277,6 +363,11 @@ impl fmt::Display for HostCommand {
             HostCommand::Events(on) => write!(f, "events {}", on_name(on)),
             HostCommand::KeepAlive(s) => write!(f, "keepalive {s}"),
             HostCommand::Page(p) => write!(f, "page {}", p.as_str()),
+            HostCommand::Names => f.write_str("names"),
+            HostCommand::Name { target, name } => match target {
+                NameTarget::Antenna(c) => write!(f, "name {} {name}", col_name(c)),
+                NameTarget::Radio(r) => write!(f, "name {} {name}", radio_name(r)),
+            },
         }
     }
 }

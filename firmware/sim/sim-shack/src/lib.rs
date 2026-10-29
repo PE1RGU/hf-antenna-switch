@@ -20,6 +20,11 @@ pub struct SimShackHw {
     framebuffer: Vec<u8>,
     /// Display SPI bytes since the last tick started.
     spi_bytes: usize,
+    /// Stored settings record (the MCU flash), and an optional file that keeps it
+    /// between simulator runs.
+    stored: Vec<u8>,
+    state_file: Option<std::path::PathBuf>,
+    saves: usize,
 }
 
 impl ShackHw for SimShackHw {
@@ -77,6 +82,20 @@ impl ShackHw for SimShackHw {
         &mut self.framebuffer
     }
 
+    fn config_load(&mut self, buf: &mut [u8]) -> usize {
+        let n = self.stored.len().min(buf.len());
+        buf[..n].copy_from_slice(&self.stored[..n]);
+        n
+    }
+
+    fn config_save(&mut self, record: &[u8]) {
+        self.stored = record.to_vec();
+        self.saves += 1;
+        if let Some(p) = &self.state_file {
+            let _ = std::fs::write(p, record);
+        }
+    }
+
     fn spi_write_framebuffer(&mut self, start: usize, end: usize) {
         self.spi_bytes += end - start;
         self.board
@@ -109,8 +128,13 @@ impl Default for ShackSim {
 }
 
 impl ShackSim {
-    /// Board powered at t = 0; the firmware ticks from t = 0.
+    /// Board powered at t = 0; the firmware ticks from t = 0. No stored settings.
     pub fn new() -> Self {
+        Self::with_stored(Vec::new())
+    }
+
+    /// As `new`, with this stored settings record in the MCU flash (a power cycle).
+    pub fn with_stored(stored: Vec<u8>) -> Self {
         let board = shared(ShackBoard::new(Corner::Typ));
         board.borrow_mut().set_env(|e| e.power = true);
         ShackSim {
@@ -119,6 +143,9 @@ impl ShackSim {
                 i2c: SimI2c(board.clone()),
                 framebuffer: vec![0; shack_ui::fb::BYTES],
                 spi_bytes: 0,
+                stored,
+                state_file: None,
+                saves: 0,
             },
             board,
             shack: Shack::new(),
@@ -212,6 +239,23 @@ impl ShackSim {
         self.press_reset();
         self.run(100);
         assert!(self.board.borrow().signals().tx_en, "TX_EN after start");
+    }
+
+    /// The stored settings record (empty when never saved).
+    pub fn stored(&self) -> Vec<u8> {
+        self.hw.stored.clone()
+    }
+
+    /// Number of flash writes of the settings.
+    pub fn saves(&self) -> usize {
+        self.hw.saves
+    }
+
+    /// Keep the stored settings in a file: load it now (if it exists), write it on every save.
+    pub fn use_state_file(path: &std::path::Path) -> Self {
+        let mut s = Self::with_stored(std::fs::read(path).unwrap_or_default());
+        s.hw.state_file = Some(path.to_path_buf());
+        s
     }
 
     /// What the simulated display shows: 320 x 240 RGB565 in window coordinates.

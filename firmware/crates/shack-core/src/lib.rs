@@ -3,5 +3,6 @@
 #![no_std]
 
 pub mod board;
+pub mod config;
 pub mod hw;
 pub mod shack;

@@ -240,6 +240,8 @@ impl Shack {
             warnings,
             stop,
             fault: self.fault_known,
+            antenna_names: self.config.antenna_names,
+            radio_names: self.config.radio_names,
         }
     }
 

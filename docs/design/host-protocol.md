@@ -73,6 +73,8 @@ Why text and not binary (postcard + COBS, the first idea in PLAN.md): you can dr
 | `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04) | `ok` |
 | `events on\|off` | Events on (default) or off | `ok` |
 | `keepalive <seconds>` | Host keep-alive time-out, 2 to 60 s (section 8) | `ok` |
+| `name <column or radio> <text>` | Set the name of an antenna (`A1` to `A4`, `EXP`) or a radio (`R1` to `R3`), 1 to 8 characters (the width of an antenna box on page B): letters, digits, `-`, `.`, `_`, `/`. Stored (section 8a) | `ok` |
+| `names` | All names, one line | `ok A1=G5RV A2=Loop A3=spare A4=spare EXP=unit2 R1=FT-710 R2=WSPR R3=spare` |
 | `page b\|c\|auto` | Display page: B flow (default), C cards, or auto (B 10 s, C 5 s). The Safe stop screen always takes over on a blocking problem (Prins, 2026-10-29) | `ok` |
 
 Error answers: `err <code> <text>`. Codes:
@@ -129,6 +131,27 @@ Decided (P3b-03). A Mac app that crashes while R2 is keyed would leave a WSPR tr
 - The time-out is 2 s. `keepalive <seconds>` sets it from 2 to 60 s, for typing by hand (Prins, 2026-10-29). It goes back to 2 s at every power-up. A host app leaves it at 2 s.
 - No line within the time-out: the shack ends every TX and releases every key, the normal way (inhibit first, F14), and sends `!host timeout`.
 - Routes, bias and the software stop stay as they are.
+
+## 8a. Stored settings
+
+Prins, 2026-10-29: the shack interface keeps its set-up over a power cycle, so the station can be used straight away.
+
+Stored in the shack MCU flash (ESP32-C3, P7):
+
+| Item | Stored | Note |
+|---|---|---|
+| Antenna and radio names | yes | `name` |
+| Route per radio (TX and RX column) | yes | The route the box reports after a `route` that it accepted |
+| Bias-T columns | yes | `bias` |
+| Display page | yes | `page` |
+| TX request, keys | **never** | A restart must not start a transmission |
+| Keep-alive time-out | no | Back to 2 s at power-up (section 8) |
+| Software stop | no | Off at power-up; the SAFE latch is set at power-up anyway |
+
+- Saved 2 s after the last change, so a burst of commands gives one flash write.
+- A record has a version byte and a CRC-16. A bad or missing record gives the defaults (names as in the requirements, no routes, no bias, page B) and the log line `# stored settings not found, defaults used`.
+- Restore: each time the box link comes up and the box is ready, the shack sends the stored routes and bias to the box. The box checks them like any other command (H1 to H4); a refusal comes as `!refused`. This also restores the routes after a box restart.
+- Restoring a route moves relays without a command from the operator. TX still needs RESET (SAFE latch), the permit and, for R2 and R3, the handshake.
 
 ## 9. Timing
 

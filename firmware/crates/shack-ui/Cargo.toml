@@ -11,6 +11,7 @@ link-proto = { path = "../link-proto" }
 embedded-graphics = "0.8"
 mplusfonts = "0.3.4"
 heapless = "0.9.3"
+host-proto = { version = "0.1.0", path = "../host-proto" }
 
 [dev-dependencies]
 png = "0.18"

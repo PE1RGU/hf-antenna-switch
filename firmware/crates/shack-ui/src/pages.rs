@@ -2,9 +2,7 @@
 
 use crate::draw::{Target, dot, rect, route, rrect, text, tri};
 use crate::theme::*;
-use crate::{
-    ANTENNA_NAMES, Page, RADIO_NAMES, RadioMode, RadioUi, StopCause, UiState, Warning, band_name,
-};
+use crate::{ANTENNA_LABELS, Page, RadioMode, RadioUi, StopCause, UiState, Warning, band_name};
 use core::fmt::Write;
 use embedded_graphics::pixelcolor::Rgb565;
 use embedded_graphics::text::Alignment::{Center as C, Left as L, Right as R};
@@ -67,7 +65,7 @@ fn toast<D: Target>(d: &mut D, s: &UiState) {
         Warning::BiasFault(c) => write!(
             msg,
             "{} bias-T · no current",
-            ANTENNA_NAMES[c as usize - 1].0
+            ANTENNA_LABELS[c as usize - 1]
         ),
         Warning::TxSense(r) => write!(msg, "{} TX sense · no signal", RADIO_LABELS[r]),
         Warning::BoxFault(n) => write!(msg, "Box fault {n}"),
@@ -114,7 +112,7 @@ fn flow<D: Target>(d: &mut D, s: &UiState) {
             surf,
             L,
         );
-        let sub = if on { RADIO_NAMES[i] } else { "off" };
+        let sub = if on { s.radio_names[i].as_str() } else { "off" };
         text(
             d,
             &SMALL,
@@ -140,7 +138,11 @@ fn flow<D: Target>(d: &mut D, s: &UiState) {
             }
         }
     }
-    for (i, (a, n)) in ANTENNA_NAMES.iter().enumerate() {
+    for (i, (a, n)) in ANTENNA_LABELS
+        .iter()
+        .zip(s.antenna_names.iter().map(|n| n.as_str()))
+        .enumerate()
+    {
         let col = Col::ALL[i + 1];
         let surf = if used[i] { CARD } else { CARD_DIM };
         rrect(d, ANT_X, ant_y(i), 90, 30, 8, surf);
@@ -257,7 +259,7 @@ fn cards<D: Target>(d: &mut D, s: &UiState) {
         text(
             d,
             &SMALL,
-            RADIO_NAMES[i],
+            s.radio_names[i].as_str(),
             104,
             y + 15,
             if on { SEC } else { FAINT },
@@ -312,7 +314,7 @@ fn route_row<D: Target>(d: &mut D, s: &UiState, surf: Rgb565, y: i32, is_tx: boo
     );
     match col_index(c) {
         Some(i) => {
-            let (a, n) = ANTENNA_NAMES[i];
+            let (a, n) = (ANTENNA_LABELS[i], s.antenna_names[i].as_str());
             let warn = bias_fault(s, c);
             text(
                 d,

@@ -51,6 +51,21 @@ fn every_command_parses() {
         ("events off", HostCommand::Events(false)),
         ("keepalive 60", HostCommand::KeepAlive(60)),
         ("page c", HostCommand::Page(PageSel::Cards)),
+        ("names", HostCommand::Names),
+        (
+            "name a3 Hexbeam",
+            HostCommand::Name {
+                target: NameTarget::Antenna(Col::A3),
+                name: Name::new("Hexbeam").unwrap(),
+            },
+        ),
+        (
+            "name R2 IC-7300",
+            HostCommand::Name {
+                target: NameTarget::Radio(Radio::R2),
+                name: Name::new("IC-7300").unwrap(),
+            },
+        ),
         ("page AUTO", HostCommand::Page(PageSel::Auto)),
         ("KEEPALIVE 2", HostCommand::KeepAlive(2)),
         ("  STATUS  \r", HostCommand::Status),
@@ -76,6 +91,11 @@ fn errors() {
         ("bias A1,,A2", ErrorCode::Arg),
         ("keepalive 1", ErrorCode::Arg),
         ("page d", ErrorCode::Arg),
+        ("name - Beam", ErrorCode::Arg),
+        ("name A9 Beam", ErrorCode::Arg),
+        ("name A1 Toolongname", ErrorCode::Arg),
+        ("name A1 G5RV!", ErrorCode::Arg),
+        ("name A1 Two words", ErrorCode::Syntax),
         ("keepalive 61", ErrorCode::Arg),
         ("keepalive 300", ErrorCode::Arg),
         ("keepalive soon", ErrorCode::Arg),
@@ -207,6 +227,25 @@ fn command() -> impl Strategy<Value = HostCommand> {
         (KEEP_ALIVE_MIN_S..=KEEP_ALIVE_MAX_S).prop_map(HostCommand::KeepAlive),
         prop::sample::select(vec![PageSel::Flow, PageSel::Cards, PageSel::Auto])
             .prop_map(HostCommand::Page),
+        Just(HostCommand::Names),
+        (
+            prop::sample::select(Col::ALL[1..].to_vec()),
+            "[A-Za-z0-9._/-]{1,8}"
+        )
+            .prop_map(|(c, s)| HostCommand::Name {
+                target: NameTarget::Antenna(c),
+                name: Name::new(&s).unwrap(),
+            }),
+        (
+            prop::sample::select(Radio::ALL.to_vec()),
+            "[A-Za-z0-9._/-]{1,8}"
+        )
+            .prop_map(|(r, s)| {
+                HostCommand::Name {
+                    target: NameTarget::Radio(r),
+                    name: Name::new(&s).unwrap(),
+                }
+            }),
     ]
 }
 
@@ -223,4 +262,18 @@ proptest! {
     fn any_text_no_panic(s in "\\PC{0,200}") {
         let _ = parse(&s);
     }
+}
+
+#[test]
+fn names_line() {
+    let a = ["G5RV", "Loop", "spare", "spare", "unit2"].map(|s| Name::new(s).unwrap());
+    let r = ["FT-710", "WSPR", "spare"].map(|s| Name::new(s).unwrap());
+    assert_eq!(
+        NamesLine {
+            antennas: &a,
+            radios: &r
+        }
+        .to_string(),
+        "ok A1=G5RV A2=Loop A3=spare A4=spare EXP=unit2 R1=FT-710 R2=WSPR R3=spare"
+    );
 }

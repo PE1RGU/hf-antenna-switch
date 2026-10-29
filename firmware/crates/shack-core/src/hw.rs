@@ -26,4 +26,8 @@ pub trait ShackHw {
     fn framebuffer(&mut self) -> &mut [u8];
     /// Send `framebuffer()[start..end]` over the display SPI.
     fn spi_write_framebuffer(&mut self, start: usize, end: usize);
+    /// Stored settings (host-protocol.md 8a): copy the stored record into `buf`,
+    /// return its length; 0 when there is none. Flash on the target.
+    fn config_load(&mut self, buf: &mut [u8]) -> usize;
+    fn config_save(&mut self, record: &[u8]);
 }

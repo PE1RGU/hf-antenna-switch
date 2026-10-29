@@ -18,20 +18,14 @@ pub use fb::FrameBuffer;
 pub use pages::render;
 
 use heapless::Vec;
+pub use host_proto::Name;
 use link_proto::{Col, ColMask, Route};
 
 pub const WIDTH: u32 = 320;
 pub const HEIGHT: u32 = 240;
 
-/// Station names (requirements.md). Fixed for now; configurable later.
-pub const RADIO_NAMES: [&str; 3] = ["FT-710", "WSPR", "spare"];
-pub const ANTENNA_NAMES: [(&str, &str); 5] = [
-    ("A1", "G5RV"),
-    ("A2", "Loop"),
-    ("A3", "spare"),
-    ("A4", "spare"),
-    ("EXP", "unit 2"),
-];
+/// Column labels. The names come with the state (stored settings, `name` command).
+pub const ANTENNA_LABELS: [&str; 5] = ["A1", "A2", "A3", "A4", "EXP"];
 
 /// The page on screen.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -103,6 +97,9 @@ pub struct UiState {
     pub stop: Option<StopCause>,
     /// Supervisor fault known after start-up (C-2): TX blocked until `clearfault`.
     pub fault: bool,
+    /// A1 to A4, EXP.
+    pub antenna_names: [Name; 5],
+    pub radio_names: [Name; 3],
 }
 
 impl UiState {

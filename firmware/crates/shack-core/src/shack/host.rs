@@ -8,7 +8,7 @@ use core::fmt::{self, Write as _};
 use heapless::{String, Vec};
 use host_proto::{
     BoxPart, ErrorCode, ErrorLine, HostCommand, HostEvent, KEEP_ALIVE_DEFAULT_S, MAX_LINE,
-    PROTO_VERSION, RadioStatus, StatusLine, TxPhase, parse,
+    NameTarget, NamesLine, PROTO_VERSION, RadioStatus, StatusLine, TxPhase, parse,
 };
 
 /// Longest line the shack sends (the status line is about 200 characters).
@@ -60,7 +60,7 @@ impl HostPort {
         let _ = self.queued.push_back(e);
     }
 
-    fn log(&mut self, text: &'static str) {
+    pub(super) fn log(&mut self, text: &'static str) {
         if self.logs.is_full() {
             self.logs.pop_front();
         }
@@ -109,7 +109,7 @@ impl Shack {
             } else {
                 match core::str::from_utf8(&line) {
                     Ok(l) if l.trim().is_empty() => continue,
-                    Ok(l) => parse(l).and_then(|cmd| self.host_command(cmd, hw)),
+                    Ok(l) => parse(l).and_then(|cmd| self.host_command(now, cmd, hw)),
                     Err(_) => Err(ErrorCode::Syntax),
                 }
             };
@@ -123,6 +123,7 @@ impl Shack {
 
     fn host_command<H: ShackHw>(
         &mut self,
+        now: Ms,
         cmd: HostCommand,
         hw: &mut H,
     ) -> Result<Option<String<OUT_LINE>>, ErrorCode> {
@@ -180,7 +181,31 @@ impl Shack {
             }
             HostCommand::Events(on) => self.host.events_on = on,
             HostCommand::KeepAlive(s) => self.host.keep_alive_s = s,
-            HostCommand::Page(p) => self.set_page(p),
+            HostCommand::Page(p) => {
+                self.set_page(p);
+                self.config.page = p;
+                self.config_changed(now);
+            }
+            HostCommand::Name { target, name } => {
+                match target {
+                    NameTarget::Antenna(c) => self.config.antenna_names[c as usize - 1] = name,
+                    NameTarget::Radio(r) => self.config.radio_names[r.index()] = name,
+                }
+                self.config_changed(now);
+            }
+            HostCommand::Names => {
+                let mut s = String::new();
+                let c = &self.config;
+                let _ = write!(
+                    s,
+                    "{}",
+                    NamesLine {
+                        antennas: &c.antenna_names,
+                        radios: &c.radio_names
+                    }
+                );
+                return Ok(Some(s));
+            }
         }
         Ok(None)
     }

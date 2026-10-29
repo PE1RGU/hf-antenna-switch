@@ -655,6 +655,7 @@ dependencies = [
 name = "shack-core"
 version = "0.1.0"
 dependencies = [
+ "crc",
  "embedded-hal",
  "heapless",
  "host-proto",
@@ -669,6 +670,7 @@ version = "0.1.0"
 dependencies = [
  "embedded-graphics",
  "heapless",
+ "host-proto",
  "link-proto",
  "mplusfonts",
  "png",
