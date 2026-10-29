@@ -243,3 +243,16 @@ fn iterm2_without_font_size_gets_images() {
     let a = App::new(ShackSim::new(), p, None);
     assert!(!a.text_view);
 }
+
+#[test]
+fn iterm_hint_trusts_term_program_first() {
+    use sim_shack::tui::iterm_hint_from;
+    assert!(iterm_hint_from(Some("iTerm.app"), Some("iTerm2")));
+    assert!(iterm_hint_from(Some("iTerm.app"), None));
+    assert!(
+        !iterm_hint_from(Some("Apple_Terminal"), Some("iTerm2")),
+        "leaked LC_TERMINAL"
+    );
+    assert!(iterm_hint_from(None, Some("iTerm2")), "over ssh");
+    assert!(!iterm_hint_from(None, None));
+}

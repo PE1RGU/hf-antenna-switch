@@ -4,6 +4,7 @@
 //!   --state <file>   stored settings file (default shack-sim-state.bin)
 //!   --tcp <port>     TCP host port on 127.0.0.1 (default 7300); --no-tcp for none
 //!   --view text|pixels  display view (default: by what the terminal supports)
+//!   --probe          print what the display detection sees, then exit
 //!   --demo           print a timeline of a start-up and one R2 transmission, no UI
 //!   --pty            Unix only: host port on a pseudo-terminal, no UI
 
@@ -40,7 +41,9 @@ fn main() {
     } else {
         Some(value("--tcp").and_then(|p| p.parse().ok()).unwrap_or(7300))
     };
-    if args.iter().any(|a| a == "--demo") {
+    if args.iter().any(|a| a == "--probe") {
+        sim_shack::tui::probe();
+    } else if args.iter().any(|a| a == "--demo") {
         demo();
     } else if args.iter().any(|a| a == "--pty") {
         #[cfg(unix)]

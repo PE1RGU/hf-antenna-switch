@@ -490,8 +490,60 @@ pub fn fix_picker(p: Picker, iterm_hint: bool, window: Option<(u16, u16, u16, u1
 }
 
 fn iterm_hint() -> bool {
-    let has = |var: &str| std::env::var(var).is_ok_and(|v| v.contains("iTerm"));
-    has("TERM_PROGRAM") || has("LC_TERMINAL")
+    iterm_hint_from(
+        std::env::var("TERM_PROGRAM").ok().as_deref(),
+        std::env::var("LC_TERMINAL").ok().as_deref(),
+    )
+}
+
+/// TERM_PROGRAM names the terminal this program runs in. LC_TERMINAL can leak into
+/// other terminals (started from iTerm2, or set in a shell profile), so it only
+/// counts when TERM_PROGRAM is not set (over ssh, for example).
+pub fn iterm_hint_from(term_program: Option<&str>, lc_terminal: Option<&str>) -> bool {
+    match term_program {
+        Some(t) if !t.is_empty() => t.contains("iTerm"),
+        _ => lc_terminal.is_some_and(|l| l.contains("iTerm")),
+    }
+}
+
+/// `--probe`: what the display detection sees, for a terminal that shows the wrong view.
+pub fn probe() {
+    let env = |v: &str| std::env::var(v).unwrap_or_else(|_| "(not set)".into());
+    println!("TERM_PROGRAM = {}", env("TERM_PROGRAM"));
+    println!("LC_TERMINAL  = {}", env("LC_TERMINAL"));
+    println!("TERM         = {}", env("TERM"));
+    match window_pixels() {
+        Some((c, r, w, h)) => println!("window       = {c} x {r} cells, {w} x {h} px"),
+        None => println!("window       = (unknown)"),
+    }
+    let queried = Picker::from_query_stdio();
+    match &queried {
+        Ok(p) => println!(
+            "query        = {:?}, font {}x{} px",
+            p.protocol_type(),
+            p.font_size().width,
+            p.font_size().height
+        ),
+        Err(e) => println!("query        = error: {e:?}"),
+    }
+    let hint = iterm_hint();
+    println!("iTerm2 hint  = {hint}");
+    let p = fix_picker(
+        queried.unwrap_or_else(|_| Picker::halfblocks()),
+        hint,
+        window_pixels(),
+    );
+    let view = if p.protocol_type() == ProtocolType::Halfblocks {
+        "text"
+    } else {
+        "pixel"
+    };
+    println!(
+        "result       = {:?}, font {}x{} px: {view} view",
+        p.protocol_type(),
+        p.font_size().width,
+        p.font_size().height
+    );
 }
 
 fn window_pixels() -> Option<(u16, u16, u16, u16)> {
