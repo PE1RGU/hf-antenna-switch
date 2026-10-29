@@ -106,19 +106,19 @@ Rust allows that with `Rc<RefCell<ShackBoard>>`: `Rc` is a shared handle, and `R
 
 `Shack::tick` (in `crates/shack-core/src/shack/mod.rs`) runs every 10 ms. In order:
 
-1. **Watchdog.** Toggle WDI. A firmware hang stops the toggling, and the supervisor sets the fault latch, which inhibits every radio in hardware.
-2. **SAFE loop.** Read GPIO21: is there SAFE loop current?
-3. **Stored settings.** On the first tick only: load the names, routes, bias and page from flash.
-4. **Expander.** If needed, set up the PCA9539 (outputs first, then configuration: rule F1). Then read its inputs: TX sense of each radio, R1 band data, KILL switch, SAFE latch.
-5. **Box link in.** Feed the received UART bytes to the link decoder. A complete answer from the box updates the box status.
-6. **Host port in.** Read the USB lines from the computer, and answer each command.
-7. **Keep-alive and restore.** End TX if the host went silent (section 8 of host-protocol.md). After a link-up, send the stored routes back to the box.
-8. **TX state machines.** Move R2 and R3 on (request, permit, end).
-9. **Box link out.** Send the next command to the box, or a poll.
-10. **Outputs.** Set the PERMIT lines and the expander outputs (keys, software stop). Permits that go off are written first: inhibit first.
-11. **Host port out.** Send events (`!` lines) for everything that changed.
-12. **Display.** Start the ST7789, or send the next part of a frame (48 rows per tick).
-13. **Save settings.** If something changed 2 s ago, write the settings to flash.
+1. **SAFE loop.** Read GPIO21: is there SAFE loop current?
+2. **Stored settings.** On the first tick only: load the names, routes, bias and page from flash.
+3. **Expander.** If needed, set up the PCA9539 (outputs first, then configuration: rule F1). Then read its inputs: TX sense of each radio, R1 band data, KILL switch, SAFE latch.
+4. **Box link in.** Feed the received UART bytes to the link decoder. A complete answer from the box updates the box status.
+5. **Host port in.** Read the USB lines from the computer, and answer each command.
+6. **Keep-alive and restore.** End TX if the host went silent (section 8 of host-protocol.md). After a link-up, send the stored routes back to the box.
+7. **TX state machines.** Move R2 and R3 on (request, permit, end).
+8. **Box link out.** Send the next command to the box, or a poll.
+9. **Outputs.** Set the PERMIT lines and the expander outputs (keys, software stop). Permits that go off are written first: inhibit first.
+10. **Host port out.** Send events (`!` lines) for everything that changed.
+11. **Display.** Start the ST7789, or send the next part of a frame (48 rows per tick).
+12. **Save settings.** If something changed 2 s ago, write the settings to flash.
+13. **Watchdog.** Toggle WDI, last, after all the checks (D-59). A firmware hang stops the toggling, and the supervisor sets the fault latch, which inhibits every radio in hardware.
 
 ## 4. Follow one transmission
 
@@ -177,7 +177,7 @@ The firmware rules from the hardware verification, and where they are kept:
 | D-59 | LATCH_CLR only once at start-up, after the self-test (the expander set-up); not again after a later fault | `Shack::tick` (expander set-up), `clearfault` | `start_up_order`, `expander_lost_drops_permits_and_sets_up_again` |
 | F13 | The box keeps K0 while a permit is out; a link loss opens SAFE | `BoxStub` (box side), `Shack::on_link` (shack side) | `link_loss_with_permit_out` |
 | F14 | At TX end: inhibit first, then wait for TX sense off and 100 ms | `Shack::step_tx`, `Shack::apply_outputs` | `tx_end_waits_for_tx_sense_and_100_ms` |
-| Watchdog | WDI toggles only from the main loop | `Shack::tick` | `shack_mcu_hang` |
+| Watchdog | WDI toggles only from the main loop, after the checks of the pass (D-59) | `Shack::tick` | `shack_mcu_hang`, `watchdog_kick_comes_after_the_checks` |
 
 The tests are in `sim/sim-shack/tests/` and `sim/sim-models/tests/`.
 Each rule was once broken on purpose, to show that its test catches it.

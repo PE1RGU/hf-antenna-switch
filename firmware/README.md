@@ -135,7 +135,7 @@ On the display, red is transmit and green is receive. A thick red route means th
 | F1 | Press RESET (clears the SAFE latch, as the button on the front panel) |
 | F2 | Press or release the KILL switch |
 | F3 | Cut or restore the Cat6 cable |
-| F4 | Switch the 13.8 V supply off or on |
+| F4 | Switch the 13.8 V supply off or on. Off: the MCU stops. On: it starts from boot, with the stored settings, and the SAFE latch needs RESET |
 | F5, F6, F7 | Radio R1, R2, R3 transmits or stops (its TX sense) |
 | F8 | Box stops or resumes answering (box hang, or the data pair broken) |
 | F9 | Save the display as a PNG at full resolution (`shack-display-1.png`, ...) |

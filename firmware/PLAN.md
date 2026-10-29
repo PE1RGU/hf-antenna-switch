@@ -107,4 +107,5 @@ Scenarios: normal start-up, route change, R1 PTT, R2 and R3 handshake, KILL duri
 - Link protocol is not specified yet. P1 writes it.
 - Mac protocol: decided, text lines (docs/design/host-protocol.md, P3b-01).
 - Async (embassy) or a plain super-loop. Proposal: embassy for the I/O, with a synchronous state machine in each core crate, so tests need no executor.
+- Box firmware (P5): how the box leaves its "link lost during TX" stop (F13: MCU_EN_N = 1). The scripted box stays stopped for the rest of a run. To decide with the box start-up rules (F11).
 - Emulator of the real binary (Wokwi or Espressif QEMU) as a later extra. Only if the HAL-level model misses a class of bugs.

@@ -118,7 +118,7 @@ The shack is the master. The box speaks only to answer.
 - The box keeps the last seq and its result. A frame with the same seq is not executed again; the box sends the present Status with the stored result. So a lost answer cannot run a command twice.
 - All commands set a state, not a step. SetRoute, TxRequest, TxEnd and SetBias give the same result when sent twice.
 
-Start: the shack sends Hello until a HelloReply comes. Hello also clears the box seq store, so a restarted shack cannot hit an old seq. If the version differs, the shack does not send commands, reports this to the Mac once, and keeps sending Hello. The rx-only mask in HelloReply must match the shack's own table (unit 1: A2, D-103).
+Start: the shack sends Hello until a HelloReply comes. Hello also clears the box seq store, so a restarted shack cannot hit an old seq. If the version differs, the shack does not send commands, reports this to the Mac once, and keeps sending Hello, one every answer time-out (60 ms, section 6). The rx-only mask in HelloReply must match the shack's own table (unit 1: A2, D-103).
 
 ### 5.1 TX handshake, R2 and R3 (D-63, T3a, T3b, F2)
 

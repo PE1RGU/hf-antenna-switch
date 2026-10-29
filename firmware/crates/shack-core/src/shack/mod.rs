@@ -339,9 +339,17 @@ impl Shack {
     /// The order of the steps is in the crate docs. The call never blocks: the
     /// display, the link and the flash each do a short step per tick.
     pub fn tick<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
-        // Kick the supervisor from the main loop only (D-59 rule 1).
+        self.pass(now, hw);
+        // Kick the supervisor from the main loop only, after the checks of the pass
+        // (D-59 rule 1). A pass that hangs or panics gives no kick, so the
+        // supervisor sets the fault latch and every radio is inhibited in hardware.
         self.wdi = !self.wdi;
         hw.set_wdi(self.wdi);
+    }
+
+    /// The work of one tick, before the watchdog kick. Returns early when the
+    /// expander is not ready.
+    fn pass<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
         self.safe_lost = hw.safe_lost();
         self.load_config(hw);
 

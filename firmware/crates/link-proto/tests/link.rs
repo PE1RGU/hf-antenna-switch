@@ -316,6 +316,12 @@ fn version_mismatch_reported_once_and_no_commands() {
         .count();
     assert_eq!(mism, 1);
     assert!(!b.shack.is_up());
+    // Hello at the answer time-out pace (60 ms), not back to back.
+    assert!(
+        b.sent_down.len() <= 500 / ANSWER_TIMEOUT as usize + 1,
+        "{} Hello frames in 500 ms",
+        b.sent_down.len()
+    );
     assert!(
         b.sent_down
             .iter()

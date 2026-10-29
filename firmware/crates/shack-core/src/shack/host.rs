@@ -180,10 +180,16 @@ impl Shack {
                 // Same edge as at start-up; the latch ignores it while RESET_N is low.
                 hw.set_latch_clr(true);
                 hw.set_latch_clr(false);
+                // With the expander down, RESET_N may still be low and the latch then
+                // ignores the edge: keep the fault and say so, never claim a clear.
                 if self.expander_ready {
                     self.fault_known = false;
+                    self.host.log("fault latch cleared by host");
+                } else {
+                    self.host.log(
+                        "LATCH_CLR sent, but the expander is not ready: fault kept, try again",
+                    );
                 }
-                self.host.log("fault latch cleared by host");
             }
             HostCommand::Events(on) => self.host.events_on = on,
             HostCommand::KeepAlive(s) => self.host.keep_alive_s = s,

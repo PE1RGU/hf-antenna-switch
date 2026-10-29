@@ -34,7 +34,9 @@
 //!    readable.
 //! 2. Box stub: the scripted box reads the bytes that reached it, answers, and sets
 //!    its READY switch.
-//! 3. Firmware tick: when a tick is due (every [`TICK`] = 10 ms), the harness
+//! 3. Firmware tick: only with board power (an off-to-on change restarts the
+//!    firmware from boot, as a power cycle of the MCU; the stored settings stay).
+//!    When a tick is due (every [`TICK`] = 10 ms), the harness
 //!    calls [`Shack::tick`] with the glue. The firmware reads inputs, drives pins,
 //!    talks to the box and the host, and draws the display. The harness records
 //!    the firmware events in [`ShackSim::events`].
@@ -221,6 +223,8 @@ pub struct ShackSim {
     /// Every line the shack sent to the host, with its time.
     pub host_lines: Vec<(Ms, String)>,
     host_partial: String,
+    /// The 13.8 V supply at the last step: an off-to-on change restarts the MCU.
+    powered: bool,
 }
 
 impl Default for ShackSim {
@@ -260,6 +264,7 @@ impl ShackSim {
             next_tick: 0,
             host_lines: Vec::new(),
             host_partial: String::new(),
+            powered: true,
         }
     }
 
@@ -274,7 +279,18 @@ impl ShackSim {
         let t = self.now() + 1;
         self.board.borrow_mut().step_to(SimTime::ms(t));
         self.boxs.step(t, &mut self.board.borrow_mut());
-        if self.mcu_running && t >= self.next_tick {
+        // Power cycle: without 13.8 V the MCU is off (no ticks). When the supply
+        // returns, the MCU starts from boot: new firmware state, a hang is gone.
+        // The stored settings stay, as in flash.
+        let powered = self.board.borrow().env().power;
+        if powered && !self.powered {
+            self.shack = Shack::new();
+            self.mcu_running = true;
+            self.next_tick = t;
+            self.host_partial.clear();
+        }
+        self.powered = powered;
+        if powered && self.mcu_running && t >= self.next_tick {
             self.hw.spi_bytes = 0;
             self.shack.tick(t, &mut self.hw);
             self.spi_max_per_tick = self.spi_max_per_tick.max(self.hw.spi_bytes);

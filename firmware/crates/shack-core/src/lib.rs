@@ -39,7 +39,7 @@
 //! is a value that remembers where it is (for example "TX requested, no permit yet")
 //! and moves to the next state when an input changes. One tick does this, in order:
 //!
-//! 1. Toggle WDI (the supervisor watchdog) and read the SAFE sense.
+//! 1. Read the SAFE sense.
 //! 2. Load the stored settings (first tick only).
 //! 3. Set up the PCA9539 expander if it is not ready (F1 order), then give the
 //!    one LATCH_CLR edge after start-up. If the expander does not answer, answer
@@ -54,6 +54,8 @@
 //! 9. Send the next queued command (or a Poll) to the box.
 //! 10. Set the outputs: permits that go off, the expander, permits that go on.
 //! 11. Send events to the host, send one display chunk, save the settings when due.
+//! 12. Toggle WDI (the supervisor watchdog): last, after the checks of the pass, also
+//!     when the pass stopped early (D-59).
 //!
 //! # Safety idea
 //!

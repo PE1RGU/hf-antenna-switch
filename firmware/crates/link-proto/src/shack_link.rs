@@ -170,12 +170,17 @@ impl ShackLink {
                 if info.version == VERSION {
                     self.up = true;
                     self.mismatch_reported = false;
-                    Some(Event::Up(info))
-                } else if !self.mismatch_reported {
+                    return Some(Event::Up(info));
+                }
+                // Wrong version: keep asking, but at the answer time-out pace, not
+                // back to back. The Hello stays in flight from now, so `transmit`
+                // sends the next one ANSWER_TIMEOUT later (link-protocol.md 5).
+                self.in_flight = Some(InFlight { sent: now, ..f });
+                if self.mismatch_reported {
+                    None
+                } else {
                     self.mismatch_reported = true;
                     Some(Event::VersionMismatch(info))
-                } else {
-                    None
                 }
             }
             (cmd, Reply::Status(status)) if self.up => {

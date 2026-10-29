@@ -470,7 +470,10 @@ impl Board for ShackBoard {
     }
 
     fn usb_write(&mut self, byte: u8) {
-        self.usb_out.push(byte);
+        // No board power: the MCU is off and nothing reaches the host.
+        if self.env.power {
+            self.usb_out.push(byte);
+        }
     }
 
     fn usb_read(&mut self) -> Option<u8> {
