@@ -1,0 +1,91 @@
+{
+ "commands": [
+  {
+   "command": "render.settings.set",
+   "params": {
+    "name": "front-hero",
+    "set": {
+     "camera": {
+      "target": [
+       0,
+       20,
+       25
+      ],
+      "yaw": 2.55,
+      "pitch": 0.42,
+      "distance": 330,
+      "fov": 0.5
+     },
+     "width": 2400,
+     "height": 1500,
+     "job": {
+      "method": "cpu_raytrace",
+      "options": {
+       "budget": "studio",
+       "primary_samples": 16,
+       "shadows": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "command": "render.settings.set",
+   "params": {
+    "name": "rear",
+    "set": {
+     "camera": {
+      "target": [
+       0,
+       -20,
+       25
+      ],
+      "yaw": -0.6,
+      "pitch": 0.42,
+      "distance": 330,
+      "fov": 0.5
+     },
+     "width": 2400,
+     "height": 1500,
+     "job": {
+      "method": "cpu_raytrace",
+      "options": {
+       "budget": "studio",
+       "primary_samples": 16,
+       "shadows": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "command": "render.settings.set",
+   "params": {
+    "name": "front-straight",
+    "set": {
+     "camera": {
+      "target": [
+       0,
+       80,
+       25.6
+      ],
+      "yaw": 3.14159265,
+      "pitch": 0.0,
+      "distance": 260,
+      "fov": 0.5
+     },
+     "width": 2400,
+     "height": 1000,
+     "job": {
+      "method": "cpu_raytrace",
+      "options": {
+       "budget": "studio",
+       "primary_samples": 16,
+       "shadows": true
+      }
+     }
+    }
+   }
+  }
+ ]
+}

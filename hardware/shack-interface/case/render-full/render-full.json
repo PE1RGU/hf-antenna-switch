@@ -1,0 +1,346 @@
+{
+ "commands": [
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/hammond-no-endpanels.step",
+    "name": "Housing Hammond 1455T1601",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/ref-shack-interface-p8.step",
+    "name": "Main board p8b",
+    "matrix": [
+     -1,
+     0,
+     0,
+     80,
+     0,
+     -1,
+     0,
+     -79.5,
+     0,
+     0,
+     1,
+     10.93
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/front-panel-silk.step",
+    "name": "Front plate a8",
+    "matrix": [
+     -1,
+     0,
+     0,
+     82.5,
+     0,
+     0,
+     1,
+     81.8,
+     0,
+     1,
+     0,
+     51.312
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/rear-panel-silk.step",
+    "name": "Rear plate a8",
+    "matrix": [
+     1,
+     0,
+     0,
+     -82.5,
+     0,
+     0,
+     -1,
+     -81.8,
+     0,
+     1,
+     0,
+     51.312
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/kill-eao-84.step",
+    "name": "KILL EAO 84",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/endplates/parts/CK_8125SHZBE.stp",
+    "name": "RESET CK 8125",
+    "matrix": [
+     1,
+     0,
+     0,
+     -40.5,
+     0,
+     1,
+     0,
+     79.8,
+     0,
+     0,
+     1,
+     20.312
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "appearance.assign",
+   "params": {
+    "components": [
+     "RESET CK 8125"
+    ],
+    "color": "#b0b4b8",
+    "pbr": {
+     "metallic": 1.0,
+     "roughness": 0.3,
+     "dielectric_ior": 1.5
+    }
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/leds.step",
+    "name": "Panel LEDs",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/display-2inch.step",
+    "name": "Display Waveshare 2inch",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/display-frame.step",
+    "name": "Display frame D-187",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/display-plug.step",
+    "name": "Display plug PHR-8",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/spacers.step",
+    "name": "Spacers WA-SMSI",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "file.insert_step",
+   "params": {
+    "path": "/Users/pdoornek/Documents/3. WorkingCopy/Projects/Ham/antenna switch/hardware/shack-interface/case/render-full/screws.step",
+    "name": "Screws M2.5",
+    "matrix": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0
+    ]
+   }
+  },
+  {
+   "command": "component.activate",
+   "params": {
+    "component": "root"
+   }
+  },
+  {
+   "command": "render.scene",
+   "params": {}
+  }
+ ]
+}

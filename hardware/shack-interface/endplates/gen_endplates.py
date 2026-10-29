@@ -11,7 +11,7 @@ Panel frame: u from the left edge, v from the top edge, both as seen from outsid
 import math
 import pcbnew
 
-REV = "a3"
+REV = "a8"
 MAIN = "../shack-interface.kicad_pcb"
 OX, OY = 20.0, 20.0
 PW, PH, PR = 165.0, 51.13, 3.9                       # plate outline (Hammond STEP: 164.998 x 51.130, R 3.9)
@@ -32,13 +32,20 @@ RECT_M = 0.3                                          # cut-out margin per side 
 MINIDIN_D = 10.5                                      # plug shell 9.5 mm passes; the overmold stops on the plate
 USBC_SLOT = (13.0, 7.0)                               # D-96: overmold up to 12.35 x 6.5 mm passes
 # front plate controls (D-180 to D-182; a3 after the main board p6). Panel frame (u, v) from outside; board x = u - 2.5.
-# Depth behind the plate: the DevKit (board x 56 to 122, up to y 146) leaves about 13 mm, the free area right of it
-# (board x 122 to 156, front) takes the KILL and RESET bodies; the display (about 11 mm deep with its cable) sits on the
-# left, over the wire headers J6, J2, J7, which moved back to y 146.5 (p6).
-KILL = (146.0, 21.0)                                  # EAO 84-5340.0020: cut-out 22.3 mm with a 3.2 mm key to 24.1 mm, head 32 mm
-RESET = (125.0, 31.0)                                 # C&K 8125SHZBE: 1/4-40 bushing, hole 6.5 mm (body at board x 119 to 126)
+# Depth behind the plate (3D fit M-100, a4): KILL holder 13.8 mm deep with the tabs, RESET 14.3 mm, display 7.6 mm with
+# the cable plug. KILL moved 2 mm inboard in a4: at u 146 its 29.8 mm holder came 0.3 mm from the extrusion side wall.
+# RESET moved with it (KILL holder to RESET body 1.35 mm). RESET lugs end 2.7 mm in front of the DevKit (A1).
+KILL = (144.0, 21.0)                                  # EAO 84-5340.0020: cut-out 22.3 mm with a 3.2 mm key to 24.1 mm, head 32 mm
+RESET = (123.0, 31.0)                                 # C&K 8125SHZBE: 1/4-40 bushing, hole 6.5 mm, body 12.7 x 6.8 mm, flange 8 mm
 LEDS = {"SAFE": (108.0, 12.0), "LATCHED": (121.0, 12.0)}   # 3 mm panel LEDs, hole 4.0 mm (Dialight 558: 3.94 to 4.01 mm)
-DISP = (12.0, 4.2)                                    # Waveshare 1.9" module top left (51.2 x 27.3); active area x 6.24..48.96, y 2.30..25.01 (module STEP)
+DISP = (15.0, 8.0)                                    # Waveshare 2inch module (D-187) PCB top left (58.0 x 35.0); module STEP x 0 at u 45.71, y 0 at v 25.5
+DISP_AA = (-20.4, 20.4, -15.3, 15.3)                  # active area in the module STEP (x0, x1, y0, y1); cell frame ring x -24.7..21.9, y +-16.8
+# Display frame (D-184, D-187 a8): printed frame (endplates/display-frame/gen_display_frame.py) on the module PCB back
+# (M2 x 5 from the front into heat-set inserts; the module's own hex pillars are not used), fixed to four SMD steel
+# spacers on the inside face, Wurth WA-SMSI 9774055151R (M2.5, OD 5.1 mm, L 5.5 mm = frame face). Pad 6.0 mm without the
+# 3.7 mm hole of the Wurth land pattern, so the outside face stays closed (A-29). Right pair at v 10 / 41, clear of the
+# PH2.0 plug and its cable (v 15 to 36); left pair at v 11 / 35 so its screw heads stay 1.6 mm above the main board top face (J6 at w 11.4).
+DSTAND = [(11.5, 11.0), (11.5, 35.0), (77.5, 10.0), (77.5, 41.0)]   # same list as display-frame/gen_display_frame.py
 
 
 def main_board():
@@ -107,7 +114,8 @@ def build(side):
         b.Add(f); KEEP.append(f)
     # cut-outs
     CUTS = []                                          # (u0, v0, u1, v1) of every opening, for the vias and the labels
-    refs = ["J3", "J1", "J11", "J12", "J13"] if side == "rear" else ["J14"]
+    # D-186 (a7, main board p7): J14 sits at the rear edge, so the USB-C slot is in the rear plate; none in the front plate
+    refs = ["J3", "J1", "J11", "J12", "J13", "J14"] if side == "rear" else []
     for r in refs:
         kind = FACE[r][0]
         if kind == "round":
@@ -130,9 +138,20 @@ def build(side):
         circle(*RESET, 6.5); CUTS.append(("RESET", RESET[0] - 3.25, RESET[1] - 3.25, RESET[0] + 3.25, RESET[1] + 3.25))
         for n, (lu, lv) in LEDS.items():
             circle(lu, lv, 4.0); CUTS.append((n, lu - 2.0, lv - 2.0, lu + 2.0, lv + 2.0))
-        du, dv = DISP; wu0, wu1 = du + 6.24 - 0.3, du + 48.96 + 0.3; wv0, wv1 = dv + 27.3 - 25.01 - 0.3, dv + 27.3 - 2.30 + 0.3
+        du, dv = DISP; x0, x1, y0, y1 = DISP_AA                            # window = active area + 0.3 mm per side
+        wu0, wu1 = du + 30.71 + x0 - 0.3, du + 30.71 + x1 + 0.3; wv0, wv1 = dv + 17.5 - y1 - 0.3, dv + 17.5 - y0 + 0.3
         rrect(wu0, wv0, wu1, wv1, 0.5); CUTS.append(("DISPLAY", wu0, wv0, wu1, wv1))
-        rrect(du, dv, du + 51.2, dv + 27.3, 1.0, pcbnew.B_SilkS, 0.15)     # module outline on the inside face (assembly)
+        rrect(du, dv, du + 58.0, dv + 35.0, 1.0, pcbnew.B_SilkS, 0.15)     # module outline on the inside face (assembly)
+        for k, (su, sv) in enumerate(DSTAND):                              # SMD spacer pads, no net, clear of the plane
+            f = pcbnew.FOOTPRINT(b); f.SetReference(f"SP{k + 1}"); f.Reference().SetVisible(False); f.Value().SetVisible(False)
+            f.SetAttributes(pcbnew.FP_SMD); f.SetPosition(P(su, sv))
+            pd = pcbnew.PAD(f); pd.SetShape(pcbnew.PAD_SHAPE_CIRCLE); pd.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+            pd.SetSize(pcbnew.VECTOR2I(mm(6.0), mm(6.0))); pd.SetNumber("1")
+            ls = pcbnew.LSET(); ls.AddLayer(pcbnew.F_Cu); ls.AddLayer(pcbnew.F_Mask); ls.AddLayer(pcbnew.F_Paste); pd.SetLayerSet(ls)
+            pd.SetLocalClearance(mm(0.5)); pd.SetPosition(P(su, sv)); f.Add(pd)
+            b.Add(f); f.Flip(P(su, sv), pcbnew.FLIP_DIRECTION_LEFT_RIGHT); KEEP.append(f)
+            circle(su, sv, 7.2, pcbnew.B_SilkS, 0.15)
+        text("SP1 to SP4: WA-SMSI 9774055151R", du + 29.0, dv + 35.0 + 2.5, 1.0, 0.15, pcbnew.B_SilkS)
     for (r, u0, v0, u1, v1) in CUTS:
         assert WINDOW[0] < u0 and u1 < WINDOW[2] and WINDOW[1] < v0 and v1 < WINDOW[3], (r, "outside the bezel window")
     C = {r: (u0, v0, u1, v1) for (r, u0, v0, u1, v1) in CUTS}
@@ -151,7 +170,7 @@ def build(side):
     text("SHACK RELAY MATRIX   SHACK INTERFACE", PW / 2, 8.0 if side == "rear" else PH - 5.0, 2.0, 0.3)
     if side == "rear":
         above("J11", "R1  FT-710"); above("J12", "R2"); above("J13", "R3"); above("J1", "CAT6  BOX")
-        above("J3", "13.8 V DC")
+        above("J3", "13.8 V DC"); above("J14", "USB")
         # polarity beside the XT60 opening, on the side of each pin (KiCad footprint pin 1 GND, pin 2 +, D-171;
         # polarity on the real part M-02)
         u0, v0, u1, v1 = C["J3"]; pu = {n: panel_uv(side, XT60_PINS[n], 0.0)[0] for n in ("1", "2")}
@@ -159,14 +178,13 @@ def build(side):
             left = pu[n] < (u0 + u1) / 2
             text(s_, u0 - 2.6 if left else u1 + 2.6, (v0 + v1) / 2, 2.5, 0.35)
     else:
-        above("J14", "USB")
         def below(r, s, h=1.5, t=0.25, dv=2.2):
             u0, v0, u1, v1 = C[r]; text(s, (u0 + u1) / 2, v1 + dv, h, t)
         text("KILL", KILL[0], KILL[1] + 16.0 + 2.2, 2.0, 0.3)               # below the 32 mm head
         below("RESET", "RESET"); below("SAFE", "SAFE", 1.2, 0.2, 1.6); below("LATCHED", "LATCHED", 1.2, 0.2, 1.6)
     text("73 de PE1RGU", 9.0, PH - 7.0, 1.0, 0.15, just="l")
     # inside face: identification
-    text(f"SRM shack interface {side} plate  rev A ({REV})  2026-10", PW / 2, PH - 8.0, 1.0, 0.15, pcbnew.B_SilkS)
+    text(f"SRM shack interface {side} plate  rev A ({REV})  2026-10", PW / 2, PH - (4.0 if side == "front" else 8.0), 1.0, 0.15, pcbnew.B_SilkS)   # front: below the 2inch module outline and SP4
 
     fn = f"{side}-panel.kicad_pcb"
     b.Save(fn)

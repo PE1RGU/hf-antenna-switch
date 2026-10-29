@@ -4,7 +4,7 @@ Status: draft, 2026-10-25 (layout p3 routed). Drawn from design-log.md, hardware
 
 ## 1. Function and interfaces
 
-The shack interface is the shack end of Cat6 #1 to the matrix box. It is an own board in an aluminium housing (D-70). It works stand-alone with its USB-C to the Mac, through the Delock 64226 isolator hub (A-16, D-68, D-69). A Raspberry Pi 5 can connect later over the same USB (D-65, D-67).
+The shack interface is the shack end of Cat6 #1 to the matrix box. It is an own board in an aluminium housing (D-70). It works stand-alone with its USB-C to the Mac, through the Delock 64226 isolator hub (A-16, D-68, D-69). Since D-186 (p7) J14 sits at the rear edge, so all cables enter at the rear panel. A Raspberry Pi 5 can connect later over the same USB (D-65, D-67).
 
 Functions:
 
@@ -23,7 +23,7 @@ Interfaces (all connectors on the root sheet):
 | Front panel J6 | RESET button, SAFE and LATCHED LEDs |
 | R1 to R3 mini-DIN 8 | Radio ports, FT-710 TUNER/LINEAR pin-out, one adapter cable per radio (D-71, D-85) |
 | R1 to R3 LED | Per-radio status LEDs on the panel |
-| USB-C J14 | GCT USB4105-GF-A at the housing wall, to the Mac or the Pi (D-96) |
+| USB-C J14 | GCT USB4105-GF-A at the rear board edge and rear plate (D-96, D-186), to the Mac or the Pi |
 | CHASSIS lug | Housing bond; GDT surge path |
 
 ## 2. Circuit description
@@ -134,7 +134,7 @@ Details in design-log.md section 4.
 - Cat6 entry: the four GDTs in one row directly behind the RJ45, so the surge path to CHASSIS is short (M-88).
 - USB-C J14: fixed fan-out copper with router terminals (M-89).
 - Housing fit (M-92 to M-94, D-177, D-178): 1455T1601 with the removable cap on top, board parts side up in the 2nd slot from the closed bottom; panel connectors overhang the board edges by 2.0 mm and J14 sits on a 13 x 2.0 mm board tab, so each connector face is 0.3 mm from its end panel. Trim the 7805 leads to 3 mm or less.
-- Front panel (D-180 to D-182, M-99): Waveshare 1.9" TFT (SPI on IO2/IO9, DC/RST/backlight on the PCA9539, header J15), SAFE and LATCHED LEDs (hardware), RESET (C&K 8125SHZBE), KILL (EAO 84-5340.0020 E-stop, 2 NC, R75 2k2).
+- Front panel (D-180 to D-183, M-99, M-100; plate a4, 3D fit with the maker models): Waveshare 1.9" TFT (SPI on IO2/IO9, DC/RST/backlight on the PCA9539, header J15), SAFE and LATCHED LEDs (hardware), RESET (C&K 8125SHZBE), KILL (EAO 84-5340.0020 E-stop, 2 NC, R75 2k2).
 - End plates (D-179): PCBs, black mask, white silkscreen, CHASSIS plane on the inside face, bonded through the four screws; generator hardware/shack-interface/endplates/gen_endplates.py. H1 earth wire to the extrusion.
 - Input range 11 to 15 V checked (C-34). TVS and 7805 capacitor exceptions recorded (D-124).
 
@@ -147,6 +147,7 @@ Desk checks on the schematic; nothing is measured yet.
 - verify_system.py with si14.xml and ctl11.xml: 52 checks pass (M-45). Covers the shack loop source and software stop, the SAFE latch, TX_EN, the TX INH and keying logic per port, the part types, the Cat6 pin-out on both boards, the 256-state SAFE loop table and the TX handshake with fault cases (M-11, M-29, M-36).
 - Footprints: photorelay land and MD-80SM land checked by STL export (M-26, M-27); Kycon second source against the land (M-28).
 
+- Layout p7 (2026-10-27, D-186, M-102): J14 at the rear edge in a GND channel between the entry block and R1; port pitch 32 mm; 155 of 155 nets routed, 425 vias; DRC 0 copper violations, 0 unconnected.
 - Layout p3 (2026-10-25, M-85 to M-90): placement by templates (total signal airwire 4485 mm at p1, 3871 mm at p3); 156 of 156 nets routed by the general router, 428 vias; stitching CHASSIS 165, GND 529, RGND 120; DRC 0 copper violations, 0 unconnected. Left: silkscreen findings, starved thermals, 4 hole clearances inside the J14 footprint (A-26), 4 right-angle bends.
 
 ## 7. Open items

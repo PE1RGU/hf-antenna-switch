@@ -1,0 +1,85 @@
+{
+ "commands": [
+  {
+   "command": "render.settings.set",
+   "params": {
+    "name": "front-hero",
+    "set": {
+     "stage": [],
+     "exposure_ev": 0.0,
+     "job": {
+      "method": "cpu_raytrace",
+      "options": {
+       "budget": "studio",
+       "primary_samples": 16,
+       "shadows": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "command": "render.library.environment.apply",
+   "params": {
+    "id": "HDR-001",
+    "name": "front-hero",
+    "samples": 16,
+    "replace_environment": true
+   }
+  },
+  {
+   "command": "render.settings.set",
+   "params": {
+    "name": "rear",
+    "set": {
+     "stage": [],
+     "exposure_ev": 0.0,
+     "job": {
+      "method": "cpu_raytrace",
+      "options": {
+       "budget": "studio",
+       "primary_samples": 16,
+       "shadows": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "command": "render.library.environment.apply",
+   "params": {
+    "id": "HDR-001",
+    "name": "rear",
+    "samples": 16,
+    "replace_environment": true
+   }
+  },
+  {
+   "command": "render.settings.set",
+   "params": {
+    "name": "front-straight",
+    "set": {
+     "stage": [],
+     "exposure_ev": 0.0,
+     "job": {
+      "method": "cpu_raytrace",
+      "options": {
+       "budget": "studio",
+       "primary_samples": 16,
+       "shadows": true
+      }
+     }
+    }
+   }
+  },
+  {
+   "command": "render.library.environment.apply",
+   "params": {
+    "id": "HDR-001",
+    "name": "front-straight",
+    "samples": 16,
+    "replace_environment": true
+   }
+  }
+ ]
+}

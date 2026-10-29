@@ -2,6 +2,19 @@
 
 Newest first. Board revisions follow the design log IDs.
 
+## 2026-10-29
+- M-106: full SolidCraft render of the shack interface (housing, board p8b, plates a8, controls, 2inch display and frame) in hardware/shack-interface/case/render-full/.
+- README: new section 'Inside the shack interface' with an open-case view (docs/images/shack-interface-open.png, SolidCraft snapshot with the cover hidden).
+
+## 2026-10-28
+- D-187, M-103, A-31: display changes to the Waveshare 2inch LCD Module (240x320 IPS, ST7789VW). Front plate a8 (window 41.4 x 31.2 mm, centred in the housing opening); new printed frame on the module PCB back (heat-set inserts, crush ribs) on four WA-SMSI 9774055151R spacers; DRC 0 on both plates. Main board layout p8 (M-104): front notch for the display stack (10.0 to 11.5 mm deep over 76 mm), routed again 155 of 155, DRC 0 copper and unconnected; board edge 1.64 mm from the display stack. p8b (M-105): the notch runs to the left edge; the small corner piece is removed; DRC unchanged. 1.9 inch frame and plate a7 kept in endplates/_archive/front-a7-1.9in/.
+
+## 2026-10-27
+- D-186, M-102: shack interface p7: J14 (USB-C) at the rear edge in a GND channel between the entry block and R1 (port pitch 35 to 32 mm, H1 to x 27); routed 155 of 155, DRC 0 copper and unconnected; rear plate a7 with the USB slot, front plate without. Supersedes D-185 and A-30.
+- D-185, A-30: the Mac USB link moves to the rear plate (panel-mount USB-C extension with a 90 degree plug into the DevKit USB-C; main board unchanged). Front plate a6 without the USB slot. Rear cut-out follows after the part is measured.
+- D-184, M-101, A-29: display frame (printed, on four Wurth WA-SMSI 9774060151R SMD spacers on the plate inside face; STEP and STL in endplates/display-frame/); front plate a5, module 4 mm to the right; frame 1.86 mm from the housing, 1.98 mm from the board parts; DRC 0.
+- M-100: front plate 3D fit with the EAO 84 and C&K 8125 maker models, the Waveshare module and the p6 board STEP. D-183, front plate a4: KILL to u 144 and RESET to u 123 (KILL holder was 0.3 mm from the extrusion wall; now 1.37 mm). No other clash; RESET lugs 2.7 mm from the DevKit. DRC 0 on both plates.
+
 ## 2026-10-26
 - D-181 (KILL: EAO 84-5340.0020, R75 2k2), D-182 (RESET: C&K 8125SHZBE; Dialight 558 LEDs), A-28 (plates stay 1.6 mm). Schematic a17-display (M-97): R1 to R3 panel LEDs removed, display header J15 on IO2/IO9 and the PCA9539. Layout p6 (M-98): headers moved, routed again, DRC 0. Front plate a3 (M-99): display left, KILL right.
 - D-180: shack interface front plate gets a colour TFT (SPI on IO2/IO9, DC/RST/backlight on the PCA9539) in place of the R1 to R3 LEDs; SAFE and LATCHED LEDs stay in hardware.

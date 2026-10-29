@@ -94,6 +94,13 @@ More detail, and the reason for each choice, is in [docs/architecture.md](docs/a
 </p>
 <p align="center"><em>Controller board, rev C (KiCad render). Left: the Cat6 link with the opto current loops and a 3 mm isolation gap. Right: the ESP32-C3 DevKit. The NOR gate on the silkscreen is the relay enable: RLY_EN = NOR(KILL, MCU_EN_N, FAULT).</em></p>
 
+## Inside the shack interface
+
+<p align="center">
+  <img src="docs/images/shack-interface-open.png" alt="Shack interface with the top cover removed: main board in the extruded case, rear panel connectors, front plate with the 2 inch display, SAFE and LATCHED LEDs, RESET and the KILL switch" width="80%">
+</p>
+<p align="center"><em>Shack interface, cover removed (SolidCraft view, board p8b, front plate a8; made with hardware/shack-interface/case/render-full/open-cover.json). At the rear: 13.8 V DC, Cat6 to the outdoor unit, USB and the three radio ports. At the front: the 2 inch display, the SAFE and LATCHED LEDs, RESET and the KILL switch.</em></p>
+
 ## Safety chain
 
 The SAFE loop is one series current loop from the shack to the box and back.

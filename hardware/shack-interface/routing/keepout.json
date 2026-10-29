@@ -3,100 +3,108 @@
   {
    "poly": [
     [
-     56.0,
+     65.5,
      6.0
     ],
     [
-     88.5,
+     93.7,
      6.0
     ],
     [
-     88.5,
+     93.7,
      55.5
     ],
     [
-     79.5,
+     85.5,
      55.5
     ],
     [
-     79.5,
+     85.5,
      53.3
     ],
     [
-     56.0,
+     62.0,
      53.3
+    ],
+    [
+     62.0,
+     16.0
+    ],
+    [
+     65.5,
+     16.0
     ]
    ],
    "holes": [
     [
      [
-      58.5,
+      64.5,
       35.8
      ],
      [
-      61.099999999999994,
+      67.1,
       35.8
      ],
      [
-      61.099999999999994,
+      67.1,
       46.7
      ],
      [
-      58.5,
+      64.5,
       46.7
      ]
     ],
     [
      [
-      65.2,
+      71.2,
       31.8
      ],
      [
-      67.8,
+      73.8,
       31.8
      ],
      [
-      67.8,
+      73.8,
       42.7
      ],
      [
-      65.2,
-      42.7
-     ]
-    ],
-    [
-     [
-      69.2,
-      31.8
-     ],
-     [
-      71.8,
-      31.8
-     ],
-     [
-      71.8,
-      42.7
-     ],
-     [
-      69.2,
+      71.2,
       42.7
      ]
     ],
     [
      [
-      77.2,
+      75.2,
       31.8
      ],
      [
-      79.8,
+      77.8,
       31.8
      ],
      [
-      79.8,
+      77.8,
       42.7
      ],
      [
-      77.2,
+      75.2,
+      42.7
+     ]
+    ],
+    [
+     [
+      83.2,
+      31.8
+     ],
+     [
+      85.8,
+      31.8
+     ],
+     [
+      85.8,
+      42.7
+     ],
+     [
+      83.2,
       42.7
      ]
     ]
@@ -130,100 +138,100 @@
   {
    "poly": [
     [
-     89.0,
+     94.0,
      6.0
     ],
     [
-     123.5,
+     125.7,
      6.0
     ],
     [
-     123.5,
+     125.7,
      55.5
     ],
     [
-     114.5,
+     117.5,
      55.5
     ],
     [
-     114.5,
+     117.5,
      53.3
     ],
     [
-     89.0,
+     94.0,
      53.3
     ]
    ],
    "holes": [
     [
      [
-      93.5,
+      96.5,
       35.8
      ],
      [
-      96.1,
+      99.1,
       35.8
      ],
      [
-      96.1,
+      99.1,
       46.7
      ],
      [
-      93.5,
+      96.5,
       46.7
      ]
     ],
     [
      [
-      100.2,
+      103.2,
       31.8
      ],
      [
-      102.8,
+      105.8,
       31.8
      ],
      [
-      102.8,
+      105.8,
       42.7
      ],
      [
-      100.2,
-      42.7
-     ]
-    ],
-    [
-     [
-      104.2,
-      31.8
-     ],
-     [
-      106.8,
-      31.8
-     ],
-     [
-      106.8,
-      42.7
-     ],
-     [
-      104.2,
+      103.2,
       42.7
      ]
     ],
     [
      [
-      112.2,
+      107.2,
       31.8
      ],
      [
-      114.8,
+      109.8,
       31.8
      ],
      [
-      114.8,
+      109.8,
       42.7
      ],
      [
-      112.2,
+      107.2,
+      42.7
+     ]
+    ],
+    [
+     [
+      115.2,
+      31.8
+     ],
+     [
+      117.8,
+      31.8
+     ],
+     [
+      117.8,
+      42.7
+     ],
+     [
+      115.2,
       42.7
      ]
     ]
@@ -257,7 +265,7 @@
   {
    "poly": [
     [
-     124.0,
+     126.0,
      6.0
     ],
     [
@@ -277,7 +285,7 @@
      53.3
     ],
     [
-     124.0,
+     126.0,
      53.3
     ]
    ],
@@ -379,6 +387,236 @@
     "Net-(JP402-Pad3)",
     "Net-(JP405-Pin_1)",
     "Net-(JP405-Pin_2)"
+   ]
+  },
+  {
+   "poly": [
+    [
+     0,
+     0
+    ],
+    [
+     160.0,
+     0
+    ],
+    [
+     160.0,
+     5.5
+    ],
+    [
+     65.0,
+     5.5
+    ],
+    [
+     65.0,
+     3.6
+    ],
+    [
+     54.5,
+     3.6
+    ],
+    [
+     54.5,
+     15.5
+    ],
+    [
+     55.475,
+     15.5
+    ],
+    [
+     55.475,
+     47.0
+    ],
+    [
+     21.525,
+     47.0
+    ],
+    [
+     21.525,
+     5.5
+    ],
+    [
+     0,
+     5.5
+    ]
+   ],
+   "holes": [],
+   "except": [
+    "+13V8",
+    "+3V3",
+    "+5V",
+    "/Link to the box/KILL_1",
+    "/Link to the box/KILL_2",
+    "/Link to the box/L1N",
+    "/Link to the box/L1P",
+    "/Link to the box/L2N",
+    "/Link to the box/L2P",
+    "/Link to the box/L3N",
+    "/Link to the box/L3P",
+    "/Link to the box/L4N",
+    "/Link to the box/L4P",
+    "/Link to the box/R1_TX",
+    "/Link to the box/SW_STOP_N",
+    "/MCU and expander/BAND_A",
+    "/MCU and expander/BAND_B",
+    "/MCU and expander/BAND_C",
+    "/MCU and expander/BAND_D",
+    "/MCU and expander/DATA_RX",
+    "/MCU and expander/DATA_TX",
+    "/MCU and expander/DISP_BL",
+    "/MCU and expander/DISP_DC",
+    "/MCU and expander/DISP_MOSI",
+    "/MCU and expander/DISP_RST",
+    "/MCU and expander/DISP_SCK",
+    "/MCU and expander/FAULT",
+    "/MCU and expander/KEY_R1",
+    "/MCU and expander/KEY_R2",
+    "/MCU and expander/KEY_R3",
+    "/MCU and expander/KILL_S",
+    "/MCU and expander/LATCHED",
+    "/MCU and expander/LATCH_CLR",
+    "/MCU and expander/PERMIT_R1",
+    "/MCU and expander/PERMIT_R2",
+    "/MCU and expander/PERMIT_R3",
+    "/MCU and expander/R2_TX",
+    "/MCU and expander/R3_TX",
+    "/MCU and expander/RESET_N",
+    "/MCU and expander/SAFE_LOST",
+    "/MCU and expander/SCL",
+    "/MCU and expander/SDA",
+    "/MCU and expander/SDA_IO10",
+    "/MCU and expander/SDA_IO7",
+    "/MCU and expander/WDI",
+    "/Power/VIN_P",
+    "/Radio port R1/DIN1",
+    "/Radio port R1/DIN2",
+    "/Radio port R1/DIN3",
+    "/Radio port R1/DIN4",
+    "/Radio port R1/DIN6",
+    "/Radio port R1/DIN7",
+    "/Radio port R1/DIN8",
+    "/Radio port R1/INH_ON",
+    "/Radio port R1/KEY_ON",
+    "/Radio port R1/RGND",
+    "/Radio port R1/TX_EN",
+    "/Radio port R2/BAND_A",
+    "/Radio port R2/BAND_B",
+    "/Radio port R2/BAND_C",
+    "/Radio port R2/BAND_D",
+    "/Radio port R2/DIN1",
+    "/Radio port R2/DIN2",
+    "/Radio port R2/DIN3",
+    "/Radio port R2/DIN4",
+    "/Radio port R2/DIN6",
+    "/Radio port R2/DIN7",
+    "/Radio port R2/DIN8",
+    "/Radio port R2/INH_ON",
+    "/Radio port R2/KEY_ON",
+    "/Radio port R2/RGND",
+    "/Radio port R3/BAND_A",
+    "/Radio port R3/BAND_B",
+    "/Radio port R3/BAND_C",
+    "/Radio port R3/BAND_D",
+    "/Radio port R3/DIN1",
+    "/Radio port R3/DIN2",
+    "/Radio port R3/DIN3",
+    "/Radio port R3/DIN4",
+    "/Radio port R3/DIN6",
+    "/Radio port R3/DIN7",
+    "/Radio port R3/DIN8",
+    "/Radio port R3/INH_ON",
+    "/Radio port R3/KEY_ON",
+    "/Radio port R3/RGND",
+    "/SAFE latch/BTN",
+    "/SAFE latch/LED_LATCHED",
+    "/SAFE latch/LED_SAFE",
+    "/SAFE latch/POR_N",
+    "/SAFE latch/PRE_N",
+    "/SAFE latch/RESET_CLK",
+    "/SAFE latch/SAFE_OK",
+    "CHASSIS",
+    "GND",
+    "Net-(A1-IO21/TXD)",
+    "Net-(C22-Pad2)",
+    "Net-(C23-Pad1)",
+    "Net-(C24-Pad2)",
+    "Net-(C25-Pad1)",
+    "Net-(C26-Pad2)",
+    "Net-(C27-Pad1)",
+    "Net-(C28-Pad2)",
+    "Net-(C29-Pad1)",
+    "Net-(D1-A)",
+    "Net-(D11-A2)",
+    "Net-(D201-A)",
+    "Net-(D201-K)",
+    "Net-(D202-K)",
+    "Net-(D21-A2)",
+    "Net-(D301-A)",
+    "Net-(D301-K)",
+    "Net-(D302-K)",
+    "Net-(D31-A1)",
+    "Net-(D33-K)",
+    "Net-(D401-A)",
+    "Net-(D401-K)",
+    "Net-(D402-K)",
+    "Net-(D41-A1)",
+    "Net-(D41-A2)",
+    "Net-(D43-K)",
+    "Net-(D71-A)",
+    "Net-(JP201-Pin_2)",
+    "Net-(JP202-Pad1)",
+    "Net-(JP202-Pad3)",
+    "Net-(JP205-Pin_1)",
+    "Net-(JP205-Pin_2)",
+    "Net-(JP301-Pin_2)",
+    "Net-(JP302-Pad1)",
+    "Net-(JP302-Pad3)",
+    "Net-(JP305-Pin_1)",
+    "Net-(JP305-Pin_2)",
+    "Net-(JP401-Pin_2)",
+    "Net-(JP402-Pad1)",
+    "Net-(JP402-Pad3)",
+    "Net-(JP405-Pin_1)",
+    "Net-(JP405-Pin_2)",
+    "Net-(Q11-B)",
+    "Net-(Q11-E)",
+    "Net-(Q13-D)",
+    "Net-(Q21-B)",
+    "Net-(Q21-E)",
+    "Net-(Q23-D)",
+    "Net-(Q31-B)",
+    "Net-(Q31-E)",
+    "Net-(Q33-D)",
+    "Net-(Q41-B)",
+    "Net-(Q41-E)",
+    "Net-(R203-Pad2)",
+    "Net-(R205-Pad2)",
+    "Net-(R303-Pad2)",
+    "Net-(R305-Pad2)",
+    "Net-(R403-Pad2)",
+    "Net-(R405-Pad2)",
+    "Net-(U1-OUT)",
+    "Net-(U2-OUT)",
+    "unconnected-(A1-IO8/SCL-Pad18)",
+    "unconnected-(A1-NC-Pad21)",
+    "unconnected-(A1-NC-Pad22)",
+    "unconnected-(A1-NC-Pad23)",
+    "unconnected-(A1-NC-Pad24)",
+    "unconnected-(A1-NC-Pad25)",
+    "unconnected-(A1-NC-Pad3)",
+    "unconnected-(A1-RST-Pad1)",
+    "unconnected-(A1-VBAT-Pad28)",
+    "unconnected-(A1-VBUS-Pad26)",
+    "unconnected-(J14-SBU1-PadA8)",
+    "unconnected-(J14-SBU2-PadB8)",
+    "unconnected-(U10-NC-Pad1)",
+    "unconnected-(U3-~{MR}-Pad3)",
+    "unconnected-(U4-Pad3)",
+    "unconnected-(U5-~{INT}-Pad1)",
+    "unconnected-(U6-WDI-Pad4)",
+    "unconnected-(U6-~{MR}-Pad3)",
+    "unconnected-(U7-NC-Pad1)",
+    "unconnected-(U9-Pad3)"
    ]
   }
  ]
