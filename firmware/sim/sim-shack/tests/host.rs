@@ -57,7 +57,9 @@ fn hello_and_status() {
     assert_eq!(s.host("hello"), "ok shack fw 0.1.0 proto 1");
     let st = s.host("status");
     assert!(
-        st.starts_with("ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 band=15 box=ready"),
+        st.starts_with(
+            "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 band=15 box=ready"
+        ),
         "{st}"
     );
     assert!(st.contains("r2=-/-,tx=idle,permit=0,key=0"), "{st}");
@@ -245,4 +247,31 @@ fn host_keep_alive_releases_the_r1_key() {
     let sig = s.board.borrow().signals();
     assert!(!sig.key_contact[0], "key released");
     assert!(!sig.inhibit[0], "R1 permit stays: routes are not touched");
+}
+
+/// `keepalive <seconds>`: a longer time-out for typing by hand.
+#[test]
+fn keepalive_command_sets_the_time_out() {
+    let mut s = ShackSim::new();
+    routed_r2(&mut s);
+    assert_eq!(s.host("keepalive 10"), "ok");
+    assert!(s.host("status").contains("keepalive=10"));
+    s.host("tx R2 on");
+    let t_last = s.now();
+    s.run(9000);
+    assert!(
+        s.host_seen(0, "!host timeout").is_none(),
+        "9 s silent: still on"
+    );
+    assert!(s.shack.permit(Radio::R2));
+    s.run(1100);
+    let t = s
+        .host_seen(0, "!host timeout")
+        .expect("time-out after 10 s");
+    assert!(
+        (10_000..=10_020).contains(&(t - t_last)),
+        "{} ms",
+        t - t_last
+    );
+    assert!(s.host("keepalive 61").starts_with("err arg"));
 }

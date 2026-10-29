@@ -10,18 +10,33 @@ use link_proto::{Col, ColMask, Command, Radio, ResultCode, Route};
 pub const PROTO_VERSION: u8 = 1;
 /// Longest host line, without the line end.
 pub const MAX_LINE: usize = 120;
+/// Host keep-alive (section 8): default and allowed range in seconds.
+pub const KEEP_ALIVE_DEFAULT_S: u8 = 2;
+pub const KEEP_ALIVE_MIN_S: u8 = 2;
+pub const KEEP_ALIVE_MAX_S: u8 = 60;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum HostCommand {
     Hello,
     Status,
-    Route { radio: Radio, route: Route },
-    Tx { radio: Radio, on: bool },
-    Key { radio: Radio, on: bool },
+    Route {
+        radio: Radio,
+        route: Route,
+    },
+    Tx {
+        radio: Radio,
+        on: bool,
+    },
+    Key {
+        radio: Radio,
+        on: bool,
+    },
     Bias(ColMask),
     Stop(bool),
     ClearFault,
     Events(bool),
+    /// Keep-alive time-out in seconds, KEEP_ALIVE_MIN_S to KEEP_ALIVE_MAX_S.
+    KeepAlive(u8),
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -161,6 +176,12 @@ pub fn parse(line: &str) -> Result<HostCommand, ErrorCode> {
         Ok(HostCommand::Bias(col_list(w[1])?))
     } else if is("stop", 2) {
         Ok(HostCommand::Stop(on_off(w[1])?))
+    } else if is("keepalive", 2) {
+        let s: u8 = w[1].parse().map_err(|_| ErrorCode::Arg)?;
+        if !(KEEP_ALIVE_MIN_S..=KEEP_ALIVE_MAX_S).contains(&s) {
+            return Err(ErrorCode::Arg);
+        }
+        Ok(HostCommand::KeepAlive(s))
     } else if is("events", 2) {
         Ok(HostCommand::Events(on_off(w[1])?))
     } else {
@@ -225,6 +246,7 @@ impl fmt::Display for HostCommand {
             HostCommand::Bias(m) => write!(f, "bias {}", ColList(m)),
             HostCommand::Stop(on) => write!(f, "stop {}", on_name(on)),
             HostCommand::Events(on) => write!(f, "events {}", on_name(on)),
+            HostCommand::KeepAlive(s) => write!(f, "keepalive {s}"),
         }
     }
 }
@@ -361,6 +383,8 @@ pub struct StatusLine {
     pub kill: bool,
     pub fault: bool,
     pub stop: bool,
+    /// Keep-alive time-out in seconds.
+    pub keepalive: u8,
     pub band: u8,
     pub boxs: Option<BoxPart>,
     pub radios: [RadioStatus; 3],
@@ -371,13 +395,14 @@ impl fmt::Display for StatusLine {
         let b = |v: bool| v as u8;
         write!(
             f,
-            "ok link={} safe={} latched={} kill={} fault={} stop={} band={} box={}",
+            "ok link={} safe={} latched={} kill={} fault={} stop={} keepalive={} band={} box={}",
             if self.link { "up" } else { "down" },
             if self.safe_ok { "ok" } else { "lost" },
             b(self.latched),
             b(self.kill),
             b(self.fault),
             b(self.stop),
+            self.keepalive,
             self.band,
             match self.boxs {
                 Some(x) if x.ready => "ready",

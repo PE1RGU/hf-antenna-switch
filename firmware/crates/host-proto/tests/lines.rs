@@ -49,6 +49,8 @@ fn every_command_parses() {
         ("bias -", HostCommand::Bias(ColMask::EMPTY)),
         ("stop on", HostCommand::Stop(true)),
         ("events off", HostCommand::Events(false)),
+        ("keepalive 60", HostCommand::KeepAlive(60)),
+        ("KEEPALIVE 2", HostCommand::KeepAlive(2)),
         ("  STATUS  \r", HostCommand::Status),
     ];
     for (line, cmd) in cases {
@@ -70,6 +72,11 @@ fn errors() {
         ("tx R1 on", ErrorCode::NotForR1),
         ("bias A1,-", ErrorCode::Arg),
         ("bias A1,,A2", ErrorCode::Arg),
+        ("keepalive 1", ErrorCode::Arg),
+        ("keepalive 61", ErrorCode::Arg),
+        ("keepalive 300", ErrorCode::Arg),
+        ("keepalive soon", ErrorCode::Arg),
+        ("keepalive", ErrorCode::Syntax),
     ];
     for (line, e) in cases {
         assert_eq!(parse(line), Err(e), "{line:?}");
@@ -133,6 +140,7 @@ fn status_line_as_in_the_spec() {
         kill: false,
         fault: false,
         stop: false,
+        keepalive: 2,
         band: 5,
         boxs: Some(BoxPart {
             ready: true,
@@ -162,7 +170,7 @@ fn status_line_as_in_the_spec() {
     };
     assert_eq!(
         s.to_string(),
-        "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 band=5 box=ready \
+        "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 band=5 box=ready \
          r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0 \
          k1=A1,A3 rfdet=- bias=- boxfault=0"
     );
@@ -192,6 +200,7 @@ fn command() -> impl Strategy<Value = HostCommand> {
         (0u8..32).prop_map(|b| HostCommand::Bias(ColMask::from_bits(b).unwrap())),
         any::<bool>().prop_map(HostCommand::Stop),
         any::<bool>().prop_map(HostCommand::Events),
+        (KEEP_ALIVE_MIN_S..=KEEP_ALIVE_MAX_S).prop_map(HostCommand::KeepAlive),
     ]
 }
 

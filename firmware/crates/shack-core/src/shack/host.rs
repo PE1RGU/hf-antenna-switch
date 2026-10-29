@@ -7,12 +7,10 @@ use super::*;
 use core::fmt::{self, Write as _};
 use heapless::{String, Vec};
 use host_proto::{
-    BoxPart, ErrorCode, ErrorLine, HostCommand, HostEvent, MAX_LINE, PROTO_VERSION, RadioStatus,
-    StatusLine, TxPhase, parse,
+    BoxPart, ErrorCode, ErrorLine, HostCommand, HostEvent, KEEP_ALIVE_DEFAULT_S, MAX_LINE,
+    PROTO_VERSION, RadioStatus, StatusLine, TxPhase, parse,
 };
 
-/// Host keep-alive while any TX or key is on (section 8).
-pub const KEEP_ALIVE: Ms = 2000;
 /// Longest line the shack sends (the status line is about 200 characters).
 const OUT_LINE: usize = 256;
 
@@ -32,6 +30,8 @@ pub(super) struct HostPort {
     buf: Vec<u8, MAX_LINE>,
     overflow: bool,
     events_on: bool,
+    /// Keep-alive time-out in seconds (`keepalive`, section 8).
+    keep_alive_s: u8,
     /// Time of the last line from the host; None until the host speaks (keep-alive off).
     last_line: Option<Ms>,
     queued: Deque<HostEvent, 32>,
@@ -45,6 +45,7 @@ impl HostPort {
             buf: Vec::new(),
             overflow: false,
             events_on: true,
+            keep_alive_s: KEEP_ALIVE_DEFAULT_S,
             last_line: None,
             queued: Deque::new(),
             logs: Deque::new(),
@@ -178,17 +179,18 @@ impl Shack {
                 self.host.log("fault latch cleared by host");
             }
             HostCommand::Events(on) => self.host.events_on = on,
+            HostCommand::KeepAlive(s) => self.host.keep_alive_s = s,
         }
         Ok(None)
     }
 
-    /// Host silent for KEEP_ALIVE while TX or a key is on: end it all (section 8).
+    /// Host silent for the keep-alive time-out while TX or a key is on: end it all (section 8).
     pub(super) fn host_keep_alive(&mut self, now: Ms) {
         let Some(last) = self.host.last_line else {
             return;
         };
         let active = self.want_tx.iter().chain(&self.want_key).any(|x| *x);
-        if active && now.saturating_sub(last) >= KEEP_ALIVE {
+        if active && now.saturating_sub(last) >= Ms::from(self.host.keep_alive_s) * 1000 {
             self.want_tx = [false; 3];
             self.want_key = [false; 3];
             self.host.last_line = Some(now);
@@ -279,6 +281,7 @@ impl Shack {
             kill: inp.kill,
             fault: self.fault_known,
             stop: self.sw_stop,
+            keepalive: self.host.keep_alive_s,
             band: inp.band,
             boxs: self.status.map(|s| BoxPart {
                 ready: s.flags.ready,

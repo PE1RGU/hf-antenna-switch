@@ -72,6 +72,7 @@ Why text and not binary (postcard + COBS, the first idea in PLAN.md): you can dr
 | `stop on\|off` | Software stop: opens the SAFE loop. `off` closes it again; the SAFE latch still needs RESET | `ok` |
 | `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04) | `ok` |
 | `events on\|off` | Events on (default) or off | `ok` |
+| `keepalive <seconds>` | Host keep-alive time-out, 2 to 60 s (section 8) | `ok` |
 
 Error answers: `err <code> <text>`. Codes:
 
@@ -112,7 +113,7 @@ Sent on every change (when events are on). One line each.
 `status` answers one line with `key=value` pairs, in this order:
 
 ```
-ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 band=5 box=ready
+ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 band=5 box=ready
    r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0
    k1=A1,A3 rfdet=- bias=- boxfault=0
 ```
@@ -123,8 +124,9 @@ ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 band=5 box=ready
 
 Decided (P3b-03). A Mac app that crashes while R2 is keyed would leave a WSPR transmitter on until someone notices.
 
-- While any `tx` is on or any `key` is on, the host must send a line at least every 2 s. Any command counts; `status` is the normal one.
-- No line for 2 s: the shack ends every TX and releases every key, the normal way (inhibit first, F14), and sends `!host timeout`.
+- While any `tx` is on or any `key` is on, the host must send a line at least every keep-alive time-out. Any line counts, an empty line too; `status` is the normal one.
+- The time-out is 2 s. `keepalive <seconds>` sets it from 2 to 60 s, for typing by hand (Prins, 2026-10-29). It goes back to 2 s at every power-up. A host app leaves it at 2 s.
+- No line within the time-out: the shack ends every TX and releases every key, the normal way (inhibit first, F14), and sends `!host timeout`.
 - Routes, bias and the software stop stay as they are.
 
 ## 9. Timing
