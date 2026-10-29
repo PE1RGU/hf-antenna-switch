@@ -124,7 +124,7 @@ At the rear: 13.8 V DC, Cat6 to the outdoor unit, USB and the three radio ports.
   <img src="docs/images/shack-interface-front.png" alt="Shack interface, front: display, SAFE and LATCHED LEDs, RESET and the red KILL switch" width="49%">
   <img src="docs/images/shack-interface-rear.png" alt="Shack interface, rear: three mini-DIN radio ports, USB-C, Cat6 and the XT60 power input" width="49%">
 </p>
-<p align="center"><em>Front and rear of the shack interface (SolidCraft renders).</em></p>
+<p align="center"><em>Front and rear of the shack interface (SolidCraft views).</em></p>
 
 ## Safety chain
 
