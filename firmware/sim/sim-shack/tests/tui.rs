@@ -48,7 +48,7 @@ fn draws_display_world_board_and_host() {
     term.draw(|f| a.draw(f)).unwrap();
     let t = screen_text(&term);
     for s in [
-        "Display 320",
+        "Display 320 x 240",
         "Outside world",
         "Board",
         "Host (USB)",

@@ -251,7 +251,7 @@ impl App {
     }
 
     fn draw_display(&mut self, f: &mut Frame, area: Rect) {
-        let block = Block::bordered().title(" Display 320 × 240 ");
+        let block = Block::bordered().title(" Display 320 x 240 ");
         let inner = block.inner(area);
         f.render_widget(block, area);
         let screen = self.sim.screen();
@@ -431,8 +431,12 @@ pub struct Options {
 /// Run the terminal UI until Ctrl-C.
 pub fn run(opts: Options) -> std::io::Result<()> {
     let sim = ShackSim::use_state_file(&opts.state_file);
-    let mut terminal = ratatui::init();
+    // Ask the terminal for its image support before the UI starts, then clear: a
+    // terminal that does not understand the questions (macOS Terminal) prints parts
+    // of them, and ratatui only redraws cells that change.
     let picker = Picker::from_query_stdio().unwrap_or_else(|_| Picker::halfblocks());
+    let mut terminal = ratatui::init();
+    terminal.clear()?;
     let mut app = App::new(sim, picker, opts.tcp_port);
     app.note(&format!("stored settings: {}", opts.state_file.display()));
     app.note(WORLD_HELP);
