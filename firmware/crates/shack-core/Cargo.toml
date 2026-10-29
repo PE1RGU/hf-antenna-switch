@@ -1,0 +1,10 @@
+[package]
+name = "shack-core"
+version = "0.1.0"
+description = "Shack interface logic, no_std, without hardware calls"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true

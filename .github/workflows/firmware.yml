@@ -1,0 +1,24 @@
+name: firmware
+
+on:
+  push:
+    paths: ["firmware/**", ".github/workflows/firmware.yml"]
+  pull_request:
+    paths: ["firmware/**", ".github/workflows/firmware.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: firmware
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain (from rust-toolchain.toml)
+        run: rustup show
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            firmware
+            firmware/targets/shack-esp32c3
+      - run: ./check.sh

@@ -1,0 +1,17 @@
+# Host workspace: no_std core crates and the simulator.
+# The ESP32-C3 binaries in targets/ are separate workspaces (own target and build config).
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+exclude = ["targets"]
+
+[workspace.package]
+edition = "2024"
+license = "MIT OR Apache-2.0"
+authors = ["Prins Doornekamp PE1RGU"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
