@@ -1,6 +1,6 @@
 # Firmware
 
-Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P0 (workspace and toolchain).
+Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P1 done (link protocol, crate link-proto).
 
 Two targets, both on the ESP32-C3-DevKit-RUST:
 

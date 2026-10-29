@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 cargo fmt --all --check
 cargo clippy --all-targets -- -D warnings
 cargo test
-cargo build -p shack-core --target riscv32imc-unknown-none-elf
+cargo build --workspace --target riscv32imc-unknown-none-elf
 
 for t in targets/*/; do
     (cd "$t" && cargo fmt --check && cargo clippy --release -- -D warnings && cargo build --release)

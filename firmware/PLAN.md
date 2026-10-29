@@ -71,7 +71,7 @@ Display: the firmware draws with `embedded-graphics`. On the Mac, `embedded-grap
 | Phase | Work | Done when |
 |---|---|---|
 | P0 | Workspace, toolchain (`riscv32imc-unknown-none-elf`, esp-hal, embassy), CI with `cargo test` and `clippy`. The ESP32-C3 target is built, not flashed. | `./check.sh` passes, including the target build |
-| P1 | Link protocol spec (doc first), then `link-proto` crate with property tests (round trip, corrupt frames, lost frames) | Spec reviewed; tests pass |
+| P1 | Link protocol spec (doc first, [docs/design/link-protocol.md](../docs/design/link-protocol.md)), then `link-proto` crate with property tests (round trip, corrupt frames, lost frames) | Spec reviewed; tests pass |
 | P2 | `sim-core` and the shack board model (PCA9539, latch, ports, KILL, RESET, display, USB) | Model tests reproduce the shack checks of verify_system.py |
 | P3 | `shack-core`: start-up, F1 init, 10 ms poll, WDI kick, permits, shack side of the handshake, F14 end rule, Mac protocol, display pages | Shack runs in `sim-shack` against a scripted box stub |
 | P4 | Box board models: 4 expanders, relays, safety gate, fault latch, RF detectors, bias-T | Model tests reproduce verify_logic.py |
