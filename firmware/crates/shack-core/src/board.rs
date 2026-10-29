@@ -48,36 +48,46 @@ impl DevKit {
 pub struct ExpPin {
     pub bit: u8,
     pub output: bool,
+    /// Net name in the schematic.
+    pub name: &'static str,
 }
 
-const fn out(bit: u8) -> ExpPin {
-    ExpPin { bit, output: true }
+const fn out(bit: u8, name: &'static str) -> ExpPin {
+    ExpPin {
+        bit,
+        output: true,
+        name,
+    }
 }
 
-const fn inp(bit: u8) -> ExpPin {
-    ExpPin { bit, output: false }
+const fn inp(bit: u8, name: &'static str) -> ExpPin {
+    ExpPin {
+        bit,
+        output: false,
+        name,
+    }
 }
 
 /// PCA9539 pins (D-92, D-180).
 pub mod exp {
     use super::{ExpPin, inp, out};
 
-    pub const SW_STOP_N: ExpPin = out(0);
-    pub const R1_TX: ExpPin = inp(1);
-    pub const KEY_R1: ExpPin = out(2);
-    pub const BAND_D: ExpPin = inp(3);
-    pub const BAND_A: ExpPin = inp(4);
-    pub const BAND_B: ExpPin = inp(5);
-    pub const BAND_C: ExpPin = inp(6);
-    pub const DISP_BL: ExpPin = out(7);
-    pub const KEY_R2: ExpPin = out(8);
-    pub const R2_TX: ExpPin = inp(9);
-    pub const DISP_DC: ExpPin = out(10);
-    pub const KEY_R3: ExpPin = out(11);
-    pub const R3_TX: ExpPin = inp(12);
-    pub const DISP_RST: ExpPin = out(13);
-    pub const KILL_S: ExpPin = inp(14);
-    pub const LATCHED: ExpPin = inp(15);
+    pub const SW_STOP_N: ExpPin = out(0, "SW_STOP_N");
+    pub const R1_TX: ExpPin = inp(1, "R1_TX");
+    pub const KEY_R1: ExpPin = out(2, "KEY_R1");
+    pub const BAND_D: ExpPin = inp(3, "BAND_D");
+    pub const BAND_A: ExpPin = inp(4, "BAND_A");
+    pub const BAND_B: ExpPin = inp(5, "BAND_B");
+    pub const BAND_C: ExpPin = inp(6, "BAND_C");
+    pub const DISP_BL: ExpPin = out(7, "DISP_BL");
+    pub const KEY_R2: ExpPin = out(8, "KEY_R2");
+    pub const R2_TX: ExpPin = inp(9, "R2_TX");
+    pub const DISP_DC: ExpPin = out(10, "DISP_DC");
+    pub const KEY_R3: ExpPin = out(11, "KEY_R3");
+    pub const R3_TX: ExpPin = inp(12, "R3_TX");
+    pub const DISP_RST: ExpPin = out(13, "DISP_RST");
+    pub const KILL_S: ExpPin = inp(14, "KILL_S");
+    pub const LATCHED: ExpPin = inp(15, "LATCHED");
 
     pub const ALL: [ExpPin; 16] = [
         SW_STOP_N, R1_TX, KEY_R1, BAND_D, BAND_A, BAND_B, BAND_C, DISP_BL, KEY_R2, R2_TX, DISP_DC,

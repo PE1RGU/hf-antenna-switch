@@ -1,6 +1,6 @@
 # Firmware
 
-Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P1 done (link protocol, crate link-proto).
+Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P2 done (simulator core and shack board model).
 
 Two targets, both on the ESP32-C3-DevKit-RUST:
 
@@ -12,6 +12,8 @@ Firmware rules already defined: see design-log.md (F-rules) and hardware/docs/di
 ## Layout
 
 - `crates/`: no_std logic, one host workspace (`Cargo.toml` here). Tested on the Mac with `cargo test`.
+- `sim/sim-core`: virtual time, trace, I2C and UART plumbing, embedded-hal adapters.
+- `sim/sim-models`: part models (PCA9539, 74LVC1G74, TPS3823, ST7789) and board models (shack interface).
 - `targets/<name>/`: ESP32-C3 binaries, each its own workspace with its own `.cargo/config.toml`. Glue only.
 
 ## Tools
