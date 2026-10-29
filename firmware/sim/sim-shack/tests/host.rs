@@ -275,3 +275,32 @@ fn keepalive_command_sets_the_time_out() {
     );
     assert!(s.host("keepalive 61").starts_with("err arg"));
 }
+
+/// `clearfault` while the expander does not answer: the latch may still be held
+/// in reset, so the fault stays and the log does not claim a clear.
+#[test]
+fn clearfault_with_the_expander_down_keeps_the_fault() {
+    let mut s = ShackSim::new();
+    s.start();
+    s.board.borrow_mut().exp.force_nack = true;
+    s.run(30);
+    assert!(s.host("status").contains("fault=1"));
+    let from = s.host_lines.len();
+    assert_eq!(s.host("clearfault"), "ok");
+    s.run(20);
+    assert!(
+        s.host_seen(from, "# fault latch cleared").is_none(),
+        "no false claim"
+    );
+    assert!(
+        s.host_seen(from, "# LATCH_CLR sent, but the expander is not ready")
+            .is_some()
+    );
+    assert!(s.host("status").contains("fault=1"), "fault kept");
+    // Expander back: now the clear works.
+    s.board.borrow_mut().exp.force_nack = false;
+    s.run(30);
+    assert_eq!(s.host("clearfault"), "ok");
+    s.run(20);
+    assert!(s.host("status").contains("fault=0"));
+}

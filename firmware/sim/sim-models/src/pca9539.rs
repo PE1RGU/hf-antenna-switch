@@ -4,9 +4,18 @@
 //! After reset: output 0xFFFF, polarity 0, configuration 0xFFFF (all inputs).
 //! The register pointer toggles inside its pair after each byte.
 //! While RESET is low the device holds the defaults and does not acknowledge.
+//!
+//! On the shack board, RESET comes from the supervisor RESET_N (TPS3823). The
+//! default output register of 0xFFFF matters: a pin that the firmware makes an
+//! output before it writes the output register goes high at once (rule F1). So the
+//! firmware writes the outputs first, then the configuration.
 
 use sim_core::i2c::{I2cDevice, Nack};
 
+/// One PCA9539 at register level. Use it as an [`I2cDevice`] on the board bus.
+///
+/// The board sets the levels on the input pins with [`Pca9539::set_external`] and
+/// reads the pin levels with [`Pca9539::pins`].
 #[derive(Clone, Debug)]
 pub struct Pca9539 {
     output: u16,
@@ -26,6 +35,8 @@ impl Default for Pca9539 {
 }
 
 impl Pca9539 {
+    /// A device in its power-on state: outputs 0xFFFF, polarity 0, all pins inputs,
+    /// not in reset.
     pub fn new() -> Self {
         Pca9539 {
             output: 0xFFFF,
@@ -49,6 +60,7 @@ impl Pca9539 {
         self.in_reset = active;
     }
 
+    /// True while the RESET pin is active.
     pub fn in_reset(&self) -> bool {
         self.in_reset
     }
@@ -64,14 +76,17 @@ impl Pca9539 {
         (self.output & !self.config) | (self.ext & self.config)
     }
 
+    /// Level of one pin (`bit` 0 to 15: port 0 is bits 0 to 7, port 1 is bits 8 to 15).
     pub fn pin(&self, bit: u8) -> bool {
         self.pins() & (1 << bit) != 0
     }
 
+    /// Output registers 2 and 3 as one word (register 3 in the high byte).
     pub fn output_reg(&self) -> u16 {
         self.output
     }
 
+    /// Configuration registers 6 and 7 as one word. A 1 bit is an input.
     pub fn config_reg(&self) -> u16 {
         self.config
     }

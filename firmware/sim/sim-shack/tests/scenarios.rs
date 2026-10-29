@@ -361,3 +361,37 @@ fn permit_waits_for_the_permit_bit() {
         t_permit - t_k0
     );
 }
+
+/// D-59: the WDI kick comes last in a tick, after the checks of that pass
+/// (here: after the expander inputs are read).
+#[test]
+fn watchdog_kick_comes_after_the_checks() {
+    use sim_core::TraceKind;
+    let mut s = ShackSim::new();
+    s.start();
+    s.run(100);
+    let b = s.board.borrow();
+    let ev = b.trace.events();
+    // Each WDI edge: the I2C read of that tick (same time) comes before it.
+    let mut checked = 0;
+    for (i, e) in ev.iter().enumerate() {
+        if matches!(e.kind, TraceKind::Signal { name: "WDI", .. }) && e.t > SimTime::ms(300) {
+            let read_before = ev[..i]
+                .iter()
+                .rev()
+                .take_while(|x| x.t == e.t)
+                .any(|x| matches!(x.kind, TraceKind::I2cRead { .. }));
+            let read_after = ev[i + 1..]
+                .iter()
+                .take_while(|x| x.t == e.t)
+                .any(|x| matches!(x.kind, TraceKind::I2cRead { .. }));
+            assert!(
+                read_before && !read_after,
+                "WDI at {} before the checks",
+                e.t
+            );
+            checked += 1;
+        }
+    }
+    assert!(checked > 5);
+}

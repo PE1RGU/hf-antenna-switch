@@ -1,5 +1,93 @@
 //! Shack firmware logic (shack-core) on the shack board model, against a scripted box.
 //! Time moves in 1 ms steps; the firmware ticks every `shack::TICK` ms.
+//!
+//! # Where this crate sits
+//!
+//! This is the top layer of the emulator (README, "How the emulator works"). The
+//! firmware logic in `shack-core` asks for hardware through one trait,
+//! [`ShackHw`]. On the ESP32-C3 the glue implements it with `esp-hal`. Here
+//! [`SimShackHw`] implements it with the board model of `sim-models`. So the
+//! emulator runs the same logic code as the target. It does not run RISC-V
+//! instructions.
+//!
+//! # Main types
+//!
+//! - [`ShackSim`]: the harness. It owns the board model, the firmware state
+//!   ([`Shack`]), the glue and the scripted box, and moves them all in time.
+//! - [`SimShackHw`]: the [`ShackHw`] implementation over the board model.
+//! - [`box_stub::BoxStub`]: a scripted box at the far end of the Cat6 data link.
+//! - [`tui`]: the terminal UI of the `sim-shack` program, with [`textview`] for
+//!   terminals without images.
+//!
+//! The board is a [`Shared`] value, an `Rc<RefCell<ShackBoard>>`: the harness,
+//! the glue, the I2C adapter and the test all hold a handle to the same board.
+//! Call `s.board.borrow()` to read it and `s.board.borrow_mut()` to change it, and
+//! drop the borrow before the next [`ShackSim::step`]. A second borrow while one is
+//! active panics.
+//!
+//! # One step
+//!
+//! [`ShackSim::step`] moves virtual time by 1 ms, to `t`, in this order:
+//!
+//! 1. Board time: the board model moves to `t` and settles. The supervisors, the
+//!    latches and the SAFE loop update; UART bytes that arrived by `t` become
+//!    readable.
+//! 2. Box stub: the scripted box reads the bytes that reached it, answers, and sets
+//!    its READY switch.
+//! 3. Firmware tick: only with board power (an off-to-on change restarts the
+//!    firmware from boot, as a power cycle of the MCU; the stored settings stay).
+//!    When a tick is due (every [`TICK`] = 10 ms), the harness
+//!    calls [`Shack::tick`] with the glue. The firmware reads inputs, drives pins,
+//!    talks to the box and the host, and draws the display. The harness records
+//!    the firmware events in [`ShackSim::events`].
+//! 4. Host lines: the bytes the firmware wrote to the USB port are split into
+//!    lines and kept in [`ShackSim::host_lines`] with their time.
+//!
+//! # How to write a scenario test
+//!
+//! 1. Make a sim with [`ShackSim::new`]. The board has power at t = 0.
+//! 2. Bring it to the ready state with [`ShackSim::start`]: link up, SAFE latch
+//!    cleared, TX_EN high. Skip this step to test the start-up itself.
+//! 3. Act: send host commands with [`ShackSim::host`], call the firmware
+//!    directly (`s.shack.set_tx(..)`), or change the outside world
+//!    (`s.board.borrow_mut().set_env(..)` or [`ShackSim::world`]).
+//! 4. Move time with [`ShackSim::run`] or [`ShackSim::run_until`].
+//! 5. Check the result: the board trace (`s.board.borrow().trace`), the board
+//!    signals, the box logs ([`box_stub::BoxStub::log`]), the firmware events or
+//!    the host lines. Put times in the assert messages; they help when a test fails.
+//!
+//! See `tests/scenarios.rs` and `tests/host.rs` for complete examples.
+//!
+//! ```
+//! use sim_shack::ShackSim;
+//!
+//! let mut s = ShackSim::new();
+//! s.start();
+//! assert_eq!(s.host("route R2 A1 A1"), "ok");
+//! s.run(150);
+//! // KILL pressed: the SAFE loop opens and TX_EN goes low.
+//! s.board.borrow_mut().set_env(|e| e.kill_pressed = true);
+//! s.run(20);
+//! let b = s.board.borrow();
+//! assert!(!b.signals().tx_en);
+//! // The trace shows when TX_EN fell.
+//! let (t, high) = *b.trace.signal("TX_EN").last().unwrap();
+//! assert!(!high, "TX_EN low since {t}");
+//! ```
+//!
+//! # Example
+//!
+//! Start the sim, send `hello` on the host port, and read the answer. This runs
+//! about 50 ms of virtual time.
+//!
+//! ```
+//! use sim_shack::ShackSim;
+//!
+//! let mut s = ShackSim::new();
+//! s.run(50);
+//! let answer = s.host("hello");
+//! assert!(answer.starts_with("ok shack"), "{answer}");
+//! ```
 
 pub mod box_stub;
 pub mod textview;
@@ -16,6 +104,12 @@ use sim_models::shack::ShackBoard;
 use sim_models::tps3823::Corner;
 
 /// `ShackHw` over the board model: the same calls the ESP32-C3 glue will make.
+///
+/// Each function forwards to the [`Board`] trait of [`ShackBoard`]: pins by their
+/// ESP32-C3 GPIO number ([`gpio`]), I2C through [`SimI2c`]. The frame buffer is a
+/// `Vec` here and a static on the target. The settings flash is a `Vec`, with an
+/// optional file so the settings survive a restart of the emulator. [`ShackSim`]
+/// makes and owns the one instance.
 pub struct SimShackHw {
     board: Shared<ShackBoard>,
     i2c: SimI2c<ShackBoard>,
@@ -106,10 +200,18 @@ impl ShackHw for SimShackHw {
     }
 }
 
+/// The emulator harness: board model, firmware logic, glue and scripted box, moved
+/// together in 1 ms steps. See the [crate overview](crate) for one step and for
+/// how to write a test.
 pub struct ShackSim {
+    /// The board model, shared with the glue. Borrow it to read the trace and
+    /// signals, or to change the outside world with `set_env`.
     pub board: Shared<ShackBoard>,
     hw: SimShackHw,
+    /// The firmware logic state. A test may call its request functions directly
+    /// (`set_route`, `set_tx`, `set_key`), as the host port does.
     pub shack: Shack,
+    /// The scripted box at the far end of the data link.
     pub boxs: BoxStub,
     /// Firmware events with their time.
     pub events: Vec<(Ms, Event)>,
@@ -121,6 +223,8 @@ pub struct ShackSim {
     /// Every line the shack sent to the host, with its time.
     pub host_lines: Vec<(Ms, String)>,
     host_partial: String,
+    /// The 13.8 V supply at the last step: an off-to-on change restarts the MCU.
+    powered: bool,
 }
 
 impl Default for ShackSim {
@@ -130,7 +234,9 @@ impl Default for ShackSim {
 }
 
 impl ShackSim {
-    /// Board powered at t = 0; the firmware ticks from t = 0. No stored settings.
+    /// Board powered at t = 0; the firmware ticks from the first step (t = 1 ms,
+    /// then every [`TICK`]). No stored settings. Supervisor timing at
+    /// [`Corner::Typ`].
     pub fn new() -> Self {
         Self::with_stored(Vec::new())
     }
@@ -158,19 +264,33 @@ impl ShackSim {
             next_tick: 0,
             host_lines: Vec::new(),
             host_partial: String::new(),
+            powered: true,
         }
     }
 
+    /// Present virtual time in ms (the board time).
     pub fn now(&self) -> Ms {
         self.board.borrow().now().as_ms()
     }
 
-    /// One millisecond.
+    /// One millisecond: board time, box stub, firmware tick when due, host lines.
+    /// The [crate overview](crate#one-step) explains the order.
     pub fn step(&mut self) {
         let t = self.now() + 1;
         self.board.borrow_mut().step_to(SimTime::ms(t));
         self.boxs.step(t, &mut self.board.borrow_mut());
-        if self.mcu_running && t >= self.next_tick {
+        // Power cycle: without 13.8 V the MCU is off (no ticks). When the supply
+        // returns, the MCU starts from boot: new firmware state, a hang is gone.
+        // The stored settings stay, as in flash.
+        let powered = self.board.borrow().env().power;
+        if powered && !self.powered {
+            self.shack = Shack::new();
+            self.mcu_running = true;
+            self.next_tick = t;
+            self.host_partial.clear();
+        }
+        self.powered = powered;
+        if powered && self.mcu_running && t >= self.next_tick {
             self.hw.spi_bytes = 0;
             self.shack.tick(t, &mut self.hw);
             self.spi_max_per_tick = self.spi_max_per_tick.max(self.hw.spi_bytes);
@@ -188,6 +308,14 @@ impl ShackSim {
     }
 
     /// Send one line as the host and return the answer (`ok ...` or `err ...`).
+    ///
+    /// The line goes in with a `\n`. The sim then steps until the firmware answers.
+    /// Event lines (`!`) and log lines (`#`) on the way stay in
+    /// [`ShackSim::host_lines`].
+    ///
+    /// # Panics
+    ///
+    /// If no answer comes within 100 ms.
     pub fn host(&mut self, line: &str) -> String {
         let from = self.host_lines.len();
         self.board.borrow_mut().host_send(&format!("{line}\n"));
@@ -204,6 +332,9 @@ impl ShackSim {
     }
 
     /// Host lines that start with `prefix`, from line index `from`.
+    ///
+    /// Returns the time of the first such line, or `None`. Take `from` from
+    /// `host_lines.len()` before the action, to skip older lines.
     pub fn host_seen(&self, from: usize, prefix: &str) -> Option<Ms> {
         self.host_lines[from..]
             .iter()
@@ -211,6 +342,7 @@ impl ShackSim {
             .map(|(t, _)| *t)
     }
 
+    /// Run `ms` milliseconds of virtual time, in 1 ms steps.
     pub fn run(&mut self, ms: Ms) {
         for _ in 0..ms {
             self.step();
@@ -228,6 +360,8 @@ impl ShackSim {
         cond(self).then(|| self.now())
     }
 
+    /// Press the front panel RESET button for 5 ms, then release it. The press gives
+    /// one clean clock edge to the SAFE latch (ideal debounce).
     pub fn press_reset(&mut self) {
         self.board.borrow_mut().set_env(|e| e.reset_pressed = true);
         self.run(5);
@@ -235,6 +369,13 @@ impl ShackSim {
     }
 
     /// Start-up done, link up, SAFE latch cleared by the operator: ready to transmit.
+    ///
+    /// Runs until the box link is up (at most 2 s), presses RESET, and runs 100 ms
+    /// more. With the typical supervisor this ends at about t = 340 ms.
+    ///
+    /// # Panics
+    ///
+    /// If the link does not come up, or TX_EN is not high at the end.
     pub fn start(&mut self) {
         self.run_until(2000, |s| s.shack.link_up())
             .expect("link up");
@@ -275,6 +416,9 @@ impl ShackSim {
 
     /// One outside-world command, shared by the terminal UI and the pty mode.
     /// Returns what happened, or an error with the help text.
+    ///
+    /// The commands are in [`WORLD_HELP`], for example `kill on`, `cable off` or
+    /// `radio R2 on`. Words are split on spaces; `on` is not case sensitive.
     pub fn world(&mut self, cmd: &str) -> Result<String, String> {
         let w: Vec<&str> = cmd.split_whitespace().collect();
         let on = |x: &str| x.eq_ignore_ascii_case("on");
@@ -304,12 +448,20 @@ impl ShackSim {
         Ok(format!("{cmd}: done"))
     }
 
+    /// Time of the first firmware event equal to `e`, or `None`.
     pub fn has_event(&self, e: Event) -> Option<Ms> {
         self.events.iter().find(|(_, x)| *x == e).map(|(t, _)| *t)
     }
 }
 
 /// Save 320 x 240 RGB565 pixels as PNG, scaled `scale` times.
+///
+/// Each pixel becomes a `scale` x `scale` block, 8 bits per colour. The function
+/// makes the parent folder if needed.
+///
+/// # Panics
+///
+/// If `px` is shorter than 320 x 240, or the file cannot be written.
 pub fn save_png(path: &std::path::Path, px: &[u16], scale: u32) {
     let (w, h) = (shack_ui::WIDTH, shack_ui::HEIGHT);
     let mut data = Vec::with_capacity((w * h * scale * scale * 3) as usize);

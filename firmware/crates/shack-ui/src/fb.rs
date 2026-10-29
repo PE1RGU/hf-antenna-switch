@@ -1,5 +1,8 @@
 //! Frame buffer in the ST7789 pixel format: RGB565, big-endian, row by row.
 //! 320 x 240 x 2 = 153 600 bytes. The caller owns the memory (a static on the target).
+//!
+//! The bytes are in the order the ST7789 reads them after RAMWR, so the target can
+//! send any run of rows over SPI as it is, with no conversion.
 
 use crate::{HEIGHT, WIDTH};
 use core::convert::Infallible;
@@ -8,22 +11,29 @@ use embedded_graphics::pixelcolor::raw::RawU16;
 use embedded_graphics::prelude::*;
 use embedded_graphics::primitives::Rectangle;
 
+/// Size of a whole frame in bytes: 153 600.
 pub const BYTES: usize = (WIDTH * HEIGHT * 2) as usize;
+/// Size of one pixel row in bytes: 640. Row `y` starts at `y * ROW_BYTES`.
 pub const ROW_BYTES: usize = (WIDTH * 2) as usize;
 
+/// A frame buffer over memory that the caller owns.
+///
+/// It implements the `embedded-graphics` `DrawTarget`, so [`render`](crate::render)
+/// can draw on it. Pixels outside the screen are skipped.
 pub struct FrameBuffer<'a> {
     buf: &'a mut [u8],
 }
 
 impl<'a> FrameBuffer<'a> {
-    /// `buf` must hold at least `BYTES`.
+    /// `buf` must hold at least [`BYTES`]; a shorter buffer panics.
     pub fn new(buf: &'a mut [u8]) -> Self {
         assert!(buf.len() >= BYTES, "frame buffer too small");
         FrameBuffer { buf }
     }
 }
 
-/// Pixel at (x, y) of a frame buffer, as RGB565.
+/// Pixel at (x, y) of a frame buffer, as RGB565. For tests and the simulator.
+/// Panics outside the buffer.
 pub fn pixel(buf: &[u8], x: u32, y: u32) -> u16 {
     let i = ((y * WIDTH + x) * 2) as usize;
     u16::from_be_bytes([buf[i], buf[i + 1]])

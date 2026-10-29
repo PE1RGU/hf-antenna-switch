@@ -10,8 +10,9 @@ use ratatui::widgets::{Block, BorderType, Widget};
 use shack_ui::wording::{self, RADIO_LABELS};
 use shack_ui::{ANTENNA_LABELS, Page, RadioMode, UiState, Warning, band_name};
 
-/// Smallest area for the full layout.
+/// Smallest area for the full layout: width in terminal cells.
 pub const MIN_WIDTH: u16 = 56;
+/// Smallest area for the full layout: height in terminal rows.
 pub const MIN_HEIGHT: u16 = 23;
 
 const TX: Color = Color::LightRed;
@@ -20,8 +21,16 @@ const AMBER: Color = Color::Yellow;
 const DIM: Color = Color::DarkGray;
 const SEC: Color = Color::Gray;
 
+/// A ratatui widget that draws one display page as text.
+///
+/// Page B (flow) shows radios on the left, antennas on the right, and routes as
+/// lines between them. Page C shows one card per radio. The Safe stop page shows
+/// the cause and the steps to clear it. A smaller area than [`MIN_WIDTH`] x
+/// [`MIN_HEIGHT`] shows a short message instead.
 pub struct TextView<'a> {
+    /// The display state from the firmware (`Shack::ui_state`).
     pub state: &'a UiState,
+    /// The page to draw (`Shack::shown_page`).
     pub page: Page,
 }
 

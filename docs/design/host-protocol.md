@@ -70,7 +70,7 @@ Why text and not binary (postcard + COBS, the first idea in PLAN.md): you can dr
 | `key <radio> on\|off` | Key the radio through the interface. Works only while its permit is out | `ok` |
 | `bias <column list>` | Bias-T feeds on for these columns, off for the rest | `ok` (queued) |
 | `stop on\|off` | Software stop: opens the SAFE loop. `off` closes it again; the SAFE latch still needs RESET | `ok` |
-| `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04) | `ok` |
+| `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04). While the expander does not answer, RESET_N may still hold the latch: the fault stays and a `#` line says so | `ok` |
 | `events on\|off` | Events on (default) or off | `ok` |
 | `keepalive <seconds>` | Host keep-alive time-out, 2 to 60 s (section 8) | `ok` |
 | `name <column or radio> <text>` | Set the name of an antenna (`A1` to `A4`, `EXP`) or a radio (`R1` to `R3`), 1 to 8 characters (the width of an antenna box on page B): letters, digits, `-`, `.`, `_`, `/`. Stored (section 8a) | `ok` |
@@ -162,7 +162,7 @@ Stored in the shack MCU flash (ESP32-C3, P7):
 ## 10. Implementation (P3b)
 
 - `host-proto` (no_std): line parser into a `HostCommand` enum, and formatters for answers, events and the status line into a fixed buffer. Fuzz test: no panic on any input.
-- shack-core: `Shack::host_line(now, &str) -> answer` and an event formatter; keep-alive timer in `tick`.
+- shack-core: the host port in `Shack::tick`: bytes come in through `ShackHw::usb_read`, each complete line is parsed and answered, and events go out through `ShackHw::usb_write` (`shack/host.rs`); keep-alive timer in `tick`.
 - Simulator: the USB port as a byte channel on the board model. `sim-shack --pty` opens a pseudo-terminal, so a real terminal or a Mac script can talk to the simulated interface. Same commands, same answers as the real one.
 
 ## 11. Open points
@@ -174,6 +174,6 @@ Stored in the shack MCU flash (ESP32-C3, P7):
 
 Choices from P3a, confirmed by Prins (2026-10-29):
 
-- **C-1 R1 permit.** PERMIT_R1 on while the box is READY and R1 has a TX column with K1 on; off while an R1 route change is pending or running.
+- **C-1 R1 permit.** PERMIT_R1 on while the box is READY and R1 has a TX column with K1 on; off while an R1 route change is pending (sent, not answered) or running (the box reports SWITCHING).
 - **C-2 Fault after start-up.** After an expander reset during operation, the firmware sets the expander up again but does not clear the fault latch by itself. `clearfault` (P3b-04) is the way back.
 - **C-3 F14 plausibility.** 500 ms keyed with permit and no TX sense: the port is flagged (`!txsense`). TX is not blocked.

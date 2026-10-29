@@ -1,4 +1,8 @@
-//! Shack interface logic. Call `tick` every TICK ms from the main loop.
+//! Shack interface logic. Call [`Shack::tick`] every [`TICK`] ms from the main loop.
+//!
+//! [`Shack`] is the state machine of the interface. The host port
+//! (host-protocol.md) and the display are submodules; they add methods to the same
+//! `Shack` type.
 //!
 //! Rules implemented here (design-log.md, hardware/unit/verify):
 //! - F1: expander outputs written before its configuration, at start-up and after every expander reset.
@@ -7,6 +11,23 @@
 //! - Handshake for R2 and R3 (D-63, link-protocol.md 5.1): PERMIT only while the box reports the permit.
 //! - F14: at TX end, inhibit first, then wait for TX sense inactive and at least 100 ms, then TxEnd.
 //! - Link lost: drop every permit and key at once; the box keeps K0 (F13); TxEnd after the link returns.
+//!
+//! # TX handshake of R2 and R3
+//!
+//! Each of R2 and R3 has a [`TxState`]. The moves are:
+//!
+//! | From | To | When |
+//! |---|---|---|
+//! | Idle | Requesting | `set_tx(on)` with the link up: TxRequest queued |
+//! | Requesting | Permitted | The box Status shows permit bit k: PERMIT_Rk on in the same tick |
+//! | Requesting, Permitted | Ending | `set_tx(off)`, host time-out, TxRequest refused, permit lost or link lost: PERMIT_Rk and KEY_Rk off in the same tick |
+//! | Ending | Releasing | Link up, TX sense inactive, at least 100 ms since the inhibit (F14): TxEnd queued |
+//! | Releasing | Idle | The box Status shows permit bit k = 0 |
+//! | Releasing | Ending | Link lost or TxEnd refused: TxEnd again after the F14 wait |
+//!
+//! PERMIT_Rk is on only in `Permitted`, and only while the box reports permit bit k.
+//! R1 has no handshake: K0 of R1 follows the PTT loop in hardware, and PERMIT_R1
+//! follows the box status (C-1).
 
 mod display;
 pub use display::{AUTO_CARDS_MS, AUTO_FLOW_MS, ROWS_PER_TICK};
@@ -35,8 +56,12 @@ const KEYS: [ExpPin; 3] = [exp::KEY_R1, exp::KEY_R2, exp::KEY_R3];
 const TX_SENSE: [ExpPin; 3] = [exp::R1_TX, exp::R2_TX, exp::R3_TX];
 
 /// TX state of R2 and R3 (R1 uses the hardware PTT loop).
+///
+/// The handshake follows link-protocol.md 5.1 (D-63). See the module docs for the
+/// diagram.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TxState {
+    /// No TX wanted. K0 released, no permit.
     Idle,
     /// TxRequest sent, no permit yet.
     Requesting,
@@ -44,22 +69,38 @@ pub enum TxState {
     Permitted,
     /// Inhibited at `since`; waiting for the F14 conditions before TxEnd.
     Ending {
+        /// Time of the inhibit, in ms. TxEnd goes no earlier than
+        /// `since + TX_END_MIN_WAIT`.
         since: Ms,
     },
     /// TxEnd sent; waiting for the box to drop the permit.
     Releasing,
 }
 
+/// Something that happened in a tick, for the log or the host.
+///
+/// [`Shack::tick`] queues events; [`Shack::take_event`] takes them out, oldest
+/// first. The queue holds 16; when it is full, the oldest event is dropped. The
+/// host also gets each event as a `!` line (host-protocol.md section 6), except
+/// [`Event::VersionMismatch`], which comes as a `#` log line.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Event {
+    /// The expander answered and is set up (F1 order). Inputs are valid from now on.
     ExpanderReady,
     /// Expander did not answer or was reset: all outputs off, set up again.
     ExpanderLost,
+    /// The box answered Hello with the same protocol version.
     LinkUp,
+    /// No valid answer from the box for 300 ms (link-protocol.md 6). All permits
+    /// and keys are off.
     LinkLost,
+    /// The box speaks another link protocol version: no commands are sent.
     VersionMismatch,
+    /// The box refused a command (Poll and Hello not included).
     Refused {
+        /// The refused command.
         cmd: Command,
+        /// The result code from the box (link-protocol.md 4.1).
         result: ResultCode,
     },
     /// The box dropped a permit that the shack still used.
@@ -72,23 +113,32 @@ pub enum Event {
     HostTimeout,
 }
 
+/// Why a request from the host or the main loop was refused at once.
+///
+/// These are local checks. The box still checks every command it gets, and a
+/// refusal from the box comes later as [`Event::Refused`].
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Refusal {
+    /// The box link is down, so the request cannot go to the box.
     LinkDown,
     /// R1 has no handshake; R2 and R3 only.
     NotForR1,
     /// The radio is transmitting or ending (F13 on the shack side).
     TxBusy,
+    /// The command queue to the box (8 commands) is full. Try again later.
     QueueFull,
 }
 
 /// Expander inputs, decoded.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Inputs {
+    /// TX sense per radio (index 0 = R1): `true` = the radio transmits.
     pub tx_sense: [bool; 3],
     /// Bit 0 = BAND A ... bit 3 = BAND D.
     pub band: u8,
+    /// KILL switch pressed.
     pub kill: bool,
+    /// SAFE latch set: TX blocked in hardware until the RESET button.
     pub latched: bool,
 }
 
@@ -107,6 +157,12 @@ impl Inputs {
     }
 }
 
+/// The shack interface state machine.
+///
+/// Make one with [`Shack::new`] and call [`Shack::tick`] every 10 ms. Requests
+/// (`set_route`, `set_tx`, `set_key`...) only record what is wanted. The next tick
+/// checks the conditions and sets the outputs. The host port calls the same
+/// requests from its text commands.
 pub struct Shack {
     expander_ready: bool,
     latch_cleared: bool,
@@ -148,6 +204,8 @@ impl Default for Shack {
 }
 
 impl Shack {
+    /// A new interface at power-up: expander not set up, link down, every permit
+    /// and key off, SAFE assumed lost until the first tick reads it.
     pub fn new() -> Self {
         Shack {
             expander_ready: false,
@@ -182,6 +240,11 @@ impl Shack {
 
     // ---------------------------------------------------------------- requests
 
+    /// Queue a route change for `radio` to the box.
+    ///
+    /// Refused while that radio is not [`TxState::Idle`] (F13 on the shack side).
+    /// For R1, PERMIT_R1 stays off from now until the box answers (C-1). The box
+    /// checks the route (H1 to H4) and the result comes as a reply.
     pub fn set_route(&mut self, radio: Radio, route: Route) -> Result<(), Refusal> {
         if self.tx[radio.index()] != TxState::Idle {
             return Err(Refusal::TxBusy);
@@ -194,6 +257,10 @@ impl Shack {
     }
 
     /// Ask for (or end) TX on R2 or R3.
+    ///
+    /// `on = true` starts the handshake on the next tick (D-63). `on = false` ends
+    /// TX the F14 way and also releases the key. Ending is always allowed, also
+    /// with the link down.
     pub fn set_tx(&mut self, radio: Radio, on: bool) -> Result<(), Refusal> {
         if radio == Radio::R1 {
             return Err(Refusal::NotForR1);
@@ -209,10 +276,15 @@ impl Shack {
     }
 
     /// Key the radio through the interface. Takes effect only while its permit is out.
+    ///
+    /// The key is a wish: KEY_Rk goes high on the expander only when PERMIT_Rk is
+    /// out, and the hardware gates it by the permit as well.
     pub fn set_key(&mut self, radio: Radio, on: bool) {
         self.want_key[radio.index()] = on;
     }
 
+    /// Queue a bias-T change to the box: `mask` is the set of columns with the
+    /// bias-T on.
     pub fn set_bias(&mut self, mask: link_proto::ColMask) -> Result<(), Refusal> {
         self.queue(Command::SetBias(mask))
     }
@@ -224,43 +296,65 @@ impl Shack {
 
     // ---------------------------------------------------------------- state
 
+    /// The box link is up (Hello answered, no time-out).
     pub fn link_up(&self) -> bool {
         self.link.is_up()
     }
 
+    /// The last Status from the box. `None` before the first one and after a link loss.
     pub fn box_status(&self) -> Option<&Status> {
         self.status.as_ref()
     }
 
+    /// The expander inputs of the last tick. `None` while the expander is not ready.
     pub fn inputs(&self) -> Option<&Inputs> {
         self.inputs.as_ref()
     }
 
+    /// No SAFE loop current at the last tick (GPIO21 high).
     pub fn safe_lost(&self) -> bool {
         self.safe_lost
     }
 
+    /// TX state of `radio`. Always [`TxState::Idle`] for R1 (no handshake).
     pub fn tx_state(&self, radio: Radio) -> TxState {
         self.tx[radio.index()]
     }
 
+    /// PERMIT line of `radio` as driven now.
     pub fn permit(&self, radio: Radio) -> bool {
         self.permit_out[radio.index()]
     }
 
+    /// Take the oldest queued [`Event`], or `None` when there is none.
     pub fn take_event(&mut self) -> Option<Event> {
         self.events.pop_front()
     }
 
     // ---------------------------------------------------------------- main loop
 
+    /// Run one pass of the main loop. Call it every [`TICK`] ms with the present
+    /// time `now` in ms (from power-up; it must not go back).
+    ///
+    /// The order of the steps is in the crate docs. The call never blocks: the
+    /// display, the link and the flash each do a short step per tick.
     pub fn tick<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
+        self.pass(now, hw);
+        // Kick the supervisor from the main loop only, after the checks of the pass
+        // (D-59 rule 1). A pass that hangs or panics gives no kick, so the
+        // supervisor sets the fault latch and every radio is inhibited in hardware.
         self.wdi = !self.wdi;
         hw.set_wdi(self.wdi);
+    }
+
+    /// The work of one tick, before the watchdog kick. Returns early when the
+    /// expander is not ready.
+    fn pass<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
         self.safe_lost = hw.safe_lost();
         self.load_config(hw);
 
         if !self.expander_ready {
+            // F1: `init` writes the output word before the configuration.
             if EXPANDER
                 .init(hw.i2c(), self.exp_word(), expander_config())
                 .is_err()
@@ -273,6 +367,9 @@ impl Shack {
             self.expander_ready = true;
             self.exp_written = Some(self.exp_word());
             self.event(Event::ExpanderReady);
+            // Self-test passed (expander answers): one LATCH_CLR edge, only at
+            // start-up (D-59 rule 2). After a later reset the host must use
+            // `clearfault` (C-2).
             if !self.latch_cleared {
                 hw.set_latch_clr(true);
                 hw.set_latch_clr(false);
@@ -301,6 +398,7 @@ impl Shack {
             }
         }
 
+        // Box link: decode replies, then check the 300 ms link time-out.
         while let Some(b) = hw.uart_read() {
             if let Some(Ok(f)) = self.decoder.push::<Reply>(b)
                 && let Some(e) = self.link.receive(now, f)
@@ -318,6 +416,7 @@ impl Shack {
         for r in [Radio::R2, Radio::R3] {
             self.step_tx(now, r);
         }
+        // One command at a time: the next one waits for the answer to the last.
         if self.link.is_up()
             && !self.link.busy()
             && let Some(c) = self.pending.pop_front()
@@ -387,7 +486,7 @@ impl Shack {
         }
     }
 
-    /// The stored settings in use.
+    /// The stored settings in use (names, routes, bias, page).
     pub fn config(&self) -> &Config {
         &self.config
     }
@@ -408,6 +507,9 @@ impl Shack {
             }
             LinkEvent::VersionMismatch(_) => self.event(Event::VersionMismatch),
             LinkEvent::Lost { .. } => {
+                // Without a status, permit_wanted() is false for all radios, so
+                // apply_outputs() drops every permit in this tick. Each radio that
+                // was in the handshake goes to Ending: TxEnd after the link is back.
                 self.status = None;
                 self.pending.clear();
                 self.route_r1_pending = false;
@@ -459,6 +561,7 @@ impl Shack {
                 result: status.result,
             });
         }
+        // Follow the permit bits in the Status (link-protocol.md 5.1).
         for r in [Radio::R2, Radio::R3] {
             let i = r.index();
             match self.tx[i] {
@@ -474,6 +577,8 @@ impl Shack {
         }
     }
 
+    /// Move the handshake of `r` on by local conditions (request, end, F14 wait).
+    /// Moves caused by the box reply are in `on_reply`.
     fn step_tx(&mut self, now: Ms, r: Radio) {
         let i = r.index();
         let up = self.link.is_up();
@@ -520,6 +625,8 @@ impl Shack {
         }
     }
 
+    /// The expander output word for the present state: software stop, keys (only
+    /// with the permit out) and the display pins.
     fn exp_word(&self) -> u16 {
         let mut w = 0u16;
         if !self.sw_stop {
@@ -536,6 +643,8 @@ impl Shack {
     fn apply_outputs<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
         let want = Radio::ALL.map(|r| self.permit_wanted(r));
         // Inhibit first: permits that go off, then the expander, then permits that go on.
+        // So a radio is inhibited before anything else changes, and a key never
+        // goes high before its permit is out.
         for r in Radio::ALL {
             if self.permit_out[r.index()] && !want[r.index()] {
                 hw.set_permit(r, false);
@@ -560,6 +669,8 @@ impl Shack {
         self.check_tx_sense(now);
     }
 
+    /// F14 plausibility (C-3): keyed with the permit for 500 ms without TX sense
+    /// flags the port once. TX is not blocked.
     fn check_tx_sense(&mut self, now: Ms) {
         for r in Radio::ALL {
             let i = r.index();
@@ -585,6 +696,8 @@ impl Shack {
         }
     }
 
+    /// Add a command for the box. A command that is already queued is not added
+    /// twice (all commands set a state, link-protocol.md 5).
     fn queue(&mut self, cmd: Command) -> Result<(), Refusal> {
         if self.pending.iter().any(|c| *c == cmd) {
             return Ok(());
@@ -601,6 +714,9 @@ impl Shack {
     }
 
     /// True after a supervisor reset during operation, until `clearfault`.
+    ///
+    /// The firmware cannot read FAULT itself. It knows a fault when the expander
+    /// was reset after start-up (the expander RESET is RESET_N, C-2).
     pub fn fault_known(&self) -> bool {
         self.fault_known
     }

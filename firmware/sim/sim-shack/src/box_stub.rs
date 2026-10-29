@@ -3,6 +3,12 @@
 //! - TxRequest: K0 set at once, permit reported 12 ms later.
 //! - SetRoute: refused while the radio has K0, while TX_ANY, or for a TX row on A2 or a shared TX column.
 //! - Link lost with K0 out: open SAFE (READY off), keep K0 (F13). Without K0: hold (P-02).
+//!
+//! The stub uses the real link code of `link-proto` ([`BoxLink`], [`Decoder`]) for
+//! framing, sequence numbers, repeats and the link time-out. Only the decisions
+//! are a script. It does not model relays, RF detection or bias-T current: `rfdet`
+//! is always empty, `bias_ok` always equals `bias`, and the fault code is always
+//! none.
 
 use link_proto::box_link::{BoxLink, Incoming};
 use link_proto::frame::MAX_WIRE;
@@ -14,10 +20,15 @@ pub const K0_SETTLE: Ms = 12;
 /// Length of a route change sequence (three 12 ms steps).
 pub const SWITCH_TIME: Ms = 36;
 
+/// The scripted box. [`ShackSim`](crate::ShackSim) calls [`BoxStub::step`] once
+/// per ms. A test may change the public fields to make the box slow, silent or
+/// not ready.
 pub struct BoxStub {
     link: BoxLink,
     decoder: Decoder,
+    /// Present route (TX and RX column) per radio R1 to R3.
     pub routes: [Route; 3],
+    /// Columns with the bias-T on, as the last SetBias asked.
     pub bias: ColMask,
     k0_since: [Option<Ms>; 3],
     switching_until: Ms,
@@ -25,6 +36,8 @@ pub struct BoxStub {
     pub ready: bool,
     /// Time from K0 set to the permit bit; K0_SETTLE unless a test makes the box slow.
     pub k0_settle: Ms,
+    /// The box opened SAFE after a link loss with K0 out (status flag
+    /// `link_lost_stop`). It stays set; nothing in the stub clears it.
     pub link_lost_stop: bool,
     /// Box MCU answers nothing (hang, or pair 4 broken).
     pub mute: bool,
@@ -41,6 +54,7 @@ impl Default for BoxStub {
 }
 
 impl BoxStub {
+    /// A box with no routes, K0 off, READY closed, answering.
     pub fn new() -> Self {
         BoxStub {
             link: BoxLink::new(),
@@ -58,6 +72,7 @@ impl BoxStub {
         }
     }
 
+    /// True while K0 of radio `r` is set (the box has given it TX).
     pub fn k0(&self, r: Radio) -> bool {
         self.k0_since[r.index()].is_some()
     }
@@ -72,6 +87,11 @@ impl BoxStub {
             .fold(ColMask::EMPTY, |m, r| m.with(r.tx).with(r.rx))
     }
 
+    /// One ms of box time at `now`.
+    ///
+    /// Reads every byte that reached the box, decodes frames, and sends a reply for
+    /// each one (unless `mute`). Then checks the link time-out, and puts the READY
+    /// state on the board (the box side of the SAFE loop).
     pub fn step(&mut self, now: Ms, board: &mut ShackBoard) {
         while let Some(b) = board.box_recv() {
             let Some(frame) = self.decoder.push::<Command>(b) else {

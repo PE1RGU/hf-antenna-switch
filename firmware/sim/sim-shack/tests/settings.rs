@@ -143,3 +143,39 @@ fn state_file_survives_a_simulator_restart() {
     assert_eq!(s.boxs.routes[0], route(Col::A1, Col::A2));
     assert!(s.host("names").contains("A1=Dipole"));
 }
+
+/// F4 or `:power off`: the MCU is off, then starts from boot. The stored
+/// settings stay; the SAFE latch is set again; a new start-up runs.
+#[test]
+fn power_cycle_in_the_emulator_restarts_the_firmware() {
+    let mut s = configured();
+    let lines_before = s.host_lines.len();
+    s.world("power off").unwrap();
+    s.run(500);
+    assert_eq!(
+        s.host_lines.len(),
+        lines_before,
+        "nothing from an unpowered MCU"
+    );
+    s.world("power on").unwrap();
+    s.run_until(3000, |s| s.shack.link_up())
+        .expect("link up after the restart");
+    s.run(300);
+    let ready = s
+        .events
+        .iter()
+        .filter(|(_, e)| *e == shack_core::shack::Event::ExpanderReady)
+        .count();
+    assert_eq!(ready, 2, "a second start-up");
+    assert_eq!(
+        s.shack.ui_state().stop,
+        Some(shack_ui::StopCause::PowerUp),
+        "SAFE latch set at power-up"
+    );
+    let names = s.host("names");
+    assert!(
+        names.contains("A3=Hexbeam"),
+        "stored settings kept: {names}"
+    );
+    assert!(s.host("status").contains("page=c"));
+}

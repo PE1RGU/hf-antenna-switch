@@ -2,6 +2,12 @@
 //!
 //! The host asks; the shack logic decides. No command here clears the SAFE latch
 //! or gives a permit: commands only set what the host wants, as the API does.
+//!
+//! Each tick reads the received bytes and answers every complete line in the same
+//! tick (`ok`, `err ...` or a text answer). Commands for the box answer `ok` when
+//! queued; the box result comes later as an event. Events are not sent at once:
+//! they are queued and sent at the end of the tick, after the change detection,
+//! so the host sees the new state in a fixed order.
 
 use super::*;
 use core::fmt::{self, Write as _};
@@ -174,10 +180,16 @@ impl Shack {
                 // Same edge as at start-up; the latch ignores it while RESET_N is low.
                 hw.set_latch_clr(true);
                 hw.set_latch_clr(false);
+                // With the expander down, RESET_N may still be low and the latch then
+                // ignores the edge: keep the fault and say so, never claim a clear.
                 if self.expander_ready {
                     self.fault_known = false;
+                    self.host.log("fault latch cleared by host");
+                } else {
+                    self.host.log(
+                        "LATCH_CLR sent, but the expander is not ready: fault kept, try again",
+                    );
                 }
-                self.host.log("fault latch cleared by host");
             }
             HostCommand::Events(on) => self.host.events_on = on,
             HostCommand::KeepAlive(s) => self.host.keep_alive_s = s,
@@ -216,6 +228,8 @@ impl Shack {
     }
 
     /// Host silent for the keep-alive time-out while TX or a key is on: end it all (section 8).
+    /// Routes, bias and the software stop stay as they are. The timer restarts, so
+    /// one time-out gives one `!host timeout`.
     pub(super) fn host_keep_alive(&mut self, now: Ms) {
         let Some(last) = self.host.last_line else {
             return;
@@ -262,6 +276,8 @@ impl Shack {
         }
     }
 
+    /// Compare the present state with the last values sent and queue an event for
+    /// each change. The first call after start-up sends each known value once.
     fn detect_changes(&mut self) {
         let mut out: Vec<HostEvent, 16> = Vec::new();
         let seen = &mut self.host.seen;

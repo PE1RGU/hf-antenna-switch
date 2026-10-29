@@ -4,10 +4,19 @@
 //! DISPOFF/DISPON, CASET, RASET, RAMWR, MADCTL (MY, MX, MV), COLMOD (16 bit only).
 //! Other commands are kept in `unknown` so a test can see them.
 //! Simplification: MADCTL swaps (MV) before it mirrors (MX, MY), on panel coordinates.
+//!
+//! On the shack board, D/C and RESX come from the PCA9539 (DISP_DC, DISP_RST),
+//! and the SPI bus is write only (no MISO). The firmware draws in landscape,
+//! 320 x 240, with MV set (D-180). Pixels are RGB565, two bytes each, high byte
+//! first. Timing (SLPOUT wait, frame rate) is not modelled.
 
+/// Panel width in pixels, in panel coordinates (portrait).
 pub const WIDTH: usize = 240;
+/// Panel height in pixels, in panel coordinates (portrait).
 pub const HEIGHT: usize = 320;
 
+/// One ST7789 with its frame memory. Feed it SPI bytes with [`St7789::spi`];
+/// read the picture with [`St7789::pixel`] or [`St7789::logical`].
 #[derive(Clone, Debug)]
 pub struct St7789 {
     fb: Vec<u16>,
@@ -34,6 +43,8 @@ impl Default for St7789 {
 }
 
 impl St7789 {
+    /// A controller after power-on: asleep, display off, frame memory black,
+    /// COLMOD 0x66 (18 bit), MADCTL 0, window the full panel.
     pub fn new() -> Self {
         St7789 {
             fb: vec![0; WIDTH * HEIGHT],
@@ -174,6 +185,8 @@ impl St7789 {
         self.fb[y * WIDTH + x]
     }
 
+    /// The whole frame memory, RGB565, row by row in panel coordinates
+    /// (`y * WIDTH + x`).
     pub fn framebuffer(&self) -> &[u16] {
         &self.fb
     }
@@ -191,6 +204,7 @@ impl St7789 {
         out
     }
 
+    /// Present MADCTL value (0x20 = MV, 0x40 = MX, 0x80 = MY).
     pub fn madctl(&self) -> u8 {
         self.madctl
     }
@@ -200,6 +214,8 @@ impl St7789 {
         !self.in_reset && !self.sleeping && self.on && self.colmod & 0x07 == 0x05
     }
 
+    /// True after INVON (0x21), false after INVOFF (0x20) or a reset. The
+    /// firmware sends INVON in its init sequence (`shack_ui::st7789`).
     pub fn inverted(&self) -> bool {
         self.inverted
     }

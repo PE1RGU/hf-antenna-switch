@@ -1,12 +1,24 @@
 //! One direction of a UART link, at byte level with real byte timing.
 //! A cut line loses every byte, also bytes already in flight.
+//!
+//! The model follows the box data link (D-58): 9600 baud, 8N1, so one byte takes
+//! 10 bit times (1041 µs). Bits are not modelled; a byte arrives whole at the end
+//! of its byte time. A full-duplex link uses two lines, one per direction.
 
 use crate::SimTime;
 use std::collections::VecDeque;
 
 /// Fault filter: `None` drops the byte, `Some(b)` delivers `b` (maybe corrupted).
+///
+/// A `Box<dyn FnMut ..>` is a closure stored on the heap; it can keep its own
+/// state, for example a counter that drops every tenth byte.
 pub type ByteFilter = Box<dyn FnMut(u8) -> Option<u8>>;
 
+/// One direction of a UART link: transmitter, wire and receiver FIFO.
+///
+/// The sender calls [`UartLine::send`]; the receiver calls [`UartLine::recv`]
+/// with its own present time. Bytes queue behind each other, as in a real
+/// transmitter.
 pub struct UartLine {
     byte_time: SimTime,
     in_flight: VecDeque<(SimTime, u8)>,
@@ -17,7 +29,9 @@ pub struct UartLine {
 }
 
 impl UartLine {
-    /// 8N1: 10 bit times per byte.
+    /// A line at `baud` bits per second, not cut, without filter.
+    ///
+    /// 8N1: 10 bit times per byte. The byte time is rounded down to whole µs.
     pub fn new(baud: u32) -> Self {
         UartLine {
             byte_time: SimTime::us(10_000_000 / baud as u64),
@@ -28,10 +42,12 @@ impl UartLine {
         }
     }
 
+    /// Time for one byte on the wire (1041 µs at 9600 baud).
     pub fn byte_time(&self) -> SimTime {
         self.byte_time
     }
 
+    /// Set or remove the fault filter. It acts on each byte at [`UartLine::send`].
     pub fn set_filter(&mut self, f: Option<ByteFilter>) {
         self.filter = f;
     }

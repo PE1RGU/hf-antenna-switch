@@ -186,6 +186,7 @@ cargo run --release -p sim-shack
 ```
 
 [firmware/README.md](firmware/README.md) explains how the emulator works, every key and command, and a first session step by step.
+To read or change the code, start with the [firmware guide](firmware/docs/guide.md), written for hobby programmers.
 
 ## Where it stands
 
