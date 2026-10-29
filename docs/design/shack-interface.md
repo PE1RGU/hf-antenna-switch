@@ -134,7 +134,7 @@ Details in design-log.md section 4.
 - Cat6 entry: the four GDTs in one row directly behind the RJ45, so the surge path to CHASSIS is short (M-88).
 - USB-C J14: fixed fan-out copper with router terminals (M-89).
 - Housing fit (M-92 to M-94, D-177, D-178): 1455T1601 with the removable cap on top, board parts side up in the 2nd slot from the closed bottom; panel connectors overhang the board edges by 2.0 mm and J14 sits on a 13 x 2.0 mm board tab, so each connector face is 0.3 mm from its end panel. Trim the 7805 leads to 3 mm or less.
-- Front panel (D-180 to D-183, M-99, M-100; plate a4, 3D fit with the maker models): Waveshare 1.9" TFT (SPI on IO2/IO9, DC/RST/backlight on the PCA9539, header J15), SAFE and LATCHED LEDs (hardware), RESET (C&K 8125SHZBE), KILL (EAO 84-5340.0020 E-stop, 2 NC, R75 2k2).
+- Front panel (D-180 to D-183, M-99, M-100; plate a4, 3D fit with the maker models): Waveshare 2inch TFT, 240 x 320 (D-187, replaces the 1.9 inch of D-180; SPI on IO2/IO9, DC/RST/backlight on the PCA9539, header J15), SAFE and LATCHED LEDs (hardware), RESET (C&K 8125SHZBE), KILL (EAO 84-5340.0020 E-stop, 2 NC, R75 2k2).
 - End plates (D-179): PCBs, black mask, white silkscreen, CHASSIS plane on the inside face, bonded through the four screws; generator hardware/shack-interface/endplates/gen_endplates.py. H1 earth wire to the extrusion.
 - Input range 11 to 15 V checked (C-34). TVS and 7805 capacitor exceptions recorded (D-124).
 

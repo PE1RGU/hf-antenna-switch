@@ -1,41 +1,79 @@
 //! Frame layout (link-protocol.md section 3):
 //! `COBS( seq | type | payload | crc16 ) | 0x00`, CRC-16/CCITT-FALSE high byte first.
+//!
+//! - **seq**: sequence number. The shack sets it; the box copies it into the answer.
+//! - **type**: message type (section 4).
+//! - **payload**: 0 to 12 bytes, fixed length per type.
+//! - **crc16**: CRC-16/CCITT-FALSE (poly 0x1021, init 0xFFFF, no reflection,
+//!   no final XOR) over seq, type and payload.
+//!
+//! COBS (Consistent Overhead Byte Stuffing) removes every 0x00 from the frame,
+//! for a cost of one byte. So a 0x00 on the line can only be the delimiter at
+//! the end of a frame. After any error, the receiver starts again at the next
+//! 0x00. A break (cable cut, box dead) reads as 0x00 bytes, so it also only
+//! ends a frame.
+//!
+//! The CRC-16 finds all 1, 2 and 3 bit errors and all bursts up to 16 bits in
+//! these short frames. The cable is unshielded and buried (D-57).
 
 use crate::cobs;
 use crate::msg::{MAX_PAYLOAD, Message, ParseError};
 
-/// seq + type + payload + crc.
+/// Largest frame before COBS, in bytes: seq + type + payload + crc (16).
 pub const MAX_RAW: usize = 2 + MAX_PAYLOAD + 2;
 /// COBS adds one byte below 254 bytes.
 const MAX_COBS: usize = MAX_RAW + 1;
-/// Largest frame on the wire, with the delimiter.
+/// Largest frame on the wire, with the delimiter, in bytes (18: a Status).
+/// Use it as the size of the buffer for [`Frame::encode`].
 pub const MAX_WIRE: usize = MAX_COBS + 1;
 
 /// CRC-16/CCITT-FALSE is named CRC-16/IBM-3740 in the CRC catalogue.
 const CRC: crc::Crc<u16> = crc::Crc::<u16>::new(&crc::CRC_16_IBM_3740);
 
+/// One message with its sequence number.
+///
+/// `M` is the message type: [`Command`](crate::Command) from the shack, or
+/// [`Reply`](crate::Reply) from the box. Rust calls this a generic type: the
+/// same code works for both.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Frame<M> {
+    /// Sequence number. The shack adds 1 for each new command (it wraps after
+    /// 255); a resend keeps the seq. The box answers with the same seq.
     pub seq: u8,
+    /// The message.
     pub msg: M,
 }
 
+/// Why a received frame was not accepted.
+///
+/// The checks run in the order of section 3. On every error except
+/// [`BadValue`](DecodeError::BadValue) the receiver drops the frame and says
+/// nothing; the time-outs catch a lost link.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DecodeError {
+    /// More bytes than [`MAX_WIRE`] before the delimiter.
     TooLong,
+    /// The COBS encoding is not valid.
     Cobs,
+    /// Fewer than 4 bytes after COBS: no room for seq, type and CRC.
     TooShort,
+    /// The CRC does not match: the frame was damaged on the line.
     Crc,
+    /// The type byte is not known in this direction.
     UnknownType,
+    /// The payload length does not match the type.
     Length,
     /// CRC good, but a value is out of range. The box answers BadArg to this seq.
     BadValue {
+        /// The seq of the frame, for the BadArg answer.
         seq: u8,
     },
 }
 
 impl<M: Message> Frame<M> {
-    /// Write the frame with its delimiter, return the number of bytes.
+    /// Write the frame with its delimiter into `out`, return the number of bytes.
+    ///
+    /// Send `out[..n]` on the UART. A frame is 6 (Poll) to 18 (Status) bytes.
     pub fn encode(&self, out: &mut [u8; MAX_WIRE]) -> usize {
         let mut payload = [0u8; MAX_PAYLOAD];
         let (ty, n) = self.msg.write(&mut payload);
@@ -50,7 +88,10 @@ impl<M: Message> Frame<M> {
         len + 1
     }
 
-    /// Check and parse one frame after COBS decoding.
+    /// Check and parse one frame after COBS decoding (without the delimiter).
+    ///
+    /// Checks the length, the CRC, the type and the payload. Normally you do
+    /// not call this yourself: [`Decoder::push`] does it.
     pub fn decode_raw(raw: &[u8]) -> Result<Self, DecodeError> {
         if raw.len() < 4 {
             return Err(DecodeError::TooShort);
@@ -71,6 +112,10 @@ impl<M: Message> Frame<M> {
 }
 
 /// Streaming decoder: feed it the UART bytes one at a time.
+///
+/// It collects bytes until a 0x00 delimiter, then decodes the frame. It needs
+/// no time-out of its own: a frame cut short by a break ends at the next 0x00
+/// and fails the COBS, length or CRC check.
 #[derive(Debug, Default)]
 pub struct Decoder {
     buf: [u8; MAX_COBS],
@@ -79,13 +124,21 @@ pub struct Decoder {
 }
 
 impl Decoder {
+    /// An empty decoder.
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Returns a result at each delimiter. Empty frames (a break reads as zero bytes) give nothing.
+    /// Add one received byte.
+    ///
+    /// Returns a result at each delimiter, `None` for all other bytes. Empty
+    /// frames (a break reads as zero bytes) give nothing. `M` is the message
+    /// type to expect: the box uses `push::<Command>`, the shack
+    /// `push::<Reply>`.
     pub fn push<M: Message>(&mut self, byte: u8) -> Option<Result<Frame<M>, DecodeError>> {
         if byte != 0 {
+            // Keep the byte. On overflow, drop the rest of the frame and
+            // report TooLong at the delimiter.
             if self.len < self.buf.len() {
                 self.buf[self.len] = byte;
                 self.len += 1;

@@ -38,7 +38,7 @@ A break or a framing error is not an error to report on its own. The receiver dr
 
 - **seq** (u8): sequence number, set by the shack (section 5). The box copies it back.
 - **type** (u8): message type (section 4).
-- **payload**: fixed length per type. Little endian.
+- **payload**: fixed length per type. In v1 every payload field is one byte, so there is no byte order to choose; a future field of more than one byte is little endian. (The CRC goes high byte first, see below.)
 - **crc16**: CRC-16/CCITT-FALSE (poly 0x1021, init 0xFFFF, no reflection, no final XOR), over seq, type and payload. Sent high byte first.
 - **COBS** encoding, then one 0x00 delimiter. A receiver resyncs at the next 0x00 after any error.
 
@@ -101,7 +101,7 @@ Status payload (12 bytes):
 | 6 | BadArg | Value out of range, or TxRequest / TxEnd for R1 (R1 uses the PTT loop) |
 | 7 | Busy | A switching sequence is running |
 | 8 | ReadBack | Read-back differs from the written state |
-| 9 | Version | Hello version not supported |
+| 9 | Version | Reserved. In v1 the box answers every Hello with a HelloReply that carries its own version; the shack compares the versions (section 5) |
 
 ### 4.2 Fault codes
 
@@ -118,7 +118,7 @@ The shack is the master. The box speaks only to answer.
 - The box keeps the last seq and its result. A frame with the same seq is not executed again; the box sends the present Status with the stored result. So a lost answer cannot run a command twice.
 - All commands set a state, not a step. SetRoute, TxRequest, TxEnd and SetBias give the same result when sent twice.
 
-Start: the shack sends Hello until a HelloReply comes. Hello also clears the box seq store, so a restarted shack cannot hit an old seq. If the version differs, the shack does not send commands and reports this to the Mac. The rx-only mask in HelloReply must match the shack's own table (unit 1: A2, D-103).
+Start: the shack sends Hello until a HelloReply comes. Hello also clears the box seq store, so a restarted shack cannot hit an old seq. If the version differs, the shack does not send commands, reports this to the Mac once, and keeps sending Hello. The rx-only mask in HelloReply must match the shack's own table (unit 1: A2, D-103).
 
 ### 5.1 TX handshake, R2 and R3 (D-63, T3a, T3b, F2)
 

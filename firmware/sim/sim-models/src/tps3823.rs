@@ -3,15 +3,27 @@
 //! RESET_N is low while VDD is below the threshold, and for td after VDD returns.
 //! Watchdog: any edge on WDI restarts the timer; no edge for tout asserts RESET_N for td.
 //! WDI floating (open) disables the watchdog.
+//!
+//! The shack board has two of them. The main supervisor drives RESET_N (MCU,
+//! expander, fault latch) and gets WDI from the MCU through R64 (D-123). The
+//! second one has WDI open and gives POR_N for the SAFE latch (D-84).
+//!
+//! The VDD threshold is not modelled as a voltage: the board passes `vdd_ok`.
 
 use sim_core::SimTime;
 
 /// Datasheet corner for the timing values.
+///
+/// Run a scenario at [`Corner::Min`] and [`Corner::Max`] to check that the
+/// firmware works over the whole spread, not only at the typical value.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum Corner {
+    /// Shortest times: td 120 ms, tout 0.9 s.
     Min,
+    /// Typical times: td 200 ms, tout 1.6 s. The default.
     #[default]
     Typ,
+    /// Longest times: td 300 ms, tout 2.5 s.
     Max,
 }
 
@@ -35,6 +47,8 @@ impl Corner {
     }
 }
 
+/// One TPS3823A-33. Call [`Tps3823::update`] at each board step; it returns
+/// RESET_N.
 #[derive(Clone, Debug)]
 pub struct Tps3823 {
     corner: Corner,
@@ -45,6 +59,8 @@ pub struct Tps3823 {
 }
 
 impl Tps3823 {
+    /// A supervisor without supply, with the timing of `corner`. The first
+    /// [`Tps3823::update`] with `vdd_ok` starts the td hold.
     pub fn new(corner: Corner) -> Self {
         Tps3823 {
             corner,
@@ -56,6 +72,11 @@ impl Tps3823 {
     }
 
     /// Returns RESET_N. `wdi` None = pin open (watchdog off).
+    ///
+    /// `now` must not go back between calls. A WDI edge counts only when the
+    /// level differs from the last call, so call this at every step. The
+    /// watchdog starts when RESET_N goes high; WDI edges during the td hold do not
+    /// count.
     pub fn update(&mut self, now: SimTime, vdd_ok: bool, wdi: Option<bool>) -> bool {
         if !vdd_ok {
             self.powered = false;

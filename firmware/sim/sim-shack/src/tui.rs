@@ -6,7 +6,7 @@
 //! - Right: the outside world (F-keys) and the board signals.
 //! - Bottom: host traffic and a command line. Host commands go to the USB port of the
 //!   simulated shack; `:` commands go to the outside world.
-//! - TCP: a host tool can connect to 127.0.0.1:<port> (one client at a time).
+//! - TCP: a host tool can connect to `127.0.0.1:<port>` (one client at a time).
 
 use crate::textview::TextView;
 use crate::{ShackSim, WORLD_HELP};
@@ -31,11 +31,18 @@ const LOG_LINES: usize = 200;
 /// An empty host line this often while auto keep-alive is on (host-protocol.md 8).
 const AUTO_ALIVE_MS: Ms = 1000;
 
+/// State of the terminal UI: the sim, the display image, the host log, the TCP
+/// port and the command line.
+///
+/// [`run`] makes one and loops: [`App::step_realtime`], [`App::draw`], then
+/// [`App::key`] for each key press.
 pub struct App {
+    /// The emulator that the UI shows and drives.
     pub sim: ShackSim,
     picker: Picker,
     image: Option<StatefulProtocol>,
     last_screen: Vec<u16>,
+    /// The command line as typed so far (at most 120 characters).
     pub input: String,
     log: VecDeque<(Style, String)>,
     seen_lines: usize,
@@ -55,6 +62,9 @@ pub struct App {
 }
 
 impl App {
+    /// A UI for `sim`. `picker` sets the image protocol; half-blocks select the text
+    /// view. `tcp_port`: listen on 127.0.0.1 at this port. If the port is not
+    /// free, the UI runs without TCP and says so in the log.
     pub fn new(sim: ShackSim, picker: Picker, tcp_port: Option<u16>) -> Self {
         let tcp = tcp_port.and_then(|p| {
             let l = TcpListener::bind(("127.0.0.1", p)).ok()?;
@@ -106,7 +116,7 @@ impl App {
         self.sim.board.borrow_mut().host_send(&format!("{line}\n"));
     }
 
-    /// Simulated time follows the wall clock.
+    /// Simulated time follows the wall clock: run the ms since the last call.
     pub fn step_realtime(&mut self) {
         let target = self.start.elapsed().as_millis() as Ms;
         let ms = target.saturating_sub(self.sim.now());
@@ -177,6 +187,10 @@ impl App {
     }
 
     /// Handle one key. Returns false to quit.
+    ///
+    /// F1 to F10 act on the outside world (see [`WORLD_HELP`]). Enter sends the
+    /// command line: a line that starts with `:` is an outside-world command,
+    /// any other line goes to the host port.
     pub fn key(&mut self, k: KeyEvent) -> bool {
         if k.kind != KeyEventKind::Press {
             return true;
@@ -253,6 +267,8 @@ impl App {
 
     // ---------------------------------------------------------------- drawing
 
+    /// Draw the whole screen: display (left), outside world and board (right),
+    /// host log and command line (bottom).
     pub fn draw(&mut self, f: &mut Frame) {
         let [top, bottom] =
             Layout::vertical([Constraint::Min(16), Constraint::Length(12)]).areas(f.area());
@@ -461,8 +477,11 @@ impl App {
     }
 }
 
+/// Start options of the terminal UI, from the command line of `sim-shack`.
 pub struct Options {
+    /// File for the stored settings (`--state`).
     pub state_file: PathBuf,
+    /// TCP host port on 127.0.0.1 (`--tcp`), or `None` for no port (`--no-tcp`).
     pub tcp_port: Option<u16>,
     /// Force the display view: Some(true) text, Some(false) pixels, None by terminal.
     pub text_view: Option<bool>,

@@ -1,12 +1,20 @@
 //! `sim-shack`: the simulated shack interface in a terminal UI (macOS, Linux, Windows).
 //!
 //! Options:
+//!
+//! ```text
 //!   --state <file>   stored settings file (default shack-sim-state.bin)
 //!   --tcp <port>     TCP host port on 127.0.0.1 (default 7300); --no-tcp for none
 //!   --view text|pixels  display view (default: by what the terminal supports)
 //!   --probe          print what the display detection sees, then exit
 //!   --demo           print a timeline of a start-up and one R2 transmission, no UI
 //!   --pty            Unix only: host port on a pseudo-terminal, no UI
+//! ```
+//!
+//! The program only reads the options and starts one of the modes. The work is in
+//! the library: [`sim_shack::tui`] for the terminal UI, `pty` for the pty mode, and
+//! `demo` below, which shows how to read the trace, the box logs and the firmware
+//! events after a run.
 
 #[cfg(unix)]
 mod pty;
@@ -15,6 +23,7 @@ use link_proto::{Col, Radio, Route};
 use sim_core::TraceKind;
 use sim_shack::ShackSim;
 
+/// Signals that `--demo` prints, by trace name.
 const SHOWN: [&str; 10] = [
     "RESET_N",
     "FAULT",
@@ -63,6 +72,9 @@ fn main() {
     }
 }
 
+/// `--demo`: run a start-up and one R2 transmission, then print one time-sorted
+/// list of the [`SHOWN`] signal changes, the box commands, K0 changes and firmware
+/// events.
 fn demo() {
     let mut s = ShackSim::new();
     s.start();

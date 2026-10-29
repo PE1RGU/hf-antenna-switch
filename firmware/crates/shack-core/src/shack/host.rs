@@ -2,6 +2,12 @@
 //!
 //! The host asks; the shack logic decides. No command here clears the SAFE latch
 //! or gives a permit: commands only set what the host wants, as the API does.
+//!
+//! Each tick reads the received bytes and answers every complete line in the same
+//! tick (`ok`, `err ...` or a text answer). Commands for the box answer `ok` when
+//! queued; the box result comes later as an event. Events are not sent at once:
+//! they are queued and sent at the end of the tick, after the change detection,
+//! so the host sees the new state in a fixed order.
 
 use super::*;
 use core::fmt::{self, Write as _};
@@ -216,6 +222,8 @@ impl Shack {
     }
 
     /// Host silent for the keep-alive time-out while TX or a key is on: end it all (section 8).
+    /// Routes, bias and the software stop stay as they are. The timer restarts, so
+    /// one time-out gives one `!host timeout`.
     pub(super) fn host_keep_alive(&mut self, now: Ms) {
         let Some(last) = self.host.last_line else {
             return;
@@ -262,6 +270,8 @@ impl Shack {
         }
     }
 
+    /// Compare the present state with the last values sent and queue an event for
+    /// each change. The first call after start-up sends each known value once.
     fn detect_changes(&mut self) {
         let mut out: Vec<HostEvent, 16> = Vec::new();
         let seen = &mut self.host.seen;

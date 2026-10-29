@@ -4,6 +4,15 @@
 //! I2C write. A frame is drawn once into the frame buffer and then sent in
 //! chunks of ROWS_PER_TICK rows, one chunk per tick, so the main loop (WDI,
 //! link, permits) keeps its 10 ms rhythm. The display never touches a safety line.
+//!
+//! Start-up runs as small steps, one per tick, with no waiting in between:
+//! RST low for one tick, RST high, 120 ms, SLPOUT, 120 ms, the `INIT` commands,
+//! backlight on. After that, each tick compares the present [`UiState`] and page
+//! with the last frame. Only a change draws a new frame. A frame is 240 rows, so it
+//! takes 5 ticks (50 ms) to send.
+//!
+//! When the expander is lost, its pins go back to inputs and the display is in
+//! reset. Start-up then runs again once the expander is back.
 
 use super::*;
 use host_proto::PageSel;
@@ -17,8 +26,10 @@ use shack_ui::{
 pub const ROWS_PER_TICK: u32 = 48;
 /// `page auto`: B for 10 s, then C for 5 s.
 pub const AUTO_FLOW_MS: Ms = 10_000;
+/// `page auto`: time on page C (cards) in ms, after [`AUTO_FLOW_MS`] on page B.
 pub const AUTO_CARDS_MS: Ms = 5_000;
 
+/// Start-up phase of the ST7789. Each phase waits for its time, then moves on.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum Phase {
     /// Not started, or the expander was lost (pins in reset).
@@ -74,6 +85,8 @@ impl Display {
         };
     }
 
+    /// The page the host chose at `now`. With `page auto` the 15 s cycle runs on
+    /// the clock, so it needs no own timer.
     fn chosen(&self, now: Ms) -> Page {
         match self.sel {
             PageSel::Flow => Page::Flow,
@@ -157,6 +170,7 @@ impl Shack {
                 self.lcd_cmd(hw, c, &args);
             }
             self.lcd_cmd(hw, st7789::RAMWR, &[]);
+            // Pixel data follows: D/C stays high for all chunks of this frame.
             self.set_dc(hw, true);
             self.display.drawn = Some((state, page));
             self.display.next_row = Some(0);
@@ -169,6 +183,10 @@ impl Shack {
     }
 
     /// Snapshot of what the display shows.
+    ///
+    /// The simulator uses it for its text view, so both views show the same state.
+    /// A radio shows TX on TX sense, or when the interface keys it with its permit.
+    /// Box values count only while the link is up.
     pub fn ui_state(&self) -> UiState {
         let inp = self.inputs;
         let latched = inp.is_none_or(|i| i.latched);
@@ -212,6 +230,8 @@ impl Shack {
             }
         }
 
+        // Causes in the shack first (KILL, software stop), then the box (link-lost
+        // stop), then the loop itself. Loop closed again: only RESET is needed.
         let stop = latched.then(|| {
             if inp.is_some_and(|i| i.kill) {
                 StopCause::Kill
@@ -245,11 +265,12 @@ impl Shack {
         }
     }
 
-    /// Page selection (`page` host command).
+    /// Page selection (`page` host command). The host command also stores it.
     pub fn set_page(&mut self, sel: PageSel) {
         self.display.sel = sel;
     }
 
+    /// The page selection in use: flow, cards or auto.
     pub fn page(&self) -> PageSel {
         self.display.sel
     }

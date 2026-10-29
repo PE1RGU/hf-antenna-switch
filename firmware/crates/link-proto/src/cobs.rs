@@ -1,7 +1,15 @@
 //! Consistent Overhead Byte Stuffing. The 0x00 delimiter is added by the caller.
+//!
+//! COBS removes every 0x00 from the data. The data is cut into blocks at each
+//! 0x00. Each block starts with a code byte: the distance to the next 0x00
+//! (block length + 1). The 0x00 itself is not sent. Code 0xFF means 254 bytes
+//! without a 0x00, and no 0x00 follows. For frames below 254 bytes the cost is
+//! exactly one byte.
 
 /// Encode `src` into `dst`. `dst` must hold `src.len() + src.len() / 254 + 1` bytes.
 pub(crate) fn encode(src: &[u8], dst: &mut [u8]) -> usize {
+    // `code_idx`: where the code byte of the open block goes (filled in later).
+    // `code`: block length + 1 so far.
     let mut code_idx = 0;
     let mut out = 1;
     let mut code = 1u8;
@@ -15,6 +23,7 @@ pub(crate) fn encode(src: &[u8], dst: &mut [u8]) -> usize {
             dst[out] = b;
             out += 1;
             code += 1;
+            // 254 data bytes: close the block without a zero.
             if code == 0xFF {
                 dst[code_idx] = code;
                 code_idx = out;
@@ -49,6 +58,8 @@ pub(crate) fn decode(src: &[u8], dst: &mut [u8]) -> Result<usize, ()> {
         dst[out..out + block.len()].copy_from_slice(block);
         out += block.len();
         i = end;
+        // A block with a code below 0xFF stood for data followed by a zero.
+        // The zero after the last block is not real data, so skip it.
         if code != 0xFF && i < src.len() {
             if out >= dst.len() {
                 return Err(());

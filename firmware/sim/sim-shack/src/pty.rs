@@ -11,6 +11,12 @@ use std::io::BufRead;
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
+/// Run `s` in real time until `quit` is typed.
+///
+/// Opens a pty in raw mode and prints its device path. Bytes from the pty go to
+/// the host port of the sim; host lines from the sim go back with `\r\n`. Lines
+/// typed on stdin are outside-world commands ([`ShackSim::world`]). The loop
+/// sleeps 1 ms per turn and steps the sim up to the wall clock.
 pub fn run(mut s: ShackSim) {
     let pty = openpty(None, None).expect("openpty");
     let mut t = tcgetattr(&pty.slave).expect("tcgetattr");

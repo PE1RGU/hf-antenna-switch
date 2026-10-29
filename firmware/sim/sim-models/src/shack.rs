@@ -9,6 +9,18 @@
 //!
 //! Simplifications: the RESET debounce is ideal (one clean edge per press); signal levels
 //! are evaluated at each step, so timing resolution is the step size the test uses.
+//!
+//! # Use
+//!
+//! A test changes the outside world with [`ShackBoard::set_env`] and moves time
+//! with [`ShackBoard::step_to`] or [`ShackBoard::run`]. The firmware side uses the
+//! [`Board`] trait. After every change and every bus access the board settles:
+//! it updates the parts, works out the [`Signals`], and records each changed
+//! signal and expander pin in [`ShackBoard::trace`]. The names in the trace are the
+//! net names: `RESET_N`, `TX_EN`, `INH_R2`, `SW_STOP_N`, and so on.
+//!
+//! The box end of the data link is open to the test: [`ShackBoard::box_send`] and
+//! [`ShackBoard::box_recv`]. In `sim-shack` the scripted box uses them.
 
 use crate::lvc1g74::Lvc1g74;
 use crate::pca9539::Pca9539;
@@ -63,15 +75,31 @@ impl Default for Env {
 }
 
 /// Derived board signals, traced on every change.
+///
+/// The board works these out in each settle, from [`Env`], the MCU outputs and
+/// the part states. Read them with [`ShackBoard::signals`]. In the trace each field
+/// has its net name (in brackets below).
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Signals {
+    /// Main supervisor output (`RESET_N`). Low: expander in reset, fault latch set.
     pub reset_n: bool,
+    /// Second supervisor output, WDI open (`POR_N`). Low: SAFE latch held set (D-84).
     pub por_n: bool,
+    /// Fault latch Q (`FAULT`). Set by a supervisor reset, cleared by a rising
+    /// edge on LATCH_CLR (D-59).
     pub fault: bool,
+    /// SW_STOP_N expander pin: the firmware switches on the SAFE loop source
+    /// (`SAFE_SOURCE`).
     pub safe_source: bool,
+    /// Current flows in the SAFE loop (`SAFE_CURRENT`): power, source, KILL
+    /// closed, cable intact and box READY, all in series (verify_system.py section 1).
     pub safe_current: bool,
+    /// No loop current (`SAFE_LOST`). The MCU reads this on GPIO21.
     pub safe_lost: bool,
+    /// SAFE latch Q (`LATCHED`). Set by a loss of loop current or power-up;
+    /// cleared by the RESET button while PRE_N is high (D-75).
     pub latched: bool,
+    /// Transmit enable (`TX_EN`) = NOR(FAULT, LATCHED), and power present.
     pub tx_en: bool,
     /// INH contact closed = radio inhibited.
     pub inhibit: [bool; 3],
@@ -112,6 +140,11 @@ struct Gpio {
     latch_clr: bool,
 }
 
+/// The shack interface board: the parts, their wiring, and the board end of the
+/// links (UART to the box, USB to the host).
+///
+/// Make one with [`ShackBoard::new`]. It starts unpowered at t = 0; set
+/// `power` in [`Env`] to start it.
 pub struct ShackBoard {
     now: SimTime,
     env: Env,
@@ -120,7 +153,11 @@ pub struct ShackBoard {
     por: Tps3823,
     fault_ff: Lvc1g74,
     safe_ff: Lvc1g74,
+    /// PCA9539 I/O expander at [`EXPANDER_ADDR`], RESET from RESET_N (D-68).
+    /// Public so a test can inject faults (`force_nack`) or read registers.
     pub exp: Pca9539,
+    /// The display controller on the Waveshare module. Public so a test can read the
+    /// picture.
     pub lcd: St7789,
     shtc3: AckStub,
     imu: AckStub,
@@ -130,6 +167,7 @@ pub struct ShackBoard {
     usb_out: Vec<u8>,
     sig: Signals,
     exp_pins: u16,
+    /// Record of every signal change, I2C transfer and UART byte to the box.
     pub trace: Trace,
 }
 
@@ -160,6 +198,7 @@ impl ShackBoard {
         b
     }
 
+    /// The present outside world.
     pub fn env(&self) -> Env {
         self.env
     }
@@ -170,15 +209,24 @@ impl ShackBoard {
         self.settle();
     }
 
+    /// The derived board signals after the last settle.
     pub fn signals(&self) -> Signals {
         self.sig
     }
 
+    /// Level of one expander pin, for example `exp_pin(exp::KEY_R2)`.
     pub fn exp_pin(&self, p: ExpPin) -> bool {
         self.exp.pin(p.bit)
     }
 
     /// Move time forward to `t` and settle.
+    ///
+    /// The board settles once, at `t`. Use [`ShackBoard::run`] for a long time span,
+    /// so the supervisors and latches see the steps in between.
+    ///
+    /// # Panics
+    ///
+    /// If `t` is earlier than the present time.
     pub fn step_to(&mut self, t: SimTime) {
         assert!(t >= self.now, "time runs forward");
         self.now = t;
@@ -194,7 +242,8 @@ impl ShackBoard {
         }
     }
 
-    /// Box end of the data link: a byte from the box (pair 4).
+    /// Box end of the data link: a byte from the box (pair 4). It arrives at the
+    /// MCU one byte time (1041 µs) later, or never if the cable is cut.
     pub fn box_send(&mut self, byte: u8) {
         self.from_box.send(self.now, byte);
     }
@@ -217,10 +266,12 @@ impl ShackBoard {
         String::from_utf8_lossy(&std::mem::take(&mut self.usb_out)).into_owned()
     }
 
+    /// The MCU to box line (pair 1), for example to set a fault filter.
     pub fn to_box_line(&mut self) -> &mut UartLine {
         &mut self.to_box
     }
 
+    /// The box to MCU line (pair 4), for example to set a fault filter.
     pub fn from_box_line(&mut self) -> &mut UartLine {
         &mut self.from_box
     }

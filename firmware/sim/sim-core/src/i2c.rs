@@ -1,4 +1,8 @@
 //! I2C: device trait and the transaction runner that boards use for their bus.
+//!
+//! A part model implements [`I2cDevice`]. The board picks the device for an
+//! address and calls [`transact`], which runs the segments and records each one in
+//! the [`Trace`]. Timing is not modelled: a transaction takes no virtual time.
 
 use crate::{SimTime, Trace, TraceKind};
 use embedded_hal::i2c::{ErrorKind, NoAcknowledgeSource, Operation};
@@ -8,8 +12,13 @@ use embedded_hal::i2c::{ErrorKind, NoAcknowledgeSource, Operation};
 pub struct Nack;
 
 /// A target on the bus. One call per write or read segment of a transaction.
+///
+/// The device keeps its own register pointer between segments, as a real part
+/// does. Return [`Nack`] to refuse the transfer (device in reset, bad register).
 pub trait I2cDevice {
+    /// A write segment: all bytes after the address byte.
     fn write(&mut self, data: &[u8]) -> Result<(), Nack>;
+    /// A read segment: fill `buf` with the bytes the device sends.
     fn read(&mut self, buf: &mut [u8]) -> Result<(), Nack>;
 }
 
@@ -28,6 +37,11 @@ impl I2cDevice for AckStub {
 }
 
 /// Run one transaction against `dev` (None: no device at `addr`) and record it.
+///
+/// Each accepted segment gives one [`TraceKind::I2cWrite`] or
+/// [`TraceKind::I2cRead`] at time `now`. A refused segment gives a
+/// [`TraceKind::I2cNack`] and stops the transaction, as a STOP after a NACK on a
+/// real bus. Segments before the NACK stay done.
 pub fn transact(
     trace: &mut Trace,
     now: SimTime,
