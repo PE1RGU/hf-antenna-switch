@@ -7,7 +7,7 @@ Rust firmware for the two ESP32-C3 controllers, developed and tested in an emula
 | Shack interface | SAFE latch read-back, TX permits and handshake, USB host port, display, stored settings | Runs in the emulator (phase P3 done) |
 | Box controller (outdoor unit) | Relay matrix, safety gate, watchdog, data link to the shack | Not started (phases P4 to P6); a scripted box stands in for it |
 
-New to the code? Start with the [firmware guide](docs/guide.md): how the firmware works, one transmission followed through the code, and how to add a command, a test or a part model. Every type and function is documented in the code; open it with `cargo doc --no-deps --open`.
+New to the code? Start with the [firmware guide](docs/guide.md): how the firmware works, one transmission followed through the code, and how to add a command, a test or a part model. Every type and function is documented in the code; open it with `./doc.sh`.
 
 Plan and phases: [PLAN.md](PLAN.md). Firmware rules from the hardware verification: F1 to F14 in [design-log.md](../design-log.md) and [hardware/unit/verify](../hardware/unit/verify).
 
@@ -349,11 +349,14 @@ The present target is a bring-up stub: version log, I2C scan (bare DevKit-RUST-1
 ## Code documentation
 
 - [docs/guide.md](docs/guide.md): the firmware guide for hobby programmers. The big picture, the Rust ideas used, one tick, one transmission followed through the code, where the safety rules are, and step-by-step how-tos.
-- The code documentation (rustdoc): every crate, type and function, with the design decision or rule it implements. Build and open it:
+- The code documentation (rustdoc): every crate, type and function, with the design decision or rule it implements. Build it and open it in the browser:
 
 ```bash
-cargo doc --no-deps --open
+./doc.sh
 ```
+
+`doc.sh` builds the documentation of our crates only, serves it on http://localhost:8765 and opens the browser. Stop it with Ctrl-C. It needs Python 3 (on macOS and most Linux systems it is there).
+Why a local server: opened from disk (a `file://` address), Safari does not load the style sheets, and the pages look plain. In Chrome, Firefox or Edge, `cargo doc --no-deps --open` also works. The gear icon at the top right of each page has light and dark themes.
 
 Good starting points: `shack_core::shack::Shack` (the logic), `shack_core::hw::ShackHw` (the boundary to the hardware), `sim_shack::ShackSim` (the emulator).
 
