@@ -258,7 +258,8 @@ fn iterm_hint_trusts_term_program_first() {
 }
 
 /// iTerm2 answers the kitty query (`--probe`: "query = Kitty, font 7x15"), but kitty
-/// images stay empty there: use iTerm2 images, keep the font size from the query.
+/// images stay empty there: use iTerm2 images. The font size comes from the window in
+/// screen pixels (Retina: 2674 x 1590 px for 191 x 53 cells gives 14 x 30).
 #[test]
 fn iterm2_answering_kitty_gets_iterm2_images() {
     use ratatui_image::picker::ProtocolType;
@@ -266,15 +267,23 @@ fn iterm2_answering_kitty_gets_iterm2_images() {
     for proto in [ProtocolType::Kitty, ProtocolType::Sixel] {
         let mut q = Picker::halfblocks();
         q.set_protocol_type(proto);
-        let font = q.font_size();
         let p = fix_picker(q, true, Some((191, 53, 2674, 1590)));
         assert_eq!(p.protocol_type(), ProtocolType::Iterm2);
         assert_eq!(
             (p.font_size().width, p.font_size().height),
-            (font.width, font.height),
-            "query font size kept"
+            (14, 30),
+            "screen pixels"
         );
     }
+    // No window size: the query's font size is kept.
+    let mut q = Picker::halfblocks();
+    q.set_protocol_type(ProtocolType::Kitty);
+    let font = q.font_size();
+    let p = fix_picker(q, true, None);
+    assert_eq!(
+        (p.font_size().width, p.font_size().height),
+        (font.width, font.height)
+    );
     // Real kitty (no iTerm2 hint) keeps kitty.
     let mut q = Picker::halfblocks();
     q.set_protocol_type(ProtocolType::Kitty);

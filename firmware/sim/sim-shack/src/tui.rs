@@ -468,28 +468,31 @@ pub struct Options {
     pub text_view: Option<bool>,
 }
 
-/// iTerm2 needs its own image protocol (seen by Prins, `--probe` in iTerm2):
+/// iTerm2 needs its own image protocol and its font size in screen pixels
+/// (seen by Prins, `--probe` in iTerm2 on a Retina screen):
 /// - iTerm2 answers the kitty graphics query, but its kitty support is partial and the
 ///   display stays empty (ratatui-image rules out kitty for WezTerm for the same reason).
-///   Use iTerm2 images with the font size the query found.
-/// - Without a font size from the terminal, ratatui-image falls back to half-blocks.
-///   Use iTerm2 images with the font size from the window size, else 8 x 16.
+/// - The query gives the font size in points (7 x 15); iTerm2 draws images in screen
+///   pixels (14 x 30 on Retina), so the picture came out at half size. The window size
+///   in pixels divided by the cells gives the size in screen pixels.
+/// - Without any font size, ratatui-image falls back to half-blocks.
+///
+/// Font size: from the window when known, else from the query, else 8 x 16.
 pub fn fix_picker(p: Picker, iterm_hint: bool, window: Option<(u16, u16, u16, u16)>) -> Picker {
-    if !iterm_hint || p.protocol_type() == ProtocolType::Iterm2 {
+    if !iterm_hint {
         return p;
     }
-    if p.protocol_type() != ProtocolType::Halfblocks {
-        let mut p = p;
-        p.set_protocol_type(ProtocolType::Iterm2);
-        return p;
-    }
-    let font = window
+    let from_window = window
         .filter(|&(c, r, w, h)| c > 0 && r > 0 && w >= c && h >= r)
-        .map(|(c, r, w, h)| FontSize::new(w / c, h / r))
-        .unwrap_or(FontSize::new(8, 16));
+        .map(|(c, r, w, h)| FontSize::new(w / c, h / r));
+    let font = match (from_window, p.protocol_type()) {
+        (Some(f), _) => f,
+        (None, ProtocolType::Halfblocks) => FontSize::new(8, 16),
+        (None, _) => p.font_size(),
+    };
     #[allow(
         deprecated,
-        reason = "the only way to give ratatui-image 11 a font size; the query did not get one"
+        reason = "the only way to give ratatui-image 11 a font size"
     )]
     let mut p = Picker::from_fontsize(font);
     p.set_protocol_type(ProtocolType::Iterm2);
