@@ -47,3 +47,22 @@ hardware/unit/controller-board/_sym/*.pdf
 
 # Editor backups of CAD files
 *.bak
+
+# iCloud sync conflict copies ("name 2", "name 2.ext")
+* 2
+* 2.*
+
+# Vendor 3D models and documents for the front panel parts (EAO, C&K, Waveshare): not ours to
+# redistribute. See hardware/THIRD-PARTY.md for where to get them.
+hardware/shack-interface/endplates/parts/
+hardware/shack-interface/endplates/display/
+hardware/shack-interface/endplates/display-candidates/*/
+
+# Render inputs and SolidCraft designs: regenerable (world_parts.py, kicad-cli, render-full.json)
+# and partly built from vendor models
+hardware/shack-interface/case/render-full/*.step
+hardware/shack-interface/case/render-full/*.solidcraft
+
+# Superseded board STEP exports (the current one is ref-shack-interface-p8.step)
+hardware/shack-interface/case/ref-shack-interface-p6.step
+hardware/shack-interface/case/ref-shack-interface-p7.step
