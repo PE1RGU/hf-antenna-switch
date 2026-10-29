@@ -33,6 +33,8 @@ A terminal UI on macOS, Linux and Windows:
 - Stored settings (names, routes, bias, page) are kept in `shack-sim-state.bin` (`--state <file>`), as the shack keeps them in flash: stop and start the simulator and the station comes back.
 - Auto keep-alive (F10, on by default) sends an empty host line every second, so slow typing does not end TX.
 
+The first log line says which display mode was chosen. `--view pixels` or `--view text` overrides it.
+
 Other modes: `--demo` prints a timeline; `--pty` (Unix) puts the host port on a pseudo-terminal.
 
 ## Host port on a pseudo-terminal (Unix)

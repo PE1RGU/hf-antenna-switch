@@ -3,6 +3,7 @@
 //! Options:
 //!   --state <file>   stored settings file (default shack-sim-state.bin)
 //!   --tcp <port>     TCP host port on 127.0.0.1 (default 7300); --no-tcp for none
+//!   --view text|pixels  display view (default: by what the terminal supports)
 //!   --demo           print a timeline of a start-up and one R2 transmission, no UI
 //!   --pty            Unix only: host port on a pseudo-terminal, no UI
 
@@ -49,6 +50,11 @@ fn main() {
     } else if let Err(e) = sim_shack::tui::run(sim_shack::tui::Options {
         state_file: state_file.into(),
         tcp_port,
+        text_view: match value("--view").as_deref() {
+            Some("text") => Some(true),
+            Some("pixels") => Some(false),
+            _ => None,
+        },
     }) {
         eprintln!("terminal UI: {e}");
     }

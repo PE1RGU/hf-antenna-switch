@@ -213,3 +213,33 @@ fn help_for_both_command_sets() {
         "scrolled back to the start of the help"
     );
 }
+
+/// iTerm2 that does not report its font size: ratatui-image gives half-blocks;
+/// fix_picker turns that into iTerm2 images with the font size from the window.
+#[test]
+fn iterm2_without_font_size_gets_images() {
+    use ratatui_image::picker::ProtocolType;
+    use sim_shack::tui::fix_picker;
+    let p = fix_picker(Picker::halfblocks(), true, Some((148, 47, 1184, 799)));
+    assert_eq!(p.protocol_type(), ProtocolType::Iterm2);
+    assert_eq!((p.font_size().width, p.font_size().height), (8, 17));
+    let p = fix_picker(Picker::halfblocks(), true, None);
+    assert_eq!(
+        p.protocol_type(),
+        ProtocolType::Iterm2,
+        "no window size: 8 x 16"
+    );
+    assert_eq!((p.font_size().width, p.font_size().height), (8, 16));
+    let p = fix_picker(Picker::halfblocks(), false, Some((148, 47, 1184, 799)));
+    assert_eq!(
+        p.protocol_type(),
+        ProtocolType::Halfblocks,
+        "no iTerm2 hint: unchanged"
+    );
+    // A window size without pixels (0) is not used.
+    let p = fix_picker(Picker::halfblocks(), true, Some((148, 47, 0, 0)));
+    assert_eq!((p.font_size().width, p.font_size().height), (8, 16));
+    // iTerm2 images: the UI starts with the pixels.
+    let a = App::new(ShackSim::new(), p, None);
+    assert!(!a.text_view);
+}

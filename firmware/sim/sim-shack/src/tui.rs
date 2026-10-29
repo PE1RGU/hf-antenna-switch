@@ -20,7 +20,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, Paragraph};
 use ratatui_image::picker::{Picker, ProtocolType};
 use ratatui_image::protocol::StatefulProtocol;
-use ratatui_image::{Resize, StatefulImage};
+use ratatui_image::{FontSize, Resize, StatefulImage};
 use std::collections::VecDeque;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
@@ -464,6 +464,39 @@ impl App {
 pub struct Options {
     pub state_file: PathBuf,
     pub tcp_port: Option<u16>,
+    /// Force the display view: Some(true) text, Some(false) pixels, None by terminal.
+    pub text_view: Option<bool>,
+}
+
+/// ratatui-image falls back to half-blocks when the terminal does not report its font
+/// size in pixels, even when it knows the terminal is iTerm2 (seen by Prins in iTerm2).
+/// With an iTerm2 hint in the environment, use iTerm2 images anyway; the font size comes
+/// from the window size (columns, rows, width and height in pixels), else 8 x 16.
+pub fn fix_picker(p: Picker, iterm_hint: bool, window: Option<(u16, u16, u16, u16)>) -> Picker {
+    if p.protocol_type() != ProtocolType::Halfblocks || !iterm_hint {
+        return p;
+    }
+    let font = window
+        .filter(|&(c, r, w, h)| c > 0 && r > 0 && w >= c && h >= r)
+        .map(|(c, r, w, h)| FontSize::new(w / c, h / r))
+        .unwrap_or(FontSize::new(8, 16));
+    #[allow(
+        deprecated,
+        reason = "the only way to give ratatui-image 11 a font size; the query did not get one"
+    )]
+    let mut p = Picker::from_fontsize(font);
+    p.set_protocol_type(ProtocolType::Iterm2);
+    p
+}
+
+fn iterm_hint() -> bool {
+    let has = |var: &str| std::env::var(var).is_ok_and(|v| v.contains("iTerm"));
+    has("TERM_PROGRAM") || has("LC_TERMINAL")
+}
+
+fn window_pixels() -> Option<(u16, u16, u16, u16)> {
+    let w = ratatui::crossterm::terminal::window_size().ok()?;
+    Some((w.columns, w.rows, w.width, w.height))
 }
 
 /// Run the terminal UI until Ctrl-C.
@@ -472,10 +505,24 @@ pub fn run(opts: Options) -> std::io::Result<()> {
     // Ask the terminal for its image support before the UI starts, then clear: a
     // terminal that does not understand the questions (macOS Terminal) prints parts
     // of them, and ratatui only redraws cells that change.
-    let picker = Picker::from_query_stdio().unwrap_or_else(|_| Picker::halfblocks());
+    let queried = Picker::from_query_stdio().unwrap_or_else(|_| Picker::halfblocks());
+    let picker = fix_picker(queried, iterm_hint(), window_pixels());
+    let detected = format!(
+        "display: {:?} images, font {}x{} px",
+        picker.protocol_type(),
+        picker.font_size().width,
+        picker.font_size().height
+    );
     let mut terminal = ratatui::init();
     terminal.clear()?;
     let mut app = App::new(sim, picker, opts.tcp_port);
+    if let Some(t) = opts.text_view {
+        app.text_view = t;
+    }
+    app.note(&format!(
+        "{detected}; {} view (Tab switches, --view text|pixels)",
+        if app.text_view { "text" } else { "pixel" }
+    ));
     app.note(&format!("stored settings: {}", opts.state_file.display()));
     app.note(WORLD_HELP);
     let result = (|| -> std::io::Result<()> {
