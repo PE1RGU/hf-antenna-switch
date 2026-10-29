@@ -278,6 +278,7 @@ impl ShackSim {
         let w: Vec<&str> = cmd.split_whitespace().collect();
         let on = |x: &str| x.eq_ignore_ascii_case("on");
         match w.as_slice() {
+            ["help" | "?"] => return Ok(WORLD_HELP.to_string()),
             ["reset"] => {
                 self.press_reset();
                 return Ok("RESET pressed".into());
@@ -332,5 +333,14 @@ pub fn save_png(path: &std::path::Path, px: &[u16], scale: u32) {
 }
 
 /// Outside-world commands (terminal UI: type them with a leading `:`).
-pub const WORLD_HELP: &str = "outside world: reset | kill on|off | cable on|off | power on|off | \
-radio R1|R2|R3 on|off (TX sense) | box mute on|off | shot <file.png>";
+pub const WORLD_HELP: &str = "\
+outside world commands (terminal UI: type them with a leading ':')
+  reset                  press RESET              F1
+  kill on|off            KILL switch              F2
+  cable on|off           Cat6 intact or cut       F3
+  power on|off           13.8 V                   F4
+  radio R1-R3 on|off     radio TX sense           F5-F7
+  box mute on|off        box silent               F8
+  shot <file.png>        save the display         F9
+  help | ?               this list
+F10 auto keep-alive, Ctrl-C quit. Type help (no ':') for the shack commands.";

@@ -193,6 +193,11 @@ impl Shack {
                 }
                 self.config_changed(now);
             }
+            HostCommand::Help => {
+                for l in host_proto::HELP {
+                    write_line(hw, format_args!("# {l}"));
+                }
+            }
             HostCommand::Names => {
                 let mut s = String::new();
                 let c = &self.config;

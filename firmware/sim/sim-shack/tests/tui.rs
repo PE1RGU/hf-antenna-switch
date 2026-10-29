@@ -127,3 +127,31 @@ fn tcp_host_tool() {
     }
     assert_eq!(line.trim_end(), "ok shack fw 0.1.0 proto 1");
 }
+
+#[test]
+fn help_for_both_command_sets() {
+    let mut a = app();
+    a.advance(600);
+    type_line(&mut a, "help");
+    a.advance(50);
+    let host: Vec<_> = a.sim.host_lines.iter().map(|(_, l)| l.as_str()).collect();
+    assert!(
+        host.iter().any(|l| l.starts_with("# route R1-R3")),
+        "{host:?}"
+    );
+    assert!(host.iter().any(|l| l.starts_with("# help | ?")));
+    let i = host.iter().rposition(|l| l.starts_with('#')).unwrap();
+    assert_eq!(host.get(i + 1).copied(), Some("ok"), "help ends with ok");
+    type_line(&mut a, "?");
+    a.advance(50);
+    assert!(a.sim.world("?").unwrap().contains("radio R1-R3 on|off"));
+    // The help is longer than the log panel: PgUp shows the top of it.
+    let mut term = Terminal::new(TestBackend::new(120, 40)).unwrap();
+    press(&mut a, KeyCode::PageUp);
+    press(&mut a, KeyCode::PageUp);
+    term.draw(|f| a.draw(f)).unwrap();
+    assert!(
+        screen_text(&term).contains("# hello"),
+        "scrolled back to the start of the help"
+    );
+}

@@ -114,6 +114,8 @@ pub enum HostCommand {
         name: Name,
     },
     Names,
+    /// `help` or `?`.
+    Help,
 }
 
 /// Display page selection (`page` command).
@@ -275,6 +277,8 @@ pub fn parse(line: &str) -> Result<HostCommand, ErrorCode> {
         Ok(HostCommand::Bias(col_list(w[1])?))
     } else if is("stop", 2) {
         Ok(HostCommand::Stop(on_off(w[1])?))
+    } else if is("help", 1) || is("?", 1) {
+        Ok(HostCommand::Help)
     } else if is("names", 1) {
         Ok(HostCommand::Names)
     } else if is("name", 3) {
@@ -303,6 +307,24 @@ pub fn parse(line: &str) -> Result<HostCommand, ErrorCode> {
         Err(ErrorCode::Syntax)
     }
 }
+
+/// Answer to `help`: one `#` line each, then `ok`.
+pub const HELP: [&str; 14] = [
+    "hello                      identify",
+    "status                     full state, one line",
+    "route R1-R3 <tx> <rx>      route a radio; columns A1-A4, EXP, - (none)",
+    "tx R2|R3 on|off            ask for the TX permit, or end TX",
+    "key R1-R3 on|off           key a radio (only with its permit)",
+    "bias <A2,A3 | ->           bias-T feeds on these columns",
+    "stop on|off                software stop: opens the SAFE loop",
+    "clearfault                 clear the fault latch after a supervisor reset",
+    "page b|c|auto              display page: flow, cards, or both in turn",
+    "name A1-A4|EXP|R1-R3 <x>   set a name, 1-8 characters",
+    "names                      show all names",
+    "keepalive 2-60             host keep-alive time-out in seconds",
+    "events on|off              events on or off",
+    "help | ?                   this list",
+];
 
 // ---------------------------------------------------------------- names
 
@@ -364,6 +386,7 @@ impl fmt::Display for HostCommand {
             HostCommand::KeepAlive(s) => write!(f, "keepalive {s}"),
             HostCommand::Page(p) => write!(f, "page {}", p.as_str()),
             HostCommand::Names => f.write_str("names"),
+            HostCommand::Help => f.write_str("help"),
             HostCommand::Name { target, name } => match target {
                 NameTarget::Antenna(c) => write!(f, "name {} {name}", col_name(c)),
                 NameTarget::Radio(r) => write!(f, "name {} {name}", radio_name(r)),

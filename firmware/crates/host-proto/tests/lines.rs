@@ -52,6 +52,8 @@ fn every_command_parses() {
         ("keepalive 60", HostCommand::KeepAlive(60)),
         ("page c", HostCommand::Page(PageSel::Cards)),
         ("names", HostCommand::Names),
+        ("help", HostCommand::Help),
+        ("?", HostCommand::Help),
         (
             "name a3 Hexbeam",
             HostCommand::Name {
@@ -228,6 +230,7 @@ fn command() -> impl Strategy<Value = HostCommand> {
         prop::sample::select(vec![PageSel::Flow, PageSel::Cards, PageSel::Auto])
             .prop_map(HostCommand::Page),
         Just(HostCommand::Names),
+        Just(HostCommand::Help),
         (
             prop::sample::select(Col::ALL[1..].to_vec()),
             "[A-Za-z0-9._/-]{1,8}"

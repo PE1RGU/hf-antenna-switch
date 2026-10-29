@@ -74,6 +74,7 @@ Why text and not binary (postcard + COBS, the first idea in PLAN.md): you can dr
 | `events on\|off` | Events on (default) or off | `ok` |
 | `keepalive <seconds>` | Host keep-alive time-out, 2 to 60 s (section 8) | `ok` |
 | `name <column or radio> <text>` | Set the name of an antenna (`A1` to `A4`, `EXP`) or a radio (`R1` to `R3`), 1 to 8 characters (the width of an antenna box on page B): letters, digits, `-`, `.`, `_`, `/`. Stored (section 8a) | `ok` |
+| `help` or `?` | The command list as `#` lines, then `ok` | `ok` |
 | `names` | All names, one line | `ok A1=G5RV A2=Loop A3=spare A4=spare EXP=unit2 R1=FT-710 R2=WSPR R3=spare` |
 | `page b\|c\|auto` | Display page: B flow (default), C cards, or auto (B 10 s, C 5 s). The Safe stop screen always takes over on a blocking problem (Prins, 2026-10-29) | `ok` |
 

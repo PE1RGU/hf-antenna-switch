@@ -46,6 +46,8 @@ pub struct App {
     pub auto_alive: bool,
     last_alive: Ms,
     shots: u32,
+    /// Lines scrolled back in the host log (PgUp, PgDn); 0 = newest at the bottom.
+    pub scroll: usize,
     start: Instant,
 }
 
@@ -70,6 +72,7 @@ impl App {
             auto_alive: true,
             last_alive: 0,
             shots: 0,
+            scroll: 0,
             start: Instant::now(),
         };
         let note = match (tcp_port, app.tcp_port) {
@@ -82,7 +85,9 @@ impl App {
     }
 
     fn note(&mut self, text: &str) {
-        self.push_log(Style::new().fg(Color::DarkGray), format!("· {text}"));
+        for l in text.lines() {
+            self.push_log(Style::new().fg(Color::DarkGray), format!("· {l}"));
+        }
     }
 
     fn push_log(&mut self, style: Style, text: String) {
@@ -201,10 +206,15 @@ impl App {
                 self.note(&format!("auto keep-alive {s}"));
             }
             KeyCode::Esc => self.input.clear(),
+            KeyCode::PageUp => {
+                self.scroll = (self.scroll + 5).min(self.log.len().saturating_sub(1))
+            }
+            KeyCode::PageDown => self.scroll = self.scroll.saturating_sub(5),
             KeyCode::Backspace => {
                 self.input.pop();
             }
             KeyCode::Enter => {
+                self.scroll = 0;
                 let line = std::mem::take(&mut self.input);
                 if let Some(w) = line.trim().strip_prefix(':') {
                     let w = w.to_string();
@@ -320,7 +330,10 @@ impl App {
                 "Auto alive",
                 state(self.auto_alive, "on", "off", false),
             ),
-            Line::styled("Ctrl-C quit · Esc clear", Style::new().fg(Color::DarkGray)),
+            Line::styled(
+                "Ctrl-C quit · PgUp/PgDn log",
+                Style::new().fg(Color::DarkGray),
+            ),
         ];
         f.render_widget(
             Paragraph::new(lines).block(Block::bordered().title(" Outside world ")),
@@ -396,10 +409,12 @@ impl App {
         let [log, input] =
             Layout::vertical([Constraint::Min(1), Constraint::Length(1)]).areas(inner);
         let n = log.height as usize;
+        let end = self.log.len().saturating_sub(self.scroll);
         let lines: Vec<Line> = self
             .log
             .iter()
-            .skip(self.log.len().saturating_sub(n))
+            .take(end)
+            .skip(end.saturating_sub(n))
             .map(|(st, t)| Line::styled(t.clone(), *st))
             .collect();
         f.render_widget(Paragraph::new(lines), log);
@@ -412,7 +427,7 @@ impl App {
             Span::styled("█", Style::new().fg(Color::DarkGray)),
             Span::styled(
                 if self.input.is_empty() {
-                    "  host command, or :outside world command (:reset)"
+                    "  shack command (help), or :outside world command (:help)"
                 } else {
                     ""
                 },
