@@ -74,7 +74,7 @@ Display: the firmware draws with `embedded-graphics`. On the Mac, `embedded-grap
 | P1 | Link protocol spec (doc first, [docs/design/link-protocol.md](../docs/design/link-protocol.md)), then `link-proto` crate with property tests (round trip, corrupt frames, lost frames) | Spec reviewed; tests pass |
 | P2 | `sim-core` and the shack board model (PCA9539, latch, ports, KILL, RESET, display). USB moves to P3, with the Mac protocol. | Model tests reproduce the shack checks of verify_system.py |
 | P3a | `shack-core`: start-up, F1 init, 10 ms poll, WDI kick, permits, shack side of the handshake, F14 end rule, link loss | Shack runs in `sim-shack` against a scripted box stub |
-| P3b | Mac protocol spec (review first), `host-proto`, USB CDC model | Spec reviewed; Mac commands drive the shack in the simulator |
+| P3b | Mac protocol spec ([docs/design/host-protocol.md](../docs/design/host-protocol.md)), `host-proto`, USB CDC model | Spec reviewed; Mac commands drive the shack in the simulator |
 | P3c | Display pages (`embedded-graphics`) | Pages render in the simulator |
 | P4 | Box board models: 4 expanders, relays, safety gate, fault latch, RF detectors, bias-T | Model tests reproduce verify_logic.py |
 | P5 | `box-core`: F1, F5, F10, F11, F13, crossbar check (F6), box side of the handshake, link time-out | Box runs against a scripted shack stub |
@@ -105,6 +105,6 @@ Scenarios: normal start-up, route change, R1 PTT, R2 and R3 handshake, KILL duri
 
 - Link physical layer. The design uses four opto current loops with UART 9600 baud over Cat6 (D-56, D-58), not RS-485. The plan models the current loops. Confirm.
 - Link protocol is not specified yet. P1 writes it.
-- Mac protocol: text (easy to test by hand) or binary (COBS + postcard). Proposal: postcard with COBS, plus a small CLI on the Mac for manual tests.
+- Mac protocol: decided, text lines (docs/design/host-protocol.md, P3b-01).
 - Async (embassy) or a plain super-loop. Proposal: embassy for the I/O, with a synchronous state machine in each core crate, so tests need no executor.
 - Emulator of the real binary (Wokwi or Espressif QEMU) as a later extra. Only if the HAL-level model misses a class of bugs.
