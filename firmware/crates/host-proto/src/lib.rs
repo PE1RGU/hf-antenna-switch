@@ -37,6 +37,29 @@ pub enum HostCommand {
     Events(bool),
     /// Keep-alive time-out in seconds, KEEP_ALIVE_MIN_S to KEEP_ALIVE_MAX_S.
     KeepAlive(u8),
+    Page(PageSel),
+}
+
+/// Display page selection (`page` command).
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum PageSel {
+    /// B: flow.
+    #[default]
+    Flow,
+    /// C: cards.
+    Cards,
+    /// B 10 s, C 5 s.
+    Auto,
+}
+
+impl PageSel {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            PageSel::Flow => "b",
+            PageSel::Cards => "c",
+            PageSel::Auto => "auto",
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -176,6 +199,12 @@ pub fn parse(line: &str) -> Result<HostCommand, ErrorCode> {
         Ok(HostCommand::Bias(col_list(w[1])?))
     } else if is("stop", 2) {
         Ok(HostCommand::Stop(on_off(w[1])?))
+    } else if is("page", 2) {
+        [PageSel::Flow, PageSel::Cards, PageSel::Auto]
+            .into_iter()
+            .find(|p| eq(w[1], p.as_str()))
+            .map(HostCommand::Page)
+            .ok_or(ErrorCode::Arg)
     } else if is("keepalive", 2) {
         let s: u8 = w[1].parse().map_err(|_| ErrorCode::Arg)?;
         if !(KEEP_ALIVE_MIN_S..=KEEP_ALIVE_MAX_S).contains(&s) {
@@ -247,6 +276,7 @@ impl fmt::Display for HostCommand {
             HostCommand::Stop(on) => write!(f, "stop {}", on_name(on)),
             HostCommand::Events(on) => write!(f, "events {}", on_name(on)),
             HostCommand::KeepAlive(s) => write!(f, "keepalive {s}"),
+            HostCommand::Page(p) => write!(f, "page {}", p.as_str()),
         }
     }
 }
@@ -385,6 +415,7 @@ pub struct StatusLine {
     pub stop: bool,
     /// Keep-alive time-out in seconds.
     pub keepalive: u8,
+    pub page: PageSel,
     pub band: u8,
     pub boxs: Option<BoxPart>,
     pub radios: [RadioStatus; 3],
@@ -395,7 +426,7 @@ impl fmt::Display for StatusLine {
         let b = |v: bool| v as u8;
         write!(
             f,
-            "ok link={} safe={} latched={} kill={} fault={} stop={} keepalive={} band={} box={}",
+            "ok link={} safe={} latched={} kill={} fault={} stop={} keepalive={} page={} band={} box={}",
             if self.link { "up" } else { "down" },
             if self.safe_ok { "ok" } else { "lost" },
             b(self.latched),
@@ -403,6 +434,7 @@ impl fmt::Display for StatusLine {
             b(self.fault),
             b(self.stop),
             self.keepalive,
+            self.page.as_str(),
             self.band,
             match self.boxs {
                 Some(x) if x.ready => "ready",

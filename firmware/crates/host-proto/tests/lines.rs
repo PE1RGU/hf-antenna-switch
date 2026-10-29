@@ -50,6 +50,8 @@ fn every_command_parses() {
         ("stop on", HostCommand::Stop(true)),
         ("events off", HostCommand::Events(false)),
         ("keepalive 60", HostCommand::KeepAlive(60)),
+        ("page c", HostCommand::Page(PageSel::Cards)),
+        ("page AUTO", HostCommand::Page(PageSel::Auto)),
         ("KEEPALIVE 2", HostCommand::KeepAlive(2)),
         ("  STATUS  \r", HostCommand::Status),
     ];
@@ -73,6 +75,7 @@ fn errors() {
         ("bias A1,-", ErrorCode::Arg),
         ("bias A1,,A2", ErrorCode::Arg),
         ("keepalive 1", ErrorCode::Arg),
+        ("page d", ErrorCode::Arg),
         ("keepalive 61", ErrorCode::Arg),
         ("keepalive 300", ErrorCode::Arg),
         ("keepalive soon", ErrorCode::Arg),
@@ -141,6 +144,7 @@ fn status_line_as_in_the_spec() {
         fault: false,
         stop: false,
         keepalive: 2,
+        page: PageSel::Flow,
         band: 5,
         boxs: Some(BoxPart {
             ready: true,
@@ -170,7 +174,7 @@ fn status_line_as_in_the_spec() {
     };
     assert_eq!(
         s.to_string(),
-        "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 band=5 box=ready \
+        "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 page=b band=5 box=ready \
          r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0 \
          k1=A1,A3 rfdet=- bias=- boxfault=0"
     );
@@ -201,6 +205,8 @@ fn command() -> impl Strategy<Value = HostCommand> {
         any::<bool>().prop_map(HostCommand::Stop),
         any::<bool>().prop_map(HostCommand::Events),
         (KEEP_ALIVE_MIN_S..=KEEP_ALIVE_MAX_S).prop_map(HostCommand::KeepAlive),
+        prop::sample::select(vec![PageSel::Flow, PageSel::Cards, PageSel::Auto])
+            .prop_map(HostCommand::Page),
     ]
 }
 

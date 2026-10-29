@@ -8,6 +8,8 @@
 //! - F14: at TX end, inhibit first, then wait for TX sense inactive and at least 100 ms, then TxEnd.
 //! - Link lost: drop every permit and key at once; the box keeps K0 (F13); TxEnd after the link returns.
 
+mod display;
+pub use display::{AUTO_CARDS_MS, AUTO_FLOW_MS, ROWS_PER_TICK};
 mod host;
 
 use crate::board::{EXPANDER_ADDR, ExpPin, exp, expander_config};
@@ -124,6 +126,9 @@ pub struct Shack {
     events: Deque<Event, 16>,
     fault_known: bool,
     host: host::HostPort,
+    /// The SAFE latch was clear at least once since power-up (Safe stop cause).
+    ever_unlatched: bool,
+    display: display::Display,
 }
 
 impl Default for Shack {
@@ -156,6 +161,8 @@ impl Shack {
             events: Deque::new(),
             fault_known: false,
             host: host::HostPort::new(),
+            ever_unlatched: false,
+            display: display::Display::new(),
         }
     }
 
@@ -258,12 +265,16 @@ impl Shack {
             }
         }
         match self.read_expander(hw) {
-            Some(i) => self.inputs = Some(i),
+            Some(i) => {
+                self.ever_unlatched |= !i.latched;
+                self.inputs = Some(i);
+            }
             None => {
                 self.expander_ready = false;
                 self.exp_written = None;
                 self.inputs = None;
                 self.drop_all(hw);
+                self.display.lost();
                 self.event(Event::ExpanderLost);
                 if self.latch_cleared && !self.fault_known {
                     self.fault_known = true;
@@ -304,6 +315,7 @@ impl Shack {
         }
         self.apply_outputs(now, hw);
         self.host_tx(hw);
+        self.display_step(now, hw);
     }
 
     fn read_expander<H: ShackHw>(&mut self, hw: &mut H) -> Option<Inputs> {
@@ -426,7 +438,7 @@ impl Shack {
                 w |= 1 << k.bit;
             }
         }
-        w
+        w | self.display.exp_bits()
     }
 
     fn apply_outputs<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {

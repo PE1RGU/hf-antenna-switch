@@ -58,7 +58,7 @@ fn hello_and_status() {
     let st = s.host("status");
     assert!(
         st.starts_with(
-            "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 band=15 box=ready"
+            "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 page=b band=15 box=ready"
         ),
         "{st}"
     );

@@ -75,7 +75,7 @@ Display: the firmware draws with `embedded-graphics`. On the Mac, `embedded-grap
 | P2 | `sim-core` and the shack board model (PCA9539, latch, ports, KILL, RESET, display). USB moves to P3, with the Mac protocol. | Model tests reproduce the shack checks of verify_system.py |
 | P3a | `shack-core`: start-up, F1 init, 10 ms poll, WDI kick, permits, shack side of the handshake, F14 end rule, link loss | Shack runs in `sim-shack` against a scripted box stub |
 | P3b | Mac protocol spec ([docs/design/host-protocol.md](../docs/design/host-protocol.md)), `host-proto`, USB CDC model | Spec reviewed; Mac commands drive the shack in the simulator |
-| P3c | Display pages (`embedded-graphics`) | Pages render in the simulator |
+| P3c | Display pages (`embedded-graphics`, M+ fonts): B flow, C cards, Safe stop; `page b\|c\|auto` | Pages render on the simulated ST7789 and match a direct render |
 | P4 | Box board models: 4 expanders, relays, safety gate, fault latch, RF detectors, bias-T | Model tests reproduce verify_logic.py |
 | P5 | `box-core`: F1, F5, F10, F11, F13, crossbar check (F6), box side of the handshake, link time-out | Box runs against a scripted shack stub |
 | P6 | `sim-system`: both firmwares, both boards, the link. Fault injection. | All scenarios in section 6 pass |

@@ -1,0 +1,19 @@
+[package]
+name = "shack-ui"
+version = "0.1.0"
+description = "Shack interface display pages (320 x 240 RGB565), no_std, embedded-graphics"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+link-proto = { path = "../link-proto" }
+embedded-graphics = "0.8"
+mplusfonts = "0.3.4"
+heapless = "0.9.3"
+
+[dev-dependencies]
+png = "0.18"
+
+[lints]
+workspace = true

@@ -19,6 +19,7 @@ outside world (type here, Enter):
   radio R1|R2|R3 on|off   radio TX sense (radio transmits)
   box mute on|off    box stops / resumes answering
   status             board signals
+  shot <file.png>    save the display (3x)
   quit";
 
 pub fn run() {
@@ -105,6 +106,12 @@ fn world(s: &mut ShackSim, cmd: &str) -> bool {
             drop(b);
             s.boxs.mute = on(v);
             println!("box mute {v}");
+            return true;
+        }
+        ["shot", path] => {
+            drop(b);
+            s.save_screen(std::path::Path::new(path), 3);
+            println!("display saved to {path}");
             return true;
         }
         ["status"] => {

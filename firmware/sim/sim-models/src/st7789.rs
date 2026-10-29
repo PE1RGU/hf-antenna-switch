@@ -178,6 +178,23 @@ impl St7789 {
         &self.fb
     }
 
+    /// The picture as the driver addressed it: `w` x `h` in window coordinates,
+    /// through the present MADCTL (landscape 320 x 240 with MV set).
+    pub fn logical(&self, w: usize, h: usize) -> Vec<u16> {
+        let mut out = Vec::with_capacity(w * h);
+        for y in 0..h {
+            for x in 0..w {
+                let i = self.panel_index(x as u16, y as u16);
+                out.push(i.map_or(0, |i| self.fb[i]));
+            }
+        }
+        out
+    }
+
+    pub fn madctl(&self) -> u8 {
+        self.madctl
+    }
+
     /// The picture is visible: awake, display on, 16-bit colour set.
     pub fn showing(&self) -> bool {
         !self.in_reset && !self.sleeping && self.on && self.colmod & 0x07 == 0x05

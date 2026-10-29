@@ -73,6 +73,7 @@ Why text and not binary (postcard + COBS, the first idea in PLAN.md): you can dr
 | `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04) | `ok` |
 | `events on\|off` | Events on (default) or off | `ok` |
 | `keepalive <seconds>` | Host keep-alive time-out, 2 to 60 s (section 8) | `ok` |
+| `page b\|c\|auto` | Display page: B flow (default), C cards, or auto (B 10 s, C 5 s). The Safe stop screen always takes over on a blocking problem (Prins, 2026-10-29) | `ok` |
 
 Error answers: `err <code> <text>`. Codes:
 
@@ -113,7 +114,7 @@ Sent on every change (when events are on). One line each.
 `status` answers one line with `key=value` pairs, in this order:
 
 ```
-ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 band=5 box=ready
+ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 page=b band=5 box=ready
    r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0
    k1=A1,A3 rfdet=- bias=- boxfault=0
 ```

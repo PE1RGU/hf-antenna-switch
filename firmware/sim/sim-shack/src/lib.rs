@@ -17,6 +17,9 @@ use sim_models::tps3823::Corner;
 pub struct SimShackHw {
     board: Shared<ShackBoard>,
     i2c: SimI2c<ShackBoard>,
+    framebuffer: Vec<u8>,
+    /// Display SPI bytes since the last tick started.
+    spi_bytes: usize,
 }
 
 impl ShackHw for SimShackHw {
@@ -64,6 +67,22 @@ impl ShackHw for SimShackHw {
     fn usb_read(&mut self) -> Option<u8> {
         self.board.borrow_mut().usb_read()
     }
+
+    fn spi_write(&mut self, bytes: &[u8]) {
+        self.spi_bytes += bytes.len();
+        self.board.borrow_mut().spi_write(bytes);
+    }
+
+    fn framebuffer(&mut self) -> &mut [u8] {
+        &mut self.framebuffer
+    }
+
+    fn spi_write_framebuffer(&mut self, start: usize, end: usize) {
+        self.spi_bytes += end - start;
+        self.board
+            .borrow_mut()
+            .spi_write(&self.framebuffer[start..end]);
+    }
 }
 
 pub struct ShackSim {
@@ -75,6 +94,8 @@ pub struct ShackSim {
     pub events: Vec<(Ms, Event)>,
     /// False: the MCU hangs (no more ticks).
     pub mcu_running: bool,
+    /// Most display SPI bytes sent in one tick.
+    pub spi_max_per_tick: usize,
     next_tick: Ms,
     /// Every line the shack sent to the host, with its time.
     pub host_lines: Vec<(Ms, String)>,
@@ -96,12 +117,15 @@ impl ShackSim {
             hw: SimShackHw {
                 board: board.clone(),
                 i2c: SimI2c(board.clone()),
+                framebuffer: vec![0; shack_ui::fb::BYTES],
+                spi_bytes: 0,
             },
             board,
             shack: Shack::new(),
             boxs: BoxStub::new(),
             events: Vec::new(),
             mcu_running: true,
+            spi_max_per_tick: 0,
             next_tick: 0,
             host_lines: Vec::new(),
             host_partial: String::new(),
@@ -118,7 +142,9 @@ impl ShackSim {
         self.board.borrow_mut().step_to(SimTime::ms(t));
         self.boxs.step(t, &mut self.board.borrow_mut());
         if self.mcu_running && t >= self.next_tick {
+            self.hw.spi_bytes = 0;
             self.shack.tick(t, &mut self.hw);
+            self.spi_max_per_tick = self.spi_max_per_tick.max(self.hw.spi_bytes);
             self.next_tick = t + TICK;
             while let Some(e) = self.shack.take_event() {
                 self.events.push((t, e));
@@ -188,7 +214,44 @@ impl ShackSim {
         assert!(self.board.borrow().signals().tx_en, "TX_EN after start");
     }
 
+    /// What the simulated display shows: 320 x 240 RGB565 in window coordinates.
+    pub fn screen(&self) -> Vec<u16> {
+        self.board
+            .borrow()
+            .lcd
+            .logical(shack_ui::WIDTH as usize, shack_ui::HEIGHT as usize)
+    }
+
+    /// Save the simulated display as PNG, scaled `scale` times.
+    pub fn save_screen(&self, path: &std::path::Path, scale: u32) {
+        save_png(path, &self.screen(), scale);
+    }
+
     pub fn has_event(&self, e: Event) -> Option<Ms> {
         self.events.iter().find(|(_, x)| *x == e).map(|(t, _)| *t)
     }
+}
+
+/// Save 320 x 240 RGB565 pixels as PNG, scaled `scale` times.
+pub fn save_png(path: &std::path::Path, px: &[u16], scale: u32) {
+    let (w, h) = (shack_ui::WIDTH, shack_ui::HEIGHT);
+    let mut data = Vec::with_capacity((w * h * scale * scale * 3) as usize);
+    for y in 0..h * scale {
+        for x in 0..w * scale {
+            let p = px[((y / scale) * w + x / scale) as usize];
+            data.extend([
+                ((p >> 11) << 3) as u8,
+                (((p >> 5) & 0x3F) << 2) as u8,
+                ((p & 0x1F) << 3) as u8,
+            ]);
+        }
+    }
+    if let Some(dir) = path.parent() {
+        std::fs::create_dir_all(dir).unwrap();
+    }
+    let f = std::fs::File::create(path).unwrap();
+    let mut e = png::Encoder::new(std::io::BufWriter::new(f), w * scale, h * scale);
+    e.set_color(png::ColorType::Rgb);
+    e.set_depth(png::BitDepth::Eight);
+    e.write_header().unwrap().write_image_data(&data).unwrap();
 }

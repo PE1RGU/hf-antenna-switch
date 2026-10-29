@@ -20,4 +20,10 @@ pub trait ShackHw {
     /// Host port (USB Serial/JTAG, host-protocol.md).
     fn usb_write(&mut self, bytes: &[u8]);
     fn usb_read(&mut self) -> Option<u8>;
+    /// Display SPI (SCK IO2, MOSI IO9, D-180). D/C and RST are on the expander.
+    fn spi_write(&mut self, bytes: &[u8]);
+    /// Display frame buffer, `shack_ui::fb::BYTES` long (a static on the target).
+    fn framebuffer(&mut self) -> &mut [u8];
+    /// Send `framebuffer()[start..end]` over the display SPI.
+    fn spi_write_framebuffer(&mut self, start: usize, end: usize);
 }

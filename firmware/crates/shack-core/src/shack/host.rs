@@ -180,6 +180,7 @@ impl Shack {
             }
             HostCommand::Events(on) => self.host.events_on = on,
             HostCommand::KeepAlive(s) => self.host.keep_alive_s = s,
+            HostCommand::Page(p) => self.set_page(p),
         }
         Ok(None)
     }
@@ -282,6 +283,7 @@ impl Shack {
             fault: self.fault_known,
             stop: self.sw_stop,
             keepalive: self.host.keep_alive_s,
+            page: self.page(),
             band: inp.band,
             boxs: self.status.map(|s| BoxPart {
                 ready: s.flags.ready,

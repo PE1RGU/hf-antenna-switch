@@ -9,11 +9,17 @@ publish = false
 
 [dependencies]
 embedded-hal = "1"
+host-proto = { version = "0.1.0", path = "../../crates/host-proto" }
 link-proto = { path = "../../crates/link-proto" }
 nix = { version = "0.31.3", features = ["term", "fs"] }
+png = "0.18"
 shack-core = { path = "../../crates/shack-core" }
+shack-ui = { version = "0.1.0", path = "../../crates/shack-ui" }
 sim-core = { path = "../sim-core" }
 sim-models = { path = "../sim-models" }
 
 [lints]
 workspace = true
+
+[dev-dependencies]
+embedded-graphics = "0.8"
