@@ -1,0 +1,16 @@
+[package]
+name = "host-proto"
+version = "0.1.0"
+description = "Mac or Pi to shack interface: text line protocol (docs/design/host-protocol.md)"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+link-proto = { path = "../link-proto" }
+
+[dev-dependencies]
+proptest = "1"
+
+[lints]
+workspace = true

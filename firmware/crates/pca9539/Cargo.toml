@@ -1,0 +1,13 @@
+[package]
+name = "pca9539"
+version = "0.1.0"
+description = "PCA9539 I/O expander driver, no_std, embedded-hal 1.0; enforces the F1 write order"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+embedded-hal = "1"
+
+[lints]
+workspace = true

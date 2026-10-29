@@ -1,0 +1,17 @@
+[package]
+name = "link-proto"
+version = "0.1.0"
+description = "Shack to box data link: frames, messages, link state machines (docs/design/link-protocol.md)"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+crc = "3"
+
+[dev-dependencies]
+proptest = "1"
+crc = "3"
+
+[lints]
+workspace = true

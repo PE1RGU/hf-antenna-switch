@@ -1,0 +1,16 @@
+[package]
+name = "sim-models"
+version = "0.1.0"
+description = "Part and board models for the simulator"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+sim-core = { path = "../sim-core" }
+shack-core = { path = "../../crates/shack-core" }
+embedded-hal = "1"
+
+[lints]
+workspace = true

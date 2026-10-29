@@ -1,0 +1,19 @@
+[package]
+name = "shack-core"
+version = "0.1.0"
+description = "Shack interface logic, no_std, without hardware calls"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+crc = "3"
+embedded-hal = "1"
+heapless = "0.9.3"
+host-proto = { version = "0.1.0", path = "../host-proto" }
+link-proto = { version = "0.1.0", path = "../link-proto" }
+pca9539 = { version = "0.1.0", path = "../pca9539" }
+shack-ui = { version = "0.1.0", path = "../shack-ui" }

@@ -1,0 +1,14 @@
+[package]
+name = "sim-core"
+version = "0.1.0"
+description = "Simulator core: virtual time, trace, I2C and UART plumbing, embedded-hal adapters"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+embedded-hal = "1"
+
+[lints]
+workspace = true
