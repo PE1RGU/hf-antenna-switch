@@ -2,6 +2,7 @@
 //! Time moves in 1 ms steps; the firmware ticks every `shack::TICK` ms.
 
 pub mod box_stub;
+pub mod tui;
 
 use box_stub::BoxStub;
 use link_proto::{Ms, Radio};
@@ -271,6 +272,36 @@ impl ShackSim {
         save_png(path, &self.screen(), scale);
     }
 
+    /// One outside-world command, shared by the terminal UI and the pty mode.
+    /// Returns what happened, or an error with the help text.
+    pub fn world(&mut self, cmd: &str) -> Result<String, String> {
+        let w: Vec<&str> = cmd.split_whitespace().collect();
+        let on = |x: &str| x.eq_ignore_ascii_case("on");
+        match w.as_slice() {
+            ["reset"] => {
+                self.press_reset();
+                return Ok("RESET pressed".into());
+            }
+            ["box", "mute", v] => self.boxs.mute = on(v),
+            ["radio", r, v] => {
+                let i = ["R1", "R2", "R3"]
+                    .iter()
+                    .position(|x| x.eq_ignore_ascii_case(r))
+                    .ok_or_else(|| WORLD_HELP.to_string())?;
+                self.board.borrow_mut().set_env(|e| e.radio_tx[i] = on(v));
+            }
+            ["kill", v] => self.board.borrow_mut().set_env(|e| e.kill_pressed = on(v)),
+            ["cable", v] => self.board.borrow_mut().set_env(|e| e.cable_ok = on(v)),
+            ["power", v] => self.board.borrow_mut().set_env(|e| e.power = on(v)),
+            ["shot", path] => {
+                self.save_screen(std::path::Path::new(path), 3);
+                return Ok(format!("display saved to {path}"));
+            }
+            _ => return Err(WORLD_HELP.to_string()),
+        }
+        Ok(format!("{cmd}: done"))
+    }
+
     pub fn has_event(&self, e: Event) -> Option<Ms> {
         self.events.iter().find(|(_, x)| *x == e).map(|(t, _)| *t)
     }
@@ -299,3 +330,7 @@ pub fn save_png(path: &std::path::Path, px: &[u16], scale: u32) {
     e.set_depth(png::BitDepth::Eight);
     e.write_header().unwrap().write_image_data(&data).unwrap();
 }
+
+/// Outside-world commands (terminal UI: type them with a leading `:`).
+pub const WORLD_HELP: &str = "outside world: reset | kill on|off | cable on|off | power on|off | \
+radio R1|R2|R3 on|off (TX sense) | box mute on|off | shot <file.png>";

@@ -123,3 +123,23 @@ fn damaged_record_gives_defaults() {
     );
     assert_eq!(s.boxs.routes[0], Route::default(), "nothing restored");
 }
+
+/// The simulator keeps the record in a file, so a restart of the simulator is a power cycle.
+#[test]
+fn state_file_survives_a_simulator_restart() {
+    let path = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join("state-file-test.bin");
+    let _ = std::fs::remove_file(&path);
+    {
+        let mut s = ShackSim::use_state_file(&path);
+        s.start();
+        assert_eq!(s.host("route R1 A1 A2"), "ok");
+        assert_eq!(s.host("name A1 Dipole"), "ok");
+        s.run(2500);
+    }
+    assert!(path.exists(), "saved to the file");
+    let mut s = ShackSim::use_state_file(&path);
+    s.run_until(3000, |s| s.shack.link_up()).unwrap();
+    s.run(500);
+    assert_eq!(s.boxs.routes[0], route(Col::A1, Col::A2));
+    assert!(s.host("names").contains("A1=Dipole"));
+}

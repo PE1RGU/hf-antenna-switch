@@ -1,7 +1,12 @@
-//! `sim-shack`: demo run that prints a timeline (start-up, RESET, one R2 transmission).
-//! `sim-shack --pty`: the simulated shack interface in real time on a pseudo-terminal,
-//! for a serial terminal or a host script (docs/design/host-protocol.md).
+//! `sim-shack`: the simulated shack interface in a terminal UI (macOS, Linux, Windows).
+//!
+//! Options:
+//!   --state <file>   stored settings file (default shack-sim-state.bin)
+//!   --tcp <port>     TCP host port on 127.0.0.1 (default 7300); --no-tcp for none
+//!   --demo           print a timeline of a start-up and one R2 transmission, no UI
+//!   --pty            Unix only: host port on a pseudo-terminal, no UI
 
+#[cfg(unix)]
 mod pty;
 
 use link_proto::{Col, Radio, Route};
@@ -22,10 +27,34 @@ const SHOWN: [&str; 10] = [
 ];
 
 fn main() {
-    if std::env::args().any(|a| a == "--pty") {
-        pty::run();
-        return;
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let value = |name: &str| {
+        args.iter()
+            .position(|a| a == name)
+            .and_then(|i| args.get(i + 1).cloned())
+    };
+    let state_file = value("--state").unwrap_or_else(|| "shack-sim-state.bin".into());
+    let tcp_port = if args.iter().any(|a| a == "--no-tcp") {
+        None
+    } else {
+        Some(value("--tcp").and_then(|p| p.parse().ok()).unwrap_or(7300))
+    };
+    if args.iter().any(|a| a == "--demo") {
+        demo();
+    } else if args.iter().any(|a| a == "--pty") {
+        #[cfg(unix)]
+        pty::run(ShackSim::use_state_file(std::path::Path::new(&state_file)));
+        #[cfg(not(unix))]
+        eprintln!("--pty needs a Unix system; use the terminal UI and its TCP port");
+    } else if let Err(e) = sim_shack::tui::run(sim_shack::tui::Options {
+        state_file: state_file.into(),
+        tcp_port,
+    }) {
+        eprintln!("terminal UI: {e}");
     }
+}
+
+fn demo() {
     let mut s = ShackSim::new();
     s.start();
     let route = Route {

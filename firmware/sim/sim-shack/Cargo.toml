@@ -10,13 +10,18 @@ publish = false
 [dependencies]
 embedded-hal = "1"
 host-proto = { version = "0.1.0", path = "../../crates/host-proto" }
+image = { version = "0.25.10", default-features = false }
 link-proto = { path = "../../crates/link-proto" }
-nix = { version = "0.31.3", features = ["term", "fs"] }
 png = "0.18"
+ratatui = "0.30.2"
+ratatui-image = { version = "11.1.0", default-features = false, features = ["crossterm"] }
 shack-core = { path = "../../crates/shack-core" }
 shack-ui = { version = "0.1.0", path = "../../crates/shack-ui" }
 sim-core = { path = "../sim-core" }
 sim-models = { path = "../sim-models" }
+
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.31.3", features = ["term", "fs"] }
 
 [lints]
 workspace = true

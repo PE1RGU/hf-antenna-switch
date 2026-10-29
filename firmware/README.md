@@ -1,6 +1,6 @@
 # Firmware
 
-Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P3c done (display pages). Next: P4, the box board models.
+Rust. Plan and phases: [PLAN.md](PLAN.md). Status: P3 done (shack interface in the simulator, with stored settings and a terminal UI). Next: P4, the box board models.
 
 Two targets, both on the ESP32-C3-DevKit-RUST:
 
@@ -18,7 +18,24 @@ Firmware rules already defined: see design-log.md (F-rules) and hardware/docs/di
 - `crates/shack-ui`: display pages B (flow), C (cards) and Safe stop, 320 x 240, anti-aliased M+ fonts. Mock-ups: docs/design/display-mockups.
 - `sim/sim-shack`: shack logic on the board model, against a scripted box. `cargo run -p sim-shack` prints a demo timeline.
 
-## Talk to the simulated shack interface
+## Run the simulated shack interface
+
+```bash
+cargo run --release -p sim-shack
+```
+
+A terminal UI on macOS, Linux and Windows:
+
+- Left: the display as the firmware draws it. Full resolution in terminals with an image protocol (iTerm2, kitty, WezTerm, Windows Terminal 1.22 or later); coloured half-blocks elsewhere (macOS Terminal: readable shapes, small text). F9 saves a PNG at full resolution.
+- Right: the outside world on F-keys (F1 RESET, F2 KILL, F3 cable, F4 power, F5 to F7 radio TX sense, F8 box silent, F10 auto keep-alive) and the board signals.
+- Bottom: host traffic and a command line. Type host commands (`route R2 A1 A1`, `tx R2 on`, `name A3 Hexbeam`, `page c`); type `:` commands for the outside world (`:reset`, `:kill on`, `:radio R2 on`).
+- Host tools connect over TCP to 127.0.0.1:7300 (`--tcp <port>`, `--no-tcp`).
+- Stored settings (names, routes, bias, page) are kept in `shack-sim-state.bin` (`--state <file>`), as the shack keeps them in flash: stop and start the simulator and the station comes back.
+- Auto keep-alive (F10, on by default) sends an empty host line every second, so slow typing does not end TX.
+
+Other modes: `--demo` prints a timeline; `--pty` (Unix) puts the host port on a pseudo-terminal.
+
+## Host port on a pseudo-terminal (Unix)
 
 ```bash
 cargo run -p sim-shack -- --pty
