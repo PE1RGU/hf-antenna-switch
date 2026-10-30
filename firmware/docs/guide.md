@@ -9,8 +9,10 @@ This guide explains the rest when you meet it.
 The details of every type and function are in the code documentation (rustdoc). Open it with:
 
 ```bash
-cargo doc --no-deps --open
+./doc.sh
 ```
+
+It builds the documentation, serves it on http://localhost:8765 and opens the browser (stop with Ctrl-C). Do not open the files from disk in Safari: Safari then drops the style sheets, and the pages look plain.
 
 ## Contents
 
@@ -297,7 +299,7 @@ CI on GitHub runs the same script, plus the emulator tests on Ubuntu, macOS and 
 | The protocols | `docs/design/link-protocol.md`, `docs/design/host-protocol.md` |
 | The hardware the firmware drives | `docs/design/shack-interface.md`, `docs/design/controller-board.md` |
 | Why a decision was taken | `design-log.md`, by its ID (D-63, F14, ...) |
-| A type or function | `cargo doc --no-deps --open`, then search |
+| A type or function | `./doc.sh`, then search (press `S`) |
 | Good starting points in the rustdoc | `shack_core::shack::Shack` (the logic), `shack_core::hw::ShackHw` (the boundary), `sim_shack::ShackSim` (the emulator) |
 
 ## 12. Words used in this code
