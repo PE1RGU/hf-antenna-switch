@@ -63,6 +63,7 @@ pub fn warning_line(s: &UiState) -> Option<String<48>> {
             ANTENNA_LABELS[c as usize - 1]
         ),
         Warning::TxSense(r) => write!(msg, "{} TX sense · no signal", RADIO_LABELS[r]),
+        Warning::TxWithoutPermit(r) => write!(msg, "{} transmits without permit", RADIO_LABELS[r]),
         Warning::BoxFault(n) => write!(msg, "Box fault {n}"),
     };
     if s.warnings.len() > 1 {

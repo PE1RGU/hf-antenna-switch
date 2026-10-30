@@ -109,6 +109,7 @@ Sent on every change (when events are on). One line each.
 | `!refused <command words> <result>` | The box refused a command; result as in link-protocol.md 4.1, lower case |
 | `!permitlost <radio>` | The box dropped a permit in use |
 | `!txsense <radio> fault` | Keyed with permit for 500 ms without TX sense (F14) |
+| `!txsense <radio> nopermit` | TX sense active without the permit for more than 50 ms, outside the 500 ms after an inhibit: the radio transmits while inhibited (no TX INH input, or a wiring fault). A warning only; nothing stops by itself (F15, D-188) |
 | `!route <radio> <tx col> <rx col>` | Route as read back from the box |
 | `!host timeout` | Host keep-alive missed: TX ended (section 8) |
 

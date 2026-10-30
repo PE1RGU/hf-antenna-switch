@@ -211,6 +211,12 @@ impl Shack {
         });
 
         let mut warnings = heapless::Vec::new();
+        // The most severe first: the toast shows the first warning.
+        for i in 0..3 {
+            if self.nopermit[i] {
+                let _ = warnings.push(Warning::TxWithoutPermit(i));
+            }
+        }
         if !self.link.is_up() {
             let _ = warnings.push(Warning::LinkDown);
         }

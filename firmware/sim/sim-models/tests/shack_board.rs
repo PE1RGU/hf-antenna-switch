@@ -347,7 +347,12 @@ fn f1_config_before_output_keys_the_radio() {
 #[test]
 fn ptt_loop_follows_r1_tx_sense_without_the_mcu() {
     let b = powered(); // fault and latch still set: MCU has done nothing
-    b.borrow_mut().set_env(|e| e.radio_tx[0] = true);
+    // R1 is inhibited (latch set). The PTT path in hardware is the point here, so
+    // R1 transmits anyway, as a radio without a TX INH input.
+    b.borrow_mut().set_env(|e| {
+        e.radio_no_inh[0] = true;
+        e.radio_tx[0] = true;
+    });
     assert!(sig(&b).ptt_loop);
     b.borrow_mut().set_env(|e| e.cable_ok = false);
     assert!(!sig(&b).ptt_loop);
@@ -363,6 +368,8 @@ fn inputs_read_through_the_expander() {
     let b = powered();
     exp_setup(&b, OUT_IDLE);
     b.borrow_mut().set_env(|e| {
+        // The wiring is the point here: radios that transmit although inhibited.
+        e.radio_no_inh = [true; 3];
         e.radio_tx = [true, false, true];
         e.kill_pressed = true;
         e.band = 0b0101;
@@ -459,4 +466,35 @@ fn trace_records_signal_changes() {
     assert_eq!(tr.level_at("FAULT", t), Some(false));
     assert_eq!(tr.signal("POR_N").last().map(|x| x.1), Some(true));
     assert!(tr.signal("LATCH_CLR").len() >= 2);
+}
+
+/// An inhibited radio does not transmit; one that was transmitting stops after
+/// its inhibit response time; a radio without a TX INH input transmits anyway (F15).
+#[test]
+fn radios_obey_tx_inh() {
+    let b = powered(); // latched: every radio inhibited
+    b.borrow_mut().set_env(|e| e.radio_tx = [true; 3]);
+    assert_eq!(sig(&b).radio_tx_active, [false; 3], "inhibited: no TX");
+    b.borrow_mut().set_env(|e| e.radio_no_inh[1] = true);
+    assert_eq!(
+        sig(&b).radio_tx_active,
+        [false, true, false],
+        "no TX INH input: R2 transmits"
+    );
+
+    // Free R3, let it transmit, then inhibit it: it stops after its response time.
+    clear_fault(&b);
+    press_reset(&b);
+    b.borrow_mut()
+        .set_env(|e| e.inh_response[2] = SimTime::ms(30));
+    gpio_set(&b, gpio::PERMIT_R3, true);
+    assert!(sig(&b).radio_tx_active[2], "permitted: R3 transmits");
+    gpio_set(&b, gpio::PERMIT_R3, false);
+    b.borrow_mut().run(ms(29));
+    assert!(sig(&b).radio_tx_active[2], "RF tail");
+    b.borrow_mut().run(ms(2));
+    assert!(!sig(&b).radio_tx_active[2], "stopped after 30 ms");
+    // PTT still held: it does not start again while inhibited.
+    b.borrow_mut().run(ms(100));
+    assert!(!sig(&b).radio_tx_active[2]);
 }

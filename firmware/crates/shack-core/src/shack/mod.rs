@@ -50,6 +50,11 @@ pub const TX_END_MIN_WAIT: Ms = 100;
 pub const CONFIG_SAVE_DELAY: Ms = 2000;
 /// F14 plausibility: keyed this long without TX sense flags the port.
 pub const TX_SENSE_PLAUSIBLE: Ms = 500;
+/// F15 (D-188): TX sense without the permit for this long raises the alarm.
+pub const TX_NOPERMIT_DEBOUNCE: Ms = 50;
+/// F15: no alarm this long after the permit went off: the normal RF tail after an
+/// inhibit (F14). To review with the measured inhibit response (M-12).
+pub const TX_NOPERMIT_GRACE: Ms = 500;
 
 const EXPANDER: Pca9539 = Pca9539::new(EXPANDER_ADDR);
 const KEYS: [ExpPin; 3] = [exp::KEY_R1, exp::KEY_R2, exp::KEY_R3];
@@ -107,6 +112,9 @@ pub enum Event {
     PermitLost(Radio),
     /// F14 plausibility: keyed with the permit, but TX sense stays inactive.
     TxSenseFault(Radio),
+    /// F15 (D-188): the radio transmits without its permit (TX sense active while
+    /// inhibited): no TX INH input, or a wiring fault. A warning only.
+    TxWithoutPermit(Radio),
     /// Expander lost after start-up: the fault latch is likely set. TX blocked until cleared (C-2).
     Fault,
     /// Host keep-alive missed: TX ended, keys released (host-protocol.md section 8).
@@ -179,6 +187,11 @@ pub struct Shack {
     permit_out: [bool; 3],
     keyed_since: [Option<Ms>; 3],
     sense_fault: [bool; 3],
+    /// F15: when the permit last went off, per radio (0 at power-up).
+    permit_off_at: [Ms; 3],
+    /// F15: TX sense without permit since, and whether it is already reported.
+    nopermit_since: [Option<Ms>; 3],
+    nopermit: [bool; 3],
     route_r1_pending: bool,
     sw_stop: bool,
     pending: Deque<Command, 8>,
@@ -223,6 +236,9 @@ impl Shack {
             permit_out: [false; 3],
             keyed_since: [None; 3],
             sense_fault: [false; 3],
+            permit_off_at: [0; 3],
+            nopermit_since: [None; 3],
+            nopermit: [false; 3],
             route_r1_pending: false,
             sw_stop: false,
             pending: Deque::new(),
@@ -649,6 +665,7 @@ impl Shack {
             if self.permit_out[r.index()] && !want[r.index()] {
                 hw.set_permit(r, false);
                 self.permit_out[r.index()] = false;
+                self.permit_off_at[r.index()] = now;
             }
         }
         let w = self.exp_word();
@@ -685,6 +702,33 @@ impl Shack {
             if !sense && !self.sense_fault[i] && now.saturating_sub(since) >= TX_SENSE_PLAUSIBLE {
                 self.sense_fault[i] = true;
                 self.event(Event::TxSenseFault(r));
+            }
+        }
+        self.check_tx_without_permit(now);
+    }
+
+    /// F15 (D-188): TX sense active while the radio has no permit, for longer than
+    /// [`TX_NOPERMIT_DEBOUNCE`], outside the [`TX_NOPERMIT_GRACE`] after its permit
+    /// went off (the normal RF tail). Reported once per episode; nothing stops by
+    /// itself: the operator decides.
+    fn check_tx_without_permit(&mut self, now: Ms) {
+        for r in Radio::ALL {
+            let i = r.index();
+            let sense = self.inputs.is_some_and(|x| x.tx_sense[i]);
+            if !sense {
+                self.nopermit_since[i] = None;
+                self.nopermit[i] = false;
+                continue;
+            }
+            let in_tail = now.saturating_sub(self.permit_off_at[i]) < TX_NOPERMIT_GRACE;
+            if self.permit_out[i] || in_tail {
+                self.nopermit_since[i] = None;
+                continue;
+            }
+            let since = *self.nopermit_since[i].get_or_insert(now);
+            if !self.nopermit[i] && now.saturating_sub(since) >= TX_NOPERMIT_DEBOUNCE {
+                self.nopermit[i] = true;
+                self.event(Event::TxWithoutPermit(r));
             }
         }
     }

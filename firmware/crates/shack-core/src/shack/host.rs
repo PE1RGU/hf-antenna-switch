@@ -257,6 +257,7 @@ impl Shack {
             Event::Refused { cmd, result } => HostEvent::Refused(cmd, result),
             Event::PermitLost(r) => HostEvent::PermitLost(r),
             Event::TxSenseFault(r) => HostEvent::TxSenseFault(r),
+            Event::TxWithoutPermit(r) => HostEvent::TxWithoutPermit(r),
             Event::Fault => HostEvent::Fault,
             Event::HostTimeout => HostEvent::HostTimeout,
         };

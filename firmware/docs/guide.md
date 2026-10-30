@@ -177,6 +177,7 @@ The firmware rules from the hardware verification, and where they are kept:
 | D-59 | LATCH_CLR only once at start-up, after the self-test (the expander set-up); not again after a later fault | `Shack::tick` (expander set-up), `clearfault` | `start_up_order`, `expander_lost_drops_permits_and_sets_up_again` |
 | F13 | The box keeps K0 while a permit is out; a link loss opens SAFE | `BoxStub` (box side), `Shack::on_link` (shack side) | `link_loss_with_permit_out` |
 | F14 | At TX end: inhibit first, then wait for TX sense off and 100 ms | `Shack::step_tx`, `Shack::apply_outputs` | `tx_end_waits_for_tx_sense_and_100_ms` |
+| F15 | TX sense without the permit (a radio that ignores TX INH, or a wiring fault): warn, stop nothing (D-188) | `Shack::check_tx_without_permit` | `tx_without_permit_raises_the_alarm`, `rf_tail_within_the_grace_is_no_alarm` |
 | Watchdog | WDI toggles only from the main loop, after the checks of the pass (D-59) | `Shack::tick` | `shack_mcu_hang`, `watchdog_kick_comes_after_the_checks` |
 
 The tests are in `sim/sim-shack/tests/` and `sim/sim-models/tests/`.
