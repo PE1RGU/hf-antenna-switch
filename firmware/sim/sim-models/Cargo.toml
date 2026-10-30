@@ -10,6 +10,8 @@ publish = false
 [dependencies]
 sim-core = { path = "../sim-core" }
 shack-core = { path = "../../crates/shack-core" }
+box-core = { path = "../../crates/box-core" }
+link-proto = { path = "../../crates/link-proto" }
 embedded-hal = "1"
 
 [lints]

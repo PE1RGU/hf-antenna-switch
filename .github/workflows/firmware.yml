@@ -41,4 +41,4 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: firmware
-      - run: cargo test -p host-proto -p link-proto -p shack-core -p shack-ui -p sim-models -p sim-shack
+      - run: cargo test -p box-core -p host-proto -p link-proto -p shack-core -p shack-ui -p sim-models -p sim-shack
