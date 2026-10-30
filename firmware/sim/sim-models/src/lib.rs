@@ -15,11 +15,13 @@
 //!
 //! | Module | Part | Interface | Source |
 //! |---|---|---|---|
-//! | [`pca9539`] | PCA9539 16-bit I/O expander | [`I2cDevice`](sim_core::i2c::I2cDevice) | Datasheet, rule F1 |
+//! | [`pca9539`] | PCA9539 16-bit I/O expander, with INT | [`I2cDevice`](sim_core::i2c::I2cDevice) | Datasheet, rule F1 |
 //! | [`tps3823`] | TPS3823A-33 supervisor and watchdog | `update(now, vdd_ok, wdi)` | SLVS165O, C-19 |
 //! | [`lvc1g74`] | 74LVC1G74 D flip-flop | `update(pre_n, clr_n, clk, d)` | Datasheet, D-59, D-75 |
 //! | [`st7789`] | ST7789 display controller | `spi(dc, bytes)` | Datasheet, D-187 |
+//! | [`rt1`] | TE RT1 power relay | `update(now, coil)` | RT1pb rev 4 (timing), verify_logic.py section 8 |
 //! | [`shack`] | The shack interface board | [`Board`](sim_core::hal::Board) | verify_system.py sections 1, 3, 4 |
+//! | [`box_board`] | The box: RF board and controller board | [`Board`](sim_core::hal::Board) | verify_logic.py, verify_system.py section 1 |
 //!
 //! # How the board model works
 //!
@@ -63,8 +65,10 @@
 //! assert_eq!(buf, [0xFF, 0xFF]);
 //! ```
 
+pub mod box_board;
 pub mod lvc1g74;
 pub mod pca9539;
+pub mod rt1;
 pub mod shack;
 pub mod st7789;
 pub mod tps3823;

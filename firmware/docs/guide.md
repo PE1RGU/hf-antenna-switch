@@ -251,7 +251,7 @@ Run one test file with `cargo test -p sim-shack --test scenarios`.
 
 ## 8. How to: add a part model
 
-The part models are in `sim/sim-models/src/`. The board model `ShackBoard` (in `shack.rs`) connects them.
+The part models are in `sim/sim-models/src/`. Two board models connect them: `ShackBoard` (in `shack.rs`) and `BoxBoard` (in `box_board.rs`, the RF board and the controller board of the box).
 
 1. **Write the part** as a struct with the part's state, in its own file. Follow the datasheet, and write the values you used in the file header (times, defaults after reset).
    - A part on the I2C bus implements the trait `I2cDevice` (`write` and `read`). See `pca9539.rs`.
@@ -260,7 +260,7 @@ The part models are in `sim/sim-models/src/`. The board model `ShackBoard` (in `
 2. **Test the part alone**, in a `#[cfg(test)] mod tests` at the end of its file, against the datasheet.
 3. **Wire it into the board.** Add it as a field of `ShackBoard`, and call it in `ShackBoard::settle`, in the right order (the order of the signals on the schematic).
 4. **Name its signals** in `Signals` if you want them in the trace and on the Board panel.
-5. **Test the board** in `sim/sim-models/tests/shack_board.rs`, against the logic in `hardware/unit/verify/verify_system.py`.
+5. **Test the board** in `sim/sim-models/tests/shack_board.rs` (against `hardware/unit/verify/verify_system.py`) or `box_board.rs` (against `verify_logic.py`).
 
 ## 9. How to: change the display
 
