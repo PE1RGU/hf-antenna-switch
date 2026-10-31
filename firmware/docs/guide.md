@@ -163,7 +163,7 @@ Where each step is in the code:
 | The radio is released | `Shack::apply_outputs` sets PERMIT_R2; the hardware gate (permit AND not latched AND no fault) frees TX INH |
 | The end | `set_tx(R2, false)` moves R2 to `Ending`; `apply_outputs` drops the permit at once; `step_tx` sends `TxEnd` only after the F14 wait |
 
-In the emulator, the box is `BoxStub` (in `sim/sim-shack/src/box_stub.rs`). It follows the same rules as the real box firmware will.
+In the shack emulator, the box is `BoxStub` (in `sim/sim-shack/src/box_stub.rs`), a script with the same rules. The real box firmware is `RelayBox` in `crates/box-core`. It runs on the box board model in `sim/sim-box`, against a scripted shack (`ShackStub`), behind its own trait `BoxHw`. Phase P6 joins the two firmwares.
 
 ## 5. Where the safety is
 
@@ -177,12 +177,15 @@ The firmware rules from the hardware verification, and where they are kept:
 |---|---|---|---|
 | F1 | Write the expander outputs before its configuration | `pca9539::Pca9539::init` | `start_up_order`, `f1_config_before_output_keys_the_radio` |
 | D-59 | LATCH_CLR only once at start-up, after the self-test (the expander set-up); not again after a later fault | `Shack::tick` (expander set-up), `clearfault` | `start_up_order`, `expander_lost_drops_permits_and_sets_up_again` |
-| F13 | The box keeps K0 while a permit is out; a link loss opens SAFE | `BoxStub` (box side), `Shack::on_link` (shack side) | `link_loss_with_permit_out` |
+| F11, F5 | Box start-up: LATCH_CLR edge, MCU_EN_N low, wait for KILL = 0, then set up the expanders. After KILL, set them up again; the relays come back off | `RelayBox::tick`, `RelayBox::set_up` | `start_up_order_f11_f1`, `kill_releases_and_the_box_sets_up_again_f5` |
+| F6 | Check every new relay state against H1 to H4 before a relay moves | `crossbar::check`, `RelayBox::set_route` | `hazards_are_refused_f6`, `counts_match_logic_verification_section_7` |
+| F10 | Open, wait 12 ms, K1 on, wait, close, wait, K1 off. One write only opens or only closes; no step while TX_ANY = 1 | `RelayBox::switch_step` | `route_change_follows_section_8`, `tx_any_refuses_and_pauses_the_sequence` |
+| F13 | The box keeps K0 while a permit is out; a link loss opens SAFE | `RelayBox::on_link_lost` (box side), `Shack::on_link` (shack side) | `link_loss_with_permit_opens_safe_f13`, `link_loss_with_permit_out` |
 | F14 | At TX end: inhibit first, then wait for TX sense off and 100 ms | `Shack::step_tx`, `Shack::apply_outputs` | `tx_end_waits_for_tx_sense_and_100_ms` |
 | F15 | TX sense without the permit (a radio that ignores TX INH, or a wiring fault): warn, stop nothing (D-188) | `Shack::check_tx_without_permit` | `tx_without_permit_raises_the_alarm`, `rf_tail_within_the_grace_is_no_alarm` |
 | Watchdog | WDI toggles only from the main loop, after the checks of the pass (D-59) | `Shack::tick` | `shack_mcu_hang`, `watchdog_kick_comes_after_the_checks` |
 
-The tests are in `sim/sim-shack/tests/` and `sim/sim-models/tests/`.
+The tests are in `sim/sim-shack/tests/`, `sim/sim-box/tests/` and `sim/sim-models/tests/`.
 Each rule was once broken on purpose, to show that its test catches it.
 
 ## 6. How to: add a host command

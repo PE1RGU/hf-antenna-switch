@@ -5,7 +5,7 @@ Rust firmware for the two ESP32-C3 controllers, developed and tested in an emula
 | Target | Function | State |
 |---|---|---|
 | Shack interface | SAFE latch read-back, TX permits and handshake, USB host port, display, stored settings | Runs in the emulator (phase P3 done) |
-| Box controller (outdoor unit) | Relay matrix, safety gate, watchdog, data link to the shack | Board model and pin map done (phase P4); firmware in P5. A scripted box stands in for it |
+| Box controller (outdoor unit) | Relay matrix, safety gate, watchdog, data link to the shack | Firmware logic runs on the box board model against a scripted shack (phase P5 done). The shack emulator still uses a scripted box until P6 |
 
 New to the code? Start with the [firmware guide](docs/guide.md): how the firmware works, one transmission followed through the code, and how to add a command, a test or a part model. Every type and function is documented in the code; open it with `./doc.sh`.
 
@@ -114,7 +114,7 @@ Time is virtual and follows the wall clock in the terminal UI. The logic runs it
 What the emulator is not:
 
 - It does not show the processor's speed or memory use. Those are measured on the board (phase P7).
-- The box is a script, not the box firmware. The box board model exists (P4, `sim/sim-models/src/box_board.rs`); the box firmware and the joined system follow in P5 and P6.
+- In `sim-shack` the box is a script, not the box firmware. The box firmware runs on its own board model in `sim-box` (P5, `cargo test -p sim-box`); the joined system follows in P6.
 - The radios are simple: a TX sense on or off. There is no RF, no SWR and no relay contact bounce.
 
 ## The screen
@@ -324,11 +324,12 @@ The tests check the firmware against the hardware design:
 | `crates/host-proto` | Host protocol: command parser, answers, events ([host-protocol.md](../docs/design/host-protocol.md)) |
 | `crates/pca9539` | I/O expander driver with the F1 write order |
 | `crates/shack-core` | Shack interface logic: `Shack::tick` every 10 ms, the `ShackHw` trait, pin map, stored settings |
-| `crates/box-core` | Box logic. Now only the pin map (expanders U901 to U1001, GPIO); the state machine follows in P5 |
+| `crates/box-core` | Box logic: `RelayBox::tick` every 1 ms, the `BoxHw` trait, the crossbar check (H1 to H4), pin map |
 | `crates/shack-ui` | Display pages, theme and fonts (M+ FONTS, anti-aliased), frame buffer, ST7789 commands. Mock-ups: [docs/design/display-mockups](../docs/design/display-mockups) |
 | `sim/sim-core` | Emulator core: virtual time, trace, I2C and UART plumbing, embedded-hal adapters |
 | `sim/sim-models` | Part and board models: PCA9539, TPS3823, 74LVC1G74, RT1 relay, ST7789, the shack board and the box board |
 | `sim/sim-shack` | The shack emulator: harness, scripted box, terminal UI, text view, tests |
+| `sim/sim-box` | The box emulator: harness, scripted shack, scenario tests |
 | `targets/shack-esp32c3` | ESP32-C3 binary (bring-up stub until P7) |
 
 The logic crates are `no_std` and build for the ESP32-C3. The emulator crates need `std`.

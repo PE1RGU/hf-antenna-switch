@@ -34,6 +34,9 @@ pub struct Pca9539 {
     /// Fault injection: RESET pin open (for example a bad solder joint). The
     /// device ignores [`Pca9539::set_reset`].
     pub reset_open: bool,
+    /// Fault injection: these pins are held low on the board (for example a
+    /// shorted gate driver), whatever the device drives.
+    pub stuck_low: u16,
 }
 
 impl Default for Pca9539 {
@@ -56,6 +59,7 @@ impl Pca9539 {
             seen: 0xFFFF,
             force_nack: false,
             reset_open: false,
+            stuck_low: 0,
         }
     }
 
@@ -65,10 +69,11 @@ impl Pca9539 {
             return;
         }
         if active {
-            let (nack, ext) = (self.force_nack, self.ext);
+            let (nack, ext, stuck) = (self.force_nack, self.ext, self.stuck_low);
             *self = Pca9539::new();
             self.force_nack = nack;
             self.ext = ext;
+            self.stuck_low = stuck;
             self.seen = self.pins();
         }
         self.in_reset = active;
@@ -87,7 +92,7 @@ impl Pca9539 {
 
     /// Pin levels: the output register on outputs, the board level on inputs.
     pub fn pins(&self) -> u16 {
-        (self.output & !self.config) | (self.ext & self.config)
+        ((self.output & !self.config) | (self.ext & self.config)) & !self.stuck_low
     }
 
     /// Level of one pin (`bit` 0 to 15: port 0 is bits 0 to 7, port 1 is bits 8 to 15).

@@ -105,7 +105,7 @@ Status payload (12 bytes):
 
 ### 4.2 Fault codes
 
-1 expander NACK, 2 read-back mismatch, 3 bias-T fault, 4 link time-out with permit out, 5 SAFE loop did not close at start-up (F11). More codes are added with the box firmware.
+1 expander NACK, 2 read-back mismatch, 3 bias-T fault, 4 link time-out with permit out, 5 SAFE loop did not close at start-up (F11), 6 link time-out with no permit out (P-02). More codes are added with the box firmware. The field holds the last fault since the box powered up.
 
 ## 5. Exchange
 
@@ -119,6 +119,8 @@ The shack is the master. The box speaks only to answer.
 - All commands set a state, not a step. SetRoute, TxRequest, TxEnd and SetBias give the same result when sent twice.
 
 Start: the shack sends Hello until a HelloReply comes. Hello also clears the box seq store, so a restarted shack cannot hit an old seq. If the version differs, the shack does not send commands, reports this to the Mac once, and keeps sending Hello, one every answer time-out (60 ms, section 6). The rx-only mask in HelloReply must match the shack's own table (unit 1: A2, D-103).
+
+Hello also ends every permit. The shack that sends it has all PERMIT lines off (after a boot or a link loss), and a restarted shack does not know its old permits. The box clears the permit bits at once and releases K0 100 ms after the Hello (the F14 wait), unless a TxRequest or TxEnd for that radio comes first.
 
 ### 5.1 TX handshake, R2 and R3 (D-63, T3a, T3b, F2)
 
@@ -143,9 +145,11 @@ Timing on the wire: the box answers the TxRequest at once (7.3 + 18.8 ms, permit
 |---|---|---|
 | Shack: answer time-out | 60 ms | Retry the same frame (same seq) every 60 ms until the link is lost: at most 5 sends |
 | Shack: link lost | no valid answer for 300 ms | Drop all PERMIT and KEY lines; report to the Mac; send Hello until the link is back; then TxEnd for each radio that had a permit, after the F14 wait |
-| Box: link lost | no valid frame for 300 ms, after at least one valid frame | Permit out: MCU_EN_N = 1 (opens SAFE), do not release K0 (F13), fault 4. No permit out: hold the routes, flag the fault (P-02) |
+| Box: link lost | no valid frame for 300 ms, after at least one valid frame | Permit out: MCU_EN_N = 1 (opens SAFE), do not release K0 (F13), fault 4. No permit out: hold the routes, fault 6 (P-02) |
 
 300 ms is 6 poll periods. It is well below the box watchdog minimum (0.9 s, C-19), so a link loss is handled by firmware before the watchdog acts.
+
+The box leaves its link-loss stop (fault 4) on a Hello, or when each radio that had a permit got its TxEnd (decided by Prins, 2026-10-31). It then sets MCU_EN_N = 0 and runs the F11 start-up again. The relays come back off. The SAFE latch in the shack still needs RESET, so an operator is in the loop. While stopped, the box answers every command with READY = 0 and refuses SetRoute, TxRequest and SetBias with NotReady.
 
 ## 7. Rules for the implementation
 

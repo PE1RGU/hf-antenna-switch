@@ -1,0 +1,17 @@
+[package]
+name = "sim-box"
+version = "0.1.0"
+description = "Runs the box firmware logic on the box board model, against a scripted shack"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+box-core = { path = "../../crates/box-core" }
+link-proto = { path = "../../crates/link-proto" }
+sim-core = { path = "../sim-core" }
+sim-models = { path = "../sim-models" }
+
+[lints]
+workspace = true
