@@ -193,17 +193,47 @@ fn status_line_as_in_the_spec() {
                 key: false,
             },
         ],
+        selftest: SelfTestState::Pass,
     };
     assert_eq!(
         s.to_string(),
         "ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 page=b band=5 box=ready \
          r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0 \
-         k1=A1,A3 rfdet=- bias=- boxfault=0"
+         k1=A1,A3 rfdet=- bias=- boxfault=0 selftest=pass"
     );
     let unknown = StatusLine::default().to_string();
     assert!(
-        unknown.contains("box=?") && unknown.contains("r2=?/?") && unknown.ends_with("boxfault=?")
+        unknown.contains("box=?")
+            && unknown.contains("r2=?/?")
+            && unknown.ends_with("boxfault=? selftest=running")
     );
+    let failed = StatusLine {
+        selftest: SelfTestState::Fail(SelfTestItem::Watchdog),
+        ..Default::default()
+    };
+    assert!(failed.to_string().ends_with(" selftest=fail-watchdog"));
+}
+
+#[test]
+fn self_test_events() {
+    let cases = [
+        (HostEvent::SelfTest(SelfTestState::Pass), "!selftest pass"),
+        (
+            HostEvent::SelfTest(SelfTestState::Fail(SelfTestItem::Latch)),
+            "!selftest fail latch",
+        ),
+        (
+            HostEvent::SelfTestWarn(SelfTestItem::TxSense(Radio::R2)),
+            "!selftest warn txsense R2",
+        ),
+        (
+            HostEvent::SelfTestWarn(SelfTestItem::I2c(0x70)),
+            "!selftest warn i2c 0x70",
+        ),
+    ];
+    for (e, want) in cases {
+        assert_eq!(e.to_string(), want);
+    }
 }
 
 fn command() -> impl Strategy<Value = HostCommand> {

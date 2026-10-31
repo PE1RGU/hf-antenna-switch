@@ -49,7 +49,8 @@ fn draw(a: &mut App) -> String {
 #[test]
 fn draws_display_world_board_and_host() {
     let mut a = app();
-    a.advance(800);
+    // Past the power-up test pattern (colour bars, 1 s).
+    a.advance(2500);
     assert!(a.text_view, "no image protocol: text view first");
     let t = draw(&mut a);
     for s in [
@@ -76,7 +77,8 @@ fn draws_display_world_board_and_host() {
 
 /// R1 transmits on A1 and receives on A2; R2 receives on A3 (named Hexbeam).
 fn station(a: &mut App) {
-    a.advance(600);
+    // Past the power-up self-test: TX needs it passed.
+    a.advance(2500);
     press(a, KeyCode::F(1));
     for l in ["route R1 A1 A2", "route R2 - A3", "name A3 Hexbeam"] {
         type_line(a, l);

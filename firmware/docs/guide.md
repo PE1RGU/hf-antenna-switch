@@ -184,6 +184,7 @@ The firmware rules from the hardware verification, and where they are kept:
 | F14 | At TX end: inhibit first, then wait for TX sense off and 100 ms | `Shack::step_tx`, `Shack::apply_outputs` | `tx_end_waits_for_tx_sense_and_100_ms` |
 | F15 | TX sense without the permit (a radio that ignores TX INH, or a wiring fault): warn, stop nothing (D-188) | `Shack::check_tx_without_permit` | `tx_without_permit_raises_the_alarm`, `rf_tail_within_the_grace_is_no_alarm` |
 | Watchdog | WDI toggles only from the main loop, after the checks of the pass (D-59) | `Shack::tick` | `shack_mcu_hang`, `watchdog_kick_comes_after_the_checks` |
+| Self-test | At power-up each board proves its supervisor trips, its latches work and (box) its safety gate opens, before TX or relays are allowed. A fail blocks until a power cycle | `Shack::self_test_*`, `RelayBox::self_test` | `sim-shack/tests/selftest.rs`, `self_test_*` in `sim-box`, `both_self_tests_pass_and_a_failed_box_shows_at_the_shack` |
 
 The tests are in `sim/sim-shack/tests/`, `sim/sim-box/tests/`, `sim/sim-system/tests/` and `sim/sim-models/tests/`. The system tests also check one rule across both ends at every ms: R2 or R3 is released only while its K0 in the box is settled on the TX row (D-63).
 Each rule was once broken on purpose, to show that its test catches it.

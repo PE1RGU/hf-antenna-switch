@@ -9,6 +9,7 @@ use sim_box::BoxSim;
 use sim_box::shack_stub::ShackStub;
 use sim_core::TraceKind;
 use sim_models::rt1::{Contact, Rt1Timing};
+use sim_models::tps3823::Corner;
 
 fn route(tx: Col, rx: Col) -> Route {
     Route { tx, rx }
@@ -134,29 +135,43 @@ fn no_harm(s: &BoxSim) {
 
 // ------------------------------------------------------------------ start-up
 
+/// Times at which trace signal `name` changed to `value`, in order.
+fn changes(s: &BoxSim, name: &str, value: bool) -> Vec<Ms> {
+    s.board
+        .borrow()
+        .trace
+        .signal(name)
+        .into_iter()
+        .filter(|&(t, v)| v == value && t.as_ms() > 0)
+        .map(|(t, _)| t.as_ms())
+        .collect()
+}
+
 #[test]
 fn start_up_order_f11_f1() {
     let s = started();
+    let reset_n_up = changes(&s, "RESET_N", true);
+    let clr = changes(&s, "LATCH_CLR", true);
+    let en = changes(&s, "MCU_EN_N_PIN", false)[0];
+    let kill_off = changes(&s, "KILL", false)[0];
+    assert!(
+        clr[0] > reset_n_up[0],
+        "LATCH_CLR edge at {} ms, RESET_N high at {} ms",
+        clr[0],
+        reset_n_up[0]
+    );
+    assert!(en >= clr[0], "MCU_EN_N low at {en} ms, after the clear");
+    assert!(kill_off >= en, "KILL low at {kill_off} ms");
+    // Two edges: one at start-up, one after the watchdog test (cause known, rule 2),
+    // only once RESET_N is high again after the trip.
+    assert_eq!(clr.len(), 2, "LATCH_CLR edges {clr:?}");
+    assert_eq!(reset_n_up.len(), 2, "one supervisor trip in the self-test");
+    assert!(
+        clr[1] > reset_n_up[1],
+        "second edge after RESET_N high again"
+    );
     let b = s.board.borrow();
     let tr = &b.trace;
-    let reset_n_up = last_change(&s, "RESET_N", true);
-    let clr = last_change(&s, "LATCH_CLR", true);
-    let en = last_change(&s, "MCU_EN_N_PIN", false);
-    let kill_off = last_change(&s, "KILL", false);
-    assert!(
-        clr > reset_n_up,
-        "LATCH_CLR edge at {clr} ms, RESET_N high at {reset_n_up} ms"
-    );
-    assert!(
-        en >= clr,
-        "MCU_EN_N low at {en} ms, after the clear at {clr} ms"
-    );
-    assert!(kill_off >= en, "KILL low at {kill_off} ms");
-    assert_eq!(
-        tr.signal("LATCH_CLR").iter().filter(|e| e.1).count(),
-        1,
-        "one edge"
-    );
     for addr in ADDR_U901..=ADDR_U1001 {
         let w = tr.i2c_writes(addr);
         assert!(
@@ -190,8 +205,8 @@ fn safe_loop_open_at_start_up_gives_fault_5() {
         ResultCode::NotReady
     );
     s.shack.kill_pressed = false;
-    s.run_until(100, |s| s.fw.phase() == Phase::Run)
-        .expect("runs when the loop closes");
+    s.run_until(5000, |s| s.fw.phase() == Phase::Run)
+        .expect("self-test, then runs when the loop closes");
 }
 
 // ------------------------------------------------------------------ switching
@@ -625,10 +640,17 @@ fn hello_releases_k0_after_the_f14_wait() {
 #[test]
 fn watchdog_kicks_and_a_hang_trips_it() {
     let mut s = started();
+    let t0 = s.now();
     s.run(3000);
     {
         let b = s.board.borrow();
-        let kicks: Vec<Ms> = b.trace.signal("WDI").iter().map(|e| e.0.as_ms()).collect();
+        let kicks: Vec<Ms> = b
+            .trace
+            .signal("WDI")
+            .iter()
+            .map(|e| e.0.as_ms())
+            .filter(|&t| t >= t0)
+            .collect();
         let gap = kicks.windows(2).map(|w| w[1] - w[0]).max().unwrap();
         assert!(gap <= 250, "longest WDI gap {gap} ms");
         assert!(b.signals().reset_n && b.signals().rly_en);
@@ -733,4 +755,151 @@ fn a_row_that_does_not_follow_is_a_read_back_fault() {
         route(Col::A4, Col::None),
         "status shows the read-back"
     );
+}
+
+// ------------------------------------------------------------------ self-test
+
+/// A box powered with the SAFE loop closed, run until the self-test ends.
+fn self_test(s: &mut BoxSim) -> Ms {
+    s.run_until(6000, |s| matches!(s.fw.phase(), Phase::Run | Phase::Failed))
+        .expect("self-test ends")
+}
+
+#[test]
+fn self_test_passes_at_min_and_max_supervisor_timing() {
+    for corner in [Corner::Min, Corner::Max] {
+        let mut s = BoxSim::with(corner, Rt1Timing::MAX);
+        let t = self_test(&mut s);
+        assert_eq!(s.fw.phase(), Phase::Run, "{corner:?} at {t} ms");
+        assert_eq!(s.fw.fault(), FaultCode::NONE, "{corner:?}");
+        let trips = s
+            .board
+            .borrow()
+            .trace
+            .signal("RESET_N")
+            .iter()
+            .filter(|e| !e.1)
+            .count();
+        assert_eq!(trips, 2, "{corner:?}: power-up reset and one watchdog trip");
+        no_harm(&s);
+    }
+}
+
+#[test]
+fn self_test_finds_a_stuck_ready_switch() {
+    let mut s = BoxSim::new();
+    s.board
+        .borrow_mut()
+        .set_env(|e| e.ready_stuck_closed = true);
+    self_test(&mut s);
+    assert_eq!(s.fw.phase(), Phase::Failed);
+    assert_eq!(s.fw.fault(), FaultCode::SELFTEST_GATE);
+    assert!(mcu_en_n(&s), "MCU_EN_N stays high");
+    assert!(!s.board.borrow().signals().rly_en, "no relay can move");
+}
+
+#[test]
+fn self_test_finds_an_expander_reset_pin_open() {
+    // The fault freezes the reset state at injection: inject it while U1001 runs,
+    // then power-cycle, so the next self-test meets an expander that RLY_EN = 0
+    // cannot reset.
+    let mut s = BoxSim::new();
+    self_test(&mut s);
+    s.board.borrow_mut().exp[3].reset_open = true;
+    s.board.borrow_mut().set_env(|e| e.power = false);
+    s.run(100);
+    s.board.borrow_mut().set_env(|e| e.power = true);
+    s.run(10);
+    self_test(&mut s);
+    assert_eq!(s.fw.fault(), FaultCode::SELFTEST_GATE);
+    assert_eq!(s.fw.phase(), Phase::Failed);
+}
+
+#[test]
+fn self_test_finds_the_watchdog_off() {
+    // R64 open: WDI does not reach the supervisor (D-123).
+    let mut s = BoxSim::new();
+    s.board.borrow_mut().set_env(|e| e.wdi_link = false);
+    let t = self_test(&mut s);
+    assert_eq!(s.fw.fault(), FaultCode::SELFTEST_WATCHDOG, "at {t} ms");
+    assert_eq!(s.fw.phase(), Phase::Failed);
+    assert!(mcu_en_n(&s) && !s.board.borrow().signals().rly_en);
+    // The box keeps answering, not ready, and keeps its fault code.
+    s.shack.mute = true;
+    s.run(500);
+    let st = s.fw.status();
+    assert!(!st.flags.ready);
+    assert_eq!(st.fault, FaultCode::SELFTEST_WATCHDOG);
+}
+
+#[test]
+fn self_test_finds_a_missing_expander() {
+    let mut s = BoxSim::new();
+    s.board.borrow_mut().exp[2].force_nack = true;
+    self_test(&mut s);
+    assert_eq!(s.fw.fault(), FaultCode::EXPANDER_NACK);
+    assert_eq!(s.fw.phase(), Phase::Failed);
+}
+
+#[test]
+fn self_test_warns_on_tx_any_at_start_up() {
+    let mut s = BoxSim::new();
+    s.board.borrow_mut().set_env(|e| e.ptt_loop = true);
+    self_test(&mut s);
+    assert_eq!(s.fw.phase(), Phase::Run, "a warning only");
+    assert_eq!(s.fw.fault(), FaultCode::SELFTEST_INPUT);
+}
+
+#[test]
+fn a_failed_box_starts_again_after_a_power_cycle() {
+    let mut s = BoxSim::new();
+    s.board.borrow_mut().set_env(|e| e.wdi_link = false);
+    self_test(&mut s);
+    assert_eq!(s.fw.phase(), Phase::Failed);
+    s.board.borrow_mut().set_env(|e| {
+        e.power = false;
+        e.wdi_link = true;
+    });
+    s.run(100);
+    s.board.borrow_mut().set_env(|e| e.power = true);
+    s.run(10);
+    self_test(&mut s);
+    assert_eq!(s.fw.phase(), Phase::Run);
+}
+
+#[test]
+fn self_test_rejects_an_early_trip() {
+    // The loop opens 200 ms into the watchdog step (KILL pressed): too early to be
+    // the supervisor, so the test fails rather than taking it as a trip.
+    let mut s = BoxSim::new();
+    s.run_until(3000, |s| {
+        matches!(
+            s.fw.phase(),
+            Phase::SelfTest(box_core::relay_box::SelfTest::Watchdog { .. })
+        )
+    })
+    .expect("watchdog step");
+    s.run(200);
+    s.shack.kill_pressed = true;
+    s.run(20);
+    assert_eq!(s.fw.phase(), Phase::Failed);
+    assert_eq!(s.fw.fault(), FaultCode::SELFTEST_WATCHDOG);
+}
+
+#[test]
+fn self_test_finds_a_latch_that_does_not_clear() {
+    // The loop stays open after the second LATCH_CLR edge.
+    let mut s = BoxSim::new();
+    s.run_until(5000, |s| {
+        matches!(
+            s.fw.phase(),
+            Phase::SelfTest(box_core::relay_box::SelfTest::Recover { .. })
+        )
+    })
+    .expect("recover step");
+    s.shack.kill_pressed = true;
+    self_test(&mut s);
+    assert_eq!(s.fw.phase(), Phase::Failed);
+    assert_eq!(s.fw.fault(), FaultCode::SELFTEST_LATCH);
+    assert!(mcu_en_n(&s));
 }

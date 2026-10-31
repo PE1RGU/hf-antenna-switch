@@ -191,9 +191,9 @@ impl SystemSim {
     /// # Panics
     ///
     /// If this does not end with the link up, the box running and TX_EN high
-    /// within 3 s.
+    /// within 6 s (the box self-test takes 1 to 3.5 s).
     pub fn start(&mut self) {
-        self.run_until(3000, |s| {
+        self.run_until(6000, |s| {
             s.shack.shack.link_up() && s.boxs.fw.phase() == Phase::Run
         })
         .expect("link up and box running");

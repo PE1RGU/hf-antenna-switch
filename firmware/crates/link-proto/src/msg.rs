@@ -204,6 +204,18 @@ impl FaultCode {
     pub const SAFE_NOT_CLOSED: FaultCode = FaultCode(5);
     /// Link time-out with no permit out: the box holds the routes (P-02).
     pub const LINK_TIMEOUT: FaultCode = FaultCode(6);
+    /// Self-test: MCU_EN_N = 1 did not open READY or did not drop RLY_EN (the
+    /// safety gate). The box stays stopped until a power cycle.
+    pub const SELFTEST_GATE: FaultCode = FaultCode(7);
+    /// Self-test: the supervisor did not trip when the WDI kicks stopped, or
+    /// tripped too early. The box stays stopped until a power cycle.
+    pub const SELFTEST_WATCHDOG: FaultCode = FaultCode(8);
+    /// Self-test: the LATCH_CLR edge after the watchdog test did not clear FAULT.
+    /// The box stays stopped until a power cycle.
+    pub const SELFTEST_LATCH: FaultCode = FaultCode(9);
+    /// Self-test warning: an input was not as expected at start-up (TX_ANY,
+    /// R1 K0 read-back, an RF detector, a bias-T OK). The box runs.
+    pub const SELFTEST_INPUT: FaultCode = FaultCode(10);
 }
 
 /// Status byte 1: the box state flags. Bits 6 and 7 are reserved and always 0.

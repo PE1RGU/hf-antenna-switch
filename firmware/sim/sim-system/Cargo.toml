@@ -9,6 +9,7 @@ publish = false
 
 [dependencies]
 box-core = { path = "../../crates/box-core" }
+host-proto = { path = "../../crates/host-proto" }
 link-proto = { path = "../../crates/link-proto" }
 shack-core = { path = "../../crates/shack-core" }
 sim-box = { path = "../sim-box" }

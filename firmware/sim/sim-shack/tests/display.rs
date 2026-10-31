@@ -45,6 +45,15 @@ fn run_alive(s: &mut ShackSim, ms: u64) {
 fn power_up_shows_safe_stop() {
     let mut s = ShackSim::new();
     s.run(800);
+    // First the test pattern: eight colour bars, white at the left, black at the right.
+    let px = s.screen();
+    assert_eq!(
+        (px[0], px[WIDTH as usize - 1]),
+        (0xFFFF, 0x0000),
+        "colour bars"
+    );
+    shot(&s, "0-test-pattern.png");
+    s.run(1000 + shack_core::shack::TEST_PATTERN_MS);
     let b = s.board.borrow();
     assert!(b.lcd.showing(), "display initialised");
     assert_eq!(b.lcd.madctl(), shack_ui::st7789::MADCTL_LANDSCAPE);
@@ -122,6 +131,7 @@ fn kill_takes_over_with_its_cause() {
 fn frames_go_out_in_chunks() {
     let mut s = ShackSim::new();
     s.start();
+    let t0 = sim_core::SimTime::ms(s.now());
     s.host("page auto");
     s.run(20_000);
     assert!(s.spi_max_per_tick > 0);
@@ -132,9 +142,15 @@ fn frames_go_out_in_chunks() {
         "{} bytes in one tick",
         s.spi_max_per_tick
     );
-    // WDI still kicked every tick while frames go out.
+    // WDI still kicked every tick while frames go out (after the self-test, which
+    // stops the kicks on purpose).
     let b = s.board.borrow();
-    let wdi = b.trace.signal("WDI");
+    let wdi: Vec<_> = b
+        .trace
+        .signal("WDI")
+        .into_iter()
+        .filter(|e| e.0 >= t0)
+        .collect();
     let gap = wdi.windows(2).map(|w| w[1].0 - w[0].0).max().unwrap();
     assert!(gap <= sim_core::SimTime::ms(20));
 }

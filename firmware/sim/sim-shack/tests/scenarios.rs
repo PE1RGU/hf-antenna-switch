@@ -1,6 +1,7 @@
 //! Shack firmware scenarios on the board model with the scripted box.
 //! References: system-verification.md (E3, F13, F14, rules 1 to 6), link-protocol.md 5.1 and 6.
 
+use host_proto::SelfTestState;
 use link_proto::{Col, Command, Ms, Radio, ResultCode, Route};
 use shack_core::shack::{
     Event, TX_END_MIN_WAIT, TX_NOPERMIT_DEBOUNCE, TX_NOPERMIT_GRACE, TX_SENSE_PLAUSIBLE, TxState,
@@ -73,16 +74,22 @@ fn start_up_order() {
     let clr = rising(&s, "LATCH_CLR");
     assert_eq!(clr.len(), 1, "LATCH_CLR once");
     assert!(SimTime::ms(clr[0]) >= writes[first_cfg].0);
+    // Self-test: the watchdog trip resets the expander (RESET_N low once more),
+    // and the one LATCH_CLR edge comes only after RESET_N is high again.
+    assert_eq!(s.shack.self_test(), SelfTestState::Pass);
+    let reset_up = rising(&s, "RESET_N");
+    assert_eq!(reset_up.len(), 2, "power-up and the watchdog trip");
+    assert!(clr[0] > reset_up[1], "LATCH_CLR after the trip");
     let fault = b.trace.signal("FAULT");
     assert_eq!(fault.last().map(|x| x.1), Some(false));
-    assert_eq!(
-        fault.iter().filter(|x| x.1).count(),
-        1,
-        "only the power-up fault"
-    );
     assert!(b.signals().latched, "LATCHED waits for the operator");
     assert!(s.shack.link_up());
-    let wdi = b.trace.signal("WDI");
+    let wdi: Vec<_> = b
+        .trace
+        .signal("WDI")
+        .into_iter()
+        .filter(|e| e.0.as_ms() >= clr[0])
+        .collect();
     let max_gap = wdi.windows(2).map(|w| w[1].0 - w[0].0).max().unwrap();
     assert!(max_gap <= SimTime::ms(20), "WDI kicked every tick");
 }
@@ -109,7 +116,10 @@ fn r2_permit_only_after_the_box_permit() {
 #[test]
 fn latched_interface_keeps_the_radio_inhibited() {
     let mut s = ShackSim::new();
-    s.run_until(2000, |s| s.shack.link_up()).unwrap();
+    s.run_until(5000, |s| {
+        s.shack.link_up() && s.shack.self_test() == SelfTestState::Pass
+    })
+    .unwrap();
     s.shack.set_route(Radio::R2, A1).unwrap();
     s.run(100);
     s.shack.set_tx(Radio::R2, true).unwrap();
@@ -309,9 +319,9 @@ fn expander_lost_drops_permits_and_sets_up_again() {
     assert_eq!(
         s.events
             .iter()
-            .filter(|(_, e)| *e == Event::ExpanderReady)
+            .filter(|(t, e)| *t > t0 && *e == Event::ExpanderReady)
             .count(),
-        2
+        1
     );
 }
 
@@ -376,13 +386,14 @@ fn watchdog_kick_comes_after_the_checks() {
     use sim_core::TraceKind;
     let mut s = ShackSim::new();
     s.start();
+    let t0 = SimTime::ms(s.now());
     s.run(100);
     let b = s.board.borrow();
     let ev = b.trace.events();
     // Each WDI edge: the I2C read of that tick (same time) comes before it.
     let mut checked = 0;
     for (i, e) in ev.iter().enumerate() {
-        if matches!(e.kind, TraceKind::Signal { name: "WDI", .. }) && e.t > SimTime::ms(300) {
+        if matches!(e.kind, TraceKind::Signal { name: "WDI", .. }) && e.t > t0 {
             let read_before = ev[..i]
                 .iter()
                 .rev()
