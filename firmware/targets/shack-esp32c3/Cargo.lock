@@ -1635,8 +1635,11 @@ dependencies = [
  "esp-hal",
  "esp-println",
  "esp-rtos",
+ "heapless 0.9.3",
+ "link-proto",
  "log",
  "shack-core",
+ "shack-ui",
  "static_cell",
 ]
 
