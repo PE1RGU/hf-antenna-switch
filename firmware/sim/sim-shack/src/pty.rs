@@ -6,18 +6,19 @@ use nix::fcntl::{FcntlArg, OFlag, fcntl};
 use nix::pty::openpty;
 use nix::sys::termios::{SetArg, cfmakeraw, tcgetattr, tcsetattr};
 use nix::unistd::{read, ttyname, write};
-use sim_shack::{ShackSim, WORLD_HELP};
+use sim_shack::system::{SYSTEM_WORLD_HELP, SystemSim};
 use std::io::BufRead;
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
-/// Run `s` in real time until `quit` is typed.
+/// Run `s`, the joined system (shack and box firmware), in real time until `quit`
+/// is typed.
 ///
 /// Opens a pty in raw mode and prints its device path. Bytes from the pty go to
 /// the host port of the sim; host lines from the sim go back with `\r\n`. Lines
-/// typed on stdin are outside-world commands ([`ShackSim::world`]). The loop
+/// typed on stdin are outside-world commands ([`SystemSim::world`]). The loop
 /// sleeps 1 ms per turn and steps the sim up to the wall clock.
-pub fn run(mut s: ShackSim) {
+pub fn run(mut s: SystemSim) {
     let pty = openpty(None, None).expect("openpty");
     let mut t = tcgetattr(&pty.slave).expect("tcgetattr");
     cfmakeraw(&mut t);
@@ -27,7 +28,7 @@ pub fn run(mut s: ShackSim) {
 
     println!("Simulated shack interface on {}", path.display());
     println!("Connect, for example:  screen {} 115200", path.display());
-    println!("{WORLD_HELP}\n(type here, Enter; quit to stop)\n");
+    println!("{SYSTEM_WORLD_HELP}\n(type here, Enter; quit to stop)\n");
 
     let (tx, rx) = mpsc::channel::<String>();
     std::thread::spawn(move || {
@@ -46,7 +47,7 @@ pub fn run(mut s: ShackSim) {
             && n > 0
         {
             let text = String::from_utf8_lossy(&buf[..n]).into_owned();
-            s.board.borrow_mut().host_send(&text);
+            s.shack.board.borrow_mut().host_send(&text);
         }
         while let Ok(cmd) = rx.try_recv() {
             match cmd.trim() {
@@ -62,8 +63,8 @@ pub fn run(mut s: ShackSim) {
         while s.now() < target {
             s.step();
         }
-        while sent < s.host_lines.len() {
-            let line = format!("{}\r\n", s.host_lines[sent].1);
+        while sent < s.shack.host_lines.len() {
+            let line = format!("{}\r\n", s.shack.host_lines[sent].1);
             let _ = write(&pty.master, line.as_bytes());
             sent += 1;
         }

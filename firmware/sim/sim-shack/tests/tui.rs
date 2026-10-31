@@ -4,7 +4,7 @@ use ratatui::Terminal;
 use ratatui::backend::TestBackend;
 use ratatui::crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyEventState, KeyModifiers};
 use ratatui_image::picker::Picker;
-use sim_shack::ShackSim;
+use sim_shack::system::SystemSim;
 use sim_shack::tui::App;
 use std::io::{BufRead, BufReader, Write};
 
@@ -37,7 +37,7 @@ fn screen_text(term: &Terminal<TestBackend>) -> String {
 }
 
 fn app() -> App {
-    App::new(ShackSim::new(), Picker::halfblocks(), None)
+    App::new(SystemSim::new(), Picker::halfblocks(), None)
 }
 
 fn draw(a: &mut App) -> String {
@@ -49,8 +49,8 @@ fn draw(a: &mut App) -> String {
 #[test]
 fn draws_display_world_board_and_host() {
     let mut a = app();
-    // Past the power-up test pattern (colour bars, 1 s).
-    a.advance(2500);
+    // Past the power-up test pattern (colour bars, 1 s) and the box self-test.
+    a.advance(5000);
     assert!(a.text_view, "no image protocol: text view first");
     let t = draw(&mut a);
     for s in [
@@ -62,6 +62,9 @@ fn draws_display_world_board_and_host() {
         "Host (USB)",
         "F2  KILL switch",
         "SAFE loop",
+        "Box        run, fault 0",
+        "Relays     hazards 0, hot 0",
+        "F8  Box MCU",
     ] {
         assert!(t.contains(s), "missing {s:?}\n{t}");
     }
@@ -75,11 +78,24 @@ fn draws_display_world_board_and_host() {
     );
 }
 
+/// Run until both self-tests passed and the box runs, then press RESET (F1): the
+/// box self-test opens the SAFE loop twice, so RESET comes after it.
+fn ready(a: &mut App) {
+    for _ in 0..80 {
+        if a.sim.boxs.fw.phase() == box_core::relay_box::Phase::Run
+            && a.sim.shack.shack.self_test() == host_proto::SelfTestState::Pass
+        {
+            break;
+        }
+        a.advance(100);
+    }
+    assert_eq!(a.sim.boxs.fw.phase(), box_core::relay_box::Phase::Run);
+    press(a, KeyCode::F(1));
+}
+
 /// R1 transmits on A1 and receives on A2; R2 receives on A3 (named Hexbeam).
 fn station(a: &mut App) {
-    // Past the power-up self-test: TX needs it passed.
-    a.advance(2500);
-    press(a, KeyCode::F(1));
+    ready(a);
     for l in ["route R1 A1 A2", "route R2 - A3", "name A3 Hexbeam"] {
         type_line(a, l);
         a.advance(100);
@@ -127,20 +143,27 @@ fn text_view_cards_and_stop() {
 fn keys_drive_the_world_and_host() {
     let mut a = app();
     a.advance(600);
-    assert!(a.sim.board.borrow().signals().latched);
+    assert!(a.sim.shack.board.borrow().signals().latched);
     press(&mut a, KeyCode::F(1));
     a.advance(50);
-    assert!(!a.sim.board.borrow().signals().latched, "F1 pressed RESET");
+    assert!(
+        !a.sim.shack.board.borrow().signals().latched,
+        "F1 pressed RESET"
+    );
     press(&mut a, KeyCode::F(2));
     a.advance(50);
-    assert!(a.sim.board.borrow().env().kill_pressed, "F2 pressed KILL");
+    assert!(
+        a.sim.shack.board.borrow().env().kill_pressed,
+        "F2 pressed KILL"
+    );
     type_line(&mut a, ":kill off");
     a.advance(50);
-    assert!(!a.sim.board.borrow().env().kill_pressed, ":kill off");
+    assert!(!a.sim.shack.board.borrow().env().kill_pressed, ":kill off");
     type_line(&mut a, "status");
     a.advance(50);
     assert!(
         a.sim
+            .shack
             .host_lines
             .iter()
             .any(|(_, l)| l.starts_with("ok link=up"))
@@ -154,20 +177,25 @@ fn keys_drive_the_world_and_host() {
 #[test]
 fn auto_keep_alive_holds_tx_while_typing_slowly() {
     let mut a = app();
-    a.advance(400);
-    press(&mut a, KeyCode::F(1));
+    ready(&mut a);
     type_line(&mut a, "route R2 A1 A1");
     a.advance(300);
     type_line(&mut a, "tx R2 on");
     a.advance(5000);
-    assert!(!a.sim.host_lines.iter().any(|(_, l)| l == "!host timeout"));
-    assert!(a.sim.shack.permit(link_proto::Radio::R2));
+    assert!(
+        !a.sim
+            .shack
+            .host_lines
+            .iter()
+            .any(|(_, l)| l == "!host timeout")
+    );
+    assert!(a.sim.shack.shack.permit(link_proto::Radio::R2));
 }
 
 #[test]
 fn tcp_host_tool() {
     let port = 47_311;
-    let mut a = App::new(ShackSim::new(), Picker::halfblocks(), Some(port));
+    let mut a = App::new(SystemSim::new(), Picker::halfblocks(), Some(port));
     a.advance(400);
     let mut c = std::net::TcpStream::connect(("127.0.0.1", port)).unwrap();
     a.advance(10);
@@ -194,7 +222,13 @@ fn help_for_both_command_sets() {
     a.advance(600);
     type_line(&mut a, "help");
     a.advance(50);
-    let host: Vec<_> = a.sim.host_lines.iter().map(|(_, l)| l.as_str()).collect();
+    let host: Vec<_> = a
+        .sim
+        .shack
+        .host_lines
+        .iter()
+        .map(|(_, l)| l.as_str())
+        .collect();
     assert!(
         host.iter().any(|l| l.starts_with("# route R1-R3")),
         "{host:?}"
@@ -242,7 +276,7 @@ fn iterm2_without_font_size_gets_images() {
     let p = fix_picker(Picker::halfblocks(), true, Some((148, 47, 0, 0)));
     assert_eq!((p.font_size().width, p.font_size().height), (8, 16));
     // iTerm2 images: the UI starts with the pixels.
-    let a = App::new(ShackSim::new(), p, None);
+    let a = App::new(SystemSim::new(), p, None);
     assert!(!a.text_view);
 }
 

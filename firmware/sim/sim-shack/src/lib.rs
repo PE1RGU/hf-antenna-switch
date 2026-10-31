@@ -90,6 +90,7 @@
 //! ```
 
 pub mod box_stub;
+pub mod system;
 pub mod textview;
 pub mod tui;
 

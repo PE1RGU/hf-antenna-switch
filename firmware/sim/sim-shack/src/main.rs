@@ -1,4 +1,5 @@
-//! `sim-shack`: the simulated shack interface in a terminal UI (macOS, Linux, Windows).
+//! `sim-shack`: the simulated shack interface in a terminal UI (macOS, Linux, Windows),
+//! with the real box firmware on the box board model at the far end of the cable.
 //!
 //! Options:
 //!
@@ -8,6 +9,7 @@
 //!   --view text|pixels  display view (default: by what the terminal supports)
 //!   --probe          print what the display detection sees, then exit
 //!   --demo           print a timeline of a start-up and one R2 transmission, no UI
+//!                    (with the scripted box, whose command log it prints)
 //!   --pty            Unix only: host port on a pseudo-terminal, no UI
 //! ```
 //!
@@ -56,7 +58,9 @@ fn main() {
         demo();
     } else if args.iter().any(|a| a == "--pty") {
         #[cfg(unix)]
-        pty::run(ShackSim::use_state_file(std::path::Path::new(&state_file)));
+        pty::run(sim_shack::system::SystemSim::with_shack(
+            ShackSim::use_state_file(std::path::Path::new(&state_file)),
+        ));
         #[cfg(not(unix))]
         eprintln!("--pty needs a Unix system; use the terminal UI and its TCP port");
     } else if let Err(e) = sim_shack::tui::run(sim_shack::tui::Options {

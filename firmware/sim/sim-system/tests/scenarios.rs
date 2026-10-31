@@ -615,3 +615,33 @@ fn both_self_tests_pass_and_a_failed_box_shows_at_the_shack() {
         .expect("the box refuses: not ready");
     assert!(!s.boxs.board.borrow().signals().rly_en);
 }
+
+// ------------------------------------------------------------------ world commands
+
+#[test]
+fn world_commands_reach_the_box() {
+    let mut s = started();
+    // RF on A2 opens the SAFE loop through the box.
+    assert!(s.world("box rfa2 on").is_ok());
+    s.run(10);
+    assert!(s.shack.board.borrow().signals().latched);
+    assert!(s.world("box rfa2 off").is_ok());
+    // An expander that stops answering: the box sets it up again.
+    assert!(s.world("box nack U902 on").is_ok());
+    s.run(30);
+    assert_eq!(s.boxs.fw.fault(), FaultCode::EXPANDER_NACK);
+    assert!(s.world("box nack U902 off").is_ok());
+    // The old scripted-box command points to the new one.
+    assert!(s.world("box mute on").unwrap_err().contains("box hang"));
+    assert!(s.world("box nack U9 on").is_err());
+    // A hung box MCU: its watchdog trips and the SAFE loop opens.
+    assert!(s.world("box hang on").is_ok());
+    s.run_until(3000, |s| s.boxs.board.borrow().signals().fault)
+        .expect("box watchdog");
+    // Shack commands still pass through, and cable acts on both boards.
+    assert!(s.world("cable off").is_ok());
+    assert!(!s.boxs.board.borrow().env().cable_ok);
+    assert!(s.world("radio R2 on").is_ok());
+    assert!(s.shack.board.borrow().env().radio_tx[1]);
+    assert!(s.world("help").unwrap().contains("box hang on|off"));
+}

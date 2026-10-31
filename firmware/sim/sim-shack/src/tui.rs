@@ -8,8 +8,10 @@
 //!   simulated shack; `:` commands go to the outside world.
 //! - TCP: a host tool can connect to `127.0.0.1:<port>` (one client at a time).
 
+use crate::ShackSim;
+use crate::system::{SYSTEM_WORLD_HELP, SystemSim};
 use crate::textview::TextView;
-use crate::{ShackSim, WORLD_HELP};
+use box_core::relay_box::Phase;
 use image::{DynamicImage, RgbImage};
 use link_proto::{Ms, Radio};
 use ratatui::Frame;
@@ -38,7 +40,7 @@ const AUTO_ALIVE_MS: Ms = 1000;
 /// [`App::key`] for each key press.
 pub struct App {
     /// The emulator that the UI shows and drives.
-    pub sim: ShackSim,
+    pub sim: SystemSim,
     picker: Picker,
     image: Option<StatefulProtocol>,
     last_screen: Vec<u16>,
@@ -65,7 +67,7 @@ impl App {
     /// A UI for `sim`. `picker` sets the image protocol; half-blocks select the text
     /// view. `tcp_port`: listen on 127.0.0.1 at this port. If the port is not
     /// free, the UI runs without TCP and says so in the log.
-    pub fn new(sim: ShackSim, picker: Picker, tcp_port: Option<u16>) -> Self {
+    pub fn new(sim: SystemSim, picker: Picker, tcp_port: Option<u16>) -> Self {
         let tcp = tcp_port.and_then(|p| {
             let l = TcpListener::bind(("127.0.0.1", p)).ok()?;
             l.set_nonblocking(true).ok()?;
@@ -113,7 +115,11 @@ impl App {
     }
 
     fn send_host(&mut self, line: &str) {
-        self.sim.board.borrow_mut().host_send(&format!("{line}\n"));
+        self.sim
+            .shack
+            .board
+            .borrow_mut()
+            .host_send(&format!("{line}\n"));
     }
 
     /// Simulated time follows the wall clock: run the ms since the last call.
@@ -163,13 +169,13 @@ impl App {
             for l in text.lines().filter(|l| !l.trim().is_empty()) {
                 self.push_log(Style::new().fg(Color::Cyan), format!("tcp> {}", l.trim()));
             }
-            self.sim.board.borrow_mut().host_send(&text);
+            self.sim.shack.board.borrow_mut().host_send(&text);
         }
     }
 
     fn host_out(&mut self) {
-        while self.seen_lines < self.sim.host_lines.len() {
-            let line = self.sim.host_lines[self.seen_lines].1.clone();
+        while self.seen_lines < self.sim.shack.host_lines.len() {
+            let line = self.sim.shack.host_lines[self.seen_lines].1.clone();
             self.seen_lines += 1;
             if let Some(c) = &mut self.client
                 && c.write_all(format!("{line}\r\n").as_bytes()).is_err()
@@ -188,7 +194,7 @@ impl App {
 
     /// Handle one key. Returns false to quit.
     ///
-    /// F1 to F10 act on the outside world (see [`WORLD_HELP`]). Enter sends the
+    /// F1 to F10 act on the outside world (see [`SYSTEM_WORLD_HELP`]). Enter sends the
     /// command line: a line that starts with `:` is an outside-world command,
     /// any other line goes to the host port.
     pub fn key(&mut self, k: KeyEvent) -> bool {
@@ -212,8 +218,8 @@ impl App {
                 ));
             }
             KeyCode::F(8) => {
-                let m = self.sim.boxs.mute;
-                self.world(&format!("box mute {}", if m { "off" } else { "on" }));
+                let hung = !self.sim.boxs.mcu_running;
+                self.world(&format!("box hang {}", if hung { "off" } else { "on" }));
             }
             KeyCode::F(9) => {
                 self.shots += 1;
@@ -251,7 +257,7 @@ impl App {
     }
 
     fn env(&self) -> sim_models::shack::Env {
-        self.sim.board.borrow().env()
+        self.sim.shack.board.borrow().env()
     }
 
     fn toggle_world(&mut self, what: &str, now_on: bool) {
@@ -292,8 +298,8 @@ impl App {
         let inner = block.inner(area);
         f.render_widget(block, area);
         if self.text_view {
-            let state = self.sim.shack.ui_state();
-            let page = self.sim.shack.shown_page(self.sim.now());
+            let state = self.sim.shack.shack.ui_state();
+            let page = self.sim.shack.shack.shown_page(self.sim.now());
             f.render_widget(
                 TextView {
                     state: &state,
@@ -303,7 +309,7 @@ impl App {
             );
             return;
         }
-        let screen = self.sim.screen();
+        let screen = self.sim.shack.screen();
         if screen != self.last_screen || self.image.is_none() {
             let mut img = RgbImage::new(shack_ui::WIDTH, shack_ui::HEIGHT);
             for (i, p) in screen.iter().enumerate() {
@@ -368,8 +374,8 @@ impl App {
             ),
             row(
                 "F8",
-                "Box",
-                state(!self.sim.boxs.mute, "answering", "silent", false),
+                "Box MCU",
+                state(self.sim.boxs.mcu_running, "running", "hung", false),
             ),
             row(
                 "F9",
@@ -393,7 +399,7 @@ impl App {
     }
 
     fn draw_board(&self, f: &mut Frame, area: Rect) {
-        let s = self.sim.board.borrow().signals();
+        let s = self.sim.shack.board.borrow().signals();
         let dot = |good: bool| {
             Span::styled(
                 "● ",
@@ -422,8 +428,9 @@ impl App {
         let env = self.env();
         for r in Radio::ALL {
             let i = r.index();
-            let k0 = r != Radio::R1 && self.sim.boxs.k0(r);
-            let rt = self.sim.boxs.routes[i];
+            let k0 = r != Radio::R1
+                && self.sim.boxs.board.borrow().k0(r) == sim_models::rt1::Contact::No;
+            let rt = self.sim.boxs.fw.status().routes[i];
             // TX: transmits now; blocked: wants to, but inhibited.
             let tx = if s.radio_tx_active[i] {
                 Span::styled(
@@ -455,6 +462,28 @@ impl App {
                 no_inh,
             ]));
         }
+        // The box: its firmware phase and fault code, and the relay checks of the
+        // model (hazards H1 to H4, contacts moved under RF).
+        let phase = self.sim.boxs.fw.phase();
+        let phase_name = match phase {
+            Phase::Boot => "boot",
+            Phase::WaitSafe { .. } => "wait SAFE",
+            Phase::SelfTest(_) => "self-test",
+            Phase::Run => "run",
+            Phase::Stopped => "STOPPED",
+            Phase::Failed => "FAILED",
+        };
+        let fault = self.sim.boxs.fw.fault().0;
+        lines.push(Line::from(item(
+            phase == Phase::Run,
+            format!("Box        {phase_name}, fault {fault}"),
+        )));
+        let hazards = self.sim.boxs.hazards.len();
+        let hot = self.sim.boxs.board.borrow().hot_switches().len();
+        lines.push(Line::from(item(
+            hazards == 0 && hot == 0,
+            format!("Relays     hazards {hazards}, hot {hot}"),
+        )));
         f.render_widget(
             Paragraph::new(lines).block(Block::bordered().title(" Board ")),
             area,
@@ -613,7 +642,7 @@ fn window_pixels() -> Option<(u16, u16, u16, u16)> {
 
 /// Run the terminal UI until Ctrl-C.
 pub fn run(opts: Options) -> std::io::Result<()> {
-    let sim = ShackSim::use_state_file(&opts.state_file);
+    let sim = SystemSim::with_shack(ShackSim::use_state_file(&opts.state_file));
     // Ask the terminal for its image support before the UI starts, then clear: a
     // terminal that does not understand the questions (macOS Terminal) prints parts
     // of them, and ratatui only redraws cells that change.
@@ -636,7 +665,7 @@ pub fn run(opts: Options) -> std::io::Result<()> {
         if app.text_view { "text" } else { "pixel" }
     ));
     app.note(&format!("stored settings: {}", opts.state_file.display()));
-    app.note(WORLD_HELP);
+    app.note(SYSTEM_WORLD_HELP);
     let result = (|| -> std::io::Result<()> {
         loop {
             app.step_realtime();
