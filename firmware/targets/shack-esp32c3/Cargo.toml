@@ -23,6 +23,7 @@ esp-backtrace = { version = "0.20.0", features = [
   "panic-handler",
   "println",
 ] }
+esp-storage = { version = "0.10.0", features = ["esp32c3"] }
 esp-println = { version = "0.18.0", features = ["esp32c3", "log-04"] }
 
 host-proto = { path = "../../crates/host-proto" }

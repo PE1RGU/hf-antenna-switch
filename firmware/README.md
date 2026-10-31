@@ -338,7 +338,7 @@ The tests check the firmware against the hardware design:
 | `sim/sim-shack` | The emulator program: shack harness, scripted box (`BoxStub`, for the shack tests), the joined system (`SystemSim`), terminal UI, text view, tests |
 | `sim/sim-box` | The box emulator: harness, scripted shack, scenario tests |
 | `sim/sim-system` | System scenarios with fault injection, on `SystemSim` (re-exported from `sim-shack`) |
-| `targets/shack-esp32c3` | ESP32-C3 binary: `ShackHw` on esp-hal, main loop every 10 ms. Flash with `cargo run --release` in that folder (espflash) |
+| `targets/shack-esp32c3` | ESP32-C3 binary: `ShackHw` on esp-hal, main loop every 10 ms, stored settings in flash (`nvs` partition, 0x9000). Flash with `cargo run --release` in that folder (espflash) |
 | `targets/box-esp32c3` | ESP32-C3 binary: `BoxHw` on esp-hal, main loop every 1 ms, debug log on USB (phase, fault and flag changes). Both targets report loop time and stack use every 10 s (`diag`) |
 
 The logic crates are `no_std` and build for the ESP32-C3. The emulator crates need `std`.

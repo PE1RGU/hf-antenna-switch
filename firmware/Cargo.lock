@@ -1929,6 +1929,7 @@ name = "sim-box"
 version = "0.1.0"
 dependencies = [
  "box-core",
+ "embedded-hal",
  "link-proto",
  "sim-core",
  "sim-models",

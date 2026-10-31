@@ -174,6 +174,8 @@ Stored in the shack MCU flash (ESP32-C3, P7):
 - What is stored is the route or bias the box accepted (result Ok), not the read-back in that answer: the box answers at once and switches its relays in the next 36 to 48 ms.
 - Restoring a route moves relays without a command from the operator. TX still needs RESET (SAFE latch), the permit and, for R2 and R3, the handshake.
 
+
+On the ESP32-C3 the record is in flash, in the `nvs` partition at 0x9000: one length byte, then the record. Wi-Fi and BLE are off (D-55), so nothing else uses that partition. espflash does not erase it, so the settings survive a firmware update. Tested on the DevKit, 2026-10-31. The settings are also saved while the expander does not answer.
 ## 9. Timing
 
 - The shack reads host lines every tick (10 ms) and answers in the same tick.

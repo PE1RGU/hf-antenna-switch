@@ -8,6 +8,7 @@ use link_proto::{Col, ColMask, Command, FaultCode, Ms, Radio, ResultCode, Route,
 use sim_box::BoxSim;
 use sim_box::shack_stub::ShackStub;
 use sim_core::TraceKind;
+use sim_core::hal::Board;
 use sim_models::rt1::{Contact, Rt1Timing};
 use sim_models::tps3823::Corner;
 
@@ -357,7 +358,7 @@ fn fast_relays_keep_the_rules() {
     for (tx, rx) in [
         (Col::A1, Col::A2),
         (Col::A4, Col::A1),
-        (Col::Exp, Col::A3),
+        (Col::A3, Col::Exp),
         (Col::None, Col::None),
     ] {
         assert_eq!(set(&mut s, Radio::R1, tx, rx), ResultCode::Ok);
@@ -673,7 +674,8 @@ fn expander_nack_sets_up_again() {
     assert_eq!(set(&mut s, Radio::R1, Col::A1, Col::A1), ResultCode::Ok);
     settle(&mut s);
     s.board.borrow_mut().exp[1].force_nack = true;
-    s.run(30);
+    // Two polls are retried (F-3), the third failure counts.
+    s.run(60);
     assert_eq!(s.fw.fault(), FaultCode::EXPANDER_NACK);
     assert!(matches!(s.fw.phase(), Phase::WaitSafe { .. }));
     assert!(!mcu_en_n(&s));
@@ -692,8 +694,8 @@ fn expander_nack_sets_up_again() {
 fn expander_lost_with_permit_opens_safe() {
     let mut s = r2_permit();
     s.board.borrow_mut().exp[2].force_nack = true;
-    s.run_until(30, |s| s.fw.phase() == Phase::Stopped)
-        .expect("stop");
+    s.run_until(100, |s| s.fw.phase() == Phase::Stopped)
+        .expect("stop after the retries");
     assert!(mcu_en_n(&s));
     assert_eq!(s.fw.fault(), FaultCode::EXPANDER_NACK);
     assert!(!s.fw.status().flags.link_lost_stop);
@@ -902,4 +904,116 @@ fn self_test_finds_a_latch_that_does_not_clear() {
     assert_eq!(s.fw.phase(), Phase::Failed);
     assert_eq!(s.fw.fault(), FaultCode::SELFTEST_LATCH);
     assert!(mcu_en_n(&s));
+}
+
+// ------------------------------------------------------------------ review 2026-10-31
+
+#[test]
+fn hello_keeps_k0_while_rf_is_on_the_column_f1() {
+    // R2 has no TX INH and keeps sending RF on A3 after the shack lost its link:
+    // the Hello must not release K0 under that RF.
+    let mut s = r2_permit();
+    s.board.borrow_mut().set_env(|e| e.radio_rf[1] = true);
+    s.run(20);
+    s.shack.mute = true;
+    ShackStub::send_raw(&mut s.board.borrow_mut(), 7, Command::Hello { version: 1 });
+    s.run(HELLO_RELEASE + 200);
+    assert_eq!(
+        s.board.borrow().k0(Radio::R2),
+        Contact::No,
+        "K0 held under RF"
+    );
+    s.board.borrow_mut().set_env(|e| e.radio_rf[1] = false);
+    s.run(50);
+    assert_eq!(
+        s.board.borrow().k0(Radio::R2),
+        Contact::Nc,
+        "released after the RF"
+    );
+    no_harm(&s);
+}
+
+#[test]
+fn no_tx_on_exp_without_unit_2_f2() {
+    let mut s = started();
+    assert_eq!(
+        set(&mut s, Radio::R2, Col::Exp, Col::A3),
+        ResultCode::Hazard
+    );
+    assert_eq!(
+        set(&mut s, Radio::R2, Col::A3, Col::Exp),
+        ResultCode::Ok,
+        "RX on EXP is fine"
+    );
+    settle(&mut s);
+    assert_eq!(
+        s.command(Command::TxRequest(Radio::R2)).result,
+        ResultCode::Ok
+    );
+}
+
+#[test]
+fn one_i2c_error_with_a_permit_out_is_ridden_out_f3() {
+    let mut s = r2_permit();
+    s.board.borrow_mut().exp[2].force_nack = true;
+    s.run(15); // one or two polls fail
+    s.board.borrow_mut().exp[2].force_nack = false;
+    s.run(50);
+    assert_eq!(s.fw.phase(), Phase::Run, "no stop");
+    assert!(s.fw.status().permit_r2, "permit kept");
+    assert!(!mcu_en_n(&s));
+    no_harm(&s);
+}
+
+#[test]
+fn a_disturbed_output_register_is_written_again_f3() {
+    let mut s = started();
+    assert_eq!(set(&mut s, Radio::R1, Col::A1, Col::A1), ResultCode::Ok);
+    settle(&mut s);
+    // A disturbance clears U901's output register (all R1 rows and K1 off).
+    {
+        let mut b = s.board.borrow_mut();
+        let _ = b.i2c(
+            ADDR_U901,
+            &mut [embedded_hal::i2c::Operation::Write(&[2, 0, 0])],
+        );
+    }
+    s.run(40);
+    assert_eq!(s.fw.fault(), FaultCode::READ_BACK);
+    let b = s.board.borrow();
+    assert!(
+        b.exp_pin(exp::R1_TX1) && b.exp_pin(exp::A1_K1),
+        "written again"
+    );
+}
+
+#[test]
+fn switching_steps_leave_room_for_the_i2c_time_f4() {
+    let mut s = started();
+    assert_eq!(set(&mut s, Radio::R1, Col::A1, Col::A1), ResultCode::Ok);
+    settle(&mut s);
+    assert_eq!(set(&mut s, Radio::R1, Col::A4, Col::A4), ResultCode::Ok);
+    settle(&mut s);
+    let open = last_change(&s, "R1_TX1_DRV", false);
+    let k1_on = last_change(&s, "A4_K1_DRV", true);
+    let close = last_change(&s, "R1_TX4_DRV", true);
+    // 12 ms relay time plus 8 ms for up to two full expander reads at 100 kHz.
+    assert!(
+        k1_on >= open + 20 && close >= k1_on + 20,
+        "{open} {k1_on} {close}"
+    );
+}
+
+#[test]
+fn separate_i2c_glitches_do_not_add_up_f3() {
+    // Two short glitches, far apart: each is ridden out on its own.
+    let mut s = r2_permit();
+    for _ in 0..3 {
+        s.board.borrow_mut().exp[2].force_nack = true;
+        s.run(12);
+        s.board.borrow_mut().exp[2].force_nack = false;
+        s.run(200);
+    }
+    assert_eq!(s.fw.phase(), Phase::Run, "no stop");
+    assert!(s.fw.status().permit_r2);
 }

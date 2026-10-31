@@ -425,6 +425,8 @@ impl Shack {
                 // No expander: TX stays off; the host still gets answers.
                 self.host_rx(now, hw);
                 self.host_tx(hw);
+                // Settings changed from the host are saved without the expander too.
+                self.save_config(now, hw);
                 return;
             }
             self.expander_ready = true;
@@ -464,6 +466,8 @@ impl Shack {
                 }
                 self.host_rx(now, hw);
                 self.host_tx(hw);
+                // Settings changed from the host are saved without the expander too.
+                self.save_config(now, hw);
                 return;
             }
         }

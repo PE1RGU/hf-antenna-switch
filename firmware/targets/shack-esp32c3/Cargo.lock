@@ -1635,6 +1635,7 @@ dependencies = [
  "esp-hal",
  "esp-println",
  "esp-rtos",
+ "esp-storage",
  "heapless 0.9.3",
  "host-proto",
  "link-proto",
