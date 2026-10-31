@@ -185,3 +185,18 @@ fn power_cycle_in_the_emulator_restarts_the_firmware() {
     );
     assert!(s.host("status").contains("page=c"));
 }
+
+#[test]
+fn settings_are_saved_without_the_expander() {
+    // A shack whose expander does not answer (bare DevKit, or a failed self-test):
+    // a name from the host is still stored.
+    let mut s = ShackSim::new();
+    s.board.borrow_mut().exp.force_nack = true;
+    s.run(100);
+    assert_eq!(s.host("name A3 Hexbeam"), "ok");
+    s.run(2500);
+    assert_eq!(s.saves(), 1, "saved 2 s after the change");
+    let mut again = ShackSim::with_stored(s.stored());
+    again.run(20); // the first tick loads the settings
+    assert_eq!(again.shack.config().antenna_names[2].as_str(), "Hexbeam");
+}

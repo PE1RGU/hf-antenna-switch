@@ -132,7 +132,9 @@ The shack is the master. The box speaks only to answer.
 
 Start: the shack sends Hello until a HelloReply comes. Hello also clears the box seq store, so a restarted shack cannot hit an old seq. If the version differs, the shack does not send commands, reports this to the Mac once, and keeps sending Hello, one every answer time-out (60 ms, section 6). The rx-only mask in HelloReply must match the shack's own table (unit 1: A2, D-103).
 
-Hello also ends every permit. The shack that sends it has all PERMIT lines off (after a boot or a link loss), and a restarted shack does not know its old permits. The box clears the permit bits at once and releases K0 100 ms after the Hello (the F14 wait), unless a TxRequest or TxEnd for that radio comes first.
+Hello also ends every permit. The shack that sends it has all PERMIT lines off (after a boot or a link loss), and a restarted shack does not know its old permits. The box clears the permit bits at once and releases K0 100 ms after the Hello (the F14 wait), unless a TxRequest or TxEnd for that radio comes first. It releases K0 only once its RF detector sees no RF on that radio's TX column, so a radio without TX INH, or one with a long RF tail, does not get K0 broken under RF (review 2026-10-31, F-1).
+
+Expander I2C errors: a NACK is retried at the next poll, twice, before the box treats the expander as lost; nothing moves meanwhile. An output that reads back wrong is written again and flagged with fault 2. A route with its TX column on EXP is refused with Hazard, and a TxRequest for it with NoTxRoute, while unit 2 is not fitted (review 2026-10-31, F-2, F-3).
 
 ### 5.1 TX handshake, R2 and R3 (D-63, T3a, T3b, F2)
 

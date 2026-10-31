@@ -56,7 +56,9 @@
 //! settled ([`RELAY_WAIT`]) and read back. TxEnd releases K0 at once (the shack
 //! sends it after the F14 wait). A Hello ends every permit: the shack that sends
 //! it has all PERMIT lines off (boot or link loss). The box then releases K0
-//! [`HELLO_RELEASE`] ms later, the F14 wait, unless a TxRequest or TxEnd comes first.
+//! [`HELLO_RELEASE`] ms later, the F14 wait, unless a TxRequest or TxEnd comes first,
+//! and only once no RF is on that radio's TX column (a radio without TX INH, or a
+//! long RF tail, keeps K0 on its TX row).
 
 use crate::board::{EXPANDERS, ExpPin, RX_ONLY, exp, expander_config, k0, k1, rf_det, row_relay};
 use crate::crossbar::{self, ANTENNAS, used_columns};
@@ -80,6 +82,17 @@ pub const BOOT_DELAY: Ms = 500;
 pub const SAFE_TIMEOUT: Ms = 2000;
 /// RT1 operate plus bounce, and release plus NC bounce (section 8).
 pub const RELAY_WAIT: Ms = 12;
+/// Added to [`RELAY_WAIT`] between two switching steps. The step time is the
+/// tick start, but the write comes after the I2C reads of that tick: up to two
+/// full reads of the four expanders, about 7.6 ms at 100 kHz. Without the margin
+/// open-to-close could shrink to about 8 ms (review 2026-10-31, F-4).
+pub const IO_MARGIN: Ms = 8;
+/// An I2C NACK is retried this many times (one per poll) before the box treats
+/// the expander as lost (review 2026-10-31, F-3). An expander found reset acts at once.
+pub const IO_RETRIES: u8 = 2;
+/// Unit 2 (the expansion unit on EXP) is fitted. Not on unit 1: no TX on EXP,
+/// so no radio transmits into an open SMA (review 2026-10-31, F-2).
+pub const UNIT2: bool = false;
 /// A bias-T feed is checked this long after it was switched on.
 pub const BIAS_SETTLE: Ms = 10;
 /// After a Hello, K0 of a radio with a permit is released this late (F14 wait).
@@ -223,6 +236,8 @@ pub struct RelayBox {
     tested: bool,
     /// WDI kicks on (off only in the watchdog step of the self-test).
     kick: bool,
+    /// I2C errors in a row (F-3).
+    io_errors: u8,
 }
 
 impl Default for RelayBox {
@@ -254,6 +269,7 @@ impl RelayBox {
             link_lost_stop: false,
             tested: false,
             kick: true,
+            io_errors: 0,
         }
     }
 
@@ -359,8 +375,21 @@ impl RelayBox {
                 }
             });
         if let Err(l) = r {
-            self.on_lost(now, l, hw);
+            self.io_error(now, l, hw);
         }
+    }
+
+    /// An I2C error. A NACK may be a single disturbed transfer: retry it at the next
+    /// poll, up to [`IO_RETRIES`] times, before the expander counts as lost. Nothing
+    /// moves meanwhile: a switching step and a K0 write are repeated when due.
+    fn io_error<H: BoxHw>(&mut self, now: Ms, l: Lost, hw: &mut H) {
+        if l.nack && self.io_errors < IO_RETRIES {
+            self.io_errors += 1;
+            self.fault = FaultCode::EXPANDER_NACK;
+            return;
+        }
+        self.io_errors = 0;
+        self.on_lost(now, l, hw);
     }
 
     /// F1 set-up of all four expanders, all outputs 0. True on success; the
@@ -553,10 +582,15 @@ impl RelayBox {
             inputs[i] = x.read_inputs(hw.i2c()).map_err(|_| Lost { nack: true })?;
             let outs = !cfg;
             if inputs[i] & outs != self.out[i] & outs {
+                // Write the commanded state again: a disturbed output register
+                // goes back to the checked state (F-3). A stuck pin stays wrong
+                // and keeps the fault.
                 self.fault = FaultCode::READ_BACK;
+                let _ = x.write_outputs(hw.i2c(), self.out[i]);
             }
         }
         self.inputs = Some(inputs);
+        self.io_errors = 0; // the bus works again
         Ok(())
     }
 
@@ -669,7 +703,11 @@ impl RelayBox {
         };
         let wrote = writes && self.write(hw, next)?;
         sw.step = then;
-        sw.at = if wrote { now + RELAY_WAIT } else { now };
+        sw.at = if wrote {
+            now + RELAY_WAIT + IO_MARGIN
+        } else {
+            now
+        };
         self.switching = Some(sw);
         if !wrote {
             // Nothing moved: go on with the next step in this pass.
@@ -690,7 +728,14 @@ impl RelayBox {
                         self.k0_off(r, hw)?;
                     }
                 }
-                K0::Releasing(t) if now >= t => self.k0_off(r, hw)?,
+                // After a Hello: release only when no RF is on the radio's TX
+                // column any more, so K0 never breaks under an RF tail (F-1).
+                K0::Releasing(t) if now >= t && !self.rf(self.routes[r.index()].tx) => {
+                    self.read(hw)?;
+                    if !self.rf(self.routes[r.index()].tx) {
+                        self.k0_off(r, hw)?;
+                    }
+                }
                 _ => {}
             }
         }
@@ -745,7 +790,7 @@ impl RelayBox {
                             version: VERSION,
                             fw: FW_VERSION,
                             rx_only: ColMask::EMPTY.with(RX_ONLY),
-                            unit2: false,
+                            unit2: UNIT2,
                         }),
                     }
                 }
@@ -787,7 +832,7 @@ impl RelayBox {
             Command::SetBias(m) => self.set_bias(now, m, hw),
         };
         r.unwrap_or_else(|l| {
-            self.on_lost(now, l, hw);
+            self.io_error(now, l, hw);
             ResultCode::NotReady
         })
     }
@@ -815,6 +860,9 @@ impl RelayBox {
         }
         if route == self.routes[i] {
             return Ok(ResultCode::Ok);
+        }
+        if route.tx == Col::Exp && !UNIT2 {
+            return Ok(ResultCode::Hazard);
         }
         self.read(hw)?;
         let old = self.routes[i];
@@ -859,7 +907,7 @@ impl RelayBox {
         }
         let tx = self.routes[i].tx;
         let k1_on = |c: Col| k1(c).is_none_or(|p| self.pin(p));
-        if tx == Col::None || !k1_on(tx) {
+        if tx == Col::None || !k1_on(tx) || (tx == Col::Exp && !UNIT2) {
             return Ok(ResultCode::NoTxRoute);
         }
         if crossbar::check(&self.routes, used_columns(&self.routes), self.bias).is_err() {
@@ -941,7 +989,7 @@ impl RelayBox {
                 tx_any: self.tx_any(),
                 switching: self.switching.is_some(),
                 link_lost_stop: self.link_lost_stop,
-                unit2: false,
+                unit2: UNIT2,
             },
             permit_r2: self.k0[1] == K0::On,
             permit_r3: self.k0[2] == K0::On,

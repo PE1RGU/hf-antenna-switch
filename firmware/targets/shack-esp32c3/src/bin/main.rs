@@ -5,8 +5,8 @@
 //! emulator tests.
 //!
 //! The USB Serial/JTAG port is the host port (host-protocol.md), so the firmware
-//! writes no log there; a panic prints its backtrace on it. Stored settings stay in
-//! RAM for now (lost at power-off); flash storage follows.
+//! writes no log there; a panic prints its backtrace on it. Stored settings
+//! (host-protocol.md 8a) go to the flash, at [`SETTINGS_OFFSET`].
 //!
 //! The DevKit LED (GPIO7 on the DevKit-RUST-1) uses the same code as the box:
 //! slow blink (1 Hz) = working, TX possible (self-test passed, no fault, SAFE latch
@@ -37,6 +37,7 @@ use esp_hal::time::Rate;
 use esp_hal::timer::timg::TimerGroup;
 use esp_hal::uart::{Config as UartConfig, Uart};
 use esp_hal::usb::usb_serial_jtag::UsbSerialJtag;
+use esp_storage::FlashStorage;
 use heapless::Deque;
 use host_proto::SelfTestState;
 use link_proto::Radio;
@@ -161,6 +162,15 @@ mod stack {
 
 const DEVKIT: DevKit = DevKit::Rust1;
 
+/// Flash offset of the stored settings: the `nvs` partition of the default
+/// partition table (0x9000, 24 KB). Wi-Fi and BLE are off (D-55), so nothing else
+/// uses it, and espflash does not erase it: the settings survive a firmware update.
+/// Layout: one length byte, then the record (`shack_core::config`, with its own
+/// magic, version and CRC). Erased flash reads 0xFF: no record.
+const SETTINGS_OFFSET: u32 = 0x9000;
+// The length byte holds the record length.
+const _: () = assert!(CONFIG_MAX < 0xFF);
+
 /// Host output buffer. The longest burst is the `help` list, about 1.5 KB.
 const USB_OUT: usize = 4096;
 
@@ -201,8 +211,7 @@ struct EspHw {
     usb_out: Deque<u8, USB_OUT>,
     spi: Spi<'static, Blocking>,
     framebuffer: &'static mut [u8; shack_ui::fb::BYTES],
-    stored: [u8; CONFIG_MAX],
-    stored_len: usize,
+    flash: FlashStorage<'static>,
 }
 
 impl EspHw {
@@ -291,15 +300,27 @@ impl ShackHw for EspHw {
     }
 
     fn config_load(&mut self, buf: &mut [u8]) -> usize {
-        let n = self.stored_len.min(buf.len());
-        buf[..n].copy_from_slice(&self.stored[..n]);
+        let mut b = [0u8; 1 + CONFIG_MAX];
+        if self.flash.read(SETTINGS_OFFSET, &mut b).is_err() {
+            return 0;
+        }
+        let n = usize::from(b[0]);
+        if n > CONFIG_MAX || n > buf.len() {
+            return 0; // erased (0xFF) or not ours: the logic uses its defaults
+        }
+        buf[..n].copy_from_slice(&b[1..=n]);
         n
     }
 
     fn config_save(&mut self, record: &[u8]) {
+        // The logic saves 2 s after the last change, so a burst of commands gives
+        // one write. Erase and write of one 4 KB sector stop the loop for some tens
+        // of ms; the watchdog allows 0.9 s.
         let n = record.len().min(CONFIG_MAX);
-        self.stored[..n].copy_from_slice(&record[..n]);
-        self.stored_len = n;
+        let mut b = [0u8; 1 + CONFIG_MAX];
+        b[0] = n as u8;
+        b[1..=n].copy_from_slice(&record[..n]);
+        let _ = self.flash.write(SETTINGS_OFFSET, &b[..=n]);
     }
 }
 
@@ -366,8 +387,7 @@ async fn main(_spawner: Spawner) -> ! {
         usb_out: Deque::new(),
         spi,
         framebuffer: FRAMEBUFFER.take(),
-        stored: [0; CONFIG_MAX],
-        stored_len: 0,
+        flash: FlashStorage::new(p.FLASH),
     };
 
     stack::paint();
