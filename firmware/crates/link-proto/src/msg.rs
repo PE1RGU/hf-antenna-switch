@@ -216,6 +216,10 @@ impl FaultCode {
     /// Self-test warning: an input was not as expected at start-up (TX_ANY,
     /// R1 K0 read-back, an RF detector, a bias-T OK). The box runs.
     pub const SELFTEST_INPUT: FaultCode = FaultCode(10);
+    /// The supervisor tripped after start-up (watchdog or 3V3 low) while the MCU
+    /// kept running: FAULT is set, so READY is open and RLY_EN is low. The box
+    /// waits for [`Command::ClearFault`] (D-191).
+    pub const SUPERVISOR_TRIP: FaultCode = FaultCode(11);
 }
 
 /// Status byte 1: the box state flags. Bits 6 and 7 are reserved and always 0.
@@ -339,6 +343,10 @@ pub enum Command {
     TxEnd(Radio),
     /// Bias-T feeds on for these columns, off for the rest (D-54).
     SetBias(ColMask),
+    /// Clear the box fault latch after a supervisor trip (fault 11): one
+    /// LATCH_CLR edge, on operator request from the host (`clearfault`, D-191).
+    /// Without a trip it does nothing.
+    ClearFault,
 }
 
 /// Box to shack.
@@ -379,6 +387,7 @@ pub trait Message: Sized {
 mod ty {
     pub const HELLO: u8 = 0x01;
     pub const POLL: u8 = 0x02;
+    pub const CLEAR_FAULT: u8 = 0x03;
     pub const SET_ROUTE: u8 = 0x10;
     pub const TX_REQUEST: u8 = 0x11;
     pub const TX_END: u8 = 0x12;
@@ -390,7 +399,7 @@ mod ty {
 /// Payload length for a type, `None` if the type is unknown.
 fn expected_len(t: u8) -> Option<usize> {
     Some(match t {
-        ty::POLL => 0,
+        ty::POLL | ty::CLEAR_FAULT => 0,
         ty::HELLO | ty::TX_REQUEST | ty::TX_END | ty::SET_BIAS => 1,
         ty::SET_ROUTE => 3,
         ty::HELLO_REPLY => 6,
@@ -434,6 +443,7 @@ impl Message for Command {
                 (ty::HELLO, 1)
             }
             Command::Poll => (ty::POLL, 0),
+            Command::ClearFault => (ty::CLEAR_FAULT, 0),
             Command::SetRoute { radio, route } => {
                 p[..3].copy_from_slice(&[radio as u8, route.tx as u8, route.rx as u8]);
                 (ty::SET_ROUTE, 3)
@@ -458,12 +468,21 @@ impl Message for Command {
         check_len(
             t,
             p,
-            &[HELLO, POLL, SET_ROUTE, TX_REQUEST, TX_END, SET_BIAS],
+            &[
+                HELLO,
+                POLL,
+                CLEAR_FAULT,
+                SET_ROUTE,
+                TX_REQUEST,
+                TX_END,
+                SET_BIAS,
+            ],
         )?;
         // Type and length are good from here, so the indexes below are safe.
         Ok(match t {
             HELLO => Command::Hello { version: p[0] },
             POLL => Command::Poll,
+            CLEAR_FAULT => Command::ClearFault,
             SET_ROUTE => Command::SetRoute {
                 radio: radio(p[0])?,
                 route: Route {

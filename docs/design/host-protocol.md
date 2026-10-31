@@ -70,7 +70,7 @@ Why text and not binary (postcard + COBS, the first idea in PLAN.md): you can dr
 | `key <radio> on\|off` | Key the radio through the interface. Works only while its permit is out | `ok` |
 | `bias <column list>` | Bias-T feeds on for these columns, off for the rest | `ok` (queued) |
 | `stop on\|off` | Software stop: opens the SAFE loop. `off` closes it again; the SAFE latch still needs RESET | `ok` |
-| `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04). While the expander does not answer, RESET_N may still hold the latch: the fault stays and a `#` line says so | `ok` |
+| `clearfault` | Clear the shack fault latch (LATCH_CLR edge) after a supervisor reset (P3b-04). While the expander does not answer, RESET_N may still hold the latch: the fault stays and a `#` line says so. When the box reports fault 11 (supervisor trip), the shack also sends ClearFault to the box (D-191, link-protocol.md 4.2); a refusal comes as `!refused clearfault` | `ok` |
 | `events on\|off` | Events on (default) or off | `ok` |
 | `keepalive <seconds>` | Host keep-alive time-out, 2 to 60 s (section 8) | `ok` |
 | `name <column or radio> <text>` | Set the name of an antenna (`A1` to `A4`, `EXP`) or a radio (`R1` to `R3`), 1 to 8 characters (the width of an antenna box on page B): letters, digits, `-`, `.`, `_`, `/`. Stored (section 8a) | `ok` |
@@ -89,7 +89,7 @@ Error answers: `err <code> <text>`. Codes:
 | `txbusy` | Route change for a radio that transmits or ends TX (F13) |
 | `queuefull` | Too many commands wait for the box; try again |
 | `toolong` | Line longer than 120 characters |
-| `nofault` | `clearfault` while no fault is known |
+| `nofault` | `clearfault` while no fault is known at the shack and the box does not report fault 11 |
 
 ## 6. Events
 

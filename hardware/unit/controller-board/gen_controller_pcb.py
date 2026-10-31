@@ -11,8 +11,8 @@ import json, os, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "c-s5"
-BOARD, PRO, NETLIST = "controller-board.kicad_pcb", "controller-board.kicad_pro", "../verify/ctl15.xml"
+REV = "c-s6"
+BOARD, PRO, NETLIST = "controller-board.kicad_pcb", "controller-board.kicad_pro", "../verify/ctl16.xml"
 RF_BOARD = "../rf-board/rf-board.kicad_pcb"
 OX, OY = 20.0, 20.0                                   # page offset of the RF frame origin (same as the RF board)
 X0, Y0, X1, Y1, RC = 1.0, -2.0, 153.0, 120.5, 3.0   # outline (RF frame): 4 mm left of S2, 1 mm from the top wall (y -3)
@@ -201,6 +201,7 @@ for ref, c in (("U11", "C13"), ("U14", "C16"), ("U15", "C17"), ("U13", "C15"), (
 fixp("C12", MX["U11"], YM2, 90); fixp("R65", MX["U11"] + 3.3, YM2 + 0.8, 90)
 fixp("R63", MX["U14"], YM2, 90); fixp("R62", MX["U13"], YM2, 90)
 fixp("R64", MX["U12"] - 1.6, YM2, 90); fixp("R61", MX["U12"] + 1.6, YM2, 90)
+fixp("R66", MX["U15"], YM2, 90)                       # FAULT to GPIO6 (D-191), in the free slot under U15
 fixp("JP11", 136.0, YM, 0)                             # SDA select, between DevKit pins 12 and 17
 left = [c.get("ref") for c in root.iter("comp") if c.get("ref") not in placed]
 assert not left, left
@@ -334,6 +335,21 @@ ROUTES = "routing/routes.json"
 if os.path.exists(ROUTES) and "--no-routes" not in sys.argv:    # --no-routes: board for export_geom.py
     rj = json.load(open(ROUTES))
     assert not rj["failed"], rj["failed"]
+    # a track end on the middle of a same-net track (router T joint): split that track there, else KiCad DRC reports the
+    # end as dangling (c-s6, R66 route)
+    ends = {}
+    for t in rj["tracks"]:
+        ends.setdefault((t["net"], t["layer"]), set()).update({(t["x1"], t["y1"]), (t["x2"], t["y2"])})
+    split = []
+    for t in rj["tracks"]:
+        dx, dy = t["x2"] - t["x1"], t["y2"] - t["y1"]; L2 = dx * dx + dy * dy
+        cut = sorted(((ex - t["x1"]) * dx + (ey - t["y1"]) * dy) / L2 for ex, ey in ends[(t["net"], t["layer"])] if L2 > 0
+                     and 1e-6 < ((ex - t["x1"]) * dx + (ey - t["y1"]) * dy) / L2 < 1 - 1e-6
+                     and abs((ex - t["x1"]) * dy - (ey - t["y1"]) * dx) / L2 ** 0.5 < 1e-3)
+        pts = [(t["x1"], t["y1"])] + [(round(t["x1"] + u * dx, 4), round(t["y1"] + u * dy, 4)) for u in cut] + [(t["x2"], t["y2"])]
+        split += [dict(t, x1=a[0], y1=a[1], x2=c[0], y2=c[1]) for a, c in zip(pts, pts[1:])]
+    if len(split) != len(rj["tracks"]): print("T joints split:", len(split) - len(rj["tracks"]))
+    rj["tracks"] = split
     for t in rj["tracks"]:
         tr = pcbnew.PCB_TRACK(b); tr.SetStart(P(t["x1"], t["y1"])); tr.SetEnd(P(t["x2"], t["y2"])); tr.SetWidth(mm(t["w"]))
         tr.SetLayer({"F": pcbnew.F_Cu, "In2": pcbnew.In2_Cu}[t["layer"]]); tr.SetNet(net(t["net"])); b.Add(tr); KEEP.append(tr)

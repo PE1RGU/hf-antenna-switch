@@ -78,6 +78,10 @@ impl BoxHw for SimBoxHw {
         self.board.borrow_mut().gpio_read(gpio::KILL)
     }
 
+    fn fault(&mut self) -> bool {
+        self.board.borrow_mut().gpio_read(gpio::FAULT)
+    }
+
     fn uart_write(&mut self, bytes: &[u8]) {
         let mut b = self.board.borrow_mut();
         for &x in bytes {

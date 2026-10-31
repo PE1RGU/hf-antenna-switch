@@ -1017,3 +1017,66 @@ fn separate_i2c_glitches_do_not_add_up_f3() {
     assert_eq!(s.fw.phase(), Phase::Run, "no stop");
     assert!(s.fw.status().permit_r2);
 }
+
+/// LATCH_CLR rising edges since `from`.
+fn latch_clr_edges(s: &BoxSim, from: Ms) -> usize {
+    s.board
+        .borrow()
+        .trace
+        .signal("LATCH_CLR")
+        .iter()
+        .filter(|e| e.0.as_ms() >= from && e.1)
+        .count()
+}
+
+#[test]
+fn supervisor_trip_waits_for_clear_fault_d191() {
+    let mut s = started();
+    assert_eq!(set(&mut s, Radio::R1, Col::A1, Col::A1), ResultCode::Ok);
+    settle(&mut s);
+    // A loop hang that ends (review S-1): the supervisor trips, the MCU runs on.
+    s.mcu_running = false;
+    s.run_until(3000, |s| s.board.borrow().signals().fault)
+        .expect("watchdog sets FAULT");
+    s.mcu_running = true;
+    s.run(200);
+    assert_eq!(s.fw.fault(), FaultCode::SUPERVISOR_TRIP);
+    // No way back by itself: no LATCH_CLR edge, READY stays open.
+    let t = s.now();
+    s.run(2000);
+    let st = fresh(&mut s);
+    assert_eq!(st.fault, FaultCode::SUPERVISOR_TRIP);
+    assert!(!st.flags.ready && st.flags.kill);
+    assert_eq!(latch_clr_edges(&s, t), 0, "no edge without the request");
+    assert!(s.board.borrow().signals().fault);
+    // The operator request: one edge, the latch clears, the box runs again.
+    let t = s.now();
+    let st = s.command(Command::ClearFault);
+    assert_eq!(st.result, ResultCode::Ok);
+    assert_eq!(latch_clr_edges(&s, t), 1);
+    assert!(!s.board.borrow().signals().fault);
+    s.run_until(200, |s| s.fw.phase() == Phase::Run)
+        .expect("back in Run");
+    assert_eq!(s.fw.fault(), FaultCode::NONE);
+    assert!(fresh(&mut s).flags.ready);
+    assert_eq!(
+        s.board.borrow().row(Radio::R1, true, Col::A1),
+        Contact::Nc,
+        "relays come back off; the shack restores the routes"
+    );
+}
+
+#[test]
+fn clear_fault_without_a_trip_does_nothing_d191() {
+    let mut s = started();
+    let t = s.now();
+    let st = s.command(Command::ClearFault);
+    assert_eq!(st.result, ResultCode::Ok);
+    assert_eq!(st.fault, FaultCode::NONE);
+    assert_eq!(
+        latch_clr_edges(&s, t),
+        0,
+        "rule 2: no edge without a known cause"
+    );
+    assert_eq!(s.fw.phase(), Phase::Run);
+}

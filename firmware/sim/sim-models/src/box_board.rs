@@ -707,6 +707,7 @@ impl Board for BoxBoard {
         match pin {
             gpio::KILL => self.sig.kill,
             gpio::EXP_INT => self.sig.exp_int_n,
+            gpio::FAULT => self.sig.fault, // through R66 1k (D-191)
             _ => panic!("GPIO{pin} is not an input on the box controller"),
         }
     }

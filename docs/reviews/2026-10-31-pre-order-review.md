@@ -4,7 +4,7 @@ Scope: all three boards before the PCB, parts and CNC case orders. Read-only rev
 
 ## Status (2026-10-31, after PRs #12 and #13)
 
-Done: B-1, B-2 (D-189, M-107); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -12,7 +12,6 @@ The table lists only open items. The sections below give the evidence.
 |---|---|---|---|
 | Blocker | B-3 | Order BOMs with MPN, maker and second source on every line | RF, shack |
 | Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
-| PCB | S-1 | FAULT via 1k to IO6 (firmware support follows) | Controller |
 | PCB | S-2 | SDA jumper bridged 2-3 by copper | Controller, shack |
 | PCB | S-3 | About 1 in² drain copper per bias-T FET | RF |
 | PCB | S-8 | Trim the width to 159.6 mm | Shack |

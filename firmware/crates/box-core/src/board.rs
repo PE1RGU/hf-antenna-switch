@@ -50,6 +50,9 @@ pub mod gpio {
     pub const MCU_EN_N: u8 = 4;
     /// IO5, input: KILL. High = no SAFE loop current (U3 opto off, R34 pull-up).
     pub const KILL: u8 = 5;
+    /// IO6, input: FAULT, the fault latch U13 Q, through R66 1k (D-191). High =
+    /// the supervisor tripped and the latch was not cleared since.
+    pub const FAULT: u8 = 6;
     /// IO8: I2C clock to the RF board (both DevKit revisions).
     pub const SCL: u8 = 8;
     /// IO20, input: UART RX of the shack link (pair 1).

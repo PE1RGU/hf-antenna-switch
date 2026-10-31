@@ -541,6 +541,7 @@ impl fmt::Display for LinkCommand {
             Command::TxRequest(radio) => HostCommand::Tx { radio, on: true }.fmt(f),
             Command::TxEnd(radio) => HostCommand::Tx { radio, on: false }.fmt(f),
             Command::SetBias(m) => HostCommand::Bias(m).fmt(f),
+            Command::ClearFault => HostCommand::ClearFault.fmt(f),
         }
     }
 }

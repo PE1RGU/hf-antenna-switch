@@ -6,7 +6,7 @@ Test points (bare pads), the mounting hole and DNP parts are listed apart; DNP p
 import csv, collections
 import xml.etree.ElementTree as ET
 
-NETLIST = "../verify/ctl15.xml"
+NETLIST = "../verify/ctl16.xml"
 # (value, footprint name) -> (first source, second source, specification / note)
 ORDER = {
     ("1u 16V X7R", "C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"): ("Murata GRM188R71C105KA12D", "Samsung CL10B105KO8NNNC", "MLCC 1 uF 16 V X7R 0603 (D-127)"),
