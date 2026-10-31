@@ -1956,6 +1956,7 @@ dependencies = [
 name = "sim-shack"
 version = "0.1.0"
 dependencies = [
+ "box-core",
  "embedded-graphics",
  "embedded-hal",
  "host-proto",
@@ -1967,6 +1968,7 @@ dependencies = [
  "ratatui-image",
  "shack-core",
  "shack-ui",
+ "sim-box",
  "sim-core",
  "sim-models",
 ]

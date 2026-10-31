@@ -163,7 +163,7 @@ Where each step is in the code:
 | The radio is released | `Shack::apply_outputs` sets PERMIT_R2; the hardware gate (permit AND not latched AND no fault) frees TX INH |
 | The end | `set_tx(R2, false)` moves R2 to `Ending`; `apply_outputs` drops the permit at once; `step_tx` sends `TxEnd` only after the F14 wait |
 
-In the shack emulator, the box is `BoxStub` (in `sim/sim-shack/src/box_stub.rs`), a script with the same rules. The real box firmware is `RelayBox` in `crates/box-core`. It runs on the box board model in `sim/sim-box`, against a scripted shack (`ShackStub`), behind its own trait `BoxHw`. `sim/sim-system` joins the two: both firmwares on both boards, with the four Cat6 pairs between them (`SystemSim`).
+The box firmware is `RelayBox` in `crates/box-core`, behind its own trait `BoxHw`. The emulator program runs it on the box board model, joined to the shack by the four Cat6 pairs (`SystemSim`, in `sim/sim-shack/src/system.rs`). For tests of one side alone there are two scripts: `BoxStub` (in `sim/sim-shack/src/box_stub.rs`) stands in for the box in the shack tests, and `ShackStub` (in `sim/sim-box`) stands in for the shack in the box tests.
 
 ## 5. Where the safety is
 

@@ -80,7 +80,7 @@ flowchart LR
   subgraph EMU["Emulator (sim-shack)"]
     HW["SimShackHw<br/>(ShackHw in the emulator)"]
     BOARD["Shack board model<br/>PCA9539, latches, supervisors,<br/>SAFE loop, radio ports, ST7789"]
-    BOX["Scripted box<br/>(stands in for the box firmware)"]
+    BOX["Box: box-core firmware<br/>on the box board model<br/>(relays, safety gate, RF)"]
     TUI["Terminal UI<br/>display, keys, host log"]
     TCP["TCP port 7300"]
   end
@@ -108,14 +108,15 @@ What is modelled:
 | ST7789 display | 240 x 320 frame memory, landscape addressing, D/C and reset on the expander | D-180, D-187 |
 | USB host port | Byte stream to the terminal UI and the TCP port | host-protocol.md |
 | Settings flash | A file on the computer (`shack-sim-state.bin`) | host-protocol.md 8a |
-| Box | A scripted stand-in: routes, K0 with a 12 ms settle time, hazard and permit rules, link time-out | link-protocol.md |
+| Box | The box firmware (`box-core`) on the box board model: four expanders, 34 relays with RT1 timing, the safety gate, the supervisor, the RF detectors and the bias-T. Joined by the four Cat6 pairs (`SystemSim`) | link-protocol.md, verify_logic.py |
 
 Time is virtual and follows the wall clock in the terminal UI. The logic runs its main loop every 10 ms, as on the ESP32-C3. The emulator advances in steps of 1 ms.
 
 What the emulator is not:
 
 - It does not show the processor's speed or memory use. Those are measured on the board (phase P7).
-- In the `sim-shack` program the box is a script, not the box firmware. The joined system with both firmwares runs in the tests of `sim-system` (P6), not yet in the terminal UI.
+- The radios have no RF model of their own: a radio feeds RF into its box port 15 ms after its TX GND (the F7 TX delay) until TX ends.
+- `--demo` still uses the scripted box (`BoxStub`), because it prints the box's command log.
 - The radios are simple: a TX sense on or off. There is no RF, no SWR and no relay contact bounce.
 
 ## The screen
@@ -138,7 +139,7 @@ On the display, red is transmit and green is receive. A thick red route means th
 | F3 | Cut or restore the Cat6 cable |
 | F4 | Switch the 13.8 V supply off or on. Off: the MCU stops. On: it starts from boot, with the stored settings, and the SAFE latch needs RESET |
 | F5, F6, F7 | Radio R1, R2, R3: press or release its PTT. The radio transmits only when it is not inhibited (TX INH), as a real radio; the Board panel shows `TX` or `blocked` |
-| F8 | Box stops or resumes answering (box hang, or the data pair broken) |
+| F8 | Box MCU hangs or runs again. A hung box stops its WDI kicks: its watchdog trips and the SAFE loop opens |
 | F9 | Save the display as a PNG at full resolution (`shack-display-1.png`, ...) |
 | F10 | Auto keep-alive on or off (see [Commands](#commands)) |
 | Tab | Switch the display between text view and pixel view |
@@ -192,13 +193,18 @@ Type these with a leading `:`. `:help` or `:?` lists them.
 | `:power on\|off` | F4 |
 | `:radio R1-R3 on\|off` | F5 to F7 |
 | `:radio R1-R3 noinh on\|off` | A radio without a TX INH input: it transmits while inhibited (to test rule F15) |
-| `:box mute on\|off` | F8 |
+| `:box hang on\|off` | F8 |
+| `:box power on\|off` | Box supply off or on: the box restarts and runs its self-test |
+| `:box rfa2 on\|off` | RF on the receive-only column A2: opens the SAFE loop (D-104) |
+| `:box ready stuck on\|off` | READY switch stuck closed: the box self-test finds it at the next box start |
+| `:box r64 on\|off` | R64 fitted (watchdog on). Off: the box self-test fails at the next box start |
+| `:box nack U901-U1001 on\|off` | An expander stops answering |
 | `:shot <file.png>` | F9, with a file name |
 
 ## A first session
 
-1. Start the emulator. The display shows **Safe stop** with "Press RESET": after power-up the SAFE latch is always set.
-2. Press **F1**. The latch clears and the display shows page B.
+1. Start the emulator. The display shows the colour bars for 1 s, then **Safe stop** with "Press RESET": after power-up the SAFE latch is always set.
+2. Wait until the Board panel shows `Box run` (about 3 s: the box runs its self-test, and its SAFE loop opens twice). Then press **F1**. The latch clears and the display shows page B.
 3. Route R1 to transmit on A1 and receive on A2:
 
 ```
@@ -329,9 +335,9 @@ The tests check the firmware against the hardware design:
 | `crates/shack-ui` | Display pages, theme and fonts (M+ FONTS, anti-aliased), frame buffer, ST7789 commands. Mock-ups: [docs/design/display-mockups](../docs/design/display-mockups) |
 | `sim/sim-core` | Emulator core: virtual time, trace, I2C and UART plumbing, embedded-hal adapters |
 | `sim/sim-models` | Part and board models: PCA9539, TPS3823, 74LVC1G74, RT1 relay, ST7789, the shack board and the box board |
-| `sim/sim-shack` | The shack emulator: harness, scripted box, terminal UI, text view, tests |
+| `sim/sim-shack` | The emulator program: shack harness, scripted box (`BoxStub`, for the shack tests), the joined system (`SystemSim`), terminal UI, text view, tests |
 | `sim/sim-box` | The box emulator: harness, scripted shack, scenario tests |
-| `sim/sim-system` | Both firmwares, both boards and the Cat6 cable; system scenarios with fault injection |
+| `sim/sim-system` | System scenarios with fault injection, on `SystemSim` (re-exported from `sim-shack`) |
 | `targets/shack-esp32c3` | ESP32-C3 binary: `ShackHw` on esp-hal, main loop every 10 ms. Flash with `cargo run --release` in that folder (espflash) |
 | `targets/box-esp32c3` | ESP32-C3 binary: `BoxHw` on esp-hal, main loop every 1 ms, debug log on USB (phase, fault and flag changes). Both targets report loop time and stack use every 10 s (`diag`) |
 
