@@ -25,9 +25,12 @@ esp-backtrace = { version = "0.20.0", features = [
 ] }
 esp-println = { version = "0.18.0", features = ["esp32c3", "log-04"] }
 
+link-proto = { path = "../../crates/link-proto" }
 shack-core = { path = "../../crates/shack-core" }
+shack-ui   = { path = "../../crates/shack-ui" }
 
 critical-section = "1.2.0"
+heapless         = "0.9.3"
 static_cell      = "2.1.1"
 
 

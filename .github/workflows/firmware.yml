@@ -21,6 +21,7 @@ jobs:
           workspaces: |
             firmware
             firmware/targets/shack-esp32c3
+            firmware/targets/box-esp32c3
       - run: ./check.sh
 
   simulator:

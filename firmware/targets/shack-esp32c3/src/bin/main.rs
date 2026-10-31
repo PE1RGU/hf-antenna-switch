@@ -1,5 +1,12 @@
-//! Shack interface firmware, P0 bring-up: log over USB, scan the I2C bus, blink the board LED.
-//! Runs on a bare ESP32-C3-DevKit-RUST-1. Logic lives in shack-core; this crate is glue only.
+//! Shack interface firmware for the ESP32-C3-DevKit-RUST-1 (phase P7).
+//!
+//! Glue only: [`EspHw`] implements `ShackHw` with esp-hal, and the main loop calls
+//! `Shack::tick` every 10 ms. Every decision lives in `shack-core`, the code the
+//! emulator tests.
+//!
+//! The USB Serial/JTAG port is the host port (host-protocol.md), so the firmware
+//! writes no log there; a panic prints its backtrace on it. Stored settings stay in
+//! RAM for now (lost at power-off); flash storage follows.
 #![no_std]
 #![no_main]
 #![deny(
@@ -10,15 +17,24 @@
 #![deny(clippy::large_stack_frames)]
 
 use embassy_executor::Spawner;
-use embassy_time::{Duration, Timer};
+use embassy_time::{Duration, Instant, Ticker};
 use esp_backtrace as _;
+use esp_hal::Blocking;
 use esp_hal::clock::CpuClock;
-use esp_hal::gpio::{Level, Output, OutputConfig};
+use esp_hal::gpio::{AnyPin, Input, InputConfig, Level, Output, OutputConfig, Pull};
 use esp_hal::i2c::master::{Config as I2cConfig, I2c};
+use esp_hal::spi::master::{Config as SpiConfig, Spi};
 use esp_hal::time::Rate;
 use esp_hal::timer::timg::TimerGroup;
-use log::info;
-use shack_core::board::{DevKit, EXPANDER_ADDR, gpio};
+use esp_hal::uart::{Config as UartConfig, Uart};
+use esp_hal::usb::usb_serial_jtag::UsbSerialJtag;
+use heapless::Deque;
+use link_proto::Radio;
+use shack_core::board::{DevKit, gpio};
+use shack_core::config::CONFIG_MAX;
+use shack_core::hw::ShackHw;
+use shack_core::shack::{Shack, TICK};
+use static_cell::ConstStaticCell;
 
 // This creates a default app-descriptor required by the esp-idf bootloader.
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
@@ -26,8 +42,146 @@ esp_bootloader_esp_idf::esp_app_desc!();
 
 const DEVKIT: DevKit = DevKit::Rust1;
 
+/// Host output buffer. The longest burst is the `help` list, about 1.5 KB.
+const USB_OUT: usize = 4096;
+
 // The peripherals below are picked by type; these asserts keep them in line with the pin map.
-const _: () = assert!(DEVKIT.led() == 7 && DEVKIT.sda() == 10 && gpio::SCL == 8);
+const _: () = assert!(
+    DEVKIT.sda() == 10
+        && gpio::SCL == 8
+        && gpio::PERMIT_R1 == 0
+        && gpio::WDI == 1
+        && gpio::DISP_SCK == 2
+        && gpio::LATCH_CLR == 3
+        && gpio::PERMIT_R2 == 4
+        && gpio::PERMIT_R3 == 5
+        && gpio::DATA_TX == 6
+        && gpio::DISP_MOSI == 9
+        && gpio::DATA_RX == 20
+        && gpio::SAFE_LOST == 21
+);
+
+/// Display frame buffer: 150 KB, in static RAM (not on the stack).
+static FRAMEBUFFER: ConstStaticCell<[u8; shack_ui::fb::BYTES]> =
+    ConstStaticCell::new([0; shack_ui::fb::BYTES]);
+
+/// `ShackHw` on the ESP32-C3 peripherals.
+struct EspHw {
+    i2c: I2c<'static, Blocking>,
+    permit: [Output<'static>; 3],
+    wdi: Output<'static>,
+    latch_clr: Output<'static>,
+    safe_lost: Input<'static>,
+    uart: Uart<'static, Blocking>,
+    /// The RX pin stays configured (pull-up) while the UART reads it inverted.
+    _data_rx: Input<'static>,
+    usb: UsbSerialJtag<'static, Blocking>,
+    /// Host bytes waiting for room in the 64-byte USB FIFO. [`EspHw::usb_pump`]
+    /// moves them every 1 ms.
+    usb_out: Deque<u8, USB_OUT>,
+    spi: Spi<'static, Blocking>,
+    framebuffer: &'static mut [u8; shack_ui::fb::BYTES],
+    stored: [u8; CONFIG_MAX],
+    stored_len: usize,
+}
+
+impl EspHw {
+    /// Move waiting host bytes into the USB FIFO until it is full. Never waits.
+    fn usb_pump(&mut self) {
+        while let Some(&b) = self.usb_out.front() {
+            if self.usb.write_byte_nb(b).is_err() {
+                break;
+            }
+            self.usb_out.pop_front();
+        }
+        let _ = self.usb.flush_tx_nb();
+    }
+}
+
+impl ShackHw for EspHw {
+    type I2c = I2c<'static, Blocking>;
+
+    fn i2c(&mut self) -> &mut Self::I2c {
+        &mut self.i2c
+    }
+
+    fn set_permit(&mut self, radio: Radio, on: bool) {
+        self.permit[radio.index()].set_level(Level::from(on));
+    }
+
+    fn set_wdi(&mut self, high: bool) {
+        self.wdi.set_level(Level::from(high));
+    }
+
+    fn set_latch_clr(&mut self, high: bool) {
+        self.latch_clr.set_level(Level::from(high));
+    }
+
+    fn safe_lost(&mut self) -> bool {
+        self.safe_lost.is_high()
+    }
+
+    fn uart_write(&mut self, bytes: &[u8]) {
+        // At most one frame per tick (24 bytes): the 128-byte TX FIFO takes it
+        // without waiting.
+        let mut rest = bytes;
+        while !rest.is_empty() {
+            match self.uart.write(rest) {
+                Ok(n) => rest = &rest[n..],
+                Err(_) => return,
+            }
+        }
+    }
+
+    fn uart_read(&mut self) -> Option<u8> {
+        if !self.uart.read_ready() {
+            return None;
+        }
+        let mut b = [0u8; 1];
+        match self.uart.read_buffered(&mut b) {
+            Ok(1) => Some(b[0]),
+            _ => None,
+        }
+    }
+
+    fn usb_write(&mut self, bytes: &[u8]) {
+        // Never block: with no host reading, the USB FIFO stays full. A blocked
+        // write would stop the main loop, and the watchdog would set the fault
+        // latch. Bytes that do not fit in the buffer are dropped.
+        for &b in bytes {
+            let _ = self.usb_out.push_back(b);
+        }
+        self.usb_pump();
+    }
+
+    fn usb_read(&mut self) -> Option<u8> {
+        self.usb.read_byte().ok()
+    }
+
+    fn spi_write(&mut self, bytes: &[u8]) {
+        let _ = self.spi.write(bytes);
+    }
+
+    fn framebuffer(&mut self) -> &mut [u8] {
+        &mut self.framebuffer[..]
+    }
+
+    fn spi_write_framebuffer(&mut self, start: usize, end: usize) {
+        let _ = self.spi.write(&self.framebuffer[start..end]);
+    }
+
+    fn config_load(&mut self, buf: &mut [u8]) -> usize {
+        let n = self.stored_len.min(buf.len());
+        buf[..n].copy_from_slice(&self.stored[..n]);
+        n
+    }
+
+    fn config_save(&mut self, record: &[u8]) {
+        let n = record.len().min(CONFIG_MAX);
+        self.stored[..n].copy_from_slice(&record[..n]);
+        self.stored_len = n;
+    }
+}
 
 #[allow(
     clippy::large_stack_frames,
@@ -35,54 +189,77 @@ const _: () = assert!(DEVKIT.led() == 7 && DEVKIT.sda() == 10 && gpio::SCL == 8)
 )]
 #[esp_rtos::main]
 async fn main(_spawner: Spawner) -> ! {
-    esp_println::logger::init_logger_from_env();
-
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
-    let peripherals = esp_hal::init(config);
+    let p = esp_hal::init(config);
 
-    let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0, peripherals.FROM_CPU_INTR0);
+    let timg0 = TimerGroup::new(p.TIMG0);
+    esp_rtos::start(timg0.timer0, p.FROM_CPU_INTR0);
 
-    info!(
-        "shack-esp32c3 {} on {:?}",
-        env!("CARGO_PKG_VERSION"),
-        DEVKIT
-    );
+    // Safety outputs low first: no permit, no LATCH_CLR edge, WDI low.
+    let low = |pin: AnyPin<'static>| Output::new(pin, Level::Low, OutputConfig::default());
+    let permit = [
+        low(p.GPIO0.into()),
+        low(p.GPIO4.into()),
+        low(p.GPIO5.into()),
+    ];
+    let wdi = low(p.GPIO1.into());
+    let latch_clr = low(p.GPIO3.into());
+    // SAFE_LOST: pulled up, so an open input reads 'SAFE lost'.
+    let safe_lost = Input::new(p.GPIO21, InputConfig::default().with_pull(Pull::Up));
 
-    let mut i2c = I2c::new(
-        peripherals.I2C0,
+    let i2c = I2c::new(
+        p.I2C0,
         I2cConfig::default().with_frequency(Rate::from_khz(100)),
     )
     .unwrap()
-    .with_sda(peripherals.GPIO10)
-    .with_scl(peripherals.GPIO8);
+    .with_sda(p.GPIO10)
+    .with_scl(p.GPIO8);
 
-    // Bare DevKit: SHTC3 at 0x70 and the IMU at 0x68. On the shack board: the PCA9539 as well.
-    let mut found = 0;
-    for addr in 0x08..0x78u8 {
-        if i2c.write(addr, &[]).is_ok() {
-            info!("i2c: device at {addr:#04x}");
-            found += 1;
-        }
-    }
-    info!(
-        "i2c: {found} device(s); PCA9539 {:#04x} {}",
-        EXPANDER_ADDR,
-        if i2c.write(EXPANDER_ADDR, &[]).is_ok() {
-            "present"
-        } else {
-            "absent"
-        }
-    );
+    // Box link, 9600 8N1. TX: high = loop current = idle (normal). RX: the sense
+    // transistor pulls DATA_RX low on loop current, so the UART reads it inverted
+    // (D-58). Pulled up: no cable reads as a break, not as noise.
+    let data_rx = Input::new(p.GPIO20, InputConfig::default().with_pull(Pull::Up));
+    let rx_signal = data_rx.peripheral_input().with_input_inverter(true);
+    let uart = Uart::new(p.UART1, UartConfig::default().with_baudrate(9600))
+        .unwrap()
+        .with_tx(p.GPIO6)
+        .with_rx(rx_signal);
 
-    let mut led = Output::new(peripherals.GPIO7, Level::Low, OutputConfig::default());
-    let mut ticks: u32 = 0;
+    let spi = Spi::new(
+        p.SPI2,
+        SpiConfig::default().with_frequency(Rate::from_mhz(40)),
+    )
+    .unwrap()
+    .with_sck(p.GPIO2)
+    .with_mosi(p.GPIO9);
+
+    let mut hw = EspHw {
+        i2c,
+        permit,
+        wdi,
+        latch_clr,
+        safe_lost,
+        uart,
+        _data_rx: data_rx,
+        usb: UsbSerialJtag::new(p.USB_DEVICE),
+        usb_out: Deque::new(),
+        spi,
+        framebuffer: FRAMEBUFFER.take(),
+        stored: [0; CONFIG_MAX],
+        stored_len: 0,
+    };
+
+    let mut shack = Shack::new();
+    // 1 ms loop: the USB pump every pass, the logic every TICK (10 ms).
+    let mut ticker = Ticker::every(Duration::from_millis(1));
+    let mut next_tick = 0;
     loop {
-        led.toggle();
-        ticks += 1;
-        if ticks.is_multiple_of(10) {
-            info!("alive, {} s", ticks / 2);
+        let now = Instant::now().as_millis();
+        if now >= next_tick {
+            shack.tick(now, &mut hw);
+            next_tick = now + TICK;
         }
-        Timer::after(Duration::from_millis(500)).await;
+        hw.usb_pump();
+        ticker.next().await;
     }
 }
