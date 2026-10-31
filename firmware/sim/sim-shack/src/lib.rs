@@ -213,6 +213,9 @@ pub struct ShackSim {
     pub shack: Shack,
     /// The scripted box at the far end of the data link.
     pub boxs: BoxStub,
+    /// The scripted box is off: the box end of the link and the loops are
+    /// driven from outside (`sim-system` joins the box emulator here).
+    pub external_box: bool,
     /// Firmware events with their time.
     pub events: Vec<(Ms, Event)>,
     /// False: the MCU hangs (no more ticks).
@@ -258,6 +261,7 @@ impl ShackSim {
             board,
             shack: Shack::new(),
             boxs: BoxStub::new(),
+            external_box: false,
             events: Vec::new(),
             mcu_running: true,
             spi_max_per_tick: 0,
@@ -278,7 +282,9 @@ impl ShackSim {
     pub fn step(&mut self) {
         let t = self.now() + 1;
         self.board.borrow_mut().step_to(SimTime::ms(t));
-        self.boxs.step(t, &mut self.board.borrow_mut());
+        if !self.external_box {
+            self.boxs.step(t, &mut self.board.borrow_mut());
+        }
         // Power cycle: without 13.8 V the MCU is off (no ticks). When the supply
         // returns, the MCU starts from boot: new firmware state, a hang is gone.
         // The stored settings stay, as in flash.

@@ -152,7 +152,8 @@ Stored in the shack MCU flash (ESP32-C3, P7):
 
 - Saved 2 s after the last change, so a burst of commands gives one flash write.
 - A record has a version byte and a CRC-16. A bad or missing record gives the defaults (names as in the requirements, no routes, no bias, page B) and the log line `# stored settings not found, defaults used`.
-- Restore: each time the box link comes up and the box is ready, the shack sends the stored routes and bias to the box. The box checks them like any other command (H1 to H4); a refusal comes as `!refused`. This also restores the routes after a box restart.
+- Restore: each time the box link comes up and the box is ready, and each time the box reports READY again (after KILL, RF on A2, a stop or an expander reset: its relays come back off), the shack sends the stored routes and bias to the box. A route for a radio that is still ending TX goes as soon as that radio is idle. The box checks them like any other command (H1 to H4); a refusal comes as `!refused`. This also restores the routes after a box restart.
+- What is stored is the route or bias the box accepted (result Ok), not the read-back in that answer: the box answers at once and switches its relays in the next 36 to 48 ms.
 - Restoring a route moves relays without a command from the operator. TX still needs RESET (SAFE latch), the permit and, for R2 and R3, the handshake.
 
 ## 9. Timing

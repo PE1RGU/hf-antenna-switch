@@ -1972,6 +1972,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "sim-system"
+version = "0.1.0"
+dependencies = [
+ "box-core",
+ "embedded-hal",
+ "link-proto",
+ "shack-core",
+ "sim-box",
+ "sim-core",
+ "sim-models",
+ "sim-shack",
+]
+
+[[package]]
 name = "simd-adler32"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"

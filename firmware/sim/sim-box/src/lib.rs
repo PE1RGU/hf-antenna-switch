@@ -102,6 +102,9 @@ pub struct BoxSim {
     pub fw: RelayBox,
     /// The scripted shack at the far end of the Cat6 cable.
     pub shack: ShackStub,
+    /// The scripted shack is off: the shack end of the link and the loops are
+    /// driven from outside (`sim-system` joins the shack emulator here).
+    pub external_shack: bool,
     /// False: the box MCU hangs (no more ticks).
     pub mcu_running: bool,
     /// Every hazard in the relay contacts, with the time it started.
@@ -135,6 +138,7 @@ impl BoxSim {
             board,
             fw: RelayBox::new(),
             shack: ShackStub::new(),
+            external_shack: false,
             mcu_running: true,
             hazards: Vec::new(),
             active: Vec::new(),
@@ -152,7 +156,9 @@ impl BoxSim {
     pub fn step(&mut self) {
         let t = self.now() + 1;
         self.board.borrow_mut().step_to(SimTime::ms(t));
-        self.shack.step(t, &mut self.board.borrow_mut());
+        if !self.external_shack {
+            self.shack.step(t, &mut self.board.borrow_mut());
+        }
         let powered = self.board.borrow().env().power;
         if powered && !self.powered {
             self.fw = RelayBox::new();

@@ -78,7 +78,7 @@ Display: the firmware draws with `embedded-graphics`. On the Mac, `embedded-grap
 | P3c | Display pages (`embedded-graphics`, M+ fonts): B flow, C cards, Safe stop; `page b\|c\|auto` | Pages render on the simulated ST7789 and match a direct render |
 | P4 | Box board models: 4 expanders, relays, safety gate, fault latch, RF detectors, bias-T. Pin map in `box-core` | Model tests reproduce verify_logic.py. Done 2026-10-30: sections 2 to 9, the S1 to S7 intervals at minimum and maximum timing, the crossbar counts |
 | P5 | `box-core`: F1, F5, F10, F11, F13, crossbar check (F6), box side of the handshake, link time-out | Box runs against a scripted shack stub. Done 2026-10-31: `sim/sim-box`, 22 scenarios; each rule broken once on purpose and caught |
-| P6 | `sim-system`: both firmwares, both boards, the link. Fault injection. | All scenarios in section 6 pass |
+| P6 | `sim-system`: both firmwares, both boards, the link. Fault injection. | All scenarios in section 6 pass. Done 2026-10-31: 17 system scenarios, the 256-row SAFE table across both boards; failed TX sense and the shack expander NACK stay in `sim-shack`. Two shack fixes found by the joined run (stored route, restore after READY) |
 | P7 | First flash. Target glue on ESP32-C3. Same scenarios as hardware-in-the-loop tests when boards exist. | Bench test plan in docs/test/test-spec.md |
 
 Rule: no flashing before the simulator scenarios pass. Until P7 the target crates are only built, so the esp-hal glue keeps compiling.
@@ -107,5 +107,6 @@ Scenarios: normal start-up, route change, R1 PTT, R2 and R3 handshake, KILL duri
 - Link protocol is not specified yet. P1 writes it.
 - Mac protocol: decided, text lines (docs/design/host-protocol.md, P3b-01).
 - Async (embassy) or a plain super-loop. Proposal: embassy for the I/O, with a synchronous state machine in each core crate, so tests need no executor.
-- Box firmware (P5): how the box leaves its "link lost during TX" stop (F13: MCU_EN_N = 1). Decided (Prins, 2026-10-31): on a Hello, or when every radio that had a permit got its TxEnd. Then MCU_EN_N = 0 and the F11 start-up; the SAFE latch in the shack still needs RESET. The scripted box in `sim-shack` still stays stopped (P6 replaces it).
+- Box firmware (P5): how the box leaves its "link lost during TX" stop (F13: MCU_EN_N = 1). Decided (Prins, 2026-10-31): on a Hello, or when every radio that had a permit got its TxEnd. Then MCU_EN_N = 0 and the F11 start-up; the SAFE latch in the shack still needs RESET. The scripted box in `sim-shack` still stays stopped; `sim-system` runs the real rule.
+- F12, seen in P6: on an emergency stop during TX (KILL, cable cut, a hung MCU), K0 and the row relays open within 6 to 12 ms, while the radio's RF tail after the inhibit lasts about 20 ms (model default; to measure, M-12). So the contacts break under RF. This is the accepted design point of F12 (D-76); the system tests allow hot switches only in that window.
 - Emulator of the real binary (Wokwi or Espressif QEMU) as a later extra. Only if the HAL-level model misses a class of bugs.
