@@ -41,9 +41,9 @@ pub mod gpio {
 /// DevKit board revision. It sets the SDA pin (JP61, D-94) and the board LED.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DevKit {
-    /// ESP32-C3-DevKit-RUST-1: SDA on GPIO10, LED on GPIO7. JP61 at 2-3.
+    /// ESP32-C3-DevKit-RUST-1: SDA on GPIO10, LED on GPIO7. JP61 as delivered (1-2 bridged by copper, D-192).
     Rust1,
-    /// ESP32-C3-DevKit-RUST-2: SDA on GPIO7, LED on GPIO10. JP61 at 2-1.
+    /// ESP32-C3-DevKit-RUST-2: SDA on GPIO7, LED on GPIO10. JP61: cut 1-2, bridge 2-3.
     Rust2,
 }
 

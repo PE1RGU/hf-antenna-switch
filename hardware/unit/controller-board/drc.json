@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/drc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-10-31T21:08:08",
+    "date": "2026-10-31T21:33:28",
     "ignored_checks": [
         {
             "description": "Footprint has no courtyard defined",
@@ -40,7 +40,7 @@
                         "x": 25.0,
                         "y": 25.0
                     },
-                    "uuid": "c56e16dc-d5c4-4a18-954e-35e94c01a8b1"
+                    "uuid": "83cc047f-11bc-4bca-8b37-d441d9e1691b"
                 }
             ],
             "severity": "warning",
@@ -55,7 +55,7 @@
                         "x": 48.5,
                         "y": 25.43
                     },
-                    "uuid": "9fdc1b7a-4e06-4768-a029-23678c0a183c"
+                    "uuid": "b13ee4d0-bf1e-4db6-9a0d-556a2190c3a3"
                 }
             ],
             "severity": "warning",
@@ -70,7 +70,7 @@
                         "x": 80.0,
                         "y": 32.0
                     },
-                    "uuid": "225b698b-9c0f-4695-9e41-96cb75314c5e"
+                    "uuid": "26a889df-f45b-4843-99f4-a99a43cd7561"
                 }
             ],
             "severity": "warning",
@@ -85,7 +85,7 @@
                         "x": 60.61,
                         "y": 89.61
                     },
-                    "uuid": "538f75ec-ac77-4b65-bcca-aacffb13c2c1"
+                    "uuid": "760eec00-cd4e-4636-a71d-b6af24ad981d"
                 }
             ],
             "severity": "warning",
@@ -100,7 +100,7 @@
                         "x": 72.41,
                         "y": 89.61
                     },
-                    "uuid": "583a7f0e-8fea-4bf5-b9eb-37d3d9506c3e"
+                    "uuid": "018f9fa4-a4ef-47b2-8853-aeda3a674d5c"
                 }
             ],
             "severity": "warning",
@@ -115,7 +115,7 @@
                         "x": 43.709999,
                         "y": 89.61
                     },
-                    "uuid": "e4463e6e-0b47-44e0-9776-622d3ccac9e6"
+                    "uuid": "75dca4da-5201-480c-abdb-3bc18f165512"
                 }
             ],
             "severity": "warning",
@@ -130,7 +130,7 @@
                         "x": 71.9,
                         "y": 95.11
                     },
-                    "uuid": "e48925fc-8fda-47f6-92fb-f7a555706db5"
+                    "uuid": "4de8dac1-17e9-493e-9c51-70995a75ed6a"
                 }
             ],
             "severity": "warning",
@@ -145,7 +145,7 @@
                         "x": 51.5,
                         "y": 95.11
                     },
-                    "uuid": "6e6447ef-6846-4e77-8b31-c22d7dc5a232"
+                    "uuid": "5cc5379c-a3ce-4b26-861a-dbba58615626"
                 }
             ],
             "severity": "warning",
@@ -160,7 +160,7 @@
                         "x": 61.2,
                         "y": 50.0
                     },
-                    "uuid": "10a990a1-ce26-4b49-9d24-0bcc2316b602"
+                    "uuid": "622470f9-1c32-4c35-9c5e-4b1896b9b17d"
                 }
             ],
             "severity": "warning",
@@ -175,7 +175,7 @@
                         "x": 52.4,
                         "y": 50.0
                     },
-                    "uuid": "e84bab85-2614-44c6-aaef-be07382322ec"
+                    "uuid": "48a68f11-65ae-486f-b81f-8c9a55cd5e3e"
                 }
             ],
             "severity": "warning",
@@ -190,7 +190,7 @@
                         "x": 73.0,
                         "y": 50.0
                     },
-                    "uuid": "e1f7f90c-9d68-43a9-9edb-7cf4618c1508"
+                    "uuid": "3fc7c5c8-ea38-4f34-8105-85adb3103334"
                 }
             ],
             "severity": "warning",
@@ -205,7 +205,7 @@
                         "x": 64.2,
                         "y": 50.0
                     },
-                    "uuid": "c4613b6b-5c39-474b-90d6-5bff838b14b4"
+                    "uuid": "352f6ca0-dbcc-4c16-852e-922618b21e02"
                 }
             ],
             "severity": "warning",
@@ -220,7 +220,7 @@
                         "x": 44.3,
                         "y": 50.0
                     },
-                    "uuid": "c978b988-4cb0-48f3-94d5-dc6d1b0c579e"
+                    "uuid": "ef23c61e-8b41-4d0c-b388-99f78dd98cbb"
                 }
             ],
             "severity": "warning",
@@ -235,7 +235,7 @@
                         "x": 35.5,
                         "y": 50.0
                     },
-                    "uuid": "e093edc5-ea3d-4560-b46c-0d17c9827c37"
+                    "uuid": "2fd140c4-8db3-4df8-8aff-1436e300c189"
                 }
             ],
             "severity": "warning",
@@ -250,7 +250,7 @@
                         "x": 32.799999,
                         "y": 50.0
                     },
-                    "uuid": "3af885e9-81e6-4d2d-afcc-2c18a95c60b8"
+                    "uuid": "86decc51-2c57-495d-a2d9-1eccbe1dc31d"
                 }
             ],
             "severity": "warning",
@@ -265,7 +265,7 @@
                         "x": 24.0,
                         "y": 50.0
                     },
-                    "uuid": "7b7b1acc-40bc-41d6-bbc0-d09958709a13"
+                    "uuid": "87153987-c5fe-4212-97b8-8becb22c6833"
                 }
             ],
             "severity": "warning",
@@ -280,7 +280,7 @@
                         "x": 56.8,
                         "y": 66.0
                     },
-                    "uuid": "b6fc629e-1ac1-413a-bb02-ef96055f3cd7"
+                    "uuid": "39ec0d52-d4a0-4649-a5ea-a16fb71bcffd"
                 }
             ],
             "severity": "warning",
@@ -295,7 +295,7 @@
                         "x": 56.8,
                         "y": 76.0
                     },
-                    "uuid": "746e295a-0ac4-4820-8acb-780e41f021f4"
+                    "uuid": "217f7279-f335-416c-b19a-74166499a7ff"
                 }
             ],
             "severity": "warning",
@@ -310,7 +310,7 @@
                         "x": 68.6,
                         "y": 66.0
                     },
-                    "uuid": "cdad6b71-6b5e-4916-8ffa-5983f0ae69b4"
+                    "uuid": "dbceeec8-672b-47d5-8352-38e07b3a54a7"
                 }
             ],
             "severity": "warning",
@@ -325,7 +325,7 @@
                         "x": 68.6,
                         "y": 76.0
                     },
-                    "uuid": "8d272bdc-f384-47cf-bf21-bd9003c3d416"
+                    "uuid": "dc76f3ba-2f72-4205-adb2-7dec10a35c25"
                 }
             ],
             "severity": "warning",
@@ -340,7 +340,7 @@
                         "x": 39.9,
                         "y": 66.0
                     },
-                    "uuid": "0ce8d1f4-03d6-400e-9726-6c48731528d9"
+                    "uuid": "96729bec-1bd6-4d0d-93f3-2191d11573ef"
                 }
             ],
             "severity": "warning",
@@ -355,7 +355,7 @@
                         "x": 39.9,
                         "y": 76.0
                     },
-                    "uuid": "377ac12a-a646-4733-88a5-30da305f1349"
+                    "uuid": "9d479cf9-fc1b-4213-82d3-ebfde81e7f06"
                 }
             ],
             "severity": "warning",
@@ -370,7 +370,7 @@
                         "x": 28.4,
                         "y": 66.0
                     },
-                    "uuid": "31263ae4-089d-4f7a-88db-57e3d10f75f2"
+                    "uuid": "00678584-0d08-4ed0-ac5d-6550f13fa74f"
                 }
             ],
             "severity": "warning",
@@ -385,7 +385,7 @@
                         "x": 28.4,
                         "y": 76.0
                     },
-                    "uuid": "7b5a5c08-0dd8-40cf-995f-6b6909278399"
+                    "uuid": "a3b41e2b-31a2-42f3-bdbe-376f56d209bb"
                 }
             ],
             "severity": "warning",
@@ -400,7 +400,7 @@
                         "x": 55.8,
                         "y": 43.0
                     },
-                    "uuid": "a1274c0c-7942-4ead-a815-13936fd38e56"
+                    "uuid": "3f259dea-1e7c-4b5a-818d-ffe76de3c855"
                 }
             ],
             "severity": "warning",
@@ -415,7 +415,7 @@
                         "x": 68.6,
                         "y": 43.0
                     },
-                    "uuid": "abe3d51c-7ecc-4711-bf3b-ee7787cd3b09"
+                    "uuid": "0643fd3b-a58f-4f1d-a9fa-36665a95263e"
                 }
             ],
             "severity": "warning",
@@ -430,7 +430,7 @@
                         "x": 41.2,
                         "y": 43.0
                     },
-                    "uuid": "7d6e2e2c-0420-4b77-a265-fe212d435444"
+                    "uuid": "f4b59fd9-b1f5-4d92-af1f-d987a9cbbba8"
                 }
             ],
             "severity": "warning",
@@ -445,7 +445,7 @@
                         "x": 28.4,
                         "y": 43.0
                     },
-                    "uuid": "82a29f22-854f-436b-b577-c8e3a0e2b1a3"
+                    "uuid": "b207f0d9-6d47-477d-8ebd-0c9d7344e65f"
                 }
             ],
             "severity": "warning",
@@ -460,7 +460,7 @@
                         "x": 56.8,
                         "y": 50.0
                     },
-                    "uuid": "82c8fa3e-5b61-43e2-a4c9-d79a659530e2"
+                    "uuid": "b99d0f5b-589d-4a52-9ed2-bccfdaab872f"
                 }
             ],
             "severity": "warning",
@@ -475,7 +475,7 @@
                         "x": 68.6,
                         "y": 50.0
                     },
-                    "uuid": "7547614e-015d-46b5-ba2c-70c819762cb8"
+                    "uuid": "54866c2b-4fce-43be-bde7-50ef1f3f2b73"
                 }
             ],
             "severity": "warning",
@@ -490,7 +490,7 @@
                         "x": 39.9,
                         "y": 50.0
                     },
-                    "uuid": "0aff19b5-91e4-4a99-9539-8581a1c19296"
+                    "uuid": "080b2a10-7dfe-4643-92f0-a6cec00ffa6e"
                 }
             ],
             "severity": "warning",
@@ -505,7 +505,7 @@
                         "x": 28.4,
                         "y": 50.0
                     },
-                    "uuid": "882c67e8-a72b-4f4d-86d0-565735278bfe"
+                    "uuid": "f73607ed-5287-442c-9c90-e47d716f65dd"
                 }
             ],
             "severity": "warning",
@@ -520,7 +520,7 @@
                         "x": 29.67,
                         "y": 90.11
                     },
-                    "uuid": "7849f64a-7e4a-4e27-9070-79547db83fd9"
+                    "uuid": "74d65cdd-3e79-42f1-9980-39e778f4826c"
                 }
             ],
             "severity": "warning",
@@ -535,7 +535,7 @@
                         "x": 59.8,
                         "y": 58.5
                     },
-                    "uuid": "5f1e37c9-c072-41a5-b927-e99c7f3e0e33"
+                    "uuid": "20c36967-dfdf-4ddd-a6ed-832c16f80eb8"
                 }
             ],
             "severity": "warning",
@@ -550,7 +550,7 @@
                         "x": 53.8,
                         "y": 58.5
                     },
-                    "uuid": "b35464d3-5164-4680-8582-6d727a60ff7f"
+                    "uuid": "f4375f29-ed76-4b7c-902a-fce15b283c8c"
                 }
             ],
             "severity": "warning",
@@ -565,7 +565,7 @@
                         "x": 59.8,
                         "y": 71.2
                     },
-                    "uuid": "d568b58a-0470-4e71-a73f-db2c36524eda"
+                    "uuid": "8a8f0cf2-dddd-4bd3-b107-b85ba576777c"
                 }
             ],
             "severity": "warning",
@@ -580,7 +580,7 @@
                         "x": 55.53,
                         "y": 89.61
                     },
-                    "uuid": "48957c1c-f944-4b38-afb6-ddbfa189cc4d"
+                    "uuid": "f2a7bdc5-4c66-47ec-b08e-bc54e8fc3dc3"
                 }
             ],
             "severity": "warning",
@@ -595,7 +595,7 @@
                         "x": 71.6,
                         "y": 58.5
                     },
-                    "uuid": "5ed01ad4-c1d8-4e6a-8bcc-c5ada922d4b1"
+                    "uuid": "c8f48e61-c89d-48c2-b211-43ba991fb495"
                 }
             ],
             "severity": "warning",
@@ -610,7 +610,7 @@
                         "x": 65.599999,
                         "y": 58.5
                     },
-                    "uuid": "5b015d49-5f5e-47b0-bafc-f777366173aa"
+                    "uuid": "00e60bb1-d9d6-4af8-8407-6f4b79ea4fb5"
                 }
             ],
             "severity": "warning",
@@ -625,7 +625,7 @@
                         "x": 71.6,
                         "y": 71.2
                     },
-                    "uuid": "db15fb10-f7ed-49f2-a2e2-28b41b188711"
+                    "uuid": "2391c28b-31fa-4ede-9213-7fae55fc7e90"
                 }
             ],
             "severity": "warning",
@@ -640,7 +640,7 @@
                         "x": 67.33,
                         "y": 89.61
                     },
-                    "uuid": "bd0342e3-adbb-40b7-87b2-be4dd031cb42"
+                    "uuid": "95a152fd-8bf7-4dbb-be51-a1dd4152c296"
                 }
             ],
             "severity": "warning",
@@ -655,7 +655,7 @@
                         "x": 42.9,
                         "y": 58.5
                     },
-                    "uuid": "cbc68dfe-a7b9-4cf7-8e96-6cef4fffb5eb"
+                    "uuid": "368ba4f7-5d6c-4939-8d27-7e30e00218e3"
                 }
             ],
             "severity": "warning",
@@ -670,7 +670,7 @@
                         "x": 36.9,
                         "y": 58.5
                     },
-                    "uuid": "fb467b5e-fb9e-40e7-befa-6d0c25c54269"
+                    "uuid": "03821837-b0f0-4543-b1de-435aa0cfec77"
                 }
             ],
             "severity": "warning",
@@ -685,7 +685,7 @@
                         "x": 42.9,
                         "y": 71.2
                     },
-                    "uuid": "a0bb46c0-1739-472e-986a-266bb49fafbd"
+                    "uuid": "598d6d90-499b-41a7-ad65-5b60ff3ceed3"
                 }
             ],
             "severity": "warning",
@@ -700,7 +700,7 @@
                         "x": 38.629999,
                         "y": 89.61
                     },
-                    "uuid": "bb3e7792-2021-48e4-bf35-0a0ca25c5960"
+                    "uuid": "2e9e2715-7d1e-44e5-9aef-0c82e71a3124"
                 }
             ],
             "severity": "warning",
@@ -715,7 +715,7 @@
                         "x": 46.93,
                         "y": 89.61
                     },
-                    "uuid": "7527329e-f7d0-4ee4-aba4-c6ff8688dedf"
+                    "uuid": "0a4233f8-a04f-4e75-b642-c4bdc8e901b7"
                 }
             ],
             "severity": "warning",
@@ -730,7 +730,7 @@
                         "x": 44.9,
                         "y": 95.11
                     },
-                    "uuid": "8e6d8973-a93b-4c95-8c98-f8aa978e152b"
+                    "uuid": "f99eabad-53e3-4894-8a3e-8623a5ee58d8"
                 }
             ],
             "severity": "warning",
@@ -745,7 +745,7 @@
                         "x": 31.4,
                         "y": 58.5
                     },
-                    "uuid": "aaf673ee-c01b-4a2a-8084-5cb59075c3bb"
+                    "uuid": "42e4aa34-9540-40f0-8aab-8f21d96f9d9b"
                 }
             ],
             "severity": "warning",
@@ -760,7 +760,7 @@
                         "x": 25.4,
                         "y": 58.5
                     },
-                    "uuid": "79465d3e-cfa3-4be3-b164-98682d34d64f"
+                    "uuid": "842955b3-6a3e-437e-9b6a-59a65ba3b2dd"
                 }
             ],
             "severity": "warning",
@@ -775,7 +775,7 @@
                         "x": 27.13,
                         "y": 89.61
                     },
-                    "uuid": "28b85d22-1a91-4d6f-838b-5e8c0f716002"
+                    "uuid": "7a7dbf01-7980-4499-98a0-e1561977e5f1"
                 }
             ],
             "severity": "warning",
@@ -790,7 +790,7 @@
                         "x": 29.67,
                         "y": 95.11
                     },
-                    "uuid": "03ae64ee-5509-41db-a1ba-818594af94c8"
+                    "uuid": "3775089d-90b5-4ded-8730-aa42b7d2ea1c"
                 }
             ],
             "severity": "warning",
@@ -805,7 +805,7 @@
                         "x": 92.7,
                         "y": 41.0
                     },
-                    "uuid": "8fbd9f46-aa2b-44ca-b3da-d8bd54e49af8"
+                    "uuid": "6d8664d8-c983-4f33-ad08-a944cddc4a76"
                 }
             ],
             "severity": "warning",
@@ -820,7 +820,7 @@
                         "x": 95.24,
                         "y": 41.0
                     },
-                    "uuid": "f31acbc1-2cac-4f53-8f61-7f760a89f457"
+                    "uuid": "63458ea2-db63-4c4f-ab40-c206f339edcb"
                 }
             ],
             "severity": "warning",
@@ -835,7 +835,7 @@
                         "x": 97.78,
                         "y": 41.0
                     },
-                    "uuid": "bae4e47c-8db7-4088-807a-3b000ddaa025"
+                    "uuid": "12d51d43-1932-4575-b91b-3398d009442d"
                 }
             ],
             "severity": "warning",
@@ -850,7 +850,7 @@
                         "x": 100.32,
                         "y": 37.0
                     },
-                    "uuid": "c46bcf76-3c10-4a56-817a-29a28af65e87"
+                    "uuid": "f03549e2-3861-447c-977b-b35755b72104"
                 }
             ],
             "severity": "warning",
@@ -865,7 +865,7 @@
                         "x": 90.16,
                         "y": 37.0
                     },
-                    "uuid": "79b28151-96ed-439b-85bd-9d15c29adc2d"
+                    "uuid": "a227f10e-9a84-474a-bcea-100686be6936"
                 }
             ],
             "severity": "warning",
@@ -880,7 +880,7 @@
                         "x": 60.61,
                         "y": 79.19
                     },
-                    "uuid": "0047bbf4-0300-486c-b19f-b35c0c87bedb"
+                    "uuid": "1c48c31b-3021-4efc-94d4-2097544fc79d"
                 }
             ],
             "severity": "warning",
@@ -895,7 +895,7 @@
                         "x": 72.41,
                         "y": 79.19
                     },
-                    "uuid": "62dba84c-944c-46a4-82c2-bdfce6bbf13b"
+                    "uuid": "1cfe019e-9683-4d8f-b17b-0cd4e41a0c7a"
                 }
             ],
             "severity": "warning",
@@ -910,7 +910,7 @@
                         "x": 43.709999,
                         "y": 79.19
                     },
-                    "uuid": "4e9dd20e-4f07-443a-9e39-40563521f37a"
+                    "uuid": "42a0294c-2bed-40bb-a401-0ee2dd4d79a2"
                 }
             ],
             "severity": "warning",
@@ -925,7 +925,7 @@
                         "x": 27.13,
                         "y": 86.81
                     },
-                    "uuid": "ca6dbde0-7b1e-4d6c-abe3-7377de4cce32"
+                    "uuid": "bc833409-6a28-4bef-8839-28dd1671ee18"
                 }
             ],
             "severity": "warning",
@@ -940,7 +940,7 @@
                         "x": 68.6,
                         "y": 95.11
                     },
-                    "uuid": "da2dc767-1405-47eb-8b65-a0492f225c65"
+                    "uuid": "8f940382-33b8-4e82-b0bb-ebc416227ae8"
                 }
             ],
             "severity": "warning",
@@ -955,7 +955,7 @@
                         "x": 48.2,
                         "y": 83.0
                     },
-                    "uuid": "de86ff32-3768-40e0-9921-93f4de0bc234"
+                    "uuid": "a36df03c-5adb-4f8a-8926-4019336da098"
                 }
             ],
             "severity": "warning",
@@ -970,14 +970,14 @@
                         "x": 48.2,
                         "y": 95.11
                     },
-                    "uuid": "81d7378b-1c55-4202-b7e8-f91adcbfa11b"
+                    "uuid": "c77a8482-99da-4f12-8a90-925904fde08b"
                 }
             ],
             "severity": "warning",
             "type": "footprint_symbol_field_mismatch"
         },
         {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 2-1')",
+            "description": "Field 'Description' differs (PCB: '', Schematic: 'ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 1-2 cut and 2-3 bridged')",
             "items": [
                 {
                     "description": "Footprint A1",
@@ -985,7 +985,7 @@
                         "x": 138.94,
                         "y": 50.0
                     },
-                    "uuid": "06742d5c-7ac0-4a83-967a-8de067497103"
+                    "uuid": "d17521df-c2a4-4eee-9f3d-06b079f3c465"
                 }
             ],
             "severity": "warning",
@@ -1000,7 +1000,7 @@
                         "x": 156.72,
                         "y": 60.16
                     },
-                    "uuid": "28319511-c4c4-4436-a2b1-d49a4d13f8fd"
+                    "uuid": "a892ad82-7b64-4bb6-8026-6885ec7c1874"
                 }
             ],
             "severity": "warning",
@@ -1015,7 +1015,7 @@
                         "x": 154.18,
                         "y": 39.84
                     },
-                    "uuid": "7050b7af-3f67-421a-88a8-b5173dc630d7"
+                    "uuid": "a1cd36da-a0fe-4c80-aea4-536dd89f7394"
                 }
             ],
             "severity": "warning",
@@ -1030,7 +1030,7 @@
                         "x": 151.64,
                         "y": 39.84
                     },
-                    "uuid": "90dbde72-24fa-4df2-8103-682a32edaff2"
+                    "uuid": "a34d7ac1-8d6d-4ae9-920c-a77acf64f256"
                 }
             ],
             "severity": "warning",
@@ -1045,7 +1045,7 @@
                         "x": 149.1,
                         "y": 39.84
                     },
-                    "uuid": "30fa04b6-d7c1-42d0-8047-719fde001c62"
+                    "uuid": "2de17118-5f48-40e8-9837-543570bee0cd"
                 }
             ],
             "severity": "warning",
@@ -1060,7 +1060,7 @@
                         "x": 112.4,
                         "y": 70.0
                     },
-                    "uuid": "428fa2c5-cf8b-4b5e-9905-de19c8016750"
+                    "uuid": "b7a078a6-4033-4ab0-bc75-cf2bb2be1152"
                 }
             ],
             "severity": "warning",
@@ -1075,7 +1075,7 @@
                         "x": 116.0,
                         "y": 75.5
                     },
-                    "uuid": "728418a0-10a0-4b93-ac54-7be7b12a2081"
+                    "uuid": "1468e95c-76a8-4ab8-b07d-2e1b298e94e8"
                 }
             ],
             "severity": "warning",
@@ -1090,7 +1090,7 @@
                         "x": 119.6,
                         "y": 70.0
                     },
-                    "uuid": "8423f46b-4248-47f9-af4f-f9bc7d3c2a8c"
+                    "uuid": "1c77d6da-b5e2-4bb8-b3fb-acc8c79e593e"
                 }
             ],
             "severity": "warning",
@@ -1105,7 +1105,7 @@
                         "x": 151.6,
                         "y": 70.0
                     },
-                    "uuid": "c026c60f-fef8-4819-bc60-22b8b13f495e"
+                    "uuid": "f1511a2c-4cbe-4287-8c88-82c77e881ba8"
                 }
             ],
             "severity": "warning",
@@ -1120,7 +1120,7 @@
                         "x": 143.6,
                         "y": 70.0
                     },
-                    "uuid": "28fe713f-0e3b-44ce-ad54-d0f1a18291d9"
+                    "uuid": "6dbeaa4f-caca-44c5-bd47-bfb8d166c012"
                 }
             ],
             "severity": "warning",
@@ -1135,7 +1135,7 @@
                         "x": 127.6,
                         "y": 70.0
                     },
-                    "uuid": "56905719-7d9a-4f41-b04a-ee9aa2dc78c4"
+                    "uuid": "e94f15ad-23cf-4dd8-ab61-2caa6e2a899c"
                 }
             ],
             "severity": "warning",
@@ -1150,14 +1150,14 @@
                         "x": 135.6,
                         "y": 70.0
                     },
-                    "uuid": "04724a7e-e646-42da-9ab5-bd55766063c9"
+                    "uuid": "add75efe-53e5-4d4d-a47e-e3d03440f70e"
                 }
             ],
             "severity": "warning",
             "type": "footprint_symbol_field_mismatch"
         },
         {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match')",
+            "description": "Field 'Description' differs (PCB: '', Schematic: 'SDA select (D-94, D-192): 1-2 bridged by copper = DevKit-RUST-1 (SDA GPIO10, pad 17). DevKit-RUST-2 (SDA GPIO7, pad 12): cut 1-2, bridge 2-3. Firmware SDA pin must match')",
             "items": [
                 {
                     "description": "Footprint JP11",
@@ -1165,7 +1165,7 @@
                         "x": 156.0,
                         "y": 70.0
                     },
-                    "uuid": "24336afa-c62b-4327-971c-29a72978306b"
+                    "uuid": "fec47a1f-0c34-48eb-b337-1abce995e1b4"
                 }
             ],
             "severity": "warning",
@@ -1180,7 +1180,7 @@
                         "x": 149.6,
                         "y": 75.5
                     },
-                    "uuid": "64ad7ede-c3b8-4edc-8336-99118810f78f"
+                    "uuid": "8633847c-a638-4aeb-b4fe-4e976069b44f"
                 }
             ],
             "severity": "warning",
@@ -1195,7 +1195,7 @@
                         "x": 140.0,
                         "y": 75.5
                     },
-                    "uuid": "710b3176-72ab-4d58-8be8-037282cbdbf1"
+                    "uuid": "4b8faa0d-0e02-43f3-b6f0-0bc4ff22b84d"
                 }
             ],
             "severity": "warning",
@@ -1210,7 +1210,7 @@
                         "x": 124.0,
                         "y": 75.5
                     },
-                    "uuid": "48ea2887-dbf3-4705-ab9b-5c1753434de4"
+                    "uuid": "78508770-07ae-4edb-b765-109c704c677c"
                 }
             ],
             "severity": "warning",
@@ -1225,7 +1225,7 @@
                         "x": 146.4,
                         "y": 75.5
                     },
-                    "uuid": "23467d1f-e4f9-4b8c-b649-092fc84eb0de"
+                    "uuid": "e013847f-61ce-4ffa-913e-faad56eed6e5"
                 }
             ],
             "severity": "warning",
@@ -1240,7 +1240,7 @@
                         "x": 119.3,
                         "y": 76.3
                     },
-                    "uuid": "2ba894cc-48a9-4b12-b483-5badb5a93fc5"
+                    "uuid": "28802d3a-5af0-41ca-9622-1b2b710b6e00"
                 }
             ],
             "severity": "warning",
@@ -1255,7 +1255,7 @@
                         "x": 132.0,
                         "y": 75.5
                     },
-                    "uuid": "1ee0f939-0c75-4e25-afff-e2b2989c02d8"
+                    "uuid": "04ae8a97-ac7d-4828-ac76-3a102f2b6ea7"
                 }
             ],
             "severity": "warning",
@@ -1270,7 +1270,7 @@
                         "x": 92.7,
                         "y": 37.0
                     },
-                    "uuid": "1392955b-5e88-4984-a87c-217fa06c77e4"
+                    "uuid": "a61aa504-332d-4836-937b-5fd8c5c11e8a"
                 }
             ],
             "severity": "warning",
@@ -1285,7 +1285,7 @@
                         "x": 95.24,
                         "y": 37.0
                     },
-                    "uuid": "95e7fe24-f231-42f3-bdf9-517678bd35a2"
+                    "uuid": "c635f476-e931-485b-86b8-4b144068c68d"
                 }
             ],
             "severity": "warning",
@@ -1300,7 +1300,7 @@
                         "x": 97.78,
                         "y": 37.0
                     },
-                    "uuid": "96bfcb92-578b-4cc9-b7f0-9f2e4b0b8fc8"
+                    "uuid": "9ee878f2-e2d7-4b15-b906-016ee5c07d6b"
                 }
             ],
             "severity": "warning",
@@ -1315,7 +1315,7 @@
                         "x": 80.0,
                         "y": 37.0
                     },
-                    "uuid": "152080c8-11c9-4e43-aacc-2d43df24468c"
+                    "uuid": "d24c5307-868c-4867-ac5a-df8e45bba753"
                 }
             ],
             "severity": "warning",
@@ -1330,7 +1330,7 @@
                         "x": 82.539999,
                         "y": 37.0
                     },
-                    "uuid": "97d24e36-6e43-46ef-b39e-a0081e440ac6"
+                    "uuid": "9593e577-c10e-4ee2-b1af-3dc3f09efacd"
                 }
             ],
             "severity": "warning",
@@ -1345,7 +1345,7 @@
                         "x": 85.08,
                         "y": 37.0
                     },
-                    "uuid": "41916096-1be3-4499-a556-6b4e5d2a8fd6"
+                    "uuid": "57cf29ae-b794-4268-9a1c-178f6a5583d8"
                 }
             ],
             "severity": "warning",
@@ -1360,7 +1360,7 @@
                         "x": 87.62,
                         "y": 37.0
                     },
-                    "uuid": "d5bf44a4-65b9-47e7-a404-a4137b0cafd1"
+                    "uuid": "7683e329-ea1b-4764-894a-ef5a607e8d4f"
                 }
             ],
             "severity": "warning",
@@ -1375,7 +1375,7 @@
                         "x": 116.0,
                         "y": 70.0
                     },
-                    "uuid": "e49c4512-244e-4cce-8ddf-3dde1aa2b084"
+                    "uuid": "0faf047a-c5ca-4336-819c-c7895091a2d1"
                 }
             ],
             "severity": "warning",
@@ -1390,7 +1390,7 @@
                         "x": 148.0,
                         "y": 70.0
                     },
-                    "uuid": "09b87093-7559-4482-9f83-cf73d8b9e3e0"
+                    "uuid": "a9320614-13d0-4f3d-b432-87cf3d5733e7"
                 }
             ],
             "severity": "warning",
@@ -1405,7 +1405,7 @@
                         "x": 140.0,
                         "y": 70.0
                     },
-                    "uuid": "88ba7428-38c3-44ee-ab00-31b861f683c7"
+                    "uuid": "5c814eec-52c8-441b-a13a-57968ca0769d"
                 }
             ],
             "severity": "warning",
@@ -1420,7 +1420,7 @@
                         "x": 124.0,
                         "y": 70.0
                     },
-                    "uuid": "71d1f10d-73f7-4ea9-b3a0-d5d26d742279"
+                    "uuid": "c5dce198-f7a8-4666-b869-7bd7f14ceed2"
                 }
             ],
             "severity": "warning",
@@ -1435,7 +1435,7 @@
                         "x": 132.0,
                         "y": 70.0
                     },
-                    "uuid": "dcb567ef-672f-44a3-880d-e60f9e58278c"
+                    "uuid": "b48da202-15b0-425d-8d80-2f6dd56a8f41"
                 }
             ],
             "severity": "warning",

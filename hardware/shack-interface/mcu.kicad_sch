@@ -1692,7 +1692,7 @@
 		)
 		(embedded_fonts no)
 	)
-		(symbol "shack-interface:SolderJumper_3_Open"
+		(symbol "shack-interface:SolderJumper_3_Bridged12"
 		(pin_names (offset 0.254) (hide yes))
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1700,16 +1700,17 @@
 		(in_pos_files yes)
 		(duplicate_pin_numbers_are_jumpers no)
 		(property "Reference" "U" (at 0 2.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Value" "SolderJumper_3_Open" (at 0 -2.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "SolderJumper_3_Bridged12" (at 0 -2.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-		(property "Description" "Solder jumper, 3 pads, open; bridge 2-1 or 2-3" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-		(symbol "SolderJumper_3_Open_0_1"
+		(property "Description" "Solder jumper, 3 pads, 1-2 bridged by copper; cut 1-2 and bridge 2-3 for the other setting" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+		(symbol "SolderJumper_3_Bridged12_0_1"
 			(rectangle (start -2.54 1.27) (end 2.54 -1.27) (stroke (width 0.254) (type default)) (fill (type background)))
 			(polyline (pts (xy -0.635 1.27) (xy -0.635 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
 			(polyline (pts (xy 0.635 1.27) (xy 0.635 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
+			(polyline (pts (xy -1.27 0) (xy 0 0)) (stroke (width 0.254) (type default)) (fill (type none)))
 		)
-		(symbol "SolderJumper_3_Open_1_1"
+		(symbol "SolderJumper_3_Bridged12_1_1"
 			(pin passive line (at -5.08 0 0) (length 2.54) (name "" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
 			(pin passive line (at 0 -5.08 90) (length 3.81) (name "" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
 			(pin passive line (at 5.08 0 180) (length 2.54) (name "" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -1829,7 +1830,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12), rows 20.32 mm apart (D-55, D-66, D-93, D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP61 2-1"
+		(property "Description" "ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12), rows 20.32 mm apart (D-55, D-66, D-93, D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP61 1-2 cut and 2-3 bridged"
 			(at 101.6 170.18 0)
 			(hide yes)
 			(show_name no)
@@ -5444,7 +5445,7 @@
 		(uuid "561343bb-3c50-5bcf-b810-201396fbc254")
 	)
 	(symbol
-		(lib_id "shack-interface:SolderJumper_3_Open")
+		(lib_id "shack-interface:SolderJumper_3_Bridged12")
 		(at 274.32 121.92 270)
 		(unit 1)
 		(body_style 1)
@@ -5476,7 +5477,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels"
+		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels"
 			(at 274.32 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -5500,7 +5501,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match"
+		(property "Description" "SDA select (D-94, D-192): 1-2 bridged by copper = DevKit-RUST-1 (SDA GPIO10, pad 17). DevKit-RUST-2 (SDA GPIO7, pad 12): cut 1-2, bridge 2-3. Firmware SDA pin must match"
 			(at 274.32 121.92 0)
 			(hide yes)
 			(show_name no)
@@ -5560,7 +5561,7 @@
 		)
 		(uuid "6f5034cd-29b5-586b-a1bf-ba9210d5a781")
 	)
-	(label "SDA_IO7"
+	(label "SDA_IO10"
 		(at 274.32 111.76 90)
 		(effects
 			(font
@@ -5580,7 +5581,7 @@
 		)
 		(uuid "f4b184b3-a88f-5ff7-a09d-2bf1d0fb3194")
 	)
-	(label "SDA_IO10"
+	(label "SDA_IO7"
 		(at 274.32 132.08 270)
 		(effects
 			(font
@@ -7217,7 +7218,7 @@
 		)
 		(uuid "aa7f757b-cc4c-5b6d-8b61-0e1a37864293")
 	)
-	(text "MCU: ESP32-C3 Rust board (A1) in two socket headers, the same module as the box (D-66). DevKit-RUST-1 Rev 1.2a fitted, RUST-2 also fits.\nPads as the esp-rs Rust_Board footprint: left 1..16, right 28..17 top to bottom (D-93). SDA SEL JP61: 2-3 RUST-1 (SDA IO10), 2-1 RUST-2 (SDA IO7) (D-94). Net labels at the DevKit pins; everything else is wired. 3V3 pin from the LD1117 (power sheet); EN low keeps the board buck off;\n5V not connected. USB-C to the Mac (Delock 64226) or the Pi (D-68).\nDirect GPIO (D-83): IO0 PERMIT_R1, IO1 WDI (kick at least every 0.9 s), IO3 LATCH_CLR (rising edge), IO4 PERMIT_R2, IO5 PERMIT_R3,\nIO6 DATA_TX, IO20 DATA_RX, IO21 SAFE_LOST (boot-ROM log pin, 1k series). SDA IO10 or IO7, SCL IO8 (board 10k pull-ups, SHTC3 0x70, IMU 0x68).\nIO2 DISP_SCK (WS2812 on the board sees only short pulses), IO9 DISP_MOSI (BOOT button: a press only disturbs the picture); both straps keep their pull-ups (D-180).\nBoard LED on IO7 (RUST-1) or IO10 (RUST-2): the SDA pin of the other board.\nFault latch (D-59): FAULT set at power-up, brown-out and watchdog time-out; cleared by a LATCH_CLR edge only when RESET_N is high.\nFAULT goes to the SAFE sheet and blocks every permit in hardware. RESET_N also resets the PCA9539: keys off, SW_STOP_N released.\nPCA9539 0x74 (D-92): IO0_0 SW_STOP_N (out), IO0_1 R1_TX, IO0_2 KEY_R1 (out), IO0_3 BAND_D, IO0_4 BAND_A, IO0_5 BAND_B, IO0_6 BAND_C,\nIO0_7 DISP_BL (out), IO1_0 KEY_R2 (out), IO1_1 R2_TX, IO1_2 DISP_DC (out), IO1_3 KEY_R3 (out), IO1_4 R3_TX, IO1_5 DISP_RST (out),\nIO1_6 KILL_S, IO1_7 LATCHED. Inputs not marked. Write outputs 0 before configuring (F1)."
+	(text "MCU: ESP32-C3 Rust board (A1) in two socket headers, the same module as the box (D-66). DevKit-RUST-1 Rev 1.2a fitted, RUST-2 also fits.\nPads as the esp-rs Rust_Board footprint: left 1..16, right 28..17 top to bottom (D-93). SDA SEL JP61: 1-2 bridged by copper = RUST-1 (SDA IO10); RUST-2 (SDA IO7): cut 1-2, bridge 2-3 (D-94, D-192). Net labels at the DevKit pins; everything else is wired. 3V3 pin from the LD1117 (power sheet); EN low keeps the board buck off;\n5V not connected. USB-C to the Mac (Delock 64226) or the Pi (D-68).\nDirect GPIO (D-83): IO0 PERMIT_R1, IO1 WDI (kick at least every 0.9 s), IO3 LATCH_CLR (rising edge), IO4 PERMIT_R2, IO5 PERMIT_R3,\nIO6 DATA_TX, IO20 DATA_RX, IO21 SAFE_LOST (boot-ROM log pin, 1k series). SDA IO10 or IO7, SCL IO8 (board 10k pull-ups, SHTC3 0x70, IMU 0x68).\nIO2 DISP_SCK (WS2812 on the board sees only short pulses), IO9 DISP_MOSI (BOOT button: a press only disturbs the picture); both straps keep their pull-ups (D-180).\nBoard LED on IO7 (RUST-1) or IO10 (RUST-2): the SDA pin of the other board.\nFault latch (D-59): FAULT set at power-up, brown-out and watchdog time-out; cleared by a LATCH_CLR edge only when RESET_N is high.\nFAULT goes to the SAFE sheet and blocks every permit in hardware. RESET_N also resets the PCA9539: keys off, SW_STOP_N released.\nPCA9539 0x74 (D-92): IO0_0 SW_STOP_N (out), IO0_1 R1_TX, IO0_2 KEY_R1 (out), IO0_3 BAND_D, IO0_4 BAND_A, IO0_5 BAND_B, IO0_6 BAND_C,\nIO0_7 DISP_BL (out), IO1_0 KEY_R2 (out), IO1_1 R2_TX, IO1_2 DISP_DC (out), IO1_3 KEY_R3 (out), IO1_4 R3_TX, IO1_5 DISP_RST (out),\nIO1_6 KILL_S, IO1_7 LATCHED. Inputs not marked. Write outputs 0 before configuring (F1)."
 		(exclude_from_sim no)
 		(at 25.4 22.86 0)
 		(effects

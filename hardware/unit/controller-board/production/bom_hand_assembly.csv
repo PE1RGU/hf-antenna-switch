@@ -8,7 +8,7 @@ Qty per board,References,Value,Footprint,First source,Second source,Specificatio
 4,GD1 GD2 GD3 GD4,2036-09-B2LF,GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R,Bourns 2036-09-B2LF,Littelfuse SL1003A090R-001,"3-electrode GDT 90 V (D-58, D-149)"
 1,J1,RJ45 LINK,RJ45_8P8C_Unshielded_TabDown,Wurth 615008137121,Molex 95501-2881,"RJ45 8P8C unshielded, tab down (D-138)"
 1,J2,to RF board J14,PinSocket_2x12_P2.54mm_Vertical,Samtec ESQ-112-33-G-D,Samtec ESW-112-33-G-D,"Elevated socket 2 x 12, 16.13 mm, fitted on the bottom side (D-139)"
-1,JP11,SDA SEL,SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels,-,-,Solder jumper: bridge 2-3 for RUST-1 (no part)
+1,JP11,SDA SEL,SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels,-,-,"Solder jumper, 1-2 bridged by copper for RUST-1; RUST-2: cut 1-2, bridge 2-3 (no part, D-192)"
 4,L1 L2 L3 L4,51u CMC,L_CMC_TDK_ACT45B,TDK ACT45B-510-2P-TL003,Murata DLW43SH510XK2L / Coilcraft 1812CAN-513NRC,"Common-mode choke 51 uH 1812 (D-149, D-151)"
 1,Q4,BSS138BK,SOT-23,"Nexperia BSS138BK,215",Diotec MMFTN138K,N-MOSFET (D-134)
 8,R11 R12 R21 R22 R31 R32 R41 R42,47R,R_MELF_MMB-0207,Vishay MMB02070C4709FB200,TE Neohm SMA-A 0207 47R 1 %,"Thin-film MELF 0207 1 W, pulse (C-39, D-151)"

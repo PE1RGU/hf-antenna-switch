@@ -64,6 +64,9 @@ C = "/MCU and safety gate/"
 check(members(ct_nets, C + "RLY_EN") == {("U14", "4"), ("J2", "7")}, "Controller: RLY_EN = U14 output to J2 pin 7 only")
 check({("U14", "3")} <= members(ct_nets, "/Link and PTT/KILL") and {("U14", "1")} <= members(ct_nets, C + "MCU_EN_N")
       and members(ct_nets, C + "FAULT") == {("U13", "5"), ("U14", "6"), ("U15", "2"), ("R66", "1")}, "U14 NOR inputs: KILL (pin 3), MCU_EN_N (pin 1), FAULT = U13 Q (pin 6); FAULT also to the READY gate U15 (D-62) and to R66")
+check(ct_parts["JP11"][1].endswith("SolderJumper_3_Bridged12") and ct_pin[("JP11", "1")] == C + "SDA_IO10"
+      and ct_pin[("JP11", "3")] == C + "SDA_IO7" and ("A1", "17") in members(ct_nets, C + "SDA_IO10"),
+      "SDA select JP11: pad 1 (bridged to 2 by copper) = SDA_IO10 = DevKit pad 17, the RUST-1 default the firmware uses (D-192)")
 check(members(ct_nets, C + "FAULT_IO6") == {("R66", "2"), ("A1", "11")} and ct_parts["R66"][0] == "1k",
       "FAULT read-back: R66 1k from FAULT to DevKit pin 11 (GPIO6), input only (D-191)")
 check(members(ct_nets, C + "RESET_N") == {("U12", "1"), ("U13", "7")}, "U13 PRE_N (pin 7) = U12 RESET_N only")

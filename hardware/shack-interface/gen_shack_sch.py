@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "shack-interface"
 DATE = "2026-10-19"
-GENERATOR_REV = "a18-reuse"
+GENERATOR_REV = "a19-sda-bridged"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -310,6 +310,12 @@ SYMS["shack-interface:SolderJumper_3_Open"] = mk_sym("SolderJumper_3_Open", "Sol
     [("1", "", "passive", "line", -5.08, 0, 0, 2.54), ("3", "", "passive", "line", 5.08, 0, 180, 2.54),
      ("2", "", "passive", "line", 0, -5.08, 90, 3.81)],
     lines=[[(-0.635, 1.27), (-0.635, -1.27)], [(0.635, 1.27), (0.635, -1.27)]], hide_names=True, ref=(0, 2.54), val=(0, -2.54))
+# the same, with pads 1 and 2 joined by copper on the board (D-192): the bar across the left gap
+SYMS["shack-interface:SolderJumper_3_Bridged12"] = mk_sym("SolderJumper_3_Bridged12", "Solder jumper, 3 pads, 1-2 bridged by copper; cut 1-2 and bridge 2-3 for the other setting",
+    (-2.54, 1.27, 2.54, -1.27),
+    [("1", "", "passive", "line", -5.08, 0, 0, 2.54), ("3", "", "passive", "line", 5.08, 0, 180, 2.54),
+     ("2", "", "passive", "line", 0, -5.08, 90, 3.81)],
+    lines=[[(-0.635, 1.27), (-0.635, -1.27)], [(0.635, 1.27), (0.635, -1.27)], [(-1.27, 0), (0, 0)]], hide_names=True, ref=(0, 2.54), val=(0, -2.54))
 # mini-DIN 8 socket with the shield as pin 9; pin names = FT-710 TUNER/LINEAR pin-out (D-71, A-15)
 DIN_NAMES = ["BD/KEY", "TX INH", "BAND C", "BAND B", "GND", "+13V", "BAND A", "TX GND"]
 SYMS["shack-interface:MD-80SM"] = mk_sym("MD-80SM", "Mini-DIN 8 socket, PCB, right angle, side shielded (Same Sky MD-SM rev 1.09). Pin 9 = shield tabs",
@@ -600,7 +606,7 @@ def mcu_sheet():
     XL, XRT, YBOT = 30.48, 388.62, 254.0                     # left, right and bottom edge of the drawing (hierarchical labels)
     # ---- DevKit: one board symbol, a short wire and a net label at each used pin (D-93) ----
     A1 = S.part("shack-interface:ESP32-C3-DevKit-RUST", ("A", 1), "ESP32-C3-DevKit-RUST-1", "shack-interface:ESP32-C3-DevKit-RUST_Socket", 101.6, 170.18,
-                rp=(-15.24, -27.94), desc="ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12), rows 20.32 mm apart (D-55, D-66, D-93, D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP61 2-1")
+                rp=(-15.24, -27.94), desc="ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12), rows 20.32 mm apart (D-55, D-66, D-93, D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP61 1-2 cut and 2-3 bridged")
     assert A1["1"] == (83.82, 152.4) and A1["16"] == (83.82, 190.5) and A1["28"] == (119.38, 162.56) and A1["17"] == (119.38, 190.5), A1
     dk = {5: "PERMIT_R1", 6: "WDI", 7: "DISP_SCK", 8: "LATCH_CLR", 9: "PERMIT_R2", 10: "PERMIT_R3", 11: "DATA_TX", 12: "SDA_IO7", 13: "SCL",
           15: "DATA_RX", 16: "DISP_MOSI"}                    # IO2 SCK, IO9 MOSI: display SPI (D-180)
@@ -674,13 +680,13 @@ def mcu_sheet():
                 "Defaults after reset: all inputs, output register 1: write outputs 0 before configuring (F1)")
     assert U5["22"] == (254.0, 119.38) and U5["23"] == (254.0, 121.92) and U5["3"] == (254.0, 142.24) and U5["4"] == (228.6, 119.38), U5
     S.wire(U5["22"], (259.08, 119.38)); S.label("L", "SCL", 259.08, 119.38, 0)
-    JS = S.part("shack-interface:SolderJumper_3_Open", ("JP", 61), "SDA SEL", "Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels",
+    JS = S.part("shack-interface:SolderJumper_3_Bridged12", ("JP", 61), "SDA SEL", "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels",
                 274.32, 121.92, rot=270, rp=(2.54, 3.81),
-                desc="SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match")
+                desc="SDA select (D-94, D-192): 1-2 bridged by copper = DevKit-RUST-1 (SDA GPIO10, pad 17). DevKit-RUST-2 (SDA GPIO7, pad 12): cut 1-2, bridge 2-3. Firmware SDA pin must match")
     assert JS["2"] == (269.24, 121.92) and JS["1"] == (274.32, 116.84) and JS["3"] == (274.32, 127.0), JS
     S.wire(U5["23"], JS["2"]); S.label("L", "SDA", 256.54, 121.92, 0)
-    S.wire(JS["1"], (274.32, 111.76)); S.label("L", "SDA_IO7", 274.32, 111.76, 90)
-    S.wire(JS["3"], (274.32, 132.08)); S.label("L", "SDA_IO10", 274.32, 132.08, 270)
+    S.wire(JS["1"], (274.32, 111.76)); S.label("L", "SDA_IO10", 274.32, 111.76, 90)
+    S.wire(JS["3"], (274.32, 132.08)); S.label("L", "SDA_IO7", 274.32, 132.08, 270)
     S.wire((XR, 66.04), (XR, 142.24), U5["3"]); S.label("L", "RESET_N", 257.81, 142.24, 0)
     NC(U5["1"])
     S.wire(U5["21"], (259.08, U5["21"][1])); S.wire(U5["2"], (259.08, U5["2"][1]))
@@ -718,7 +724,7 @@ def mcu_sheet():
     for nm, xt, yt in (("LATCHED", 226.06, 177.8), ("KILL_S", 223.52, 180.34)):
         S.wire(io[nm], (xt, io[nm][1]), (xt, yt), (XRT, yt)); S.label("H", nm, XRT, yt, 0)
     S.text("MCU: ESP32-C3 Rust board (A1) in two socket headers, the same module as the box (D-66). DevKit-RUST-1 Rev 1.2a fitted, RUST-2 also fits.\\n"
-           "Pads as the esp-rs Rust_Board footprint: left 1..16, right 28..17 top to bottom (D-93). SDA SEL JP61: 2-3 RUST-1 (SDA IO10), 2-1 RUST-2 (SDA IO7) (D-94). Net labels at the DevKit pins; everything else is wired. 3V3 pin from the LD1117 (power sheet); EN low keeps the board buck off;\\n"
+           "Pads as the esp-rs Rust_Board footprint: left 1..16, right 28..17 top to bottom (D-93). SDA SEL JP61: 1-2 bridged by copper = RUST-1 (SDA IO10); RUST-2 (SDA IO7): cut 1-2, bridge 2-3 (D-94, D-192). Net labels at the DevKit pins; everything else is wired. 3V3 pin from the LD1117 (power sheet); EN low keeps the board buck off;\\n"
            "5V not connected. USB-C to the Mac (Delock 64226) or the Pi (D-68).\\n"
            "Direct GPIO (D-83): IO0 PERMIT_R1, IO1 WDI (kick at least every 0.9 s), IO3 LATCH_CLR (rising edge), IO4 PERMIT_R2, IO5 PERMIT_R3,\\n"
            "IO6 DATA_TX, IO20 DATA_RX, IO21 SAFE_LOST (boot-ROM log pin, 1k series). SDA IO10 or IO7, SCL IO8 (board 10k pull-ups, SHTC3 0x70, IMU 0x68).\\n"

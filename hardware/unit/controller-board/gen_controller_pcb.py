@@ -11,8 +11,8 @@ import json, os, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "c-s6"
-BOARD, PRO, NETLIST = "controller-board.kicad_pcb", "controller-board.kicad_pro", "../verify/ctl16.xml"
+REV = "c-s7"
+BOARD, PRO, NETLIST = "controller-board.kicad_pcb", "controller-board.kicad_pro", "../verify/ctl17.xml"
 RF_BOARD = "../rf-board/rf-board.kicad_pcb"
 OX, OY = 20.0, 20.0                                   # page offset of the RF frame origin (same as the RF board)
 X0, Y0, X1, Y1, RC = 1.0, -2.0, 153.0, 120.5, 3.0   # outline (RF frame): 4 mm left of S2, 1 mm from the top wall (y -3)
@@ -389,7 +389,7 @@ TPSIG = {"TP5": "SCL", "TP6": "SDA", "TP7": "EXP_INT", "TP8": "RLY_EN", "TP9": "
 for ref, sig in TPSIG.items():
     x = pcbnew.ToMM(fps[ref].GetPosition().x) - OX
     text(f"{ref} {sig}", x, YTP + 6.5, rot=90, just="r")      # reads upward, hangs below the K0 link row
-for i, s in enumerate(("JP11 SDA", "1-2 IO7", "2-3 IO10")):
+for i, s in enumerate(("JP11 SDA", "1-2 IO10", "2-3 IO7")):
     text(s, 139.5, 48.0 + 1.6 * i, just="l")
 # art block (front): project, board, revision, date code (update at each order), call; the safety gate as an IEC 60617 NOR
 AX, AY = 64.0, 88.0

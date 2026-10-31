@@ -103,6 +103,10 @@ check(ct[("R35", "2")] == ct[("U16", "4")] and ct[("R35", "1")] == ct[("U6", "1"
 check(ct_parts.get("U16", ("",))[0] == "74LVC1G08" and ct[("U16", "1")] == ct[("U15", "4")]
       and mem(ct_nets, ct[("J2", "17")]) == {("J2", "17"), ("U16", "2"), ("R36", "1")} and ct[("R36", "2")] == "GND" and ct_parts["R36"][0] == "100k",
       "U16 = AND(READY_ON, RF_A2_N): RF_A2_N from J2 pin 17 (RF board A2 detector), R36 100k pull-down: J2 open = READY open (D-104)")
+M_ = "/MCU and expander/"
+check(si_parts["JP61"][1].endswith("SolderJumper_3_Bridged12") and si[("JP61", "1")] == M_ + "SDA_IO10"
+      and si[("JP61", "3")] == M_ + "SDA_IO7" and ("A1", "17") in mem(si_nets, M_ + "SDA_IO10"),
+      "SDA select JP61: pad 1 (bridged to 2 by copper) = SDA_IO10 = DevKit pad 17, the RUST-1 default the firmware uses (D-192)")
 check(ct_parts["U15"][0] == "74LVC1G02" and ct[("U15", "1")] == G + "MCU_EN_N" and ct[("U15", "2")] == G + "FAULT",
       "READY_ON = NOR(MCU_EN_N, FAULT) (U15); KILL is not an input, so the loop can start")
 p("")
