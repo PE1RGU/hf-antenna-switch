@@ -202,6 +202,8 @@ impl FaultCode {
     pub const LINK_TIMEOUT_PERMIT: FaultCode = FaultCode(4);
     /// The SAFE loop did not close at start-up (F11).
     pub const SAFE_NOT_CLOSED: FaultCode = FaultCode(5);
+    /// Link time-out with no permit out: the box holds the routes (P-02).
+    pub const LINK_TIMEOUT: FaultCode = FaultCode(6);
 }
 
 /// Status byte 1: the box state flags. Bits 6 and 7 are reserved and always 0.

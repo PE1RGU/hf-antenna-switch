@@ -10,4 +10,6 @@ authors.workspace = true
 workspace = true
 
 [dependencies]
+embedded-hal = "1"
+pca9539 = { version = "0.1.0", path = "../pca9539" }
 link-proto = { version = "0.1.0", path = "../link-proto" }
