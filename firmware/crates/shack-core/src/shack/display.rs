@@ -28,6 +28,22 @@ pub const ROWS_PER_TICK: u32 = 48;
 pub const AUTO_FLOW_MS: Ms = 10_000;
 /// `page auto`: time on page C (cards) in ms, after [`AUTO_FLOW_MS`] on page B.
 pub const AUTO_CARDS_MS: Ms = 5_000;
+/// Power-up test pattern: eight colour bars for this long, once, the first time
+/// the display is ready. For the eye: the display has no read-back.
+pub const TEST_PATTERN_MS: Ms = 1_000;
+/// The bars, left to right, in RGB565: white, yellow, cyan, green, magenta, red,
+/// blue, black.
+const BARS: [u16; 8] = [
+    0xFFFF, 0xFFE0, 0x07FF, 0x07E0, 0xF81F, 0xF800, 0x001F, 0x0000,
+];
+
+/// The power-up test pattern: not shown yet, shown until a time, or done.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(super) enum Pattern {
+    Pending,
+    Until(Ms),
+    Done,
+}
 
 /// Start-up phase of the ST7789. Each phase waits for its time, then moves on.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -54,6 +70,7 @@ pub(super) struct Display {
     backlight: bool,
     drawn: Option<(UiState, Page)>,
     next_row: Option<u32>,
+    pattern: Pattern,
 }
 
 impl Display {
@@ -66,6 +83,7 @@ impl Display {
             backlight: false,
             drawn: None,
             next_row: None,
+            pattern: Pattern::Pending,
         }
     }
 
@@ -79,8 +97,14 @@ impl Display {
 
     /// Expander lost: its pins are inputs again, the display is in reset.
     pub(super) fn lost(&mut self) {
+        // The pattern shows once: a reset while it shows ends it.
+        let pattern = match self.pattern {
+            Pattern::Pending => Pattern::Pending,
+            _ => Pattern::Done,
+        };
         *self = Display {
             sel: self.sel,
+            pattern,
             ..Display::new()
         };
     }
@@ -160,26 +184,44 @@ impl Shack {
     /// Send the next chunk of a frame, or start a new frame when the screen changed.
     fn frame_step<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
         if self.display.next_row.is_none() {
-            let state = self.ui_state();
-            let page = state.page(self.display.chosen(now));
-            if self.display.drawn.as_ref() == Some(&(state.clone(), page)) {
-                return;
+            match self.display.pattern {
+                Pattern::Pending => {
+                    colour_bars(hw.framebuffer());
+                    self.start_frame(hw);
+                    self.display.drawn = None;
+                    self.display.pattern = Pattern::Until(now + TEST_PATTERN_MS);
+                }
+                Pattern::Until(t) if now < t => return,
+                _ => {
+                    self.display.pattern = Pattern::Done;
+                    let state = self.ui_state();
+                    let page = state.page(self.display.chosen(now));
+                    if self.display.drawn.as_ref() == Some(&(state.clone(), page)) {
+                        return;
+                    }
+                    shack_ui::render(&mut FrameBuffer::new(hw.framebuffer()), &state, page);
+                    self.start_frame(hw);
+                    self.display.drawn = Some((state, page));
+                }
             }
-            shack_ui::render(&mut FrameBuffer::new(hw.framebuffer()), &state, page);
-            for (c, args) in st7789::window(0, 0, shack_ui::WIDTH as u16 - 1, HEIGHT as u16 - 1) {
-                self.lcd_cmd(hw, c, &args);
-            }
-            self.lcd_cmd(hw, st7789::RAMWR, &[]);
-            // Pixel data follows: D/C stays high for all chunks of this frame.
-            self.set_dc(hw, true);
-            self.display.drawn = Some((state, page));
-            self.display.next_row = Some(0);
         }
         if let Some(row) = self.display.next_row {
             let end = (row + ROWS_PER_TICK).min(HEIGHT);
             hw.spi_write_framebuffer(row as usize * ROW_BYTES, end as usize * ROW_BYTES);
             self.display.next_row = (end < HEIGHT).then_some(end);
         }
+    }
+
+    /// Window to the full screen, RAMWR, D/C high: the frame buffer follows in
+    /// chunks, from row 0.
+    fn start_frame<H: ShackHw>(&mut self, hw: &mut H) {
+        for (c, args) in st7789::window(0, 0, shack_ui::WIDTH as u16 - 1, HEIGHT as u16 - 1) {
+            self.lcd_cmd(hw, c, &args);
+        }
+        self.lcd_cmd(hw, st7789::RAMWR, &[]);
+        // Pixel data follows: D/C stays high for all chunks of this frame.
+        self.set_dc(hw, true);
+        self.display.next_row = Some(0);
     }
 
     /// Snapshot of what the display shows.
@@ -265,7 +307,7 @@ impl Shack {
             rx_only: ColMask::EMPTY.with(Col::A2),
             warnings,
             stop,
-            fault: self.fault_known,
+            fault: self.fault_known || matches!(self.selftest, host_proto::SelfTestState::Fail(_)),
             antenna_names: self.config.antenna_names,
             radio_names: self.config.radio_names,
         }
@@ -284,5 +326,14 @@ impl Shack {
     /// The page the display shows at `now` (Safe stop takes over from the chosen page).
     pub fn shown_page(&self, now: Ms) -> Page {
         self.ui_state().page(self.display.chosen(now))
+    }
+}
+
+/// Eight vertical colour bars ([`BARS`]) into the frame buffer.
+fn colour_bars(fb: &mut [u8]) {
+    let w = shack_ui::WIDTH as usize;
+    for (n, px) in fb.as_chunks_mut::<2>().0.iter_mut().enumerate() {
+        let x = n % w;
+        *px = BARS[x * BARS.len() / w].to_be_bytes();
     }
 }

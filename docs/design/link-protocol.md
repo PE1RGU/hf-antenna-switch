@@ -105,7 +105,19 @@ Status payload (12 bytes):
 
 ### 4.2 Fault codes
 
-1 expander NACK, 2 read-back mismatch, 3 bias-T fault, 4 link time-out with permit out, 5 SAFE loop did not close at start-up (F11), 6 link time-out with no permit out (P-02). More codes are added with the box firmware. The field holds the last fault since the box powered up.
+1 expander NACK, 2 read-back mismatch, 3 bias-T fault, 4 link time-out with permit out, 5 SAFE loop did not close at start-up (F11), 6 link time-out with no permit out (P-02), 7 to 10 from the power-up self-test (below). More codes are added with the box firmware. The field holds the last fault since the box powered up.
+
+Power-up self-test of the box (Prins, 2026-10-31). It runs the first time the SAFE loop closes after power-up, before any relay can move; no relay moves during it. It takes 1 to 3.5 s.
+
+| Step | Check | Fail |
+|---|---|---|
+| Gate | MCU_EN_N = 1 opens READY (KILL = 1) and drops RLY_EN (no expander answers); MCU_EN_N = 0 closes the loop again within 100 ms | 7 |
+| Expanders | F1 set-up and read-back of all four | 1 or 2 |
+| Inputs | TX_ANY = 0, R1 K0 read-back equal to TX_ANY (F3), no RF on a detector, no bias-T OK with its feed off | 10, a warning: the box runs |
+| Watchdog | The WDI kicks stop; KILL must go to 1 (FAULT opens READY) between 0.5 s and 3 s after the last kick | 8 |
+| Latch | Kicks resume; 400 ms later one more LATCH_CLR edge (the cause is known, D-59 rule 2); the loop must close within 100 ms | 9 |
+
+After a fail the box keeps MCU_EN_N high (SAFE open, no relay can move), keeps answering with READY = 0 and the fault code, and refuses every command with NotReady until a power cycle. With R64 open (watchdog off, D-123) the box does not start. The loop opens twice during the test, so the shack SAFE latch is set; RESET at the shack comes after the test, as after any power-up.
 
 ## 5. Exchange
 

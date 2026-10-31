@@ -112,6 +112,22 @@ Sent on every change (when events are on). One line each.
 | `!txsense <radio> nopermit` | TX sense active without the permit for more than 50 ms, outside the 500 ms after an inhibit: the radio transmits while inhibited (no TX INH input, or a wiring fault). A warning only; nothing stops by itself (F15, D-188) |
 | `!route <radio> <tx col> <rx col>` | Route as read back from the box |
 | `!host timeout` | Host keep-alive missed: TX ended (section 8) |
+| `!selftest pass` / `!selftest fail <item>` | The power-up self-test ended (section 6a). After a fail, TX stays blocked until a power cycle. Items: `expander`, `latch`, `watchdog` |
+| `!selftest warn <item>` | Unexpected at start-up, TX not blocked: `txsense <radio>` (TX sense active), `i2c <address>` (SHTC3 0x70 or IMU 0x68 did not answer) |
+
+## 6a. Power-up self-test
+
+Decided by Prins, 2026-10-31. The shack tests its own safety hardware after power-up, before TX can be enabled. No radio is keyed and no permit goes out during the test.
+
+1. Expander: the PCA9539 must answer and read back (F1 set-up) within 1 s of power-up. Fail: `expander`.
+2. SAFE latch: it must read set (POR_N holds it set at power-up, D-84). Fail: `latch`.
+3. Start-up inputs, warnings only: TX sense of each radio inactive; the DevKit parts SHTC3 (0x70) and IMU (0x68) answer.
+4. Watchdog: the WDI kicks stop. The supervisor must trip, which resets the expander, between 0.5 s and 3 s after the last kick (TPS3823 time-out 0.9 to 2.5 s, C-19). Fail: `watchdog`. With R64 open (watchdog off, D-123) this always fails.
+5. The kicks resume. When the expander answers again (RESET_N high), the shack gives its one LATCH_CLR edge (D-59 rule 2) and the test has passed.
+
+The test takes 1 to 3 s. A fail means no LATCH_CLR edge: the fault latch keeps TX_EN low in hardware until a power cycle, the shack gives no permit, and `clearfault` does not apply. The display shows the colour bars test pattern (eight bars, 1 s) the first time it starts; it has no read-back, so this check is for the eye. The display shows a fault after a failed test.
+
+The box runs its own self-test (link-protocol.md section 4.2, fault codes 7 to 10); the shack shows its result as `boxfault`.
 
 ## 7. Status line
 
@@ -120,8 +136,10 @@ Sent on every change (when events are on). One line each.
 ```
 ok link=up safe=ok latched=0 kill=0 fault=0 stop=0 keepalive=2 page=b band=5 box=ready
    r1=A1/A1,permit=1,key=0 r2=A3/A3,tx=permitted,permit=1,key=1 r3=-/-,tx=idle,permit=0,key=0
-   k1=A1,A3 rfdet=- bias=- boxfault=0
+   k1=A1,A3 rfdet=- bias=- boxfault=0 selftest=pass
 ```
+
+`selftest` is `running`, `pass` or `fail-<item>` (section 6a).
 
 (One line on the wire; wrapped here for reading. About 200 characters: the 120-character limit is for host lines only. Unknown values read `?`, for example `box=?` before the first box status.)
 

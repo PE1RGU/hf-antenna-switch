@@ -1977,6 +1977,7 @@ version = "0.1.0"
 dependencies = [
  "box-core",
  "embedded-hal",
+ "host-proto",
  "link-proto",
  "shack-core",
  "sim-box",

@@ -30,13 +30,14 @@
 //! follows the box status (C-1).
 
 mod display;
-pub use display::{AUTO_CARDS_MS, AUTO_FLOW_MS, ROWS_PER_TICK};
+pub use display::{AUTO_CARDS_MS, AUTO_FLOW_MS, ROWS_PER_TICK, TEST_PATTERN_MS};
 mod host;
 
 use crate::board::{EXPANDER_ADDR, ExpPin, exp, expander_config};
 use crate::config::{CONFIG_MAX, Config};
 use crate::hw::ShackHw;
 use heapless::Deque;
+use host_proto::{SelfTestItem, SelfTestState};
 use link_proto::frame::MAX_WIRE;
 use link_proto::shack_link::{Event as LinkEvent, ShackLink};
 use link_proto::{Command, Decoder, Ms, Radio, Reply, ResultCode, Route, Status};
@@ -52,11 +53,23 @@ pub const CONFIG_SAVE_DELAY: Ms = 2000;
 pub const TX_SENSE_PLAUSIBLE: Ms = 500;
 /// F15 (D-188): TX sense without the permit for this long raises the alarm.
 pub const TX_NOPERMIT_DEBOUNCE: Ms = 50;
+/// Self-test: the expander must answer this long after the first tick (the
+/// supervisor holds it in reset for td, 300 ms at most).
+pub const SELFTEST_EXPANDER_WAIT: Ms = 1000;
+/// Self-test: the supervisor trip must not come earlier than this after the last
+/// WDI kick (TPS3823 time-out 0.9 s at least, C-19).
+pub const SELFTEST_WDT_MIN: Ms = 500;
+/// Self-test: the supervisor must trip within this time after the last kick
+/// (time-out 2.5 s at most).
+pub const SELFTEST_WDT_MAX: Ms = 3000;
 /// F15: no alarm this long after the permit went off: the normal RF tail after an
 /// inhibit (F14). To review with the measured inhibit response (M-12).
 pub const TX_NOPERMIT_GRACE: Ms = 500;
 
 const EXPANDER: Pca9539 = Pca9539::new(EXPANDER_ADDR);
+/// DevKit-RUST-1 parts on the board I2C bus: SHTC3 and the IMU (D-83).
+const SHTC3_ADDR: u8 = 0x70;
+const IMU_ADDR: u8 = 0x68;
 const KEYS: [ExpPin; 3] = [exp::KEY_R1, exp::KEY_R2, exp::KEY_R3];
 const TX_SENSE: [ExpPin; 3] = [exp::R1_TX, exp::R2_TX, exp::R3_TX];
 
@@ -119,6 +132,23 @@ pub enum Event {
     Fault,
     /// Host keep-alive missed: TX ended, keys released (host-protocol.md section 8).
     HostTimeout,
+    /// The power-up self-test ended (pass or fail).
+    SelfTest(SelfTestState),
+    /// The power-up self-test found something unexpected that does not block TX.
+    SelfTestWarn(SelfTestItem),
+}
+
+/// Where the power-up self-test is (module docs).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum SelfTestStep {
+    /// Waiting for the expander after power-up.
+    WaitExpander,
+    /// No WDI kicks since `since`: the supervisor must trip.
+    Watchdog { since: Ms },
+    /// Tripped at `since`; kicks again; waiting for the expander to come back.
+    Recover { since: Ms },
+    /// Passed or failed.
+    Done,
 }
 
 /// Why a request from the host or the main loop was refused at once.
@@ -174,6 +204,12 @@ impl Inputs {
 pub struct Shack {
     expander_ready: bool,
     latch_cleared: bool,
+    /// First tick, for the self-test time-outs.
+    boot_at: Option<Ms>,
+    selftest: SelfTestState,
+    selftest_step: SelfTestStep,
+    /// WDI kicks on (off only in the watchdog step of the self-test).
+    kick: bool,
     wdi: bool,
     exp_written: Option<u16>,
     inputs: Option<Inputs>,
@@ -225,6 +261,10 @@ impl Shack {
         Shack {
             expander_ready: false,
             latch_cleared: false,
+            boot_at: None,
+            selftest: SelfTestState::Running,
+            selftest_step: SelfTestStep::WaitExpander,
+            kick: true,
             wdi: false,
             exp_written: None,
             inputs: None,
@@ -361,8 +401,11 @@ impl Shack {
         // Kick the supervisor from the main loop only, after the checks of the pass
         // (D-59 rule 1). A pass that hangs or panics gives no kick, so the
         // supervisor sets the fault latch and every radio is inhibited in hardware.
-        self.wdi = !self.wdi;
-        hw.set_wdi(self.wdi);
+        // The self-test stops the kicks on purpose to see the supervisor trip.
+        if self.kick {
+            self.wdi = !self.wdi;
+            hw.set_wdi(self.wdi);
+        }
     }
 
     /// The work of one tick, before the watchdog kick. Returns early when the
@@ -370,6 +413,7 @@ impl Shack {
     fn pass<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
         self.safe_lost = hw.safe_lost();
         self.load_config(hw);
+        let boot_at = *self.boot_at.get_or_insert(now);
 
         if !self.expander_ready {
             // F1: `init` writes the output word before the configuration.
@@ -377,6 +421,7 @@ impl Shack {
                 .init(hw.i2c(), self.exp_word(), expander_config())
                 .is_err()
             {
+                self.self_test_no_expander(now, boot_at);
                 // No expander: TX stays off; the host still gets answers.
                 self.host_rx(now, hw);
                 self.host_tx(hw);
@@ -385,21 +430,28 @@ impl Shack {
             self.expander_ready = true;
             self.exp_written = Some(self.exp_word());
             self.event(Event::ExpanderReady);
-            // Self-test passed (expander answers): one LATCH_CLR edge, only at
-            // start-up (D-59 rule 2). After a later reset the host must use
-            // `clearfault` (C-2).
-            if !self.latch_cleared {
-                hw.set_latch_clr(true);
-                hw.set_latch_clr(false);
-                self.latch_cleared = true;
-            }
+            self.self_test_expander_up(now, hw);
         }
         match self.read_expander(hw) {
             Some(i) => {
                 self.ever_unlatched |= !i.latched;
                 self.inputs = Some(i);
+                if let SelfTestStep::Watchdog { since } = self.selftest_step
+                    && now - since > SELFTEST_WDT_MAX
+                {
+                    self.self_test_fail(SelfTestItem::Watchdog);
+                }
             }
             None => {
+                if let SelfTestStep::Watchdog { since } = self.selftest_step {
+                    // The supervisor tripped: RESET_N reset the expander.
+                    self.kick = true;
+                    if now - since < SELFTEST_WDT_MIN {
+                        self.self_test_fail(SelfTestItem::Watchdog);
+                    } else {
+                        self.selftest_step = SelfTestStep::Recover { since: now };
+                    }
+                }
                 self.expander_ready = false;
                 self.exp_written = None;
                 self.inputs = None;
@@ -450,6 +502,73 @@ impl Shack {
         self.host_tx(hw);
         self.display_step(now, hw);
         self.save_config(now, hw);
+    }
+
+    // ---------------------------------------------------------------- self-test
+
+    /// The power-up self-test result so far.
+    pub fn self_test(&self) -> SelfTestState {
+        self.selftest
+    }
+
+    /// The expander does not answer: time-outs of the self-test.
+    fn self_test_no_expander(&mut self, now: Ms, boot_at: Ms) {
+        let late = match self.selftest_step {
+            SelfTestStep::WaitExpander => now - boot_at > SELFTEST_EXPANDER_WAIT,
+            SelfTestStep::Recover { since } => now - since > SELFTEST_EXPANDER_WAIT,
+            _ => false,
+        };
+        if late {
+            self.self_test_fail(SelfTestItem::Expander);
+        }
+    }
+
+    /// The expander answers (first time, or back after the watchdog trip).
+    fn self_test_expander_up<H: ShackHw>(&mut self, now: Ms, hw: &mut H) {
+        match self.selftest_step {
+            SelfTestStep::WaitExpander => {
+                let Some(i) = self.read_expander(hw) else {
+                    return;
+                };
+                // POR_N holds the SAFE latch set at power-up (D-84).
+                if !i.latched {
+                    return self.self_test_fail(SelfTestItem::Latch);
+                }
+                for r in Radio::ALL {
+                    if i.tx_sense[r.index()] {
+                        self.event(Event::SelfTestWarn(SelfTestItem::TxSense(r)));
+                    }
+                }
+                for addr in [SHTC3_ADDR, IMU_ADDR] {
+                    if embedded_hal::i2c::I2c::write(hw.i2c(), addr, &[]).is_err() {
+                        self.event(Event::SelfTestWarn(SelfTestItem::I2c(addr)));
+                    }
+                }
+                self.kick = false;
+                self.selftest_step = SelfTestStep::Watchdog { since: now };
+            }
+            SelfTestStep::Recover { .. } => {
+                // The expander answers again, so RESET_N is high: the latch takes
+                // the edge. The one LATCH_CLR edge of the start-up (D-59 rule 2).
+                // After a later reset the host must use `clearfault` (C-2).
+                hw.set_latch_clr(true);
+                hw.set_latch_clr(false);
+                self.latch_cleared = true;
+                self.selftest = SelfTestState::Pass;
+                self.selftest_step = SelfTestStep::Done;
+                self.event(Event::SelfTest(SelfTestState::Pass));
+            }
+            _ => {}
+        }
+    }
+
+    /// The self-test failed: no LATCH_CLR edge, so the fault latch keeps TX_EN low
+    /// in hardware until a power cycle.
+    fn self_test_fail(&mut self, item: SelfTestItem) {
+        self.kick = true;
+        self.selftest = SelfTestState::Fail(item);
+        self.selftest_step = SelfTestStep::Done;
+        self.event(Event::SelfTest(self.selftest));
     }
 
     fn load_config<H: ShackHw>(&mut self, hw: &mut H) {
@@ -635,6 +754,9 @@ impl Shack {
 
     /// Permit per radio from the present state.
     fn permit_wanted(&self, r: Radio) -> bool {
+        if self.selftest != SelfTestState::Pass {
+            return false;
+        }
         let Some(s) = self.status.filter(|_| self.link.is_up()) else {
             return false;
         };

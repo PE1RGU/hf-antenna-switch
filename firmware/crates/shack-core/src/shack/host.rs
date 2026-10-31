@@ -260,6 +260,8 @@ impl Shack {
             Event::TxWithoutPermit(r) => HostEvent::TxWithoutPermit(r),
             Event::Fault => HostEvent::Fault,
             Event::HostTimeout => HostEvent::HostTimeout,
+            Event::SelfTest(r) => HostEvent::SelfTest(r),
+            Event::SelfTestWarn(i) => HostEvent::SelfTestWarn(i),
         };
         self.host.push(h);
     }
@@ -345,6 +347,7 @@ impl Shack {
                 permit: self.permit_out[r.index()],
                 key: self.want_key[r.index()],
             }),
+            selftest: self.selftest,
         }
     }
 }

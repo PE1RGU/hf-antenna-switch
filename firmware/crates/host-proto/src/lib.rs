@@ -632,6 +632,54 @@ pub enum HostEvent {
     /// `!host timeout`: host keep-alive missed; every TX ended and every key
     /// released (section 8).
     HostTimeout,
+    /// `!selftest pass` / `!selftest fail <item>`: the power-up self-test ended.
+    /// After a fail the shack never gives its LATCH_CLR edge: TX stays blocked
+    /// until a power cycle.
+    SelfTest(SelfTestState),
+    /// `!selftest warn <item>`: something unexpected at start-up; TX is not blocked.
+    SelfTestWarn(SelfTestItem),
+}
+
+/// What the power-up self-test checks (host-protocol.md section 6).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SelfTestItem {
+    /// `expander`: the PCA9539 did not answer, or did not come back after the
+    /// watchdog test.
+    Expander,
+    /// `latch`: the SAFE latch was not set at power-up.
+    Latch,
+    /// `watchdog`: the supervisor did not trip when the WDI kicks stopped, or
+    /// tripped too early.
+    Watchdog,
+    /// `txsense <radio>`: TX sense active at start-up (warning).
+    TxSense(Radio),
+    /// `i2c <address>`: a DevKit part (SHTC3 0x70, IMU 0x68) did not answer (warning).
+    I2c(u8),
+}
+
+impl fmt::Display for SelfTestItem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            SelfTestItem::Expander => f.write_str("expander"),
+            SelfTestItem::Latch => f.write_str("latch"),
+            SelfTestItem::Watchdog => f.write_str("watchdog"),
+            SelfTestItem::TxSense(r) => write!(f, "txsense {}", radio_name(r)),
+            SelfTestItem::I2c(a) => write!(f, "i2c {a:#04x}"),
+        }
+    }
+}
+
+/// State of the power-up self-test (`selftest=` in the status line).
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum SelfTestState {
+    /// `running`: not done yet. TX stays blocked.
+    #[default]
+    Running,
+    /// `pass`.
+    Pass,
+    /// `fail <item>` (`fail-<item>` in the status line). TX stays blocked until a
+    /// power cycle.
+    Fail(SelfTestItem),
 }
 
 impl fmt::Display for HostEvent {
@@ -660,6 +708,10 @@ impl fmt::Display for HostEvent {
                 col_name(route.rx)
             ),
             HostEvent::HostTimeout => f.write_str("!host timeout"),
+            HostEvent::SelfTest(SelfTestState::Fail(i)) => write!(f, "!selftest fail {i}"),
+            HostEvent::SelfTest(SelfTestState::Pass) => f.write_str("!selftest pass"),
+            HostEvent::SelfTest(SelfTestState::Running) => f.write_str("!selftest running"),
+            HostEvent::SelfTestWarn(i) => write!(f, "!selftest warn {i}"),
         }
     }
 }
@@ -729,6 +781,8 @@ pub struct StatusLine {
     pub boxs: Option<BoxPart>,
     /// R1, R2, R3. Index with [`Radio::index`].
     pub radios: [RadioStatus; 3],
+    /// Power-up self-test (`selftest=running`, `pass` or `fail-<item>`).
+    pub selftest: SelfTestState,
 }
 
 impl fmt::Display for StatusLine {
@@ -774,6 +828,11 @@ impl fmt::Display for StatusLine {
                 x.fault
             ),
             None => f.write_str(" k1=? rfdet=? bias=? boxfault=?"),
+        }?;
+        match self.selftest {
+            SelfTestState::Running => f.write_str(" selftest=running"),
+            SelfTestState::Pass => f.write_str(" selftest=pass"),
+            SelfTestState::Fail(i) => write!(f, " selftest=fail-{i}"),
         }
     }
 }

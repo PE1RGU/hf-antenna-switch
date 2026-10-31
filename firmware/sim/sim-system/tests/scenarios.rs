@@ -588,3 +588,30 @@ fn safe_loop_table_256_rows() {
         assert_eq!(bx.rly_en, all_good, "RLY_EN, {msg}");
     }
 }
+
+// ------------------------------------------------------------------ self-test
+
+#[test]
+fn both_self_tests_pass_and_a_failed_box_shows_at_the_shack() {
+    let s = started();
+    assert_eq!(s.shack.shack.self_test(), host_proto::SelfTestState::Pass);
+    assert_eq!(s.boxs.fw.fault(), FaultCode::NONE);
+    checks(&s, None);
+
+    // A box with R64 open: its watchdog test fails, it stays stopped and says why.
+    let mut s = SystemSim::new();
+    s.boxs.board.borrow_mut().set_env(|e| e.wdi_link = false);
+    s.run_until(6000, |s| s.boxs.fw.phase() == Phase::Failed)
+        .expect("box self-test fails");
+    s.run(200);
+    let st = s.host("status");
+    assert!(
+        st.contains("box=notready") && st.contains("boxfault=8"),
+        "{st}"
+    );
+    let from = s.shack.host_lines.len();
+    assert_eq!(s.host("route R1 A1 A1"), "ok");
+    s.run_until(300, |s| s.shack.host_seen(from, "!refused").is_some())
+        .expect("the box refuses: not ready");
+    assert!(!s.boxs.board.borrow().signals().rly_en);
+}

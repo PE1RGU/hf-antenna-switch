@@ -158,15 +158,21 @@ fn power_cycle_in_the_emulator_restarts_the_firmware() {
         "nothing from an unpowered MCU"
     );
     s.world("power on").unwrap();
-    s.run_until(3000, |s| s.shack.link_up())
-        .expect("link up after the restart");
-    s.run(300);
-    let ready = s
+    let t_on = s.now();
+    // One step: the restart makes a new firmware state.
+    s.run(1);
+    s.run_until(5000, |s| {
+        s.shack.link_up() && s.shack.self_test() == host_proto::SelfTestState::Pass
+    })
+    .expect("link up and self-test passed after the restart");
+    let passes = s
         .events
         .iter()
-        .filter(|(_, e)| *e == shack_core::shack::Event::ExpanderReady)
+        .filter(|(t, e)| {
+            *t > t_on && *e == shack_core::shack::Event::SelfTest(host_proto::SelfTestState::Pass)
+        })
         .count();
-    assert_eq!(ready, 2, "a second start-up");
+    assert_eq!(passes, 1, "the restart runs its own self-test");
     assert_eq!(
         s.shack.ui_state().stop,
         Some(shack_ui::StopCause::PowerUp),

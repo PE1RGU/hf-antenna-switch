@@ -9,8 +9,8 @@
 //! changes. Nothing in the logic depends on it.
 //!
 //! The DevKit LED (GPIO7 on the DevKit-RUST-1) shows the phase: slow blink (1 Hz)
-//! in Run, fast blink (5 Hz) in Boot and while waiting for the SAFE loop, on solid
-//! when stopped. The main loop drives it, so a hung loop also stops the blink.
+//! in Run, fast blink (5 Hz) in Boot, while waiting for the SAFE loop and during
+//! the self-test, flicker (10 Hz) when the self-test failed, on solid when stopped. The main loop drives it, so a hung loop also stops the blink.
 #![no_std]
 #![no_main]
 #![deny(
@@ -194,8 +194,9 @@ async fn main(_spawner: Spawner) -> ! {
         // Half period of the blink, or `None` for on solid.
         let half = match s.phase {
             Phase::Run => Some(500),
-            Phase::Boot | Phase::WaitSafe { .. } => Some(100),
+            Phase::Boot | Phase::WaitSafe { .. } | Phase::SelfTest(_) => Some(100),
             Phase::Stopped => None,
+            Phase::Failed => Some(50),
         };
         led.set_level(Level::from(
             half.is_none_or(|h| (now / h).is_multiple_of(2)),

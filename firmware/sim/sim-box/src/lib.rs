@@ -128,7 +128,12 @@ impl BoxSim {
 
     /// As `new`, with this relay timing.
     pub fn with_relays(relays: Rt1Timing) -> Self {
-        let board = shared(BoxBoard::new(Corner::Typ, relays));
+        Self::with(Corner::Typ, relays)
+    }
+
+    /// As `new`, with this supervisor timing and relay timing.
+    pub fn with(corner: Corner, relays: Rt1Timing) -> Self {
+        let board = shared(BoxBoard::new(corner, relays));
         board.borrow_mut().set_env(|e| e.power = true);
         BoxSim {
             hw: SimBoxHw {
@@ -219,13 +224,14 @@ impl BoxSim {
     ///
     /// # Panics
     ///
-    /// If the box is not in [`Phase::Run`] with the link up within 2 s.
+    /// If the box is not in [`Phase::Run`] with the link up within 5 s (the
+    /// self-test takes 1 to 3.5 s).
     pub fn start(&mut self) {
         self.run_until(1000, |s| matches!(s.fw.phase(), Phase::WaitSafe { .. }))
             .expect("MCU_EN_N low after the boot delay");
         self.step();
         self.shack.press_reset();
-        self.run_until(1000, |s| s.fw.phase() == Phase::Run && s.shack.link_up())
+        self.run_until(5000, |s| s.fw.phase() == Phase::Run && s.shack.link_up())
             .expect("box running and link up");
     }
 }

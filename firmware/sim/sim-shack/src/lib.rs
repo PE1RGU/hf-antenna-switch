@@ -94,6 +94,7 @@ pub mod textview;
 pub mod tui;
 
 use box_stub::BoxStub;
+use host_proto::SelfTestState;
 use link_proto::{Ms, Radio};
 use shack_core::board::gpio;
 use shack_core::hw::ShackHw;
@@ -246,7 +247,12 @@ impl ShackSim {
 
     /// As `new`, with this stored settings record in the MCU flash (a power cycle).
     pub fn with_stored(stored: Vec<u8>) -> Self {
-        let board = shared(ShackBoard::new(Corner::Typ));
+        Self::with(Corner::Typ, stored)
+    }
+
+    /// As `with_stored`, with this supervisor timing.
+    pub fn with(corner: Corner, stored: Vec<u8>) -> Self {
+        let board = shared(ShackBoard::new(corner));
         board.borrow_mut().set_env(|e| e.power = true);
         ShackSim {
             hw: SimShackHw {
@@ -376,15 +382,20 @@ impl ShackSim {
 
     /// Start-up done, link up, SAFE latch cleared by the operator: ready to transmit.
     ///
-    /// Runs until the box link is up (at most 2 s), presses RESET, and runs 100 ms
-    /// more. With the typical supervisor this ends at about t = 340 ms.
+    /// Runs until the power-up self-test has passed and the box link is up (at most
+    /// 5 s), presses RESET, and runs 100 ms more. With the typical supervisor this
+    /// ends at about t = 2 s: the watchdog test waits for the supervisor time-out.
     ///
     /// # Panics
     ///
-    /// If the link does not come up, or TX_EN is not high at the end.
+    /// If the self-test fails, the link does not come up, or TX_EN is not high at
+    /// the end.
     pub fn start(&mut self) {
-        self.run_until(2000, |s| s.shack.link_up())
-            .expect("link up");
+        self.run_until(5000, |s| {
+            s.shack.self_test() != SelfTestState::Running && s.shack.link_up()
+        })
+        .expect("self-test done and link up");
+        assert_eq!(self.shack.self_test(), SelfTestState::Pass, "self-test");
         self.press_reset();
         self.run(100);
         assert!(self.board.borrow().signals().tx_en, "TX_EN after start");

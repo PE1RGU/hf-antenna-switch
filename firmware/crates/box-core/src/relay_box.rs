@@ -14,12 +14,35 @@
 //!   with a permit out, the box opens SAFE (MCU_EN_N = 1) and does not write K0.
 //! - WDI: toggled from the main loop, every [`POLL`] ms.
 //!
+//! # Power-up self-test
+//!
+//! The first time the SAFE loop closes after power-up, the box tests its safety
+//! hardware before any relay can move. No relay moves during the test.
+//!
+//! 1. Gate: MCU_EN_N = 1 must open READY (KILL = 1) and drop RLY_EN (the
+//!    expanders stop answering). Then MCU_EN_N = 0 must close the loop again.
+//! 2. Expanders: F1 set-up and read-back of all four.
+//! 3. Inputs, a warning only (fault 10): TX_ANY = 0, R1 K0 read-back equal to
+//!    TX_ANY (F3), no RF on any detector, no bias-T OK while its feed is off.
+//! 4. Watchdog: the WDI kicks stop. The supervisor must trip (KILL = 1 through
+//!    FAULT and READY) between [`WDT_MIN`] and [`WDT_MAX`] after the last kick.
+//! 5. The kicks resume; after [`WDT_RECOVER`] (RESET_N high again) one more
+//!    LATCH_CLR edge (the cause is known: rule 2), and the loop must close again.
+//!
+//! A failed step 1, 2, 4 or 5 sets the fault code (7, 1, 2, 8 or 9), keeps
+//! MCU_EN_N high and stops in [`Phase::Failed`] until a power cycle. The box
+//! keeps answering the shack, with READY = 0. With R64 open (watchdog off, D-123)
+//! the box therefore does not start.
+//!
 //! # Phases
 //!
 //! | From | To | When |
 //! |---|---|---|
 //! | Boot | WaitSafe | [`BOOT_DELAY`] after power-up: LATCH_CLR edge, MCU_EN_N = 0 |
-//! | WaitSafe | Run | KILL = 0 and all four expanders set up (F1) |
+//! | WaitSafe | SelfTest | KILL = 0 for the first time after power-up |
+//! | SelfTest | Run | All steps passed, expanders set up again (F1, F5) |
+//! | SelfTest | Failed | A step failed: MCU_EN_N = 1, until a power cycle |
+//! | WaitSafe | Run | KILL = 0 again later and all four expanders set up (F1) |
 //! | Run | WaitSafe | KILL = 1, or an expander reset or NACK with no permit out |
 //! | Run | Stopped | Link time-out or expander lost, with a permit out: MCU_EN_N = 1 |
 //! | Stopped | WaitSafe | A Hello, or a TxEnd for each radio that had a permit: MCU_EN_N = 0 |
@@ -61,6 +84,18 @@ pub const RELAY_WAIT: Ms = 12;
 pub const BIAS_SETTLE: Ms = 10;
 /// After a Hello, K0 of a radio with a permit is released this late (F14 wait).
 pub const HELLO_RELEASE: Ms = 100;
+/// Self-test: the supervisor trip must not come earlier than this after the last
+/// kick (TPS3823 time-out 0.9 s at least, C-19).
+pub const WDT_MIN: Ms = 500;
+/// Self-test: the supervisor must trip within this time after the last kick
+/// (time-out 2.5 s at most).
+pub const WDT_MAX: Ms = 3000;
+/// Self-test: wait after the trip before the LATCH_CLR edge. RESET_N stays low for
+/// td (300 ms at most), and the latch ignores an edge in that time (S4).
+pub const WDT_RECOVER: Ms = 400;
+/// Self-test: the SAFE loop must open or close within this time after a
+/// MCU_EN_N or LATCH_CLR change.
+pub const LOOP_WAIT: Ms = 100;
 /// Firmware version in HelloReply: major, minor, patch.
 pub const FW_VERSION: [u8; 3] = [0, 1, 0];
 
@@ -81,10 +116,45 @@ pub enum Phase {
         /// First wait after power-up: fault 5 after [`SAFE_TIMEOUT`].
         startup: bool,
     },
+    /// Power-up self-test (module docs). No relay moves.
+    SelfTest(SelfTest),
     /// Expanders set up; commands can switch relays.
     Run,
     /// SAFE opened with a permit out (MCU_EN_N high, F13).
     Stopped,
+    /// The self-test failed: MCU_EN_N high until a power cycle. The fault code
+    /// says which step.
+    Failed,
+}
+
+/// A step of the power-up self-test, with its start time.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SelfTest {
+    /// MCU_EN_N = 1 since `at`: KILL must go to 1 and the expanders must stop answering.
+    GateOpen {
+        /// Start of the step.
+        at: Ms,
+    },
+    /// MCU_EN_N = 0 since `at`: KILL must go to 0.
+    GateClose {
+        /// Start of the step.
+        at: Ms,
+    },
+    /// No WDI kicks since `since`: the supervisor must trip.
+    Watchdog {
+        /// Time of the last kick.
+        since: Ms,
+    },
+    /// Tripped; kicks again. LATCH_CLR edge at `at`.
+    Recover {
+        /// Time of the LATCH_CLR edge.
+        at: Ms,
+    },
+    /// LATCH_CLR edge given at `at`: KILL must go to 0.
+    LatchClear {
+        /// Time of the edge.
+        at: Ms,
+    },
 }
 
 /// State of K0 of one radio (R2 and R3; R1 follows the PTT loop in hardware).
@@ -149,6 +219,10 @@ pub struct RelayBox {
     bias_since: Ms,
     fault: FaultCode,
     link_lost_stop: bool,
+    /// The power-up self-test passed.
+    tested: bool,
+    /// WDI kicks on (off only in the watchdog step of the self-test).
+    kick: bool,
 }
 
 impl Default for RelayBox {
@@ -178,6 +252,8 @@ impl RelayBox {
             bias_since: 0,
             fault: FaultCode::NONE,
             link_lost_stop: false,
+            tested: false,
+            kick: true,
         }
     }
 
@@ -237,7 +313,7 @@ impl RelayBox {
                     startup: true,
                 };
             }
-            Phase::Boot | Phase::Stopped => {}
+            Phase::Boot | Phase::Stopped | Phase::Failed => {}
             Phase::WaitSafe { since, startup } => {
                 if startup && now - since >= SAFE_TIMEOUT {
                     self.fault = FaultCode::SAFE_NOT_CLOSED;
@@ -247,12 +323,18 @@ impl RelayBox {
                     };
                 }
                 if !self.kill && poll {
-                    self.set_up(hw);
+                    if !self.tested {
+                        hw.set_mcu_en_n(true);
+                        self.phase = Phase::SelfTest(SelfTest::GateOpen { at: now });
+                    } else if self.set_up(hw) {
+                        self.phase = Phase::Run;
+                    }
                 }
             }
+            Phase::SelfTest(t) => self.self_test(now, t, hw),
             Phase::Run => self.run(now, poll, hw),
         }
-        if poll {
+        if poll && self.kick {
             // After the checks of the pass (rule 1): a hung loop stops the kicks.
             self.wdi = !self.wdi;
             hw.set_wdi(self.wdi);
@@ -281,25 +363,111 @@ impl RelayBox {
         }
     }
 
-    /// F1 set-up of all four expanders, all outputs 0. Success: [`Phase::Run`].
-    fn set_up<H: BoxHw>(&mut self, hw: &mut H) {
+    /// F1 set-up of all four expanders, all outputs 0. True on success; the
+    /// fault code says why not.
+    fn set_up<H: BoxHw>(&mut self, hw: &mut H) -> bool {
         for addr in EXPANDERS {
             match Pca9539::new(addr).init(hw.i2c(), 0, expander_config(addr)) {
                 Ok(()) => {}
                 Err(pca9539::Error::Bus(_)) => {
                     self.fault = FaultCode::EXPANDER_NACK;
-                    return;
+                    return false;
                 }
                 Err(pca9539::Error::Verify) => {
                     self.fault = FaultCode::READ_BACK;
-                    return;
+                    return false;
                 }
             }
         }
         self.out = [0; 4];
         self.clear_state();
-        self.phase = Phase::Run;
-        let _ = self.read(hw);
+        self.read(hw).is_ok()
+    }
+
+    /// One pass of the power-up self-test (module docs).
+    fn self_test<H: BoxHw>(&mut self, now: Ms, step: SelfTest, hw: &mut H) {
+        match step {
+            SelfTest::GateOpen { at } if now >= at + 2 => {
+                // RLY_EN low holds the expanders in reset: they must not answer.
+                let answers = EXPANDERS
+                    .into_iter()
+                    .any(|a| Pca9539::new(a).read_config(hw.i2c()).is_ok());
+                if !self.kill || answers {
+                    return self.fail(FaultCode::SELFTEST_GATE, hw);
+                }
+                hw.set_mcu_en_n(false);
+                self.phase = Phase::SelfTest(SelfTest::GateClose { at: now });
+            }
+            SelfTest::GateClose { .. } if !self.kill => {
+                if !self.set_up(hw) {
+                    let code = self.fault;
+                    return self.fail(code, hw);
+                }
+                self.check_inputs();
+                self.kick = false;
+                self.phase = Phase::SelfTest(SelfTest::Watchdog { since: now });
+            }
+            SelfTest::GateClose { at } if now >= at + LOOP_WAIT => {
+                self.fail(FaultCode::SELFTEST_GATE, hw);
+            }
+            SelfTest::Watchdog { since } if self.kill => {
+                self.kick = true;
+                if now - since < WDT_MIN {
+                    return self.fail(FaultCode::SELFTEST_WATCHDOG, hw);
+                }
+                self.inputs = None;
+                self.phase = Phase::SelfTest(SelfTest::Recover {
+                    at: now + WDT_RECOVER,
+                });
+            }
+            SelfTest::Watchdog { since } if now - since > WDT_MAX => {
+                self.kick = true;
+                self.fail(FaultCode::SELFTEST_WATCHDOG, hw);
+            }
+            SelfTest::Recover { at } if now >= at => {
+                // The cause of this fault is known (the test): one more edge (rule 2).
+                hw.set_latch_clr(true);
+                hw.set_latch_clr(false);
+                self.phase = Phase::SelfTest(SelfTest::LatchClear { at: now });
+            }
+            SelfTest::LatchClear { .. } if !self.kill => {
+                // The expanders were reset by RLY_EN: set them up again (F5).
+                if !self.set_up(hw) {
+                    let code = self.fault;
+                    return self.fail(code, hw);
+                }
+                self.tested = true;
+                self.phase = Phase::Run;
+            }
+            SelfTest::LatchClear { at } if now >= at + LOOP_WAIT => {
+                self.fail(FaultCode::SELFTEST_LATCH, hw);
+            }
+            _ => {}
+        }
+    }
+
+    /// Start-up input plausibility (self-test step 3). A warning only: fault 10.
+    fn check_inputs(&mut self) {
+        let Some(w) = self.inputs else { return };
+        let bit = |p: ExpPin| w[usize::from(p.addr - EXPANDERS[0])] & (1 << p.bit) != 0;
+        let tx_any = bit(exp::TX_ANY);
+        let rf = ANTENNAS
+            .into_iter()
+            .any(|c| rf_det(c).is_some_and(|p| !bit(p)));
+        let bias_ok = (w[3] >> 4) & BIAS_EN != 0;
+        if tx_any || bit(exp::R1_K0) != tx_any || rf || bias_ok {
+            self.fault = FaultCode::SELFTEST_INPUT;
+        }
+    }
+
+    /// Self-test failed: open SAFE and stay stopped until a power cycle.
+    fn fail<H: BoxHw>(&mut self, code: FaultCode, hw: &mut H) {
+        hw.set_mcu_en_n(true);
+        self.kick = true;
+        self.fault = code;
+        self.clear_state();
+        self.inputs = None;
+        self.phase = Phase::Failed;
     }
 
     /// Forget the relay state: the relays are off (expanders reset or set up).
@@ -337,6 +505,9 @@ impl RelayBox {
     }
 
     fn on_link_lost<H: BoxHw>(&mut self, hw: &mut H) {
+        if self.phase == Phase::Failed {
+            return; // keep the self-test fault code
+        }
         if self.phase == Phase::Run && self.permit_out() {
             self.fault = FaultCode::LINK_TIMEOUT_PERMIT;
             self.stop(true, hw);
