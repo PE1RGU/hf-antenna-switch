@@ -2,6 +2,42 @@
 
 Scope: all three boards before the PCB, parts and CNC case orders. Read-only review: no schematic, layout or BOM was changed. Base: commit dd1f485 (main), netlists rf14.xml, ctl14.xml, si16.xml, KiCad 10.0.5.
 
+## Status (2026-10-31, after PRs #12 and #13)
+
+Done: B-1, B-2 (D-189, M-107); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+
+The table lists only open items. The sections below give the evidence.
+
+| Group | # | Open item | Board |
+|---|---|---|---|
+| Blocker | B-3 | Order BOMs with MPN, maker and second source on every line | RF, shack |
+| Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
+| PCB | S-1 | FAULT via 1k to IO6 (firmware support follows) | Controller |
+| PCB | S-2 | SDA jumper bridged 2-3 by copper | Controller, shack |
+| PCB | S-3 | About 1 in² drain copper per bias-T FET | RF |
+| PCB | S-8 | Trim the width to 159.6 mm | Shack |
+| PCB | S-9 | New production zip after S-1 and S-2 | Controller |
+| PCB | S-12 | Check the display on IO2/IO9; if unsure, move CS/DC off IO9 | Shack |
+| PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |
+| BOM | S-4 | `BSS138BK,215` (Nexperia); the ROHM pin order differs | RF, shack |
+| BOM | S-5 | Name J14: gold, post length ≥ 5.8 mm | RF |
+| BOM | S-6 | Full order codes: LM2901DR, JST, shack C1 temperature | RF, shack |
+| BOM | S-7 | "PCA9539, not the R variant" in the BOM | All |
+| BOM | S-10 | Long-lead and single-source parts: IRFL9014 (-BE3), 83-798, TPS3823, TLP176AM | All |
+| Case | S-14, S-15 | Hold CNC order W2026102506308334; first buy and measure RT1 ×4, one 83-798, one of each SMA, an XT60/XT30 pair | Case |
+| Decide | | Creepage 2.0 mm against IEC 60664 (HF part) | RF |
+| Decide | | RT1 isolation at HF: accept, or test 4 relays first | RF |
+| Decide | D-43 | BZT52C24 coil clamp energy | RF |
+| Decide | A-13, D-45 | Name the PSU; check its short-circuit current against the 50 A fuse | System |
+| Decide | D-148 | Confirm the TPS3823 second source (MAX823 or APX823) | Controller |
+| Decide | | Case: unit 2 ribbon slot, end-plate screws, NPTH for the spacers | Case |
+| Decide | P-6 to P-13 | Optional part merges, each needs a yes | All |
+| Records | S-16 | Update `verify_logic.py` to D-162; re-run and re-file | — |
+| Records | S-17 | Close the 34 design-log rows that later entries closed | — |
+| Records | | Remove the iCloud duplicates ("name 2.ext") | — |
+
+Suggested order: S-1 and S-2, then B-3 and B-4, with the S-items of each board in its pass.
+
 ## Verdict
 
 **NO-GO for ordering today. GO after the 4 blockers and the "should fix" PCB items below are closed.**
