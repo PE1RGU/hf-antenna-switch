@@ -333,7 +333,7 @@ The tests check the firmware against the hardware design:
 | `sim/sim-box` | The box emulator: harness, scripted shack, scenario tests |
 | `sim/sim-system` | Both firmwares, both boards and the Cat6 cable; system scenarios with fault injection |
 | `targets/shack-esp32c3` | ESP32-C3 binary: `ShackHw` on esp-hal, main loop every 10 ms. Flash with `cargo run --release` in that folder (espflash) |
-| `targets/box-esp32c3` | ESP32-C3 binary: `BoxHw` on esp-hal, main loop every 1 ms, debug log on USB (phase, fault and flag changes) |
+| `targets/box-esp32c3` | ESP32-C3 binary: `BoxHw` on esp-hal, main loop every 1 ms, debug log on USB (phase, fault and flag changes). Both targets report loop time and stack use every 10 s (`diag`) |
 
 The logic crates are `no_std` and build for the ESP32-C3. The emulator crates need `std`.
 

@@ -29,6 +29,7 @@ link-proto = { path = "../../crates/link-proto" }
 box-core   = { path = "../../crates/box-core" }
 
 critical-section = "1.2.0"
+heapless         = "0.9.3"
 
 
 # For fine tuning these settings, please refer to https://doc.rust-lang.org/cargo/reference/profiles.html
