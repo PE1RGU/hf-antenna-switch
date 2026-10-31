@@ -18,7 +18,7 @@ Qty per board,References,Value,Footprint,First source,Second source,Specificatio
 4,R36 R44 R62 R63,100k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"100k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
 1,R43,220R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"220R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
 2,R51 R64,0R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"0R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
-1,R61,1k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"1k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+2,R61 R66,1k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"1k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
 1,R65,0R,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,generic,generic,"0R 0R jumper 1206 (Yageo RC1206JR-070RL, any maker)"
 3,U1 U2 U3,VO2611,DIP-8_W7.62mm,Vishay VO2611,Broadcom HCPL-2611-000E,"Opto 10 MBd, DIP-8 through hole"
 1,U4,PC817X,DIP-4_W7.62mm,Sharp PC817X2NSZ9F,Lite-On LTV-817B / Everlight EL817(B),"Opto, CTR rank B or better, DIP-4"

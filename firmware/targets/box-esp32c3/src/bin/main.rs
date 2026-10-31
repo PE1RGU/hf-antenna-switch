@@ -165,6 +165,7 @@ const _: () = assert!(
         && gpio::LATCH_CLR == 3
         && gpio::MCU_EN_N == 4
         && gpio::KILL == 5
+        && gpio::FAULT == 6
         && gpio::SCL == 8
         && gpio::DATA_RX == 20
         && gpio::DATA_TX == 21
@@ -177,6 +178,7 @@ struct EspHw {
     latch_clr: Output<'static>,
     mcu_en_n: Output<'static>,
     kill: Input<'static>,
+    fault: Input<'static>,
     uart: Uart<'static, Blocking>,
     /// The RX pin stays configured (pull-up) while the UART reads it inverted.
     _data_rx: Input<'static>,
@@ -203,6 +205,10 @@ impl BoxHw for EspHw {
 
     fn kill(&mut self) -> bool {
         self.kill.is_high()
+    }
+
+    fn fault(&mut self) -> bool {
+        self.fault.is_high()
     }
 
     fn uart_write(&mut self, bytes: &[u8]) {
@@ -256,6 +262,8 @@ async fn main(_spawner: Spawner) -> ! {
     let mut led = out(p.GPIO7.into(), Level::Low);
     // KILL: pulled up as R34 does, so an open input reads 'no SAFE loop current'.
     let kill = Input::new(p.GPIO5, InputConfig::default().with_pull(Pull::Up));
+    // FAULT through R66 1k (D-191). The pull-down only matters on a bare DevKit.
+    let fault = Input::new(p.GPIO6, InputConfig::default().with_pull(Pull::Down));
 
     let i2c = I2c::new(
         p.I2C0,
@@ -281,6 +289,7 @@ async fn main(_spawner: Spawner) -> ! {
         latch_clr,
         mcu_en_n,
         kill,
+        fault,
         uart,
         _data_rx: data_rx,
     };

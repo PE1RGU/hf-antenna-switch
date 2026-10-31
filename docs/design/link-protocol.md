@@ -54,6 +54,7 @@ Shack to box:
 |---|---|---|---|
 | 0x01 | Hello | version u8 | 7 |
 | 0x02 | Poll | – | 6 |
+| 0x03 | ClearFault | – | 6 |
 | 0x10 | SetRoute | radio u8, tx col u8, rx col u8 | 9 |
 | 0x11 | TxRequest | radio u8 | 7 |
 | 0x12 | TxEnd | radio u8 | 7 |
@@ -105,7 +106,7 @@ Status payload (12 bytes):
 
 ### 4.2 Fault codes
 
-1 expander NACK, 2 read-back mismatch, 3 bias-T fault, 4 link time-out with permit out, 5 SAFE loop did not close at start-up (F11), 6 link time-out with no permit out (P-02), 7 to 10 from the power-up self-test (below). More codes are added with the box firmware. The field holds the last fault since the box powered up.
+1 expander NACK, 2 read-back mismatch, 3 bias-T fault, 4 link time-out with permit out, 5 SAFE loop did not close at start-up (F11), 6 link time-out with no permit out (P-02), 7 to 10 from the power-up self-test (below), 11 supervisor trip after start-up (below). More codes are added with the box firmware. The field holds the last fault since the box powered up.
 
 Power-up self-test of the box (Prins, 2026-10-31). It runs the first time the SAFE loop closes after power-up, before any relay can move; no relay moves during it. It takes 1 to 3.5 s.
 
@@ -118,6 +119,8 @@ Power-up self-test of the box (Prins, 2026-10-31). It runs the first time the SA
 | Latch | Kicks resume; 400 ms later one more LATCH_CLR edge (the cause is known, D-59 rule 2); the loop must close within 100 ms | 9 |
 
 After a fail the box keeps MCU_EN_N high (SAFE open, no relay can move), keeps answering with READY = 0 and the fault code, and refuses every command with NotReady until a power cycle. With R64 open (watchdog off, D-123) the box does not start. The loop opens twice during the test, so the shack SAFE latch is set; RESET at the shack comes after the test, as after any power-up.
+
+Supervisor trip after start-up (D-191, review S-1). The box reads FAULT on GPIO6 (R66 1k). FAULT = 1 after the self-test means the supervisor tripped (watchdog, or 3V3 low) while the MCU ran on, for example after a loop hang that ended. The latch opens READY and drops RLY_EN, so the relays are off in hardware. The box sets fault 11, waits with READY = 0, and does not clear the latch by itself (D-59 rule 2). The host `clearfault` makes the shack send ClearFault. The box then gives one LATCH_CLR edge. If FAULT is 0 after the edge, the answer is Ok, the fault code goes back to 0 and the box sets up again; the shack restores the routes. If FAULT stays 1 (RESET_N still low), the answer is NotReady and fault 11 stays. ClearFault without a trip does nothing and gives no edge.
 
 ## 5. Exchange
 

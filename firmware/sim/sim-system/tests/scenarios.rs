@@ -645,3 +645,39 @@ fn world_commands_reach_the_box() {
     assert!(s.shack.board.borrow().env().radio_tx[1]);
     assert!(s.world("help").unwrap().contains("box hang on|off"));
 }
+
+#[test]
+fn box_hang_that_ends_is_cleared_from_the_host_d191() {
+    let mut s = started();
+    routed(&mut s, Radio::R2, Col::A3, Col::A3);
+    s.boxs.mcu_running = false;
+    let t = s
+        .run_until(3000, |s| s.boxs.board.borrow().signals().fault)
+        .expect("box watchdog");
+    s.boxs.mcu_running = true;
+    s.run_until(2000, |s| {
+        s.shack
+            .shack
+            .box_status()
+            .is_some_and(|st| st.fault == FaultCode::SUPERVISOR_TRIP)
+    })
+    .expect("the shack sees fault 11");
+    s.run(1000);
+    assert!(
+        !s.shack.shack.box_status().unwrap().flags.ready,
+        "no recovery by itself"
+    );
+    assert_eq!(s.host("clearfault"), "ok");
+    s.run_until(2000, |s| {
+        s.shack
+            .shack
+            .box_status()
+            .is_some_and(|st| st.flags.ready && st.routes[1] == route(Col::A3, Col::A3))
+    })
+    .expect("box ready again, route restored");
+    assert_eq!(s.shack.shack.box_status().unwrap().fault, FaultCode::NONE);
+    s.press_reset();
+    s.run(20);
+    assert!(tx_en(&s));
+    checks(&s, Some((t - 1, 25)));
+}

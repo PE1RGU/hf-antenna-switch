@@ -18,13 +18,17 @@ pub trait BoxHw {
     /// only, never from a timer (verify_logic.py section 10, rule 1).
     fn set_wdi(&mut self, high: bool);
     /// LATCH_CLR of the fault latch (IO3). The logic gives one rising edge after
-    /// the boot delay, and never again (rule 2).
+    /// the boot delay (rule 2), one in the self-test, and one for each ClearFault
+    /// after a supervisor trip (D-191).
     fn set_latch_clr(&mut self, high: bool);
     /// MCU_EN_N (IO4), active low. Low asks for RLY_EN and closes READY; high
     /// opens the SAFE loop (F13).
     fn set_mcu_en_n(&mut self, high: bool);
     /// KILL (IO5): `true` = no SAFE loop current, so the relays are off in hardware.
     fn kill(&mut self) -> bool;
+    /// FAULT (IO6, through R66 1k, D-191): `true` = the fault latch is set, so
+    /// READY is open and RLY_EN is low.
+    fn fault(&mut self) -> bool;
     /// Data link to the shack (UART, 9600 8N1): send these bytes.
     fn uart_write(&mut self, bytes: &[u8]);
     /// Data link to the shack: the next received byte, or `None` when there is none.

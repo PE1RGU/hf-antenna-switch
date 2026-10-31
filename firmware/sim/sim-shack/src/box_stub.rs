@@ -160,7 +160,8 @@ impl BoxStub {
     fn execute(&mut self, now: Ms, board: &ShackBoard, cmd: Command) -> ResultCode {
         let tx_any = board.signals().ptt_loop;
         match cmd {
-            Command::Hello { .. } | Command::Poll => ResultCode::Ok,
+            // The stub has no faults, so ClearFault has nothing to clear.
+            Command::Hello { .. } | Command::Poll | Command::ClearFault => ResultCode::Ok,
             Command::SetRoute { radio, route } => {
                 let i = radio.index();
                 let others_use = |c: Col| {

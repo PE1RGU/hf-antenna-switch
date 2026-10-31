@@ -13,6 +13,9 @@
 //! - F13: no K0 or row change of a radio with a permit out. On a link time-out
 //!   with a permit out, the box opens SAFE (MCU_EN_N = 1) and does not write K0.
 //! - WDI: toggled from the main loop, every [`POLL`] ms.
+//! - D-191: FAULT = 1 after the self-test is a supervisor trip (fault 11). The
+//!   latch keeps READY open until the host sends ClearFault (operator request,
+//!   one LATCH_CLR edge). If the edge does not clear FAULT, the answer is NotReady.
 //!
 //! # Power-up self-test
 //!
@@ -238,6 +241,9 @@ pub struct RelayBox {
     kick: bool,
     /// I2C errors in a row (F-3).
     io_errors: u8,
+    /// The supervisor tripped after the self-test (fault 11, D-191). Cleared only
+    /// by [`Command::ClearFault`].
+    tripped: bool,
 }
 
 impl Default for RelayBox {
@@ -270,6 +276,7 @@ impl RelayBox {
             tested: false,
             kick: true,
             io_errors: 0,
+            tripped: false,
         }
     }
 
@@ -310,6 +317,14 @@ impl RelayBox {
             now
         });
         self.kill = hw.kill();
+        // D-191: after the self-test FAULT is low, unless the supervisor tripped
+        // while this loop ran on. The latch stays set: wait for ClearFault.
+        if self.tested && !self.tripped && hw.fault() {
+            self.tripped = true;
+        }
+        if self.tripped {
+            self.fault = FaultCode::SUPERVISOR_TRIP;
+        }
         self.link_rx(now, hw);
         if self.link.check_timeout(now) {
             self.on_link_lost(hw);
@@ -826,6 +841,7 @@ impl RelayBox {
     fn execute<H: BoxHw>(&mut self, now: Ms, cmd: Command, hw: &mut H) -> ResultCode {
         let r = match cmd {
             Command::Hello { .. } | Command::Poll => Ok(ResultCode::Ok),
+            Command::ClearFault => Ok(self.clear_fault(hw)),
             Command::SetRoute { radio, route } => self.set_route(now, radio, route, hw),
             Command::TxRequest(r) => self.tx_request(now, r, hw),
             Command::TxEnd(r) => self.tx_end(now, r, hw),
@@ -835,6 +851,24 @@ impl RelayBox {
             self.io_error(now, l, hw);
             ResultCode::NotReady
         })
+    }
+
+    /// ClearFault (D-191): after a supervisor trip, one LATCH_CLR edge on operator
+    /// request. This is the only edge outside the start-up (rule 2): the host
+    /// asks for it and logs it. Without a trip, nothing happens.
+    fn clear_fault<H: BoxHw>(&mut self, hw: &mut H) -> ResultCode {
+        if !self.tripped {
+            return ResultCode::Ok;
+        }
+        hw.set_latch_clr(true);
+        hw.set_latch_clr(false);
+        if hw.fault() {
+            // RESET_N is still low (3V3 low, or no WDI edge): the latch ignored the edge.
+            return ResultCode::NotReady;
+        }
+        self.tripped = false;
+        self.fault = FaultCode::NONE;
+        ResultCode::Ok
     }
 
     fn ready(&self) -> bool {

@@ -174,21 +174,33 @@ impl Shack {
             }
             HostCommand::Stop(on) => self.software_stop(on),
             HostCommand::ClearFault => {
-                if !self.fault_known {
+                // The box latch too (D-191): the box reports a supervisor trip as
+                // fault 11 and clears it only on this request.
+                let box_trip = self
+                    .status
+                    .is_some_and(|s| s.fault == link_proto::FaultCode::SUPERVISOR_TRIP);
+                if !self.fault_known && !box_trip {
                     return Err(ErrorCode::NoFault);
                 }
-                // Same edge as at start-up; the latch ignores it while RESET_N is low.
-                hw.set_latch_clr(true);
-                hw.set_latch_clr(false);
-                // With the expander down, RESET_N may still be low and the latch then
-                // ignores the edge: keep the fault and say so, never claim a clear.
-                if self.expander_ready {
-                    self.fault_known = false;
-                    self.host.log("fault latch cleared by host");
-                } else {
-                    self.host.log(
-                        "LATCH_CLR sent, but the expander is not ready: fault kept, try again",
-                    );
+                if box_trip {
+                    link_up(self)?;
+                    self.queue(Command::ClearFault).map_err(refusal)?;
+                    self.host.log("box fault latch: clear sent");
+                }
+                if self.fault_known {
+                    // Same edge as at start-up; the latch ignores it while RESET_N is low.
+                    hw.set_latch_clr(true);
+                    hw.set_latch_clr(false);
+                    // With the expander down, RESET_N may still be low and the latch then
+                    // ignores the edge: keep the fault and say so, never claim a clear.
+                    if self.expander_ready {
+                        self.fault_known = false;
+                        self.host.log("fault latch cleared by host");
+                    } else {
+                        self.host.log(
+                            "LATCH_CLR sent, but the expander is not ready: fault kept, try again",
+                        );
+                    }
                 }
             }
             HostCommand::Events(on) => self.host.events_on = on,

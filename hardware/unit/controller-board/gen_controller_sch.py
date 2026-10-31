@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "controller-board"
 DATE = "2026-10-22"
-GENERATOR_REV = "c14c-reuse"
+GENERATOR_REV = "c15-fault-io6"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -538,7 +538,7 @@ def mcu_sheet():
                 60.96, 182.88, rp=(15.24, 27.94, "right"),
                 desc="ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 2-1")
     assert A1["1"] == (43.18, 165.1) and A1["16"] == (43.18, 203.2) and A1["28"] == (78.74, 175.26) and A1["17"] == (78.74, 203.2), A1
-    dk = {5: "EXP_INT", 6: "WDI", 8: "LATCH_CLR", 9: "MCU_EN_N", 10: "KILL", 12: "SDA_IO7", 13: "SCL", 14: "DATA_TX", 15: "DATA_RX"}
+    dk = {5: "EXP_INT", 6: "WDI", 8: "LATCH_CLR", 9: "MCU_EN_N", 10: "KILL", 11: "FAULT_IO6", 12: "SDA_IO7", 13: "SCL", 14: "DATA_TX", 15: "DATA_RX"}
     for n in range(1, 29):
         x, y = A1[str(n)]
         if n in dk: S.wire((x, y), (35.56, y)); S.label("L", dk[n], 35.56, y, 180)
@@ -596,7 +596,13 @@ def mcu_sheet():
                  mpn="SN74LVC1G27DBVR", rp=(3.81, -10.16),
                  desc="3-input NOR, relay enable gate. -40 to 125 C (TI SCES488E). Second source Nexperia 74LVC1G27GV (SOT457, same pin-out and land, D-155); candidate Diodes 74LVC1G27W6-7 (SOT26, pin-out to check)")
     assert U14["6"] == (167.64, 119.38) and U14["1"] == (167.64, 121.92) and U14["3"] == (167.64, 124.46), U14
-    S.wire(U13["5"], (160.02, 93.98), (165.1, 93.98)); S.wire((160.02, 93.98), (160.02, 119.38), U14["6"]); S.label("L", "FAULT", 160.02, 119.38)
+    S.wire(U13["5"], (160.02, 93.98), (165.1, 93.98)); S.wire((160.02, 93.98), (160.02, 101.6), (160.02, 119.38), U14["6"]); S.label("L", "FAULT", 160.02, 119.38)
+    # FAULT read-back (D-191, review S-1): the MCU sees a supervisor trip that the MCU itself did not notice. 1k limits the
+    # current if GPIO6 is ever driven by mistake
+    RF_ = S.part("Device:R", ("R", 66), "1k", R0603, 167.64, 101.6, rot=90, rp=(0, -2.54),
+                 desc="FAULT to GPIO6 (D-191): series resistor, the MCU reads the fault latch")
+    assert RF_["1"] == (163.83, 101.6) and RF_["2"] == (171.45, 101.6), RF_
+    S.wire((160.02, 101.6), RF_["1"]); S.wire(RF_["2"], (177.8, 101.6)); S.label("L", "FAULT_IO6", 177.8, 101.6, 0)
     S.part("Connector:TestPoint", ("TP", 3), "FAULT", TP_FP, 165.1, 93.98, desc="Test point FAULT, the fault latch Q (D-120)", bom=False, rp=(1.27, -5.08))
     S.wire((134.62, 121.92), (142.24, 121.92), U14["1"]); S.label("L", "MCU_EN_N", 134.62, 121.92, 180)
     RE = S.part("Device:R", ("R", 63), "100k", R0603, 142.24, 118.11, rp=(1.27, -3.81),
@@ -630,7 +636,7 @@ def mcu_sheet():
            "5V/VBUS not connected, so the PC can stay on USB (board diode D6). Wi-Fi and BLE off in firmware.\\n"
            "I2C: board bus SDA GPIO10 (RUST-1) or GPIO7 (RUST-2), set by JP11 (2-3 or 2-1, D-94); SCL GPIO8. 10k on the board; 2.2k on the RF board.\\n"
            "GPIO0 EXP_INT, GPIO1 WDI (kick at least every 0.9 s), GPIO3 LATCH_CLR (rising edge), GPIO4 MCU_EN_N (low = relays allowed),\\n"
-           "GPIO5 KILL (read), GPIO20/21 UART 9600 baud. GPIO2, 8, 9 are strapping pins: GPIO2 and GPIO9 not used; GPIO8 is SCL. GPIO6 spare.\\n"
+           "GPIO5 KILL (read), GPIO6 FAULT (read, 1k R66, D-191), GPIO20/21 UART 9600 baud. GPIO2, 8, 9 are strapping pins: GPIO2 and GPIO9 not used; GPIO8 is SCL.\\n"
            "Board LED on GPIO7 (RUST-1) or GPIO10 (RUST-2): the SDA pin of the other board.\\n"
            "Safety gate (D-59): RLY_EN = NOR(KILL, MCU_EN_N, FAULT). FAULT is set by RESET_N: power-up, 3V3 below 2.83 to 3.00 V, or no WDI edge for 0.9 to 2.5 s.\\n"
            "After a reset the relays stay off until the MCU gives a LATCH_CLR edge. KILL is not latched. RLY_EN has a 100k pull-down on the RF board.\\n"
