@@ -186,7 +186,8 @@ FIXED_IDS = np.array([NID[n] for n in NETS if is_fixed(n)], dtype=np.int32)
 RFD = np.stack([ndimage.distance_transform_edt(~np.isin(owner[l], FIXED_IDS)).astype(np.float32) for l in range(NL)])
 FIXPAD = np.zeros((NL, NY, NX), dtype=bool)
 for p in geo["pads"]:
-    if p["net"] and is_fixed(p["net"]): paint(cu_layers(p), pad_mask(p), pad_box(p), True, arr=FIXPAD)
+    if p["net"] and is_fixed(p["net"]) and not any(fnmatch.fnmatchcase(p["net"], q) for q in CFG.get("pad_clear_skip", [])):
+        paint(cu_layers(p), pad_mask(p), pad_box(p), True, arr=FIXPAD)   # pad_clear_skip: only rf_clear per layer (D-189)
 RFDP = np.stack([ndimage.distance_transform_edt(~FIXPAD[l]).astype(np.float32) for l in range(NL)])
 del FIXPAD
 RFPC = CFG.get("rf_pad_clear", 0.0)          # local clearance of the fixed-net pads (2.0 mm on the RF board), all layers
@@ -225,7 +226,7 @@ def gnd_spot_ok(j0, j1, i0, i1):
     ok &= ndimage.distance_transform_edt(~VIAC[0, a0:a1, b0:b1])[sl] >= (0.9 - VIA_D / 2) / G
     ok &= ndimage.distance_transform_edt(~HOLES[0, a0:a1, b0:b1])[sl] >= (VIA_DR / 2 + 0.25 + MARGIN) / G
     ok &= ndimage.distance_transform_edt(~PADCU[0, a0:a1, b0:b1])[sl] >= (VIA_D / 2 + 0.2 + MARGIN) / G
-    ok &= (owner[0, j0:j1, i0:i1] != HARD)
+    ok &= (owner[0, j0:j1, i0:i1] != HARD) & ~GNDKO[j0:j1, i0:i1]
     return ok
 RING = sorted({(dj, di) for dj in range(-25, 26) for di in range(-25, 26) if 0.8 <= math.hypot(dj * G, di * G) <= 2.5},
               key=lambda d: d[0] ** 2 + d[1] ** 2)
@@ -260,7 +261,8 @@ for ln, rs in CFG.get("restrict", {}).items():
 del X, Y
 PAD_BRK = {LAY.index(ln): rs.get("pad_breakout", 0.0) for ln, rs in CFG.get("restrict", {}).items()}
 # per-net keep-out areas (shack interface p3, D-89): nets not in "except" may not use a cell inside "poly" minus "holes" on
-# any routing layer, nor place a via there (keeps interface nets off the RGND islands of the radio ports)
+# any routing layer (or only on the layers in the optional "layers" list, D-189), nor place a via there (keeps interface nets off
+# the RGND islands of the radio ports; keeps logic copper from under the RF board case seats)
 KO = []
 _kos = CFG.get("keepout", []) + (json.load(open(CFG["keepout_file"]))["keepout"] if CFG.get("keepout_file") else [])
 if _kos:
@@ -268,8 +270,14 @@ if _kos:
     for kr in _kos:
         m_ = Path(kr["poly"]).contains_points(_pts).reshape(_Y.shape)
         for h_ in kr.get("holes", []): m_ &= ~Path(h_).contains_points(_pts).reshape(_Y.shape)
-        KO.append((m_, {NID[n] for n in kr["except"] if n in NID}))
+        KO.append((m_, {NID[n] for n in kr["except"] if n in NID}, {LAY.index(x) for x in kr["layers"]} if "layers" in kr else None,
+                   ndimage.distance_transform_edt(~m_) < (VIA_D / 2 + MARGIN) / G))     # last: via centres whose copper would enter
     del _X, _Y, _pts
+# keep-outs that GND may not use either (RF board supports, D-189): no GND via of the router or of stitch.py with its copper inside
+GNDKO = np.zeros((NY, NX), dtype=bool)
+for m_, al_, _, _ in KO:
+    if NID.get("GND", -99) not in al_: GNDKO |= m_
+if GNDKO.any(): GNDKO = ndimage.distance_transform_edt(~GNDKO) < (VIA_D / 2 + MARGIN) / G
 
 DI = np.array([1, 1, 0, -1, -1, -1, 0, 1], dtype=np.int64)
 DJ = np.array([0, 1, 1, 1, 0, -1, -1, -1], dtype=np.int64)
@@ -460,8 +468,8 @@ def masks(nid, w, clr, j0, j1, i0, i1, own_allow, centres=(), ownpad=None, corr=
         ok = (dist[l] >= r_tr) & (rfd[l] >= (RFC[l] + w / 2 + MARGIN) / G) & (rfdp[l] >= (RFPC + w / 2 + MARGIN) / G) & (ALLOW[l, j0:j1, i0:i1] | own_allow[l])
         if ownpad is not None:
             ok &= (ndimage.distance_transform_edt(~ownpad[l]) >= r_tr) | corr[l]
-        for m_, al_ in KO:
-            if nid not in al_: ok &= ~m_[j0:j1, i0:i1]
+        for m_, al_, ly_, _ in KO:
+            if nid not in al_ and (ly_ is None or l in ly_): ok &= ~m_[j0:j1, i0:i1]
         for ids_, c_ in pair:                                 # aggressor/victim pairs keep a larger gap (M-81)
             o = owner[l, a0:a1, b0:b1]
             ok &= ndimage.distance_transform_edt(~np.isin(o, ids_))[sl] >= (c_ + w / 2 + MARGIN) / G
@@ -476,8 +484,8 @@ def masks(nid, w, clr, j0, j1, i0, i1, own_allow, centres=(), ownpad=None, corr=
             fr.append(ok | (own & (deep | ctr)))
     vo = np.ones((j1 - j0, i1 - i0), dtype=bool)
     for l in range(NL): vo &= (dist[l] >= r_via) & (rfd[l] >= (RFC[l] + VIA_D / 2 + MARGIN) / G) & (rfdp[l] >= (RFPC + VIA_D / 2 + MARGIN) / G)
-    for m_, al_ in KO:
-        if nid not in al_: vo &= ~m_[j0:j1, i0:i1]
+    for _, al_, ly_, mv_ in KO:
+        if nid not in al_ or ly_ is not None: vo &= ~mv_[j0:j1, i0:i1]   # layer-limited keep-outs (D-189): no via of any net
     return np.ascontiguousarray(np.stack(fr)), vo
 
 def mst_edges(pads):

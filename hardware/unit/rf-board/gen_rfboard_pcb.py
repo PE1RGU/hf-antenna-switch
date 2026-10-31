@@ -13,8 +13,8 @@ import json, math, os, re, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p3-silk"
-BOARD, PRO, NETLIST = "rf-board.kicad_pcb", "rf-board.kicad_pro", "../verify/rf14.xml"
+REV = "p3-keep"
+BOARD, PRO, NETLIST = "rf-board.kicad_pcb", "rf-board.kicad_pro", "../verify/rf15.xml"
 OX, OY, BW, BH = 20.0, 20.0, 268.0, 230.0            # board origin on the sheet, board size (C-12)
 FPLIB = "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints"
 mm = pcbnew.FromMM
@@ -647,7 +647,8 @@ def cls(name, tw, cl, vd=0.6, vdr=0.3):
     return c
 ns["classes"] = [base, cls("RF", 0.975, 0.5, 1.2, 0.8), cls("Power", 0.508, 0.2)]   # Power 0.508 (p2c: current budget, M-75)   # RF 0.5: inner antipad (D-117); outer 2.0 by the zones (M-70)
 ns["netclass_patterns"] = (
-    [{"netclass": "RF", "pattern": p} for p in ("/ANT*", "*TXBUS", "*RXBUS", "/R?_RADIO", "/R?_EXP", "/A?_ANTENNA", "*/PORT", "*/PARK")] +
+    [{"netclass": "RF", "pattern": p} for p in ("/ANT*", "*TXBUS", "*RXBUS", "/R?_RADIO", "/R?_EXP", "/A?_ANTENNA", "*/PORT", "*/PARK",
+                                                "unconnected-(K*-Pad12)")] +   # relay NC pads: joined to the common while the coil is off, so at RF (D-189)
     [{"netclass": "Power", "pattern": p} for p in ("+12V*", "+5V*", "+3V3", "CLAMP_*", "*/CHASSIS*")])   # +3V3, CHASSIS: as routed (M-75, D-162)
 open(PRO, "w").write(json.dumps(pro, indent=2) + "\n")
 
