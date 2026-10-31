@@ -8,9 +8,12 @@
 //! writes no log there; a panic prints its backtrace on it. Stored settings stay in
 //! RAM for now (lost at power-off); flash storage follows.
 //!
-//! The DevKit LED (GPIO7 on the DevKit-RUST-1) shows the self-test: fast blink
-//! (5 Hz) while it runs, slow blink (1 Hz) after a pass, flicker (10 Hz) after a
-//! fail. The main loop drives it, so a hung loop also stops the blink. On the
+//! The DevKit LED (GPIO7 on the DevKit-RUST-1) uses the same code as the box:
+//! slow blink (1 Hz) = working, TX possible (self-test passed, no fault, SAFE latch
+//! clear, link up, box ready); fast blink (5 Hz) = starting or waiting (self-test
+//! running, latched, link down, box not ready); flicker (10 Hz) = self-test failed;
+//! on solid = the box reports a link-loss stop. The main loop drives it, so a hung
+//! loop also stops the blink. On the
 //! shack interface board this pin goes only to JP61 pad 1 (the RUST-2 SDA choice);
 //! with JP61 at 2-3 for the RUST-1 it joins no net (D-94).
 #![no_std]
@@ -379,12 +382,25 @@ async fn main(_spawner: Spawner) -> ! {
             let t = diag.begin();
             shack.tick(now, &mut hw);
             diag.end(t);
+            // Half period of the blink, or `None` for on solid.
+            let boxs = shack.box_status().filter(|_| shack.link_up());
             let half = match shack.self_test() {
-                SelfTestState::Running => 100,
-                SelfTestState::Pass => 500,
-                SelfTestState::Fail(_) => 50,
+                SelfTestState::Running => Some(100),
+                SelfTestState::Fail(_) => Some(50),
+                SelfTestState::Pass if boxs.is_some_and(|s| s.flags.link_lost_stop) => None,
+                SelfTestState::Pass => {
+                    let latched = shack.inputs().is_none_or(|i| i.latched);
+                    let ready = boxs.is_some_and(|s| s.flags.ready);
+                    if !latched && ready && !shack.fault_known() {
+                        Some(500)
+                    } else {
+                        Some(100)
+                    }
+                }
             };
-            led.set_level(Level::from((now / half).is_multiple_of(2)));
+            led.set_level(Level::from(
+                half.is_none_or(|h| (now / h).is_multiple_of(2)),
+            ));
             next_tick = now + TICK;
             // A `#` log line for people (host-protocol.md section 3), between the
             // lines of the logic.
