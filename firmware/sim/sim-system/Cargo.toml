@@ -1,0 +1,23 @@
+[package]
+name = "sim-system"
+version = "0.1.0"
+description = "Runs both firmwares on both board models, joined by the Cat6 cable"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+box-core = { path = "../../crates/box-core" }
+link-proto = { path = "../../crates/link-proto" }
+shack-core = { path = "../../crates/shack-core" }
+sim-box = { path = "../sim-box" }
+sim-core = { path = "../sim-core" }
+sim-models = { path = "../sim-models" }
+sim-shack = { path = "../sim-shack" }
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+embedded-hal = "1"

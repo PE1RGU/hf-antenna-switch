@@ -205,8 +205,10 @@ pub struct Shack {
     config_loaded: bool,
     /// Time of the last unsaved change.
     config_dirty: Option<Ms>,
-    /// Send the stored routes and bias once the box is ready (after each link up).
-    restore_pending: bool,
+    /// Send the stored route of R1..R3 and the bias (index 3) once the box is ready
+    /// (after each link up, and each time the box is ready again). An item stays
+    /// set while it cannot go yet (radio still in TX, queue full).
+    restore: [bool; 4],
     display: display::Display,
 }
 
@@ -249,7 +251,7 @@ impl Shack {
             config: Config::default(),
             config_loaded: false,
             config_dirty: None,
-            restore_pending: false,
+            restore: [false; 4],
             display: display::Display::new(),
         }
     }
@@ -487,18 +489,21 @@ impl Shack {
         let Some(s) = self.status.filter(|s| s.flags.ready) else {
             return;
         };
-        if !self.restore_pending || !self.link.is_up() {
+        if !self.link.is_up() {
             return;
         }
-        self.restore_pending = false;
         for r in Radio::ALL {
-            let want = self.config.routes[r.index()];
-            if want != Route::default() && s.routes[r.index()] != want {
-                let _ = self.set_route(r, want);
+            let i = r.index();
+            let want = self.config.routes[i];
+            if self.restore[i] {
+                self.restore[i] = want != Route::default()
+                    && s.routes[i] != want
+                    && self.set_route(r, want).is_err();
             }
         }
-        if self.config.bias != s.bias_en {
-            let _ = self.set_bias(self.config.bias);
+        if self.restore[3] {
+            self.restore[3] =
+                self.config.bias != s.bias_en && self.set_bias(self.config.bias).is_err();
         }
     }
 
@@ -518,7 +523,7 @@ impl Shack {
     fn on_link(&mut self, now: Ms, e: LinkEvent) {
         match e {
             LinkEvent::Up(_) => {
-                self.restore_pending = true;
+                self.restore = [true; 4];
                 self.event(Event::LinkUp);
             }
             LinkEvent::VersionMismatch(_) => self.event(Event::VersionMismatch),
@@ -543,19 +548,26 @@ impl Shack {
     }
 
     fn on_reply(&mut self, now: Ms, cmd: Command, status: Status) {
+        // The box came back ready (after KILL, a stop or an expander reset): its
+        // relays are off, so send the stored routes and bias again.
+        if status.flags.ready && !self.status.is_some_and(|s| s.flags.ready) {
+            self.restore = [true; 4];
+        }
         self.status = Some(status);
         let ok = status.result == ResultCode::Ok;
-        // Keep the stored settings equal to what the box accepted.
+        // Keep the stored settings equal to what the box accepted: the command, not
+        // the read-back in this answer. The box answers at once and switches after
+        // (36 to 48 ms), so this read-back still shows the old relays.
         match cmd {
-            Command::SetRoute { radio, .. } if ok => {
+            Command::SetRoute { radio, route } if ok => {
                 let i = radio.index();
-                if self.config.routes[i] != status.routes[i] {
-                    self.config.routes[i] = status.routes[i];
+                if self.config.routes[i] != route {
+                    self.config.routes[i] = route;
                     self.config_changed(now);
                 }
             }
-            Command::SetBias(_) if ok && self.config.bias != status.bias_en => {
-                self.config.bias = status.bias_en;
+            Command::SetBias(mask) if ok && self.config.bias != mask => {
+                self.config.bias = mask;
                 self.config_changed(now);
             }
             _ => {}

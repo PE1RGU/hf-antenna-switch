@@ -163,7 +163,7 @@ Where each step is in the code:
 | The radio is released | `Shack::apply_outputs` sets PERMIT_R2; the hardware gate (permit AND not latched AND no fault) frees TX INH |
 | The end | `set_tx(R2, false)` moves R2 to `Ending`; `apply_outputs` drops the permit at once; `step_tx` sends `TxEnd` only after the F14 wait |
 
-In the shack emulator, the box is `BoxStub` (in `sim/sim-shack/src/box_stub.rs`), a script with the same rules. The real box firmware is `RelayBox` in `crates/box-core`. It runs on the box board model in `sim/sim-box`, against a scripted shack (`ShackStub`), behind its own trait `BoxHw`. Phase P6 joins the two firmwares.
+In the shack emulator, the box is `BoxStub` (in `sim/sim-shack/src/box_stub.rs`), a script with the same rules. The real box firmware is `RelayBox` in `crates/box-core`. It runs on the box board model in `sim/sim-box`, against a scripted shack (`ShackStub`), behind its own trait `BoxHw`. `sim/sim-system` joins the two: both firmwares on both boards, with the four Cat6 pairs between them (`SystemSim`).
 
 ## 5. Where the safety is
 
@@ -185,7 +185,7 @@ The firmware rules from the hardware verification, and where they are kept:
 | F15 | TX sense without the permit (a radio that ignores TX INH, or a wiring fault): warn, stop nothing (D-188) | `Shack::check_tx_without_permit` | `tx_without_permit_raises_the_alarm`, `rf_tail_within_the_grace_is_no_alarm` |
 | Watchdog | WDI toggles only from the main loop, after the checks of the pass (D-59) | `Shack::tick` | `shack_mcu_hang`, `watchdog_kick_comes_after_the_checks` |
 
-The tests are in `sim/sim-shack/tests/`, `sim/sim-box/tests/` and `sim/sim-models/tests/`.
+The tests are in `sim/sim-shack/tests/`, `sim/sim-box/tests/`, `sim/sim-system/tests/` and `sim/sim-models/tests/`. The system tests also check one rule across both ends at every ms: R2 or R3 is released only while its K0 in the box is settled on the TX row (D-63).
 Each rule was once broken on purpose, to show that its test catches it.
 
 ## 6. How to: add a host command

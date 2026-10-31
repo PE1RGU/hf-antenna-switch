@@ -6,9 +6,10 @@
 //! resends and the link time-out. Only the decisions are a script: the test queues
 //! the commands.
 //!
-//! The SAFE latch is modelled as in the shack (D-75): it sets when the loop
-//! current stops, and only [`ShackStub::press_reset`] clears it. It is set at
-//! power-up. The KILL switch opens the loop while pressed.
+//! The shack end of the SAFE loop closes while the KILL switch is not pressed. The
+//! SAFE latch (D-75) is not in the loop (system-verification.md section 1): it sets
+//! when the loop current stops, only [`ShackStub::press_reset`] clears it, and it
+//! only blocks TX at the shack. It is set at power-up.
 
 use link_proto::frame::MAX_WIRE;
 use link_proto::shack_link::{Event, ShackLink};
@@ -29,7 +30,7 @@ pub struct ShackStub {
     pub events: Vec<(Ms, Event)>,
     /// The shack MCU sends nothing (hang, or pair 1 broken).
     pub mute: bool,
-    /// The SAFE latch: set = the shack holds the loop open.
+    /// The SAFE latch: set = TX blocked at the shack. Not in the loop.
     pub latched: bool,
     /// The KILL switch is pressed.
     pub kill_pressed: bool,
@@ -66,8 +67,8 @@ impl ShackStub {
         self.replies.last().map(|r| r.2)
     }
 
-    /// Press the RESET button: clears the SAFE latch. If the loop has no current
-    /// (box not READY), the latch sets again at the next step.
+    /// Press the RESET button: clears the SAFE latch. If the loop has no current,
+    /// the latch sets again at the next step.
     pub fn press_reset(&mut self) {
         self.latched = false;
     }
@@ -121,13 +122,12 @@ impl ShackStub {
     }
 
     fn safe_loop(&mut self, board: &mut BoxBoard) {
-        let closed = !self.latched && !self.kill_pressed;
+        let closed = !self.kill_pressed;
         if board.env().shack_loop != closed {
             board.set_env(|e| e.shack_loop = closed);
         }
-        if closed && !board.signals().safe_current {
+        if !board.signals().safe_current {
             self.latched = true;
-            board.set_env(|e| e.shack_loop = false);
         }
     }
 }

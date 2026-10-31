@@ -49,7 +49,8 @@
 //!    answer the host and stop the tick here.
 //! 5. Read the box link replies and check the link time-out.
 //! 6. Read and answer the host lines; check the host keep-alive.
-//! 7. Restore the stored routes and bias after a link up.
+//! 7. Restore the stored routes and bias after a link up, and each time the box
+//!    reports READY again.
 //! 8. Step the TX handshake of R2 and R3.
 //! 9. Send the next queued command (or a Poll) to the box.
 //! 10. Set the outputs: permits that go off, the expander, permits that go on.
