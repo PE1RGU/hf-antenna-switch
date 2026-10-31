@@ -1,7 +1,7 @@
 Qty per board,References,Value,Footprint,First source,Second source,Specification / note
 1,A1,ESP32-C3-DevKit-RUST-1,ESP32-C3-DevKit-RUST_Socket,Espressif ESP32-C3-DevKit-RUST-1,Espressif ESP32-C3-DevKit-RUST-2 (JP11 2-1),"MCU board; sockets on the lines below (D-55, D-94, D-95)"
 10,C1 C2 C3 C4 C5 C11 C14 C15 C16 C17,1u 16V X7R,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71C105KA12D,Samsung CL10B105KO8NNNC,MLCC 1 uF 16 V X7R 0603 (D-127)
-1,C12,10n,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71H103KA01D,Yageo CC0603KRX7R9BB103,"MLCC 10 nF 50 V X7R 0603, LDO bypass"
+1,C12,10n 50V X7R,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71H103KA01D,Yageo CC0603KRX7R9BB103,"MLCC 10 nF 50 V X7R 0603, LDO bypass"
 1,C13,4.7u 16V X7R,C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,Murata GRM21BR71C475KE51L,Samsung CL21B475KOFNNNE,"MLCC 4.7 uF 16 V X7R 0805, LDO output (>= 2.2 uF effective)"
 4,D11 D21 D31 D41,SMBJ15CA,D_SMB,ST SMBJ15CA-TR,Littelfuse SMBJ15CA,"TVS 600 W bidirectional, VR 15 V"
 4,D12 D22 D32 D42,1N4148W,D_SOD-123,Diodes 1N4148W-7-F,"Nexperia 1N4148W,115",Small-signal diode SOD-123

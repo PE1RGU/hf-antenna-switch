@@ -3,7 +3,7 @@ gen_rfboard_pcb.py --no-routes. Copy of the controller-board export_geom.py, wit
 exports every track and via (with --no-routes all copper on the board is fixed copper: RF lines, GND vias, fan-out stubs).
 Writes geom.json: board outline, pads (net, layers, shape, size, rotation, drill, exact outline), tracks and vias, rule areas,
 holes. Coordinates in the board frame (page minus 20 mm), mm. Pads in terminals.json move to their fixed fan-out via."""
-import json, os, pcbnew
+import json, math, os, pcbnew
 OX = OY = 20.0
 T = pcbnew.ToMM
 b = pcbnew.LoadBoard("../rf-board.kicad_pcb")
@@ -40,11 +40,24 @@ for t in b.GetTracks():
         s, e = t.GetStart(), t.GetEnd()
         out["tracks"].append({"net": t.GetNetname(), "layer": LNAME[t.GetLayer()], "w": T(t.GetWidth()),
                               "x1": T(s.x) - OX, "y1": T(s.y) - OY, "x2": T(e.x) - OX, "y2": T(e.y) - OY})
+SUP_KO = []
 ZONES = list(b.Zones()) + [z for f in b.GetFootprints() for z in f.Zones()]      # footprint keep-outs too (M-79: J12 to J14)
 for z in ZONES:
     if z.GetIsRuleArea():
         o = z.Outline().Outline(0)
-        out["rule_areas"].append([(T(o.CPoint(i).x) - OX, T(o.CPoint(i).y) - OY) for i in range(o.PointCount())])
+        poly = [(T(o.CPoint(i).x) - OX, T(o.CPoint(i).y) - OY) for i in range(o.PointCount())]
+        if z.GetZoneName() == "SUP_KO":      # support keep-out (D-189): only the support's own net may cross it
+            own = [p.GetNetname() for p in b.GetPads() if z.Outline().Contains(p.GetPosition()) and p.GetDrillSize().x > 0]
+            SUP_KO.append({"poly": poly, "except": own, "layers": ["F"]})   # tracks on F.Cu (washer); vias on all layers
+        else:
+            out["rule_areas"].append(poly)
 json.dump(out, open("geom.json", "w"), indent=0)
+# GND screw holes of the SO-239 and SMA (case seat faces B1 to B10, diameter 10): other nets keep 5.5 mm (D-189, keepout_file)
+R_BOSS = 5.5
+ko = [{"poly": [(x + R_BOSS * math.cos(2 * math.pi * k / 48), y + R_BOSS * math.sin(2 * math.pi * k / 48)) for k in range(48)],
+       "except": ["GND"], "layers": ["F"]}                        # B.Cu is not routed; vias on all layers
+      for p in out["pads"] if p["ref"].startswith("J") and p["net"] == "GND" and p["drill"] >= 3.0 for x, y in [(p["x"], p["y"])]]
+json.dump({"keepout": ko + SUP_KO}, open("boss_keepout.json", "w"), indent=0)
+print("boss keep-outs", len(ko), "support keep-outs", [k["except"] for k in SUP_KO])
 print("pads", len(out["pads"]), "tracks", len(out["tracks"]), "vias", len(out["vias"]), "holes", len(out["holes"]),
       "rule areas", len(out["rule_areas"]), "outline", out["outline"])

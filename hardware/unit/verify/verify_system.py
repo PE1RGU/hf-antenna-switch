@@ -62,7 +62,7 @@ bn = si[("U10", "2")]
 check(si[("R71", "1")] == bn and si[("R71", "2")] == S + "BTN" and si[("R72", "2")] == bn and si[("R72", "1")] == "+3V3"
       and si[("C71", "1")] == bn and si[("C71", "2")] == "GND" and si[("D71", "2")] == bn and si[("D71", "1")] == "+3V3"
       and si[("J6", "1")] == S + "BTN" and si[("J6", "4")] == "GND"
-      and [si_parts[x][0] for x in ("R71", "R72", "C71")] == ["1k", "100k", "100n"], "RESET button: J6 pin 1 to GND, R71 1k, R72 100k pull-up, C71 100n, D71 to 3V3, into U10 (D-84)")
+      and [si_parts[x][0].split()[0] for x in ("R71", "R72", "C71")] == ["1k", "100k", "100n"], "RESET button: J6 pin 1 to GND, R71 1k, R72 100k pull-up, C71 100n, D71 to 3V3, into U10 (D-84)")
 check(len(si_nets.get(si[("U6", "3")], [])) == 1 and len(si_nets.get(si[("U6", "4")], [])) == 1 and si_parts["U6"][0] == "TPS3823A-33",
       "U6 TPS3823A-33: WDI and MR open (watchdog off, power-on reset only)")
 check(mem(si_nets, M + "LATCHED") == {("U9", "5"), ("U11", "2"), ("R74", "1"), ("U5", "20")}, "LATCHED = U9 Q to the NOR, the panel LED and U5 IO1_7")

@@ -16,7 +16,7 @@
  ],
  "max_states": 150000000,
  "breakout": 1.5,
- "passes": 6,
+ "passes": 10,
  "layers": [
   {
    "name": "F",
@@ -47,7 +47,8 @@
   "/R?_EXP",
   "/R?_RADIO",
   "/Radio port R?/RXBUS",
-  "/Radio port R?/TXBUS"
+  "/Radio port R?/TXBUS",
+  "unconnected-(K*-Pad12)"
  ],
  "rf_clear": {
   "F": 2.0,
@@ -224,5 +225,12 @@
    ],
    "clear": 1.0
   }
- ]
+ ],
+ "_doc_fixed_nets": "D-189: the relay NC pads (pad 12, not used) are joined to the common while the coil is off, so they are RF: rf_pad_clear on all layers, as pads 11 and 14",
+ "keepout_file": "boss_keepout.json",
+ "_doc_keepout_file": "D-189: written by export_geom.py. The case GND seat faces B1 to B10 (diameter 10, RF-CASE-01 rev B) under the SO-239 and SMA GND screw holes: no track or via of a net other than GND within 5.5 mm of the hole centre; plus the support keep-outs S1 to S6 (R 4.5, rule areas SUP_KO) that only the support's own CHASSIS_Sn net may cross",
+ "pad_clear_skip": [
+  "unconnected-(K*-Pad12)"
+ ],
+ "_doc_pad_clear_skip": "D-189: the relay NC pads keep rf_clear per layer (2.0 mm outer, 0.5 mm inner, D-12 and D-117) instead of rf_pad_clear on all layers, so the drive lines keep their inner channels through the relay field"
 }

@@ -12,8 +12,8 @@ import collections, json, math, os, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p8b"
-BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si16.xml"
+REV = "p8c"
+BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si17.xml"
 OX, OY = 20.0, 20.0                                  # page offset of the board frame origin
 BW, BH, RC = 160.0, 159.0, 1.0                       # board (D-171): 160 mm slot width; length 159 mm in the 160 +-0.5 mm extrusion (A-25, to confirm on the STEP model)
 SIDE = 3.5                                           # side bands in the extrusion slots and along the wall: no parts
@@ -631,7 +631,30 @@ TERM_J14 = {"A6": [jx("A6") / 2 + jx("B6") / 2, YU, ["F"]], "B6": [jx("A6") / 2 
 p24 = next(pd for pd in fps["U5"].Pads() if pd.GetNumber() == "24")
 c61 = next(pd for pd in fps["C61"].Pads() if pd.GetNetname() == p24.GetNetname())
 ftrack2([pad_mm(p24), pad_mm(c61)], p24.GetNetname(), 0.3)
-json.dump({"J14": TERM_J14, "U5": {"24": [pad_mm(c61)[0], pad_mm(c61)[1], ["F"]]}}, open("routing/terminals.json", "w"), indent=1)
+# U4, U9 fan-out (D-190, as controller U13, D-154 and M-68): VSSOP-8 at 0.5 mm pitch; the pad gap (0.15 mm) is below the
+# clearance and the router keep-out. Pins 6 and 8 (+3V3): 0.2 mm strap outside the pad tips, terminal at its middle; pin 7
+# (RESET_N at U4, PRE_N at U9) and pin 4 (GND): stubs inward to vias under the body; pin 2 (GND) to pin 4 around pin 3 (NC).
+# Pads get a local clearance of 0.12 mm (pad to pad only). Written for any rotation (U4 is turned 180 by its group).
+TERM_U = {}
+for u in ("U4", "U9"):
+    UP = {pd.GetNumber(): pad_mm(pd) for pd in fps[u].Pads()}
+    UN = {pd.GetNumber(): pd.GetNetname() for pd in fps[u].Pads()}
+    for pd in fps[u].Pads(): pd.SetLocalClearance(mm(0.12))
+    assert UN["6"] == UN["8"] == "+3V3" and UN["2"] == UN["4"] == "GND", (u, UN)
+    ucx, ucy = pos(u)
+    sx = 1.0 if UP["8"][0] > ucx else -1.0                 # side of pins 5 to 8
+    SXU = 2.6
+    p2, p4, p6, p7, p8 = (UP[k] for k in "24678")
+    ftrack2([p8, (ucx + sx * SXU, p8[1]), (ucx + sx * SXU, p6[1]), p6], "+3V3", 0.2)
+    v7, v4 = (ucx, p7[1]), (ucx, p4[1])
+    ftrack2([p7, v7], UN["7"], 0.2); ftrack2([p4, v4], "GND", 0.2)
+    ftrack2([p2, (ucx - sx * SXU, p2[1]), (ucx - sx * SXU, p4[1]), p4], "GND", 0.2)
+    for v, n_ in ((v7, UN["7"]), (v4, "GND")):
+        add_via(v[0], v[1], n_); VIAS.append(v)
+    HANDLED |= {(u, "2"), (u, "4")}
+    TERM_U[u] = {"6": [ucx + sx * SXU, (p8[1] + p6[1]) / 2, ["F"]], "8": [ucx + sx * SXU, (p8[1] + p6[1]) / 2, ["F"]],
+                 "7": [v7[0], v7[1], ["F", "In2"]]}
+json.dump({"J14": TERM_J14, "U5": {"24": [pad_mm(c61)[0], pad_mm(c61)[1], ["F"]]}, **TERM_U}, open("routing/terminals.json", "w"), indent=1)
 # fixed links for plane-net pads outside their own region
 for k, c0 in enumerate(c0s):
     n = 200 + 100 * k

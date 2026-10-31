@@ -5698,7 +5698,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2k"
+		(property "Value" "2k2"
 			(at 26.67 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5895,7 +5895,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2k"
+		(property "Value" "2k2"
 			(at 36.83 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)

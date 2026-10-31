@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12b-chassis-split"
+GENERATOR_REV = "v12c-reuse"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -447,7 +447,7 @@ def coil_supply(S):
     C2 = S.part("Device:C", ("C", 2), "DNP", C0603, 91.44, 64.77, dnp=True, rp=(-2.54, -1.27, "right"),
                 desc="Q1 drain-gate soft start, footprint only, not fitted (D-38, onsemi AND9093)")
     assert C2["1"] == (91.44, 60.96); S.wire(C2["2"], (91.44, 71.12), (104.14 + X, 71.12))
-    R2_ = S.part("Device:R", ("R", 2), "2.2k", R0603, 81.28, 67.31, rp=(-1.27, -1.27, "right"),
+    R2_ = S.part("Device:R", ("R", 2), "2k2", R0603, 81.28, 67.31, rp=(-1.27, -1.27, "right"),
                  desc="Q1 gate series: VGS about 10.3 V at 12.6 V with R1 (D-38); limits the D6 current")
     S.wire((81.28, 60.96), R2_["1"])
     Q2 = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", 2), "BSS138BK", SOT23, 78.74, 78.74, mpn="BSS138BK", desc="Q1 gate driver. " + QN_D)
@@ -510,7 +510,7 @@ def logic_3v3(S):
     assert C3["1"] == (83.82, 119.38); S.power("GND", C3["2"])
     S.power("GND", U1["2"])
     S.wire(U1["4"], (116.84, 121.92))
-    C4 = S.part("Device:C", ("C", 4), "10n", C0603, 116.84, 125.73, desc="LDO noise bypass, X7R or C0G")
+    C4 = S.part("Device:C", ("C", 4), "10n 50V X7R", C0603, 116.84, 125.73, desc="LDO noise bypass (one 10 nF line on all boards, D-190)")
     S.power("GND", C4["2"])
     S.wire(U1["5"], (124.46, 119.38), (129.54, 119.38))
     R4 = S.part("Device:R", ("R", 4), "0R", "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", 133.35, 119.38, rot=90, rp=(-2.54, -5.08),
@@ -576,7 +576,7 @@ def rf_detect_sheet():
     S.wire(RA["2"], (BX, 38.1)); S.wire((BX, 38.1), (50.8, 38.1), (43.18, 38.1))
     RB = S.part("Device:R", ("R", 2), "1k", R0603, 50.8, 41.91, rp=(1.27, -1.27), desc="VREF divider, bottom")
     S.power("GND", RB["2"])
-    CV = S.part("Device:C", ("C", 1), "100n", C0603, 43.18, 41.91, rp=(-2.54, -1.27, "right"), desc="VREF decoupling")
+    CV = S.part("Device:C", ("C", 1), "100n 50V X7R", C0603, 43.18, 41.91, rp=(-2.54, -1.27, "right"), desc="VREF decoupling")
     S.power("GND", CV["2"])
     ys = [R2(50.8 + i * 30.48) for i in range(4)]
     taps = [(BX, 38.1)] + [(BX, R2(y - 2.54)) for y in ys]
@@ -698,7 +698,7 @@ def io_sheet():
            "The controller board adds no pull-ups on this bus. Unit 2: J14 takes the EXP ribbon from the unit 1 controller board (D-53).\\n"
            "R904 100k pull-down on TX_ANY: defined low with J14 open (logic verification F4, D-61).", 25.4, 160.02)
     # bus pull-ups (D-52)
-    for k, (net, val, why) in enumerate((("SCL", "2.2k", "SCL pull-up to 3.3 V (D-52)"), ("SDA", "2.2k", "SDA pull-up to 3.3 V (D-52)"),
+    for k, (net, val, why) in enumerate((("SCL", "2k2", "SCL pull-up to 3.3 V (D-52)"), ("SDA", "2k2", "SDA pull-up to 3.3 V (D-52)"),
                                          ("EXP_INT", "10k", "EXP_INT pull-up to 3.3 V, open-drain INT of U901 to U903 (D-52)"))):
         x = R2(25.4 + k * 10.16)
         R = S.part("Device:R", ("R", 1 + k), val, R0603, x, 38.1, desc=why)
@@ -761,7 +761,7 @@ def bias_channel(S, k, ox, yl):
     # output: decoupling, TVS, read-back divider, to the antenna port
     S.wire(QP["2"], (X(53.34), yo), (X(60.96), yo), (X(73.66), yo), (X(86.36), yo), (X(101.6), yo))
     S.label("H", f"A{k}_BIAS", X(101.6), yo, 0)
-    CO = S.part("Device:C", ("C", n + 1), "100n", C0603, X(60.96), R2(yo + 3.81), desc="Output decoupling, 100 nF X7R 50 V")
+    CO = S.part("Device:C", ("C", n + 1), "100n 50V X7R", C0603, X(60.96), R2(yo + 3.81), desc="Output decoupling, 100 nF X7R 50 V")
     S.power("GND", max(CO["1"], CO["2"], key=lambda q: q[1]))
     T = S.part("Device:D_Zener", ("D", n + 1), "SMBJ15A", "Diode_SMD:D_SMB", X(73.66), R2(yo + 3.81), rot=270, mpn="SMBJ15A",
                desc="TVS on the feed: clamps surges that pass the bias choke; conducts on negative pulses (same part as D-45)")

@@ -6,11 +6,11 @@ Test points (bare pads), the mounting hole and DNP parts are listed apart; DNP p
 import csv, collections
 import xml.etree.ElementTree as ET
 
-NETLIST = "../verify/ctl14.xml"
+NETLIST = "../verify/ctl15.xml"
 # (value, footprint name) -> (first source, second source, specification / note)
 ORDER = {
     ("1u 16V X7R", "C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"): ("Murata GRM188R71C105KA12D", "Samsung CL10B105KO8NNNC", "MLCC 1 uF 16 V X7R 0603 (D-127)"),
-    ("10n", "C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"): ("Murata GRM188R71H103KA01D", "Yageo CC0603KRX7R9BB103", "MLCC 10 nF 50 V X7R 0603, LDO bypass"),
+    ("10n 50V X7R", "C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"): ("Murata GRM188R71H103KA01D", "Yageo CC0603KRX7R9BB103", "MLCC 10 nF 50 V X7R 0603, LDO bypass"),
     ("4.7u 16V X7R", "C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"): ("Murata GRM21BR71C475KE51L", "Samsung CL21B475KOFNNNE", "MLCC 4.7 uF 16 V X7R 0805, LDO output (>= 2.2 uF effective)"),
     ("SMBJ15CA", "D_SMB"): ("ST SMBJ15CA-TR", "Littelfuse SMBJ15CA", "TVS 600 W bidirectional, VR 15 V"),
     ("1N4148W", "D_SOD-123"): ("Diodes 1N4148W-7-F", "Nexperia 1N4148W,115", "Small-signal diode SOD-123"),

@@ -3242,7 +3242,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
+		(property "Footprint" "Package_SO:VSSOP-8_2.3x2mm_P0.5mm"
 			(at 304.8 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -3266,7 +3266,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "D flip-flop, fault latch: D = GND, CLR_N = 3V3, PRE_N = RESET_N (TI SCES794G). Second source Nexperia 74LVC1G74DC"
+		(property "Description" "D flip-flop, fault latch: D = GND, CLR_N = 3V3, PRE_N = RESET_N (TI SCES794G, DCU VSSOP-8, D-190 as D-154). Second source Nexperia 74LVC1G74DC,125 (SOT765-1, same pin-out and MO-187 land)"
 			(at 304.8 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -3278,7 +3278,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "SN74LVC1G74DCTR"
+		(property "MPN" "SN74LVC1G74DCUR"
 			(at 304.8 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -4260,7 +4260,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n 16V"
+		(property "Value" "100n 50V X7R"
 			(at 368.3 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)

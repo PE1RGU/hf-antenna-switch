@@ -3391,7 +3391,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "100n 50V X7R"
 			(at 142.49 58.42 0)
 			(show_name no)
 			(do_not_autoplace no)

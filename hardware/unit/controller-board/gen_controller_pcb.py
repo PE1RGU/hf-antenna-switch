@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 import pcbnew
 
 REV = "c-s5"
-BOARD, PRO, NETLIST = "controller-board.kicad_pcb", "controller-board.kicad_pro", "../verify/ctl14.xml"
+BOARD, PRO, NETLIST = "controller-board.kicad_pcb", "controller-board.kicad_pro", "../verify/ctl15.xml"
 RF_BOARD = "../rf-board/rf-board.kicad_pcb"
 OX, OY = 20.0, 20.0                                   # page offset of the RF frame origin (same as the RF board)
 X0, Y0, X1, Y1, RC = 1.0, -2.0, 153.0, 120.5, 3.0   # outline (RF frame): 4 mm left of S2, 1 mm from the top wall (y -3)

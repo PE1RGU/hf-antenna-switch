@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "controller-board"
 DATE = "2026-10-22"
-GENERATOR_REV = "c14b-u14src"
+GENERATOR_REV = "c14c-reuse"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -519,7 +519,7 @@ def mcu_sheet():
     assert CI["1"] == (43.18, y0); gnd(CI["2"])
     gnd(U1["2"])
     S.wire(U1["4"], (76.2, U1["4"][1]))
-    CB = S.part("Device:C", ("C", 12), "10n", C0603, 76.2, R2(U1["4"][1] + 3.81), rp=(-2.54, -1.27, "right"), desc="LDO noise bypass")
+    CB = S.part("Device:C", ("C", 12), "10n 50V X7R", C0603, 76.2, R2(U1["4"][1] + 3.81), rp=(-2.54, -1.27, "right"), desc="LDO noise bypass")
     gnd(CB["2"])
     yo = U1["5"][1]
     S.wire(U1["5"], (83.82, yo), (88.9, yo))

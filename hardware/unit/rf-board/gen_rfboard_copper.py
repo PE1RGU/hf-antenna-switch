@@ -197,8 +197,24 @@ for v in sorted(VIOL)[:25]: print("  ", v)
 
 # ---- GND vias: return vias at every RF layer change (D-157), then the fence along every RF line (D-119) ----
 FSTUB = []                                                # fixed signal stubs (fan-out, p2c): vias keep clear of them
+# ---- keep-outs at the supports S1 to S6 (D-189): the case seat face C1 to C6 (diameter 8, RF-CASE-01 rev B) presses on B.Cu, the
+# standoff and washer (7 mm) on F.Cu. No via or pour of any net within R_SUP of the hole centre (rule area on F.Cu and B.Cu; a
+# through via touches both). Tracks: routing/export_geom.py turns these areas (name SUP_KO) into router keep-outs that only the
+# support's own net CHASSIS_Sn may cross (its track to the bond option Cn); the logic routes never come in.
+R_SUP = 4.5
+SUP = [(round(T(fps[f"S{i}"].GetPosition().x) - OX, 3), round(T(fps[f"S{i}"].GetPosition().y) - OY, 3)) for i in range(1, 7)]
+for sx, sy in SUP:
+    ka = pcbnew.ZONE(b); ka.SetIsRuleArea(True)
+    ls_ = pcbnew.LSET(); ls_.AddLayer(pcbnew.F_Cu); ls_.AddLayer(pcbnew.B_Cu); ka.SetLayerSet(ls_)
+    ka.SetZoneName("SUP_KO"); ka.SetDoNotAllowTracks(False); ka.SetDoNotAllowVias(True); ka.SetDoNotAllowZoneFills(True)
+    ka.SetDoNotAllowPads(False); ka.SetDoNotAllowFootprints(False)
+    o = ka.Outline(); o.NewOutline()
+    for k_ in range(48):
+        o.Append(mm(OX + sx + R_SUP * math.cos(2 * math.pi * k_ / 48)), mm(OY + sy + R_SUP * math.sin(2 * math.pi * k_ / 48)))
+    b.Add(ka); KEEP.append(ka)
 def via_ok(x, y):
     if not (1.0 <= x <= BW - 1.0 and 1.0 <= y <= BH - 1.0): return False
+    if any(math.hypot(x - sx, y - sy) < R_SUP + VG_D / 2 for sx, sy in SUP): return False
     for cx_, cy_ in ((5, 5), (BW - 5, 5), (5, BH - 5), (BW - 5, BH - 5)):          # corner radius 5 mm (D-113)
         if (x < 5 or x > BW - 5) and (y < 5 or y > BH - 5) and math.hypot(x - cx_, y - cy_) > 4.0: return False
     r = VG_D / 2

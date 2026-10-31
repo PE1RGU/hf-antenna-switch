@@ -3649,7 +3649,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "2.2k"
+		(property "Value" "2k2"
 			(at 80.01 68.58 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6013,7 +6013,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10n"
+		(property "Value" "10n 50V X7R"
 			(at 119.38 127.0 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6048,7 +6048,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "LDO noise bypass, X7R or C0G"
+		(property "Description" "LDO noise bypass (one 10 nF line on all boards, D-190)"
 			(at 116.84 125.73 0)
 			(hide yes)
 			(show_name no)

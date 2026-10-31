@@ -39,6 +39,7 @@ ok &= (Xg > X0 + 0.8) & (Xg < X1 - 0.8) & (Yg > Y0 + 0.8) & (Yg < Y1 - 0.8)
 for (cx_, cy_) in ((5, 5), (X1 - 5, 5), (5, Y1 - 5), (X1 - 5, Y1 - 5)):                # 5 mm corner radius (D-113)
     corner = ((Xg < 5) | (Xg > X1 - 5)) & ((Yg < 5) | (Yg > Y1 - 5))
     ok &= ~(corner & (np.hypot(Xg - cx_, Yg - cy_) > 5 - 0.8) & (np.abs(Xg - cx_) < 5.01) & (np.abs(Yg - cy_) < 5.01))
+ok &= ~GNDKO                                                                             # support keep-outs (D-189)
 gv = [(v["x"], v["y"]) for v in geo["vias"] + rj["vias"] if v["net"] == "GND"]          # fixed GND vias and the return vias of the router
 new = []
 def free_at(j, i):

@@ -2017,7 +2017,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
+		(property "Footprint" "Package_SO:VSSOP-8_2.3x2mm_P0.5mm"
 			(at 132.08 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -2053,7 +2053,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "SN74LVC1G74DCTR"
+		(property "MPN" "SN74LVC1G74DCUR"
 			(at 132.08 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -3264,7 +3264,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "100n 50V X7R"
 			(at 157.73 119.38 0)
 			(show_name no)
 			(do_not_autoplace no)

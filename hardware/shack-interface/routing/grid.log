@@ -1,20 +1,10 @@
 nets to route 155 connections 405 grid 1603 x 1613
   return vias placed 0, beyond 0.0 mm or none: 0
-pass 1: failed 1 ['LATCHED'] | vias 424 | 126 s
+pass 1: failed 1 ['LATCHED'] | vias 421 | 72 s
   return vias placed 0, beyond 0.0 mm or none: 0
-pass 2: failed 1 ['SCL'] | vias 430 | 249 s
-  return vias placed 0, beyond 0.0 mm or none: 0
-pass 3: failed 1 ['RESET_N'] | vias 434 | 362 s
-  return vias placed 0, beyond 0.0 mm or none: 0
-pass 4: failed 1 ['BAND_D'] | vias 436 | 483 s
-  return vias placed 0, beyond 0.0 mm or none: 0
-pass 5: failed 1 ['KILL_S'] | vias 437 | 604 s
-  return vias placed 0, beyond 0.0 mm or none: 0
-pass 6: failed 1 ['SW_STOP_N'] | vias 439 | 725 s
-  return vias placed 0, beyond 0.0 mm or none: 0
-pass 7: failed 0 [] | vias 439 | 836 s
+pass 2: failed 0 [] | vias 427 | 131 s
 short segments merged: 4
-chamfered corners: 252 T-junction fillets: 18 (pieces that fail the clearance check are left out)
-narrowed: {'+3V3': [0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254, 0.254], 'L1N': [0.508, 0.508, 0.508, 0.508, 0.508, 0.508, 0.508]}
-connections without the minimum segment length (nets): ['+3V3', 'BAND_D', 'L1N', 'LATCHED', 'RESET_N', 'SCL', 'SW_STOP_N']
-nets 155 routed 155 failed 0 | F 3879 mm In2 2329 mm | vias 439 | 837 s
+chamfered corners: 261 T-junction fillets: 21 (pieces that fail the clearance check are left out)
+narrowed: {}
+connections without the minimum segment length (nets): ['LATCHED']
+nets 155 routed 155 failed 0 | F 3833 mm In2 2323 mm | vias 427 | 131 s

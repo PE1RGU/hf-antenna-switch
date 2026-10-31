@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "shack-interface"
 DATE = "2026-10-19"
-GENERATOR_REV = "a17-display"
+GENERATOR_REV = "a18-reuse"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -558,7 +558,7 @@ def power_sheet():
     R5L = S.part("Device:R", ("R", 5), "0R", "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder", 147.32, Y, rot=90,
                  desc="+5V current-measurement link: lift to measure the 5 V load (D-120)")
     assert R5L["1"] == (143.51, Y) and R5L["2"] == (151.13, Y), R5L
-    C3 = cap(3, "100n", C0603, X5[0], "L7805 output capacitor 0.1 uF (ST)")
+    C3 = cap(3, "100n 50V X7R", C0603, X5[0], "L7805 output capacitor 0.1 uF (ST)")
     C4 = cap(4, "10u 16V X7R", "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder", X5[1], "5 V rail bulk")
     C5 = cap(5, "10u 16V X7R", "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder", X5[2], "LD1117 input capacitor")
     for C in (C3, C4, C5): S.power("GND", C["2"])
@@ -632,9 +632,9 @@ def mcu_sheet():
     assert RW["1"] == (251.46, 63.5), RW
     S.wire((246.38, 63.5), RW["1"], U3["4"]); S.label("L", "WDI", 246.38, 63.5, 180); S.power("GND", RW["2"])
     NC(U3["3"]); S.power("+3V3", U3["5"]); S.power("GND", U3["2"])
-    U4 = S.part("shack-interface:74LVC1G74_IEC", ("U", 4), "74LVC1G74", "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm", 304.8, 68.58,
-                mpn="SN74LVC1G74DCTR", rp=(6.35, -12.7),
-                desc="D flip-flop, fault latch: D = GND, CLR_N = 3V3, PRE_N = RESET_N (TI SCES794G). Second source Nexperia 74LVC1G74DC")
+    U4 = S.part("shack-interface:74LVC1G74_IEC", ("U", 4), "74LVC1G74", "Package_SO:VSSOP-8_2.3x2mm_P0.5mm", 304.8, 68.58,
+                mpn="SN74LVC1G74DCUR", rp=(6.35, -12.7),
+                desc="D flip-flop, fault latch: D = GND, CLR_N = 3V3, PRE_N = RESET_N (TI SCES794G, DCU VSSOP-8, D-190 as D-154). Second source Nexperia 74LVC1G74DC,125 (SOT765-1, same pin-out and MO-187 land)")
     assert U4["7"] == (294.64, 66.04) and U4["6"] == (294.64, 63.5) and U4["1"] == (294.64, 71.12) and U4["2"] == (294.64, 73.66), U4
     XR, XC = 281.94, 287.02
     S.wire(U3["1"], (XR, 66.04), U4["7"])
@@ -656,7 +656,7 @@ def mcu_sheet():
     S.wire((XRT, 27.94), UE["4"]); S.label("H", "USB_DN", XRT, 27.94, 0); S.wire(UE["3"], (345.44, 27.94)); S.label("L", "USB_DN", 345.44, 27.94, 180)
     S.power("GND", UE["2"])
     S.wire(UE["5"], (363.22, 35.56), (365.76, 35.56), (XRT, 35.56)); S.label("H", "USB_VBUS", XRT, 35.56, 0)
-    CV = S.part("Device:C", ("C", 64), "100n 16V", C0603, 365.76, 39.37, desc="VBUS bypass at the ESD array (ST USBLC6-2 layout note)")
+    CV = S.part("Device:C", ("C", 64), "100n 50V X7R", C0603, 365.76, 39.37, desc="VBUS bypass at the ESD array (ST USBLC6-2 layout note)")
     assert CV["1"] == (365.76, 35.56), CV
     S.power("GND", CV["2"])
     for k, (nm, yc) in enumerate((("USB_CC1", 48.26), ("USB_CC2", 58.42))):
@@ -736,7 +736,7 @@ def safe_sheet():
     FAULT, LATCHED, KILL_S left; TX_EN, BTN, LED_SAFE, LED_LATCHED right. Two crossings are needed with this pin order:
     SAFE_LOST crosses FAULT and LATCHED (no junction)."""
     S = Sheet("Shack interface: SAFE latch, RESET and TX enable", "A3", [(PATH["safe"], 0)], pwr_base=[500])
-    SOT5, SSOP8 = "Package_TO_SOT_SMD:SOT-23-5", "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
+    SOT5, SSOP8 = "Package_TO_SOT_SMD:SOT-23-5", "Package_SO:VSSOP-8_2.3x2mm_P0.5mm"   # D-190: TI DCU / Nexperia DC
     nc = lambda p: S.raw(f'\t(no_connect\n\t\t(at {p[0]} {p[1]})\n\t\t(uuid "{U()}")\n\t)\n')
     XL, XR, YT = 25.4, 203.2, 30.48
     YF, YQ, YB, YS, YL, YK = 45.72, 55.88, 111.76, 132.08, 147.32, 165.1      # FAULT, LATCHED, BTN, LED_SAFE, LED_LATCHED, KILL_S rows
@@ -760,7 +760,7 @@ def safe_sheet():
     nc(U6["4"]); nc(U6["3"]); S.power("+3V3", U6["5"]); S.power("GND", U6["2"])
     S.wire(U6["1"], (91.44, 81.28), U8["2"]); S.label("L", "POR_N", 91.44, 101.6, 90)
     # SAFE latch (D-75): D = GND, CLR_N = 3V3, PRE_N from U8, CLK = debounced RESET
-    U9 = S.part("shack-interface:74LVC1G74_IEC", ("U", 9), "74LVC1G74", SSOP8, 132.08, 81.28, mpn="SN74LVC1G74DCTR", rp=(6.35, -12.7),
+    U9 = S.part("shack-interface:74LVC1G74_IEC", ("U", 9), "74LVC1G74", SSOP8, 132.08, 81.28, mpn="SN74LVC1G74DCUR", rp=(6.35, -12.7),
                 desc="SAFE latch. Q = LATCHED. Set by a lost loop or power-up; cleared by a RESET edge only while PRE_N is high (TI SCES794G)")
     assert U9["7"] == (121.92, 78.74) and U9["1"] == (121.92, 83.82) and U9["5"] == (142.24, 78.74), U9
     S.wire(U8["4"], U9["7"]); S.label("L", "PRE_N", 115.57, 78.74)
@@ -787,7 +787,7 @@ def safe_sheet():
     RP = S.part("Device:R", ("R", 72), "100k", R0603, 160.02, R2(YB - 3.81), rp=(-1.27, 0, "right"), desc="Button node pull-up: release recharges in 10 ms")
     DB = S.part("Device:D", ("D", 71), "1N4148W", SOD123, 165.1, R2(YB - 3.81), rot=270, mpn="1N4148W", rp=(1.27, -1.27),
                 desc="Discharges the 100n into 3V3 at power-down (good practice; the 74LVC1G14 input has Ioff)")
-    CB = S.part("Device:C", ("C", 71), "100n", C0603, 154.94, R2(YB + 3.81), rp=(1.27, 1.27), desc="Debounce capacitor: press discharges in 0.1 ms")
+    CB = S.part("Device:C", ("C", 71), "100n 50V X7R", C0603, 154.94, R2(YB + 3.81), rp=(1.27, 1.27), desc="Debounce capacitor: press discharges in 0.1 ms")
     U10 = S.part("shack-interface:74LVC1G14_IEC", ("U", 10), "74LVC1G14", SOT5, 134.62, YB, mpn="74LVC1G14GV", mirror="y", rp=(-2.54, -12.7, "left"),     # mirrored part: KiCad flips the justification
                  desc="Schmitt inverter: RESET press gives a rising clock edge")
     assert RB["2"] == (186.69, YB) and RB["1"] == (179.07, YB) and RP["2"] == (160.02, YB) and DB["1"] == (165.1, R2(YB - 7.62)) \
@@ -877,7 +877,7 @@ def port_sheet():
     to_din("DIN8", 109.22, (139.7, 109.22))
     S.wire(JS2["3"], (139.7, 119.38), (139.7, 121.92)); S.power("RGND", (139.7, 121.92))
     RS = rh(6, "2k2", 129.54, 101.6, "TX sense LED resistor: 5.7 mA at 13.8 V (C-23); 79 mW at 14.4 V, 1206 (0.32). Value per radio in VOLTAGE mode", fp=R1206)
-    U5 = S.part("Isolator:PC817", ("U", 5), "PC817X", "Package_DIP:DIP-4_W7.62mm", 101.6, 109.22, mirror="y", mpn="PC817X",
+    U5 = S.part("Isolator:PC817", ("U", 5), "PC817X", "Package_DIP:DIP-4_W7.62mm", 101.6, 109.22, mirror="y", mpn="PC817X2NSZ9F",
                 rp=(0, -8.89, "center"), desc="TX sense opto (Sharp D2-A03101EN), CTR min 50 % at 5 mA. Lite-On LTV-817, Everlight EL817 (D-78)")
     assert U5["1"] == (109.22, 106.68) and U5["2"] == (109.22, 111.76) and U5["4"] == (93.98, 106.68) and U5["3"] == (93.98, 111.76), U5
     D1 = S.part("Device:D", ("D", 1), "1N4148W", SOD123, 121.92, 109.22, rot=270, mpn="1N4148W", rp=(1.27, 0),
