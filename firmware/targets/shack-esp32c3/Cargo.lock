@@ -1636,6 +1636,7 @@ dependencies = [
  "esp-println",
  "esp-rtos",
  "heapless 0.9.3",
+ "host-proto",
  "link-proto",
  "log",
  "shack-core",

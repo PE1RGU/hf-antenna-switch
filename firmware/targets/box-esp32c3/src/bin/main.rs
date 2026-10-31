@@ -40,6 +40,115 @@ use link_proto::{FaultCode, Flags};
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
 esp_bootloader_esp_idf::esp_app_desc!();
 
+/// How often the loop figures are reported, in ms.
+const DIAG_PERIOD: u64 = 10_000;
+
+/// Loop timing over one report window: how long a logic tick takes, and the
+/// longest time between the starts of two ticks (the loop rhythm).
+#[derive(Default)]
+struct Diag {
+    tick_max_us: u64,
+    tick_sum_us: u64,
+    ticks: u64,
+    gap_max_us: u64,
+    last_start: Option<esp_hal::time::Instant>,
+    next_report: u64,
+}
+
+impl Diag {
+    /// Call just before the tick. Returns its start time for [`Diag::end`].
+    fn begin(&mut self) -> esp_hal::time::Instant {
+        let t = esp_hal::time::Instant::now();
+        if let Some(last) = self.last_start {
+            self.gap_max_us = self.gap_max_us.max((t - last).as_micros());
+        }
+        self.last_start = Some(t);
+        t
+    }
+
+    /// Call just after the tick.
+    fn end(&mut self, start: esp_hal::time::Instant) {
+        let d = start.elapsed().as_micros();
+        self.tick_max_us = self.tick_max_us.max(d);
+        self.tick_sum_us += d;
+        self.ticks += 1;
+    }
+
+    /// Every [`DIAG_PERIOD`]: the report line (without a newline), and a new window.
+    fn report(&mut self, now_ms: u64) -> Option<heapless::String<160>> {
+        if self.next_report == 0 {
+            // First call: open the first full window.
+            self.next_report = now_ms + DIAG_PERIOD;
+        }
+        if now_ms < self.next_report {
+            return None;
+        }
+        let mut line = heapless::String::new();
+        if let Some(avg) = self.tick_sum_us.checked_div(self.ticks) {
+            let (used, size) = stack::used();
+            let _ = core::fmt::write(
+                &mut line,
+                format_args!(
+                    "diag tick max {} us avg {avg} us, interval max {} us, stack used {used} of {size} bytes",
+                    self.tick_max_us, self.gap_max_us
+                ),
+            );
+        }
+        *self = Diag {
+            next_report: now_ms + DIAG_PERIOD,
+            ..Diag::default()
+        };
+        (!line.is_empty()).then_some(line)
+    }
+}
+
+/// Stack high-water mark: the free stack is painted with a pattern at boot; the
+/// lowest overwritten word shows how deep the stack has ever gone.
+mod stack {
+    unsafe extern "C" {
+        static _stack_end: u32;
+        static _stack_start: u32;
+    }
+
+    const PAINT: u32 = 0xA55A_5AA5;
+    /// esp-hal keeps a stack guard word 60 bytes above `_stack_end`, under a data
+    /// watchpoint: paint above it.
+    const SKIP: usize = 64;
+
+    fn bounds() -> (usize, usize) {
+        (
+            &raw const _stack_end as usize + SKIP,
+            &raw const _stack_start as usize,
+        )
+    }
+
+    /// Paint from the low end up to 1 KB below the present stack pointer.
+    #[inline(never)]
+    pub fn paint() {
+        let here = 0u32;
+        let sp = core::ptr::addr_of!(here) as usize;
+        let (lo, _) = bounds();
+        let mut p = lo;
+        while p + 1024 < sp {
+            // SAFETY: `p` is word aligned, inside the main stack and below the live
+            // frames; nothing else uses this memory.
+            unsafe { (p as *mut u32).write_volatile(PAINT) };
+            p += 4;
+        }
+    }
+
+    /// Bytes of stack ever used, and the stack size.
+    pub fn used() -> (usize, usize) {
+        let (lo, hi) = bounds();
+        let mut p = lo;
+        // SAFETY: as in `paint`: word aligned reads inside the main stack.
+        while p < hi && unsafe { (p as *const u32).read_volatile() } == PAINT {
+            p += 4;
+        }
+        (hi - p, hi - lo)
+    }
+}
+
 /// I2C data line: GPIO10 on the DevKit-RUST-1 (JP11 select on the controller board).
 const SDA: u8 = 10;
 /// The DevKit-RUST-1 board LED (470R to GND). On the controller board this pin
@@ -179,12 +288,19 @@ async fn main(_spawner: Spawner) -> ! {
     let [a, b, c] = FW_VERSION;
     println!("box-esp32c3 {a}.{b}.{c}: boot");
 
+    stack::paint();
+    let mut diag = Diag::default();
     let mut fw = RelayBox::new();
     let mut seen: Option<Seen> = None;
     let mut ticker = Ticker::every(Duration::from_millis(TICK));
     loop {
         let now = Instant::now().as_millis();
+        let t = diag.begin();
         fw.tick(now, &mut hw);
+        diag.end(t);
+        if let Some(line) = diag.report(now) {
+            println!("{now} ms: {line}");
+        }
         let st = fw.status();
         let s = Seen {
             phase: fw.phase(),

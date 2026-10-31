@@ -7,6 +7,12 @@
 //! The USB Serial/JTAG port is the host port (host-protocol.md), so the firmware
 //! writes no log there; a panic prints its backtrace on it. Stored settings stay in
 //! RAM for now (lost at power-off); flash storage follows.
+//!
+//! The DevKit LED (GPIO7 on the DevKit-RUST-1) shows the self-test: fast blink
+//! (5 Hz) while it runs, slow blink (1 Hz) after a pass, flicker (10 Hz) after a
+//! fail. The main loop drives it, so a hung loop also stops the blink. On the
+//! shack interface board this pin goes only to JP61 pad 1 (the RUST-2 SDA choice);
+//! with JP61 at 2-3 for the RUST-1 it joins no net (D-94).
 #![no_std]
 #![no_main]
 #![deny(
@@ -29,6 +35,7 @@ use esp_hal::timer::timg::TimerGroup;
 use esp_hal::uart::{Config as UartConfig, Uart};
 use esp_hal::usb::usb_serial_jtag::UsbSerialJtag;
 use heapless::Deque;
+use host_proto::SelfTestState;
 use link_proto::Radio;
 use shack_core::board::{DevKit, gpio};
 use shack_core::config::CONFIG_MAX;
@@ -40,6 +47,115 @@ use static_cell::ConstStaticCell;
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
 esp_bootloader_esp_idf::esp_app_desc!();
 
+/// How often the loop figures are reported, in ms.
+const DIAG_PERIOD: u64 = 10_000;
+
+/// Loop timing over one report window: how long a logic tick takes, and the
+/// longest time between the starts of two ticks (the loop rhythm).
+#[derive(Default)]
+struct Diag {
+    tick_max_us: u64,
+    tick_sum_us: u64,
+    ticks: u64,
+    gap_max_us: u64,
+    last_start: Option<esp_hal::time::Instant>,
+    next_report: u64,
+}
+
+impl Diag {
+    /// Call just before the tick. Returns its start time for [`Diag::end`].
+    fn begin(&mut self) -> esp_hal::time::Instant {
+        let t = esp_hal::time::Instant::now();
+        if let Some(last) = self.last_start {
+            self.gap_max_us = self.gap_max_us.max((t - last).as_micros());
+        }
+        self.last_start = Some(t);
+        t
+    }
+
+    /// Call just after the tick.
+    fn end(&mut self, start: esp_hal::time::Instant) {
+        let d = start.elapsed().as_micros();
+        self.tick_max_us = self.tick_max_us.max(d);
+        self.tick_sum_us += d;
+        self.ticks += 1;
+    }
+
+    /// Every [`DIAG_PERIOD`]: the report line (without a newline), and a new window.
+    fn report(&mut self, now_ms: u64) -> Option<heapless::String<160>> {
+        if self.next_report == 0 {
+            // First call: open the first full window.
+            self.next_report = now_ms + DIAG_PERIOD;
+        }
+        if now_ms < self.next_report {
+            return None;
+        }
+        let mut line = heapless::String::new();
+        if let Some(avg) = self.tick_sum_us.checked_div(self.ticks) {
+            let (used, size) = stack::used();
+            let _ = core::fmt::write(
+                &mut line,
+                format_args!(
+                    "diag tick max {} us avg {avg} us, interval max {} us, stack used {used} of {size} bytes",
+                    self.tick_max_us, self.gap_max_us
+                ),
+            );
+        }
+        *self = Diag {
+            next_report: now_ms + DIAG_PERIOD,
+            ..Diag::default()
+        };
+        (!line.is_empty()).then_some(line)
+    }
+}
+
+/// Stack high-water mark: the free stack is painted with a pattern at boot; the
+/// lowest overwritten word shows how deep the stack has ever gone.
+mod stack {
+    unsafe extern "C" {
+        static _stack_end: u32;
+        static _stack_start: u32;
+    }
+
+    const PAINT: u32 = 0xA55A_5AA5;
+    /// esp-hal keeps a stack guard word 60 bytes above `_stack_end`, under a data
+    /// watchpoint: paint above it.
+    const SKIP: usize = 64;
+
+    fn bounds() -> (usize, usize) {
+        (
+            &raw const _stack_end as usize + SKIP,
+            &raw const _stack_start as usize,
+        )
+    }
+
+    /// Paint from the low end up to 1 KB below the present stack pointer.
+    #[inline(never)]
+    pub fn paint() {
+        let here = 0u32;
+        let sp = core::ptr::addr_of!(here) as usize;
+        let (lo, _) = bounds();
+        let mut p = lo;
+        while p + 1024 < sp {
+            // SAFETY: `p` is word aligned, inside the main stack and below the live
+            // frames; nothing else uses this memory.
+            unsafe { (p as *mut u32).write_volatile(PAINT) };
+            p += 4;
+        }
+    }
+
+    /// Bytes of stack ever used, and the stack size.
+    pub fn used() -> (usize, usize) {
+        let (lo, hi) = bounds();
+        let mut p = lo;
+        // SAFETY: as in `paint`: word aligned reads inside the main stack.
+        while p < hi && unsafe { (p as *const u32).read_volatile() } == PAINT {
+            p += 4;
+        }
+        (hi - p, hi - lo)
+    }
+}
+
 const DEVKIT: DevKit = DevKit::Rust1;
 
 /// Host output buffer. The longest burst is the `help` list, about 1.5 KB.
@@ -48,6 +164,7 @@ const USB_OUT: usize = 4096;
 // The peripherals below are picked by type; these asserts keep them in line with the pin map.
 const _: () = assert!(
     DEVKIT.sda() == 10
+        && DEVKIT.led() == 7
         && gpio::SCL == 8
         && gpio::PERMIT_R1 == 0
         && gpio::WDI == 1
@@ -203,6 +320,7 @@ async fn main(_spawner: Spawner) -> ! {
         low(p.GPIO5.into()),
     ];
     let wdi = low(p.GPIO1.into());
+    let mut led = low(p.GPIO7.into());
     let latch_clr = low(p.GPIO3.into());
     // SAFE_LOST: pulled up, so an open input reads 'SAFE lost'.
     let safe_lost = Input::new(p.GPIO21, InputConfig::default().with_pull(Pull::Up));
@@ -249,6 +367,8 @@ async fn main(_spawner: Spawner) -> ! {
         stored_len: 0,
     };
 
+    stack::paint();
+    let mut diag = Diag::default();
     let mut shack = Shack::new();
     // 1 ms loop: the USB pump every pass, the logic every TICK (10 ms).
     let mut ticker = Ticker::every(Duration::from_millis(1));
@@ -256,8 +376,23 @@ async fn main(_spawner: Spawner) -> ! {
     loop {
         let now = Instant::now().as_millis();
         if now >= next_tick {
+            let t = diag.begin();
             shack.tick(now, &mut hw);
+            diag.end(t);
+            let half = match shack.self_test() {
+                SelfTestState::Running => 100,
+                SelfTestState::Pass => 500,
+                SelfTestState::Fail(_) => 50,
+            };
+            led.set_level(Level::from((now / half).is_multiple_of(2)));
             next_tick = now + TICK;
+            // A `#` log line for people (host-protocol.md section 3), between the
+            // lines of the logic.
+            if let Some(line) = diag.report(now) {
+                hw.usb_write(b"# ");
+                hw.usb_write(line.as_bytes());
+                hw.usb_write(b"\n");
+            }
         }
         hw.usb_pump();
         ticker.next().await;

@@ -25,6 +25,7 @@ esp-backtrace = { version = "0.20.0", features = [
 ] }
 esp-println = { version = "0.18.0", features = ["esp32c3", "log-04"] }
 
+host-proto = { path = "../../crates/host-proto" }
 link-proto = { path = "../../crates/link-proto" }
 shack-core = { path = "../../crates/shack-core" }
 shack-ui   = { path = "../../crates/shack-ui" }
