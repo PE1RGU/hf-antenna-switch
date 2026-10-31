@@ -13,7 +13,7 @@ import json, math, os, re, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p3-keep"
+REV = "p3-drain"
 BOARD, PRO, NETLIST = "rf-board.kicad_pcb", "rf-board.kicad_pro", "../verify/rf15.xml"
 OX, OY, BW, BH = 20.0, 20.0, 268.0, 230.0            # board origin on the sheet, board size (C-12)
 FPLIB = "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints"
@@ -366,9 +366,11 @@ group("H1", [("JP1", "CHASSIS"), ("C1", "CHASSIS")], R_RIGHT, at=(246.0, 12.0))
 R_BIAS = (EDGE, 181.0, 68.0, 209.0)          # RX row band of R3 ends at about y 180, R3 feed band starts at x 68.4
 fix("U1001", 9.5, 195.0, 90); fan_keep("U1001")
 group("U1001", [("C1001", ("pad", "24")), "RN1001", "RN1002"], (EDGE, 181.0, 16.5, 209.0))
+BIAS_CELLS = []                              # (FET, drain net, x1, x2): drain pours in gen_rfboard_copper.py (S-3, C-17)
 for k in range(1, 5):
     x1 = 16.5 + 12.875 * (k - 1); x2 = x1 + 12.875
     n = 1000 + 10 * k
+    BIAS_CELLS.append((f"Q{n + 2}", f"/A{k}_BIAS", x1, x2))
     # switch Q2, sense R1 and limiter Q1, gate network R2 R3, drive Q3 with R4, output TVS D1 and C1, read-back R5 R6
     group(f"Q{n + 2}", [f"R{n + 1}", f"Q{n + 1}", f"R{n + 2}", f"R{n + 3}", f"Q{n + 3}", f"R{n + 4}", f"D{n + 1}",
                         f"C{n + 1}", f"R{n + 5}", f"R{n + 6}"], (x1, 181.0, x2, 209.0), at=((x1 + x2) / 2, 186.0))

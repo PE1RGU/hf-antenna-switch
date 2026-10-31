@@ -343,6 +343,27 @@ for (ln, xa, ya, xb, yb, w, nn) in RFSEG:
             if via_ok(x, y): gvia(x, y); n_fen += 1
         s += FPITCH
 print("return vias", n_ret, "fence vias", n_fen)
+# ---- bias-T drain copper (S-3, C-17, D-54): per feed FET a drain pour on F.Cu around the tab (top part of the cell, above the
+# gate drive) and on B.Cu over the whole cell, joined by thermal vias next to the tab. B.Cu carries no routes (router_cfg), so
+# the B.Cu pour is cut only by vias; stitch.py puts no grid vias in these cells (stitch_no_grid). Area target: C-17.
+BY0, BY1, BYF, BIN = 181.0, 209.0, 190.8, 0.3            # cell band, lower end of the F.Cu part (Q?3 starts at 191.5), inset
+TV_MAX = 9
+DRAIN = []
+for q, dn, x1, x2 in BIAS_CELLS:
+    tab = max((p_ for p_ in fps[q].Pads() if p_.GetNumber() == "2"), key=lambda p_: p_.GetSize(pcbnew.F_Cu).x * p_.GetSize(pcbnew.F_Cu).y)
+    bb = tab.GetBoundingBox(); ta, tb, tc, td = T(bb.GetX()) - OX, T(bb.GetY()) - OY, T(bb.GetRight()) - OX, T(bb.GetBottom()) - OY
+    def d_tab(x, y): return math.hypot(max(ta - x, 0, x - tc), max(tb - y, 0, y - td))
+    cand = sorted(((round(x1 + BIN + 0.6 + 0.5 * i, 2), round(BY0 + BIN + 0.6 + 0.5 * j, 2)) for i in range(40) for j in range(40)
+                   if x1 + BIN + 0.6 + 0.5 * i <= x2 - BIN - 0.6 and BY0 + BIN + 0.6 + 0.5 * j <= BYF - 0.6),
+                  key=lambda c: d_tab(*c))
+    n_tv = 0
+    for x, y in cand:
+        if n_tv >= TV_MAX or d_tab(x, y) > 3.5: break
+        if not via_ok(x, y): continue
+        v = pcbnew.PCB_VIA(b); v.SetPosition(P(x, y)); v.SetWidth(mm(VG_D)); v.SetDrill(mm(VG_DR)); v.SetNet(net(dn)); v.SetLocked(True)
+        b.Add(v); KEEP.append(v); GVIA.append((x, y)); n_tv += 1
+    DRAIN.append((dn, x1, x2, n_tv))
+print("drain thermal vias", [(d[0], d[3]) for d in DRAIN])
 
 # ---- GND pours (D-119, D-156, M-70): outer layers 2.0 mm in the RF area, 0.25 mm in the logic regions; inner layers 0.2 mm ----
 def zone(lid, cl, pts, prio):
@@ -359,3 +380,12 @@ for lid in (pcbnew.F_Cu, pcbnew.B_Cu):
     for x0_, y0_, x1_, y1_ in LOGIC: zone(lid, 0.25, [(x0_, y0_), (x1_, y0_), (x1_, y1_), (x0_, y1_)], 1)
 for lid in (pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.In3_Cu, pcbnew.In4_Cu):
     zone(lid, 0.2, ALL, 0)
+def dzone(lid, dn, pts):                                  # drain pour: solid pad connection (heat path), above the GND pour
+    z = pcbnew.ZONE(b); z.SetLayer(lid); z.SetNet(net(dn)); z.SetLocalClearance(mm(0.25)); z.SetMinThickness(mm(0.25))
+    z.SetAssignedPriority(2); z.SetPadConnection(pcbnew.ZONE_CONNECTION_FULL)
+    o = z.Outline(); o.NewOutline()
+    for x, y in pts: o.Append(mm(OX + x), mm(OY + y))
+    b.Add(z); KEEP.append(z)
+for dn, x1, x2, _ in DRAIN:
+    dzone(pcbnew.F_Cu, dn, [(x1 + BIN, BY0 + BIN), (x2 - BIN, BY0 + BIN), (x2 - BIN, BYF), (x1 + BIN, BYF)])
+    dzone(pcbnew.B_Cu, dn, [(x1 + BIN, BY0 + BIN), (x2 - BIN, BY0 + BIN), (x2 - BIN, BY1 - BIN), (x1 + BIN, BY1 - BIN)])

@@ -1,16 +1,16 @@
 nets to route 168 connections 483 grid 2683 x 2303
-  return vias placed 292, beyond 1.5 mm or none: 2
-pass 1: failed 6 ['A4_K1_DRV', 'Net-(D301-A)', 'TX_ANY', 'R1_TX4_DRV', 'Net-(D101-A)', 'Net-(D201-A)'] | vias 1040 | 235 s
-  return vias placed 303, beyond 1.5 mm or none: 13
-pass 2: failed 1 ['R3_K0_DRV_J'] | vias 1076 | 442 s
-  return vias placed 312, beyond 1.5 mm or none: 7
-pass 3: failed 2 ['EXP_INT', 'R3_K0_DRV'] | vias 1120 | 678 s
-  return vias placed 305, beyond 1.5 mm or none: 4
-pass 4: failed 5 ['SDA', 'R2_K0_DRV', 'Net-(RN903-R2.1)', 'RLY_EN_J', 'SCL_J'] | vias 1090 | 935 s
-  return vias placed 313, beyond 1.5 mm or none: 7
-pass 5: failed 0 [] | vias 1118 | 1220 s
+  return vias placed 293, beyond 1.5 mm or none: 1
+pass 1: failed 6 ['A4_K1_DRV', 'Net-(D301-A)', 'TX_ANY', 'R1_TX4_DRV', 'Net-(D101-A)', 'Net-(D201-A)'] | vias 1044 | 273 s
+  return vias placed 308, beyond 1.5 mm or none: 12
+pass 2: failed 1 ['R3_K0_DRV_J'] | vias 1086 | 510 s
+  return vias placed 312, beyond 1.5 mm or none: 8
+pass 3: failed 2 ['EXP_INT', 'R3_K0_DRV'] | vias 1125 | 766 s
+  return vias placed 303, beyond 1.5 mm or none: 9
+pass 4: failed 5 ['SDA', 'R2_K0_DRV', 'Net-(RN903-R2.1)', 'RLY_EN_J', 'SCL_J'] | vias 1099 | 1008 s
+  return vias placed 314, beyond 1.5 mm or none: 6
+pass 5: failed 0 [] | vias 1124 | 1255 s
 short segments merged: 16
-chamfered corners: 573 T-junction fillets: 23 (pieces that fail the clearance check are left out)
+chamfered corners: 572 T-junction fillets: 25 (pieces that fail the clearance check are left out)
 narrowed: {'CLAMP_RLY': [0.254, 0.254, 0.254, 0.254], 'CLAMP_SW': [0.254, 0.254, 0.254, 0.254, 0.254], '+3V3': [0.254], '+5V': [0.254]}
 connections without the minimum segment length (nets): ['+12V_RLY', '+3V3', '+5V', 'CLAMP_RLY', 'CLAMP_SW', 'EXP_INT', 'Net-(D101-A)', 'Net-(D201-A)', 'Net-(D301-A)', 'Net-(RN903-R2.1)', 'R2_K0_DRV', 'R3_K0_DRV', 'R3_K0_DRV_J', 'RLY_EN', 'RLY_EN_J', 'SCL_J', 'SDA', 'TX_ANY']
-nets 168 routed 168 failed 0 | F 1965 mm In2 8532 mm In3 7092 mm | vias 1118 | 1220 s
+nets 168 routed 168 failed 0 | F 1994 mm In2 8546 mm In3 7059 mm | vias 1124 | 1256 s
