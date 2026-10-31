@@ -6,7 +6,7 @@ Test points (bare pads), the mounting hole and DNP parts are listed apart; DNP p
 import csv, collections
 import xml.etree.ElementTree as ET
 
-NETLIST = "../verify/ctl16.xml"
+NETLIST = "../verify/ctl17.xml"
 # (value, footprint name) -> (first source, second source, specification / note)
 ORDER = {
     ("1u 16V X7R", "C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"): ("Murata GRM188R71C105KA12D", "Samsung CL10B105KO8NNNC", "MLCC 1 uF 16 V X7R 0603 (D-127)"),
@@ -32,7 +32,7 @@ ORDER = {
     ("LP2985-33", "SOT-23-5"): ("TI LP2985-33DBVR", "ST LD2985BM33R", "LDO 3.3 V 150 mA"),
     ("TPS3823A-33", "SOT-23-5"): ("TI TPS3823A-33DBVR", "ADI MAX823SEUK+T / Diodes APX823-29W5G-7", "Supervisor and watchdog (D-148)"),
     ("ESP32-C3-DevKit-RUST-1", "ESP32-C3-DevKit-RUST_Socket"): ("Espressif ESP32-C3-DevKit-RUST-1", "Espressif ESP32-C3-DevKit-RUST-2 (JP11 2-1)", "MCU board; sockets on the lines below (D-55, D-94, D-95)"),
-    ("SDA SEL", "SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels"): ("-", "-", "Solder jumper: bridge 2-3 for RUST-1 (no part)"),
+    ("SDA SEL", "SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels"): ("-", "-", "Solder jumper, 1-2 bridged by copper for RUST-1; RUST-2: cut 1-2, bridge 2-3 (no part, D-192)"),
 }
 GENERIC_R = {"R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)",
              "R_1206_3216Metric_Pad1.30x1.75mm_HandSolder": "0R jumper 1206 (Yageo RC1206JR-070RL, any maker)"}

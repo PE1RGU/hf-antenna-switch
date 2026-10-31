@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "controller-board"
 DATE = "2026-10-22"
-GENERATOR_REV = "c15-fault-io6"
+GENERATOR_REV = "c16-sda-bridged"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -310,6 +310,12 @@ SYMS["controller-board:SolderJumper_3_Open"] = mk_sym("SolderJumper_3_Open", "So
     [("1", "", "passive", "line", -5.08, 0, 0, 2.54), ("3", "", "passive", "line", 5.08, 0, 180, 2.54),
      ("2", "", "passive", "line", 0, -5.08, 90, 3.81)],
     lines=[[(-0.635, 1.27), (-0.635, -1.27)], [(0.635, 1.27), (0.635, -1.27)]], hide_names=True, ref=(0, 2.54), val=(0, -2.54))
+# the same, with pads 1 and 2 joined by copper on the board (D-192): the bar across the left gap
+SYMS["controller-board:SolderJumper_3_Bridged12"] = mk_sym("SolderJumper_3_Bridged12", "Solder jumper, 3 pads, 1-2 bridged by copper; cut 1-2 and bridge 2-3 for the other setting",
+    (-2.54, 1.27, 2.54, -1.27),
+    [("1", "", "passive", "line", -5.08, 0, 0, 2.54), ("3", "", "passive", "line", 5.08, 0, 180, 2.54),
+     ("2", "", "passive", "line", 0, -5.08, 90, 3.81)],
+    lines=[[(-0.635, 1.27), (-0.635, -1.27)], [(0.635, 1.27), (0.635, -1.27)], [(-1.27, 0), (0, 0)]], hide_names=True, ref=(0, 2.54), val=(0, -2.54))
 PINS = {k: pins_of(v) for k, v in SYMS.items()}
 PINS_U = {}
 
@@ -536,7 +542,7 @@ def mcu_sheet():
     # DevKit A1: one board symbol as the physical board, a short wire and a net label at each used pin (D-93)
     A1 = S.part("controller-board:ESP32-C3-DevKit-RUST", ("A", 1), "ESP32-C3-DevKit-RUST-1", "controller-board:ESP32-C3-DevKit-RUST_Socket",
                 60.96, 182.88, rp=(15.24, 27.94, "right"),
-                desc="ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 2-1")
+                desc="ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 1-2 cut and 2-3 bridged")
     assert A1["1"] == (43.18, 165.1) and A1["16"] == (43.18, 203.2) and A1["28"] == (78.74, 175.26) and A1["17"] == (78.74, 203.2), A1
     dk = {5: "EXP_INT", 6: "WDI", 8: "LATCH_CLR", 9: "MCU_EN_N", 10: "KILL", 11: "FAULT_IO6", 12: "SDA_IO7", 13: "SCL", 14: "DATA_TX", 15: "DATA_RX"}
     for n in range(1, 29):
@@ -550,13 +556,13 @@ def mcu_sheet():
     # nets that leave the sheet: hierarchical labels as before, fed from the DevKit net labels
     for net, y in (("EXP_INT", 111.76), ("SCL", 132.08), ("DATA_TX", 134.62), ("DATA_RX", 137.16)):
         S.wire((58.42, y), (66.04, y)); S.label("L", net, 58.42, y, 180); S.label("H", net, 66.04, y, 0)
-    JS = S.part("controller-board:SolderJumper_3_Open", ("JP", 11), "SDA SEL", "Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels",
+    JS = S.part("controller-board:SolderJumper_3_Bridged12", ("JP", 11), "SDA SEL", "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels",
                 48.26, 129.54, rot=90, rp=(-3.81, -1.27, "right"),
-                desc="SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match")
+                desc="SDA select (D-94, D-192): 1-2 bridged by copper = DevKit-RUST-1 (SDA GPIO10, pad 17). DevKit-RUST-2 (SDA GPIO7, pad 12): cut 1-2, bridge 2-3. Firmware SDA pin must match")
     assert JS["2"] == (53.34, 129.54) and JS["1"] == (48.26, 134.62) and JS["3"] == (48.26, 124.46), JS
     S.wire(JS["2"], (66.04, 129.54)); S.label("H", "SDA", 66.04, 129.54, 0)
-    S.wire(JS["1"], (48.26, 142.24)); S.label("L", "SDA_IO7", 48.26, 142.24, 270)
-    S.wire(JS["3"], (48.26, 116.84)); S.label("L", "SDA_IO10", 48.26, 116.84, 90)
+    S.wire(JS["1"], (48.26, 142.24)); S.label("L", "SDA_IO10", 48.26, 142.24, 270)
+    S.wire(JS["3"], (48.26, 116.84)); S.label("L", "SDA_IO7", 48.26, 116.84, 90)
     # ---- safety gate (D-59): RLY_EN = NOR(KILL, MCU_EN_N, FAULT) ----
     # U12 supervisor and watchdog: WDI from GPIO1, 1k to GND so that a floating WDI still trips the watchdog
     U12 = S.part("Power_Supervisor:TPS3823-xxDBV", ("U", 12), "TPS3823A-33", "Package_TO_SOT_SMD:SOT-23-5", 114.3, 93.98,
@@ -634,7 +640,7 @@ def mcu_sheet():
     S.text("MCU: ESP32-C3 Rust board A1 (DevKit-RUST-1 Rev 1.2a fitted, RUST-2 fits) in gold socket headers (D-93 to D-95). Net labels at the DevKit pins.\\n"
            "3V3 pin from U11 (LDO); EN low keeps the board buck off;\\n"
            "5V/VBUS not connected, so the PC can stay on USB (board diode D6). Wi-Fi and BLE off in firmware.\\n"
-           "I2C: board bus SDA GPIO10 (RUST-1) or GPIO7 (RUST-2), set by JP11 (2-3 or 2-1, D-94); SCL GPIO8. 10k on the board; 2.2k on the RF board.\\n"
+           "I2C: board bus SDA GPIO10 (RUST-1) or GPIO7 (RUST-2), set by JP11 (1-2 bridged by copper for RUST-1; RUST-2: cut 1-2, bridge 2-3; D-94, D-192); SCL GPIO8. 10k on the board; 2.2k on the RF board.\\n"
            "GPIO0 EXP_INT, GPIO1 WDI (kick at least every 0.9 s), GPIO3 LATCH_CLR (rising edge), GPIO4 MCU_EN_N (low = relays allowed),\\n"
            "GPIO5 KILL (read), GPIO6 FAULT (read, 1k R66, D-191), GPIO20/21 UART 9600 baud. GPIO2, 8, 9 are strapping pins: GPIO2 and GPIO9 not used; GPIO8 is SCL.\\n"
            "Board LED on GPIO7 (RUST-1) or GPIO10 (RUST-2): the SDA pin of the other board.\\n"

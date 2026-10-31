@@ -14,8 +14,8 @@
 //! running, latched, link down, box not ready); flicker (10 Hz) = self-test failed;
 //! on solid = the box reports a link-loss stop. The main loop drives it, so a hung
 //! loop also stops the blink. On the
-//! shack interface board this pin goes only to JP61 pad 1 (the RUST-2 SDA choice);
-//! with JP61 at 2-3 for the RUST-1 it joins no net (D-94).
+//! shack interface board this pin goes only to JP61 pad 3 (the RUST-2 SDA choice);
+//! with JP61 1-2 bridged by copper for the RUST-1 it joins no net (D-94, D-192).
 #![no_std]
 #![no_main]
 #![deny(

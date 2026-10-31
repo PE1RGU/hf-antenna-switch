@@ -152,8 +152,8 @@ mod stack {
 /// I2C data line: GPIO10 on the DevKit-RUST-1 (JP11 select on the controller board).
 const SDA: u8 = 10;
 /// The DevKit-RUST-1 board LED (470R to GND). On the controller board this pin
-/// (pad 12) goes only to JP11 pad 1, the RUST-2 SDA choice; with JP11 at 2-3 for the
-/// RUST-1 it joins no net (D-94).
+/// (pad 12) goes only to JP11 pad 3, the RUST-2 SDA choice; with JP11 1-2 bridged by
+/// copper for the RUST-1 it joins no net (D-94, D-192).
 const LED: u8 = 7;
 
 // The peripherals below are picked by type; these asserts keep them in line with the pin map.

@@ -942,7 +942,7 @@
 		)
 		(embedded_fonts no)
 	)
-		(symbol "controller-board:SolderJumper_3_Open"
+		(symbol "controller-board:SolderJumper_3_Bridged12"
 		(pin_names (offset 0.254) (hide yes))
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -950,16 +950,17 @@
 		(in_pos_files yes)
 		(duplicate_pin_numbers_are_jumpers no)
 		(property "Reference" "U" (at 0 2.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Value" "SolderJumper_3_Open" (at 0 -2.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
+		(property "Value" "SolderJumper_3_Bridged12" (at 0 -2.54 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-		(property "Description" "Solder jumper, 3 pads, open; bridge 2-1 or 2-3" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-		(symbol "SolderJumper_3_Open_0_1"
+		(property "Description" "Solder jumper, 3 pads, 1-2 bridged by copper; cut 1-2 and bridge 2-3 for the other setting" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+		(symbol "SolderJumper_3_Bridged12_0_1"
 			(rectangle (start -2.54 1.27) (end 2.54 -1.27) (stroke (width 0.254) (type default)) (fill (type background)))
 			(polyline (pts (xy -0.635 1.27) (xy -0.635 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
 			(polyline (pts (xy 0.635 1.27) (xy 0.635 -1.27)) (stroke (width 0.254) (type default)) (fill (type none)))
+			(polyline (pts (xy -1.27 0) (xy 0 0)) (stroke (width 0.254) (type default)) (fill (type none)))
 		)
-		(symbol "SolderJumper_3_Open_1_1"
+		(symbol "SolderJumper_3_Bridged12_1_1"
 			(pin passive line (at -5.08 0 0) (length 2.54) (name "" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
 			(pin passive line (at 0 -5.08 90) (length 3.81) (name "" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
 			(pin passive line (at 5.08 0 180) (length 2.54) (name "" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
@@ -2893,7 +2894,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 2-1"
+		(property "Description" "ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12) (D-55, D-93 to D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP11 1-2 cut and 2-3 bridged"
 			(at 60.96 182.88 0)
 			(hide yes)
 			(show_name no)
@@ -3671,7 +3672,7 @@
 		(uuid "4e35835d-bb91-5313-9744-60a57414298f")
 	)
 	(symbol
-		(lib_id "controller-board:SolderJumper_3_Open")
+		(lib_id "controller-board:SolderJumper_3_Bridged12")
 		(at 48.26 129.54 90)
 		(unit 1)
 		(body_style 1)
@@ -3703,7 +3704,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm_NumberLabels"
+		(property "Footprint" "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels"
 			(at 48.26 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -3727,7 +3728,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "SDA select (D-94): bridge 2-3 for DevKit-RUST-1 (SDA GPIO10, pad 17), 2-1 for DevKit-RUST-2 (SDA GPIO7, pad 12). Firmware SDA pin must match"
+		(property "Description" "SDA select (D-94, D-192): 1-2 bridged by copper = DevKit-RUST-1 (SDA GPIO10, pad 17). DevKit-RUST-2 (SDA GPIO7, pad 12): cut 1-2, bridge 2-3. Firmware SDA pin must match"
 			(at 48.26 129.54 0)
 			(hide yes)
 			(show_name no)
@@ -3788,7 +3789,7 @@
 		)
 		(uuid "756b77cc-0bf5-5310-940d-48008f8be81c")
 	)
-	(label "SDA_IO7"
+	(label "SDA_IO10"
 		(at 48.26 142.24 270)
 		(effects
 			(font
@@ -3808,7 +3809,7 @@
 		)
 		(uuid "87b1cd6a-bc39-54d7-9e42-116764ace37e")
 	)
-	(label "SDA_IO10"
+	(label "SDA_IO7"
 		(at 48.26 116.84 90)
 		(effects
 			(font
@@ -7552,7 +7553,7 @@
 			)
 		)
 	)
-	(text "MCU: ESP32-C3 Rust board A1 (DevKit-RUST-1 Rev 1.2a fitted, RUST-2 fits) in gold socket headers (D-93 to D-95). Net labels at the DevKit pins.\n3V3 pin from U11 (LDO); EN low keeps the board buck off;\n5V/VBUS not connected, so the PC can stay on USB (board diode D6). Wi-Fi and BLE off in firmware.\nI2C: board bus SDA GPIO10 (RUST-1) or GPIO7 (RUST-2), set by JP11 (2-3 or 2-1, D-94); SCL GPIO8. 10k on the board; 2.2k on the RF board.\nGPIO0 EXP_INT, GPIO1 WDI (kick at least every 0.9 s), GPIO3 LATCH_CLR (rising edge), GPIO4 MCU_EN_N (low = relays allowed),\nGPIO5 KILL (read), GPIO6 FAULT (read, 1k R66, D-191), GPIO20/21 UART 9600 baud. GPIO2, 8, 9 are strapping pins: GPIO2 and GPIO9 not used; GPIO8 is SCL.\nBoard LED on GPIO7 (RUST-1) or GPIO10 (RUST-2): the SDA pin of the other board.\nSafety gate (D-59): RLY_EN = NOR(KILL, MCU_EN_N, FAULT). FAULT is set by RESET_N: power-up, 3V3 below 2.83 to 3.00 V, or no WDI edge for 0.9 to 2.5 s.\nAfter a reset the relays stay off until the MCU gives a LATCH_CLR edge. KILL is not latched. RLY_EN has a 100k pull-down on the RF board.\nREADY_ON = NOR(MCU_EN_N, FAULT) (U15, D-62): closes the READY switch in the SAFE loop. Start-up: LATCH_CLR, MCU_EN_N low, then KILL reads 0 (F11).\nU12 RESET_N does not reset the MCU (DevKit pin 1 RST open); the ESP32-C3 has its own watchdogs. MR open: internal 90k pull-up."
+	(text "MCU: ESP32-C3 Rust board A1 (DevKit-RUST-1 Rev 1.2a fitted, RUST-2 fits) in gold socket headers (D-93 to D-95). Net labels at the DevKit pins.\n3V3 pin from U11 (LDO); EN low keeps the board buck off;\n5V/VBUS not connected, so the PC can stay on USB (board diode D6). Wi-Fi and BLE off in firmware.\nI2C: board bus SDA GPIO10 (RUST-1) or GPIO7 (RUST-2), set by JP11 (1-2 bridged by copper for RUST-1; RUST-2: cut 1-2, bridge 2-3; D-94, D-192); SCL GPIO8. 10k on the board; 2.2k on the RF board.\nGPIO0 EXP_INT, GPIO1 WDI (kick at least every 0.9 s), GPIO3 LATCH_CLR (rising edge), GPIO4 MCU_EN_N (low = relays allowed),\nGPIO5 KILL (read), GPIO6 FAULT (read, 1k R66, D-191), GPIO20/21 UART 9600 baud. GPIO2, 8, 9 are strapping pins: GPIO2 and GPIO9 not used; GPIO8 is SCL.\nBoard LED on GPIO7 (RUST-1) or GPIO10 (RUST-2): the SDA pin of the other board.\nSafety gate (D-59): RLY_EN = NOR(KILL, MCU_EN_N, FAULT). FAULT is set by RESET_N: power-up, 3V3 below 2.83 to 3.00 V, or no WDI edge for 0.9 to 2.5 s.\nAfter a reset the relays stay off until the MCU gives a LATCH_CLR edge. KILL is not latched. RLY_EN has a 100k pull-down on the RF board.\nREADY_ON = NOR(MCU_EN_N, FAULT) (U15, D-62): closes the READY switch in the SAFE loop. Start-up: LATCH_CLR, MCU_EN_N low, then KILL reads 0 (F11).\nU12 RESET_N does not reset the MCU (DevKit pin 1 RST open); the ESP32-C3 has its own watchdogs. MR open: internal 90k pull-up."
 		(exclude_from_sim no)
 		(at 25.4 223.52 0)
 		(effects

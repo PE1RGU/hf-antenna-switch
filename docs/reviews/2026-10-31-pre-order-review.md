@@ -4,7 +4,7 @@ Scope: all three boards before the PCB, parts and CNC case orders. Read-only rev
 
 ## Status (2026-10-31, after PRs #12 and #13)
 
-Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -12,7 +12,6 @@ The table lists only open items. The sections below give the evidence.
 |---|---|---|---|
 | Blocker | B-3 | Order BOMs with MPN, maker and second source on every line | RF, shack |
 | Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
-| PCB | S-2 | SDA jumper bridged 2-3 by copper | Controller, shack |
 | PCB | S-3 | About 1 in² drain copper per bias-T FET | RF |
 | PCB | S-8 | Trim the width to 159.6 mm | Shack |
 | PCB | S-9 | New production zip after S-1 and S-2 | Controller |
@@ -35,7 +34,7 @@ The table lists only open items. The sections below give the evidence.
 | Records | S-17 | Close the 34 design-log rows that later entries closed | — |
 | Records | | Remove the iCloud duplicates ("name 2.ext") | — |
 
-Suggested order: S-1 and S-2, then B-3 and B-4, with the S-items of each board in its pass.
+Suggested order: S-9 (controller production zip), then B-3 and B-4, with the S-items of each board in its pass.
 
 ## Verdict
 

@@ -12,8 +12,8 @@ import collections, json, math, os, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p8c"
-BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si17.xml"
+REV = "p8d"
+BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si18.xml"
 OX, OY = 20.0, 20.0                                  # page offset of the board frame origin
 BW, BH, RC = 160.0, 159.0, 1.0                       # board (D-171): 160 mm slot width; length 159 mm in the 160 +-0.5 mm extrusion (A-25, to confirm on the STEP model)
 SIDE = 3.5                                           # side bands in the extrusion slots and along the wall: no parts
@@ -897,7 +897,7 @@ JPSET = {"01": ("TX INH", "HI", "LO"), "02": ("PIN 1", "KEY", "BAND"), "03": (No
          "04": ("GND BOND", None, None), "05": ("SENSE A", "CONT", "VOLT"), "06": ("SENSE K", "CONT", "VOLT")}
 # the function name stands at the jumper; the reference is placed with the other references
 JPS = {f"JP{200 + 100 * k + int(s_)}": v for k in range(3) for s_, v in JPSET.items()}
-JPS["JP61"] = ("SDA", "RUST-2", "RUST-1")
+JPS["JP61"] = ("SDA", "RUST-1", "RUST-2")      # pad 1 = RUST-1, bridged to 2 by copper (D-192)
 def jp_axis(ref):
     pdn = {pd.GetNumber(): pd for pd in fps[ref].Pads()}
     p1 = pad_mm(pdn["1"]); pl = pad_mm(pdn["3"] if "3" in pdn else pdn["2"])
@@ -919,7 +919,7 @@ for j_, (fn, s1, s3) in JPSET.items():
                          (cx + sl, fb[1] - d_ - h / 2, rot), (cx + sl, fb[3] + d_ + h / 2, rot)]
     if not port_text(fn, cand): SILK_MISS[-1] = f"title {fn} (reference only)"
 pdn, u = jp_axis("JP61")
-for s_, pd_, a_ in (("RUST-2", pdn["1"], (-u[0], -u[1])), ("RUST-1", pdn["3"], u)):
+for s_, pd_, a_ in (("RUST-1", pdn["1"], (-u[0], -u[1])), ("RUST-2", pdn["3"], u)):
     for x, y, rot in pad_cand(pd_, s_, a_):
         w, h = tsize(s_, rot)
         if free_box((x - w / 2 - 0.1, y - h / 2 - 0.1, x + w / 2 + 0.1, y + h / 2 + 0.1), crt_too=False):
