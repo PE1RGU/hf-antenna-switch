@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12f-order"
+GENERATOR_REV = "v12g-be3"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -741,7 +741,7 @@ def bias_channel(S, k, ox, yl):
     RGS = S.part("Device:R", ("R", n + 2), "100k", R0603, X(35.56), R2(yl - 3.81), rp=(1.27, -2.54),
                  desc="Gate-source: holds the P-MOSFET off. With R3 47k: VGS = 12.6 x 100 / 147 = 8.6 V max")
     assert {RGS["1"], RGS["2"]} == {(X(35.56), yg), (X(35.56), yl)}, RGS
-    QP = S.part("Transistor_FET:Q_PMOS_GDS", ("Q", n + 2), "IRFL9014", SOT223, X(48.26), R2(yl - 2.54), rot=270, mpn="IRFL9014TRPBF",
+    QP = S.part("Transistor_FET:Q_PMOS_GDS", ("Q", n + 2), "IRFL9014", SOT223, X(48.26), R2(yl - 2.54), rot=270, mpn="IRFL9014TRPBF-BE3",
                 desc="P-MOSFET -60 V, SOT-223 (1 G, 2 D, 3 S, tab D). Vishay IRFL9014 Rev G; second source onsemi NTF2955. "
                      "Needs about 1 square inch of drain copper (RthJA 60 K/W, C-17)", rp=(-3.81, 7.62, "right"))
     assert QP["3"] == (X(43.18), yl) and QP["2"] == (X(53.34), yl) and QP["1"] == (X(48.26), yg), QP

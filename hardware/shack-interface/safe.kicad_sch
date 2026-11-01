@@ -1736,7 +1736,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Power-on and brown-out reset for the SAFE latch. WDI left open: watchdog disabled (TPS3823 7.3.4). MR open (90k pull-up)"
+		(property "Description" "Power-on and brown-out reset for the SAFE latch. WDI left open: watchdog disabled (MAX823 WDI pin; TPS3823 7.3.4). MR open (internal pull-up: MAX823 52k, TPS3823 90k). Second sources as U3 (D-195)"
 			(at 101.6 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -1748,7 +1748,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "TPS3823A-33DBVR"
+		(property "MPN" "MAX823SEUK+T"
 			(at 101.6 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -5646,7 +5646,7 @@
 			)
 		)
 	)
-	(text "SAFE latch (D-62, D-75, D-84): LATCHED = 1 after a power-up or any loss of SAFE loop current.\nOnly a RESET press clears it, and only while the loop current is present (PRE_N high). A held button gives no new edge.\nTX_EN = NOR(FAULT, LATCHED) goes to every radio port: TX INH and keying need TX_EN high (D-71).\nPOR_N: second TPS3823A-33 with WDI open (watchdog off), independent of the MCU watchdog (U3).\nLEDs on the front panel: SAFE = loop current present; LATCHED = stop held, RESET needed.\nLabels on the same sides as the root block (D-92). SAFE_LOST crosses FAULT and LATCHED: these wires are not connected (no junction)."
+	(text "SAFE latch (D-62, D-75, D-84): LATCHED = 1 after a power-up or any loss of SAFE loop current.\nOnly a RESET press clears it, and only while the loop current is present (PRE_N high). A held button gives no new edge.\nTX_EN = NOR(FAULT, LATCHED) goes to every radio port: TX INH and keying need TX_EN high (D-71).\nPOR_N: second supervisor (MAX823S) with WDI open (watchdog off), independent of the MCU watchdog (U3).\nLEDs on the front panel: SAFE = loop current present; LATCHED = stop held, RESET needed.\nLabels on the same sides as the root block (D-92). SAFE_LOST crosses FAULT and LATCHED: these wires are not connected (no junction)."
 		(exclude_from_sim no)
 		(at 25.4 200.66 0)
 		(effects

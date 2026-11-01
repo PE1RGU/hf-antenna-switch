@@ -2802,7 +2802,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Supervisor 2.93 V + watchdog 0.9 to 2.5 s, push-pull RESET_N, -40 to 125 C (TI SLVS165O). A version"
+		(property "Description" "Supervisor 2.93 V (2.85 to 3.00) + watchdog 1.12 to 2.4 s, push-pull RESET_N (150 uA source: logic loads only), -40 to 125 C (ADI MAX823 19-0487 Rev 5). Second sources TI TPS3823A-33DBVR (A version only: no latch-up on WDI pulses during reset) and Diodes APX823-29W5G-7 (D-148, D-195)"
 			(at 269.24 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -2814,7 +2814,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "TPS3823A-33DBVR"
+		(property "MPN" "MAX823SEUK+T"
 			(at 269.24 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -2907,7 +2907,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "WDI pull-down: a floating WDI would disable the watchdog (TPS3823 7.3.4)"
+		(property "Description" "WDI pull-down: a floating WDI would disable the watchdog (MAX823 WDI pin; TPS3823 7.3.4). MAX823 WDI sources max 20 uA: 20 mV low"
 			(at 251.46 67.31 0)
 			(hide yes)
 			(show_name no)

@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "controller-board"
 DATE = "2026-10-22"
-GENERATOR_REV = "c16-sda-bridged"
+GENERATOR_REV = "c17-max823"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -566,15 +566,15 @@ def mcu_sheet():
     # ---- safety gate (D-59): RLY_EN = NOR(KILL, MCU_EN_N, FAULT) ----
     # U12 supervisor and watchdog: WDI from GPIO1, 1k to GND so that a floating WDI still trips the watchdog
     U12 = S.part("Power_Supervisor:TPS3823-xxDBV", ("U", 12), "TPS3823A-33", "Package_TO_SOT_SMD:SOT-23-5", 114.3, 93.98,
-                 mpn="TPS3823A-33DBVR", rp=(-8.89, -11.43, "right"),
-                 desc="Supervisor 2.93 V + watchdog 0.9 to 2.5 s, push-pull RESET_N, -40 to 125 C (TI SLVS165O). A version: no latch-up on WDI pulses during reset")
+                 mpn="MAX823SEUK+T", rp=(-8.89, -11.43, "right"),
+                 desc="Supervisor 2.93 V (2.85 to 3.00) + watchdog 1.12 to 2.4 s, push-pull RESET_N (150 uA source: logic loads only), -40 to 125 C (ADI MAX823 19-0487 Rev 5). Second sources TI TPS3823A-33DBVR (A version only: no latch-up on WDI pulses during reset) and Diodes APX823-29W5G-7 (D-148, D-195)")
     assert U12["4"] == (104.14, 91.44) and U12["1"] == (124.46, 93.98), U12
     S.wire((88.9, 91.44), (96.52, 91.44)); S.label("L", "WDI", 88.9, 91.44, 180)
     RWL = S.part("Device:R", ("R", 64), "0R", R0603, 100.33, 91.44, rot=90, rp=(-5.08, -3.81, "right"),
-                 desc="Watchdog link (D-123): fitted in use. Open on the bench: U12 WDI floats, so the watchdog is off (TPS3823 SLVS165O 7.3.4); the supply supervisor stays active")
+                 desc="Watchdog link (D-123): fitted in use. Open on the bench: U12 WDI floats, so the watchdog is off (MAX823 WDI pin; TPS3823 SLVS165O 7.3.4); the supply supervisor stays active")
     assert RWL["1"] == (96.52, 91.44) and RWL["2"] == U12["4"], RWL
     RW = S.part("Device:R", ("R", 61), "1k", R0603, 96.52, 95.25, rp=(1.27, 1.27),
-                desc="WDI pull-down: a floating WDI would disable the watchdog (TPS3823 datasheet 7.3.4)")
+                desc="WDI pull-down: a floating WDI would disable the watchdog (MAX823 WDI pin; TPS3823 7.3.4). MAX823 WDI sources max 20 uA: 20 mV low")
     assert RW["1"] == (96.52, 91.44); gnd(RW["2"])
     S.raw(f'\t(no_connect\n\t\t(at {U12["3"][0]} {U12["3"][1]})\n\t\t(uuid "{U()}")\n\t)\n')     # MR: internal 90k pull-up
     S.power("+3V3", U12["5"]); gnd(U12["2"])
