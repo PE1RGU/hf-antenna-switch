@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12h-83-1r"
+GENERATOR_REV = "v12i-zener"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -462,16 +462,16 @@ def coil_supply(S):
     S.power("+12V_SW", (152.4 + X, 71.12)); S.power("+12V_SW", (165.1 + X, 71.12), flag=True)
     S.wire((165.1 + X, 71.12), (172.72 + X, 71.12))
     S.part("Connector:TestPoint", ("TP", 4), "+12V_SW", TP_FP, 172.72 + X, 71.12, desc="Test point +12V_SW (D-120)", bom=False, rp=(1.27, -5.08))
-    Z_D = "Clamp zener, 24 V, SOD-123 (D-35, D-37): drain peak 12.6 + 24 + 0.9 = 37.5 V against 0.7 x 60 V. Part to confirm"
+    Z_D = ("Clamp zener 24 V, SOD-123F on the SOD-123 land (D-35, D-37, D-43): drain peak 12.6 + 25.6 (VZ max) + 0.9 = 39.1 V against 0.7 x 60 V. Nexperia BZT52H-C24,115: PZSM about 16 W at 0.5 ms (Fig 1) against 11.5 W for 13 coils. Second source Diotec BZT52C24 (no surge rating stated)")
     ZL = (-1.27, -1.27, "right")                             # text left of the zener
     # CLAMP_SW: two zeners in parallel, so one open zener does not remove the clamp of 34 coils
-    Z1 = S.part("Device:D_Zener", ("D", 2), "BZT52C24", SOD123, 129.54 + X, 67.31, rot=270, mpn="BZT52C24", rp=ZL, desc=Z_D + ". Row and K1 coils")
-    Z3 = S.part("Device:D_Zener", ("D", 4), "BZT52C24", SOD123, 144.78 + X, 67.31, rot=270, mpn="BZT52C24", rp=ZL, desc=Z_D + ". Parallel to D2")
+    Z1 = S.part("Device:D_Zener", ("D", 2), "BZT52C24", SOD123, 129.54 + X, 67.31, rot=270, mpn="BZT52H-C24,115", rp=ZL, desc=Z_D + ". Row and K1 coils")
+    Z3 = S.part("Device:D_Zener", ("D", 4), "BZT52C24", SOD123, 144.78 + X, 67.31, rot=270, mpn="BZT52H-C24,115", rp=ZL, desc=Z_D + ". Parallel to D2")
     S.wire(Z1["1"], (129.54 + X, 60.96), (144.78 + X, 60.96), Z3["1"])
     S.power("CLAMP_SW", (129.54 + X, 60.96)); S.power("CLAMP_SW", (144.78 + X, 60.96), flag=True)
     # CLAMP_RLY: same for the three K0 coils
-    Z2 = S.part("Device:D_Zener", ("D", 3), "BZT52C24", SOD123, 40.64, 101.6, rot=270, mpn="BZT52C24", rp=ZL, desc=Z_D + ". K0 coils")
-    Z4 = S.part("Device:D_Zener", ("D", 5), "BZT52C24", SOD123, 55.88, 101.6, rot=270, mpn="BZT52C24", rp=ZL, desc=Z_D + ". Parallel to D3")
+    Z2 = S.part("Device:D_Zener", ("D", 3), "BZT52C24", SOD123, 40.64, 101.6, rot=270, mpn="BZT52H-C24,115", rp=ZL, desc=Z_D + ". K0 coils")
+    Z4 = S.part("Device:D_Zener", ("D", 5), "BZT52C24", SOD123, 55.88, 101.6, rot=270, mpn="BZT52H-C24,115", rp=ZL, desc=Z_D + ". Parallel to D3")
     S.wire(Z2["1"], (40.64, 93.98), (55.88, 93.98), Z4["1"])
     S.power("CLAMP_RLY", (40.64, 93.98)); S.power("CLAMP_RLY", (55.88, 93.98), flag=True)
     S.wire(Z2["2"], (40.64, 109.22), (55.88, 109.22), (63.5, 109.22)); S.wire(Z4["2"], (55.88, 109.22))
