@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12g-be3"
+GENERATOR_REV = "v12h-83-1r"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -117,7 +117,7 @@ def prop(name, val, x, y, hide=False, just="left", ang=0):
             f'\t\t\t(effects\n\t\t\t\t(font\n\t\t\t\t\t(size 1.27 1.27)\n\t\t\t\t)\n\t\t\t\t(justify {just})\n\t\t\t)\n\t\t)\n')
 
 C1 = "Design: Prins Doornekamp, PE1RGU"
-C2 = "RT1 RTD14012F x37, SO-239 Amphenol 83-798 x7, SMA EXP x3, XT60 x2, XT30"
+C2 = "RT1 RTD14012F x37, SO-239 Amphenol 83-1R x7, SMA EXP x3, XT60 x2, XT30"
 C3 = "Crossbar: rows on L1, columns on L6. Unit 1 = 3 radios x 4 antennas + EXP"
 C4 = "JLC06161H-7628A, 1.6 mm, 6 layers. RF: CPWG W 0.975 / gap 2.0 mm, 50 ohm"
 
@@ -252,7 +252,7 @@ RLY_FP = "Relay_THT:Relay_SPDT_Schrack-RT1-16A-FormC_RM5mm"
 RLY_V, RLY_D = "RTD14012F", "TE RT1, 1 CO 16 A, 12 VDC 400 mW, wash-tight, 5 mm pinning"
 SO239_FP = "rf-board:SO239_83-798_StrapPad_BossRight"   # project footprint (gen_so239_fp.py, D-105): GND boss hole at +14 mm
 SO239_FP_L = "rf-board:SO239_83-798_StrapPad_BossLeft"   # A4, near the right board edge: GND boss hole at -14 mm
-SO239_D = "Amphenol RF 83-798 (SO-239/A, PTFE) in the case wall; strap to board pad"
+SO239_D = ("Amphenol RF 83-1R (SO-239, PBT insulator) in the case wall; strap to board pad. Second source Amphenol RF 83-798 (PTFE): same flange, holes and thread (D-196). PBT: solder the strap fast, check the centre contact after soldering")
 H = lambda n: ("H", n)
 
 SHEETS = [("power", "Power entry", "power.kicad_sch", None), ("j14", "J14 filter", "j14_filter.kicad_sch", None)] + \
@@ -868,7 +868,7 @@ def root_sheet():
         S.bus_tap(R2(RX - 20.32), [(f"R{i}_{d}", RX, pin_y(y, RADIO_L, d)) for d in DRV], +1, f"R{i}DRV", "top")
         yr, ye = pin_y(y, RADIO_L, "RADIO"), pin_y(y, RADIO_L, "EXP")
         J = S.part("Connector:Conn_Coaxial", ("J", i), "83-798 SO-239", SO239_FP, 25.4, yr, desc=f"Radio R{i}. " + SO239_D,
-                   mpn="83-798", mirror="y", rp=(-3.81, -5.08, "right"))   # mirror flips the justification
+                   mpn="83-1R", mirror="y", rp=(-3.81, -5.08, "right"))   # mirror flips the justification
         S.wire(J["1"], (RX, yr)); S.power("GND", J["2"])
         E = S.part("Connector:Conn_Coaxial", ("J", 3 + i), "SMA jack EXP", "rf-board:SMA_901-9215_StrapPad", 25.4, R2(ye + 17.78), mpn="901-9215",
                    desc=f"EXP R{i} to unit 2 (left wall pocket, strap land; 2nd source 132142, D-108, D-110)", mirror="y", rp=(-3.81, -5.08, "right"))
@@ -882,7 +882,7 @@ def root_sheet():
         S.bus_tap(R2(AX + AW + 20.32), [(f"A{k}_{f}", R2(AX + AW), pin_y(y, ANT_R, f)) for f in ("K1_DRV", "DET", "BIAS")], -1, "ANT", "bottom")
         ya = pin_y(y, ANT_R, "ANTENNA")
         J = S.part("Connector:Conn_Coaxial", ("J", 6 + k), "83-798 SO-239", SO239_FP_L if k == 4 else SO239_FP, 279.4, ya, desc=f"Antenna A{k}. " + SO239_D,
-                   mpn="83-798", rp=(3.81, -5.08))
+                   mpn="83-1R", rp=(3.81, -5.08))
         S.wire((R2(AX + AW), ya), J["1"]); S.power("GND", J["2"]); S.label("L", f"A{k}_ANTENNA", 254.0, ya)
     # I/O expander block: drives and inputs grouped per bus; J14 section wired straight to the header
     IOX, IOY = 406.4, 55.88
