@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "shack-interface"
 DATE = "2026-10-19"
-GENERATOR_REV = "a21-order"
+GENERATOR_REV = "a22-max823"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -630,11 +630,11 @@ def mcu_sheet():
     # ---- supervisor, watchdog and fault latch: same circuit as the box (D-59), gates the permits (D-66) ----
     S.text("Supervisor and fault latch (D-59, D-66)", 246.38, 40.64)
     U3 = S.part("Power_Supervisor:TPS3823-xxDBV", ("U", 3), "TPS3823A-33", "Package_TO_SOT_SMD:SOT-23-5", 269.24, 66.04,
-                mpn="TPS3823A-33DBVR", rp=(-8.89, -11.43, "right"),
-                desc="Supervisor 2.93 V + watchdog 0.9 to 2.5 s, push-pull RESET_N, -40 to 125 C (TI SLVS165O). A version")
+                mpn="MAX823SEUK+T", rp=(-8.89, -11.43, "right"),
+                desc="Supervisor 2.93 V (2.85 to 3.00) + watchdog 1.12 to 2.4 s, push-pull RESET_N (150 uA source: logic loads only), -40 to 125 C (ADI MAX823 19-0487 Rev 5). Second sources TI TPS3823A-33DBVR (A version only: no latch-up on WDI pulses during reset) and Diodes APX823-29W5G-7 (D-148, D-195)")
     assert U3["4"] == (259.08, 63.5) and U3["1"] == (279.4, 66.04) and U3["3"] == (259.08, 68.58), U3
     RW = S.part("Device:R", ("R", 62), "1k", R0603, 251.46, 67.31, rp=(1.27, 1.27),
-                desc="WDI pull-down: a floating WDI would disable the watchdog (TPS3823 7.3.4)")
+                desc="WDI pull-down: a floating WDI would disable the watchdog (MAX823 WDI pin; TPS3823 7.3.4). MAX823 WDI sources max 20 uA: 20 mV low")
     assert RW["1"] == (251.46, 63.5), RW
     S.wire((246.38, 63.5), RW["1"], U3["4"]); S.label("L", "WDI", 246.38, 63.5, 180); S.power("GND", RW["2"])
     NC(U3["3"]); S.power("+3V3", U3["5"]); S.power("GND", U3["2"])
@@ -759,9 +759,9 @@ def safe_sheet():
     S.wire(U7["4"], (78.74, 76.2), U8["1"]); S.label("L", "SAFE_OK", 81.28, 76.2)
     S.power("+3V3", U8["5"]); S.power("GND", U8["3"])
     # power-on reset of the latch: second supervisor, drawn mirrored under U8; WDI open = watchdog disabled (D-84)
-    U6 = S.part("Power_Supervisor:TPS3823-xxDBV", ("U", 6), "TPS3823A-33", SOT5, 101.6, 109.22, mpn="TPS3823A-33DBVR", mirror="y",
+    U6 = S.part("Power_Supervisor:TPS3823-xxDBV", ("U", 6), "TPS3823A-33", SOT5, 101.6, 109.22, mpn="MAX823SEUK+T", mirror="y",
                 rp=(6.35, -11.43, "left"),
-                desc="Power-on and brown-out reset for the SAFE latch. WDI left open: watchdog disabled (TPS3823 7.3.4). MR open (90k pull-up)")
+                desc="Power-on and brown-out reset for the SAFE latch. WDI left open: watchdog disabled (MAX823 WDI pin; TPS3823 7.3.4). MR open (internal pull-up: MAX823 52k, TPS3823 90k). Second sources as U3 (D-195)")
     assert U6["1"] == (91.44, 109.22), U6
     nc(U6["4"]); nc(U6["3"]); S.power("+3V3", U6["5"]); S.power("GND", U6["2"])
     S.wire(U6["1"], (91.44, 81.28), U8["2"]); S.label("L", "POR_N", 91.44, 101.6, 90)
@@ -818,7 +818,7 @@ def safe_sheet():
     S.text("SAFE latch (D-62, D-75, D-84): LATCHED = 1 after a power-up or any loss of SAFE loop current.\\n"
            "Only a RESET press clears it, and only while the loop current is present (PRE_N high). A held button gives no new edge.\\n"
            "TX_EN = NOR(FAULT, LATCHED) goes to every radio port: TX INH and keying need TX_EN high (D-71).\\n"
-           "POR_N: second TPS3823A-33 with WDI open (watchdog off), independent of the MCU watchdog (U3).\\n"
+           "POR_N: second supervisor (MAX823S) with WDI open (watchdog off), independent of the MCU watchdog (U3).\\n"
            "LEDs on the front panel: SAFE = loop current present; LATCHED = stop held, RESET needed.\\n"
            "Labels on the same sides as the root block (D-92). SAFE_LOST crosses FAULT and LATCHED: these wires are not connected (no junction).", 25.4, 200.66)
     return S.finish()

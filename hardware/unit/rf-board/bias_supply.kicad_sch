@@ -4934,7 +4934,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "IRFL9014TRPBF"
+		(property "MPN" "IRFL9014TRPBF-BE3"
 			(at 200.66 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -6630,7 +6630,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "IRFL9014TRPBF"
+		(property "MPN" "IRFL9014TRPBF-BE3"
 			(at 327.66 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -8326,7 +8326,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "IRFL9014TRPBF"
+		(property "MPN" "IRFL9014TRPBF-BE3"
 			(at 200.66 139.7 0)
 			(hide yes)
 			(show_name no)
@@ -10022,7 +10022,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "IRFL9014TRPBF"
+		(property "MPN" "IRFL9014TRPBF-BE3"
 			(at 327.66 139.7 0)
 			(hide yes)
 			(show_name no)

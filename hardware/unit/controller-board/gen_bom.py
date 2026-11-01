@@ -30,7 +30,7 @@ ORDER = {
     ("74LVC1G27", "SOT-23-6"): ("TI SN74LVC1G27DBVR", "Nexperia 74LVC1G27GV", "3-input NOR, SOT-23-6 / SOT457, same pin-out (D-155). Candidate: Diodes 74LVC1G27W6-7 (pin-out to check)"),
     ("74LVC1G74", "VSSOP-8_2.3x2mm_P0.5mm"): ("TI SN74LVC1G74DCUR", "Nexperia 74LVC2G74DC", "D flip-flop, VSSOP-8 0.5 mm (D-154). Same pin-out, JEDEC MO-187 CA"),
     ("LP2985-33", "SOT-23-5"): ("TI LP2985-33DBVR", "ST LD2985BM33R", "LDO 3.3 V 150 mA"),
-    ("TPS3823A-33", "SOT-23-5"): ("TI TPS3823A-33DBVR", "ADI MAX823SEUK+T / Diodes APX823-29W5G-7", "Supervisor and watchdog (D-148)"),
+    ("TPS3823A-33", "SOT-23-5"): ("ADI MAX823SEUK+T", "TI TPS3823A-33DBVR / Diodes APX823-29W5G-7", "Supervisor and watchdog (D-148, D-195)"),
     ("ESP32-C3-DevKit-RUST-1", "ESP32-C3-DevKit-RUST_Socket"): ("Espressif ESP32-C3-DevKit-RUST-1", "Espressif ESP32-C3-DevKit-RUST-2 (JP11 2-1)", "MCU board; sockets on the lines below (D-55, D-94, D-95)"),
     ("SDA SEL", "SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels"): ("-", "-", "Solder jumper, 1-2 bridged by copper for RUST-1; RUST-2: cut 1-2, bridge 2-3 (no part, D-192)"),
 }
