@@ -4,7 +4,7 @@ Scope: all three boards before the PCB, parts and CNC case orders. Read-only rev
 
 ## Status (2026-11-01, after PRs #12 to #15)
 
-Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -12,7 +12,6 @@ The table lists only open items. The sections below give the evidence.
 |---|---|---|---|
 | Blocker | B-3 | Order BOMs with MPN, maker and second source on every line | RF, shack |
 | Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
-| PCB | S-8 | Trim the width to 159.6 mm | Shack |
 | PCB | S-9 | New production zip after S-1 and S-2 | Controller |
 | PCB | S-12 | Check the display on IO2/IO9; if unsure, move CS/DC off IO9 | Shack |
 | PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |

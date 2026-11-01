@@ -1,10 +1,14 @@
-nets to route 155 connections 405 grid 1603 x 1613
+nets to route 155 connections 405 grid 1599 x 1613
   return vias placed 0, beyond 0.0 mm or none: 0
-pass 1: failed 1 ['LATCHED'] | vias 421 | 72 s
+pass 1: failed 1 ['LATCHED'] | vias 422 | 69 s
   return vias placed 0, beyond 0.0 mm or none: 0
-pass 2: failed 0 [] | vias 427 | 131 s
+pass 2: failed 1 ['SCL'] | vias 423 | 136 s
+  return vias placed 0, beyond 0.0 mm or none: 0
+pass 3: failed 1 ['RESET_N'] | vias 426 | 195 s
+  return vias placed 0, beyond 0.0 mm or none: 0
+pass 4: failed 0 [] | vias 429 | 250 s
 short segments merged: 4
-chamfered corners: 261 T-junction fillets: 21 (pieces that fail the clearance check are left out)
+chamfered corners: 276 T-junction fillets: 14 (pieces that fail the clearance check are left out)
 narrowed: {}
-connections without the minimum segment length (nets): ['LATCHED']
-nets 155 routed 155 failed 0 | F 3833 mm In2 2323 mm | vias 427 | 131 s
+connections without the minimum segment length (nets): ['LATCHED', 'RESET_N', 'SCL']
+nets 155 routed 155 failed 0 | F 3862 mm In2 2320 mm | vias 429 | 250 s
