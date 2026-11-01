@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12d-mpn"
+GENERATOR_REV = "v12e-j14"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -919,7 +919,7 @@ def root_sheet():
     HX = R2(FX - 20.32 - 5.08)
     JH = S.part("Connector_Generic:Conn_02x12_Odd_Even", ("J", 14), "Controller header", "Connector_PinHeader_2.54mm:PinHeader_2x12_P2.54mm_Vertical",
                 HX, R2(iy("SCL") + 12.7), mirror="y",
-                desc="Board-to-board header. Unit 1: controller board (MCU, RJ45 LINK). Unit 2: EXP ribbon from the unit 1 controller board, +5V pins open at the controller end. 3.3 V logic (D-51, D-53)",
+                desc="Board-to-board header. Unit 1: controller board (MCU, RJ45 LINK). Unit 2: EXP ribbon from the unit 1 controller board, +5V pins open at the controller end. 3.3 V logic (D-51, D-53). Samtec TSW, 0.64 mm square post 5.84 mm above the body, 10 uin gold on the post; mates with the ESQ-112-33-G-D on the controller (D-139)", mpn="TSW-112-07-L-D",
                 rp=(7.62, 17.78, "left"))
     assert JH["1"][0] == R2(FX - 20.32), JH["1"]
     for i, net in enumerate(J14_SIG + ["", "", ""]):        # pin 17 = A2_RFDET: RF on the receive-only column A2 (D-104, SR-01 H2)

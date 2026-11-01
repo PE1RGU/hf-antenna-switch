@@ -2,9 +2,9 @@
 
 Scope: all three boards before the PCB, parts and CNC case orders. Read-only review: no schematic, layout or BOM was changed. Base: commit dd1f485 (main), netlists rf14.xml, ctl14.xml, si16.xml, KiCad 10.0.5.
 
-## Status (2026-11-01, after PRs #12 to #19)
+## Status (2026-11-01, after PRs #12 to #20)
 
-Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); S-4 (M-115: MPN BSS138BK,215 on all 45 BSS138BK, RF and shack); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); S-4 (M-115: MPN BSS138BK,215 on all 45 BSS138BK, RF and shack); S-5 (M-116: RF J14 = Samtec TSW-112-07-L-D, post 5.84 mm, engagement 4.89 mm); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -13,7 +13,6 @@ The table lists only open items. The sections below give the evidence.
 | Blocker | B-3 | Order BOMs with MPN, maker and second source on every line | RF, shack |
 | Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
 | PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |
-| BOM | S-5 | Name J14: gold, post length ≥ 5.8 mm | RF |
 | BOM | S-6 | Full order codes: LM2901DR, JST, shack C1 temperature | RF, shack |
 | BOM | S-7 | "PCA9539, not the R variant" in the BOM | All |
 | BOM | S-10 | Long-lead and single-source parts: IRFL9014 (-BE3), 83-798, TPS3823, TLP176AM | All |
@@ -43,7 +42,7 @@ Order of work:
 1. RF board: fix B-1 and B-2, then do an order-readiness pass like M-67 (B-4).
 2. Controller board: FAULT to IO6 (S-1) and the SDA jumper default (S-2). Then regenerate the production zip (S-9).
 3. Shack interface: fix the SDA jumper default, the width, U4/U9 and IO2/IO9 (S-2, S-8, S-11, S-12). Then do an order-readiness pass.
-4. Order BOMs for the RF board and the shack interface with full MPNs (B-3, S-5 to S-7).
+4. Order BOMs for the RF board and the shack interface with full MPNs (B-3, S-6, S-7).
 5. Buy a few long-lead or unknown parts first: RT1 ×4, one SO-239 83-798, one of each SMA, an XT60/XT30 pair. Measure them, then release the case (S-14, S-15).
 
 ## 1. What was run
@@ -100,7 +99,7 @@ The parity field warnings are all "MPN/Description missing in the footprint". Th
 - Evidence: only `hardware/unit/controller-board/production/bom_hand_assembly.csv` exists. It matches ctl14 one to one. On the RF board and the shack interface these lines have no MPN:
   - RF: R401 to R701 "1M HV" (D-32 open); C6/C7 47 µF 25 V polymer (D-129 open); C404 to C704 4.7 pF 1 kV C0G (A-22); J14 header; all passives.
   - Shack: C1; C205/C305/C405 10 nF 1 kV; the 1 nF C0G line filters; JST XH; headers; all resistors.
-- Fix: port `gen_bom.py` to rf14 and si16, with MPN, maker, second source and voltage on every line. Include S-5 to S-7.
+- Fix: port `gen_bom.py` to rf14 and si16, with MPN, maker, second source and voltage on every line. Include S-6 and S-7.
 
 ### B-4. RF board and shack interface: no order-readiness pass
 
@@ -125,7 +124,6 @@ Parts and BOM:
 
 | # | Finding | Evidence | Fix |
 |---|---|---|---|
-| S-5 | RF J14 header is not named. It sets the 4.7 to 5.05 mm engagement with the Samtec ESQ-112-33-G-D socket (D-139) | rf14 J14 | A gold, 0.64 mm square post header with post length ≥ 5.8 mm |
 | S-6 | Generic or incomplete order codes: LM2901 (no package code); shack PC817X; RF C1011 to C1041 and the shack 1 nF C0G with no voltage (12.6 V there); shack C1 temperature; JST parts | rf14, si16 | LM2901DR; PC817X2NSZ9F; ≥ 25 V; 105 °C; B2B-XH-A / B4B-XH-A |
 | S-7 | "PCA9539, not the R variant". The firmware relies on RESET clearing the registers. With a PCA9539R, the relays come back in their old state | PCA9539 Rev 9.1 §6.4; relay_box.rs:390-397, 550 | Write it in the BOM and in D-133 |
 | S-10 | Lifecycle and stock: IRFL9014TRPBF is listed obsolete by DigiKey (the -BE3 variant is active); the SO-239 83-798 is single source (Buerklin 0 stock, 16 weeks); TPS3823A-33 is TI only (0 stock on 2026-10-19); TLP176AM has a 98 to 168 day lead; SN74LVC1G74DCTR is TI only | web snapshots, not live (the JLC database in the KiCad MCP is empty, and DigiKey has no credentials) | Confirm with Vishay; order the long-lead parts first; name the second sources in the BOM |
@@ -186,7 +184,7 @@ Note: another session edited firmware files around 17:01 during this review (sha
 
 ## 6. BOM
 
-All pin-outs of the active parts, relays and connectors match the filed datasheets for the intended makers. That includes RT1 (RT1pb rev 4 p.2, S0418-CA), PCA9539/TCA9539/PI4IOE5V9539, VO2611, TPS3823, 74LVC1G74/1G27, TLP176AM, LP2985, L7805/LD1117, USBLC6-2, ACT45B, the Bourns 2036 GDT, the Wurth RJ45 and the 83-798/901-9215. Fitted capacitors are within the 0.7 voltage factor. There is no 0402. The order data has gaps: B-3 and S-5 to S-7, S-10.
+All pin-outs of the active parts, relays and connectors match the filed datasheets for the intended makers. That includes RT1 (RT1pb rev 4 p.2, S0418-CA), PCA9539/TCA9539/PI4IOE5V9539, VO2611, TPS3823, 74LVC1G74/1G27, TLP176AM, LP2985, L7805/LD1117, USBLC6-2, ACT45B, the Bourns 2036 GDT, the Wurth RJ45 and the 83-798/901-9215. Fitted capacitors are within the 0.7 voltage factor. There is no 0402. The order data has gaps: B-3, S-6, S-7 and S-10.
 
 Can wait:
 - TE gives no HF data for the RT1 (no contact capacitance, no isolation). The open-contact dielectric is 1000 Vrms against 173 V peak; the current is 2.45 A against 16 A. Run the M-01 coupon test on 4 relays before you buy all 34.
