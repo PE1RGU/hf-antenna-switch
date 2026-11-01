@@ -2,9 +2,9 @@
 
 Scope: all three boards before the PCB, parts and CNC case orders. Read-only review: no schematic, layout or BOM was changed. Base: commit dd1f485 (main), netlists rf14.xml, ctl14.xml, si16.xml, KiCad 10.0.5.
 
-## Status (2026-11-01, after PRs #12 to #29)
+## Status (2026-11-01, after PRs #12 to #30)
 
-Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); S-4 (M-115: MPN BSS138BK,215 on all 45 BSS138BK, RF and shack); S-5 (M-116: RF J14 = Samtec TSW-112-07-L-D, post 5.84 mm, engagement 4.89 mm); S-6 (M-117: LM2901DR, JST B2B/B4B-XH-A(LF)(SN), shack 1 nF GRM1885C1H102JA01D; PC817X, RF 100n and C1 105 C were already done); S-7 (D-133: plain PCA9539 only, never R; already in the part descriptions, to the order BOM with B-3); S-10 (D-195, M-118: IRFL9014TRPBF-BE3, MAX823SEUK+T first source, TLP176AM in stock; SO-239: 83-1R first, 83-798 second, D-196 / M-119); Decide D-148 (closed by D-195: MAX823SEUK+T first source, datasheet filed); Decide creepage (D-197: 2.0 mm accepted for the prototype, IEC 60664 check before product use); Decide RT1 isolation (D-198: accepted, buy all, M-01 on the first RF board); Decide D-43 (M-120: BZT52H-C24 passes the 13-coil pulse, Diotec second source); Decide A-13/D-45 (D-199: Mean Well HDR-30-12 + HDR-15-5, short-circuit current far below 50 A); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); S-4 (M-115: MPN BSS138BK,215 on all 45 BSS138BK, RF and shack); S-5 (M-116: RF J14 = Samtec TSW-112-07-L-D, post 5.84 mm, engagement 4.89 mm); S-6 (M-117: LM2901DR, JST B2B/B4B-XH-A(LF)(SN), shack 1 nF GRM1885C1H102JA01D; PC817X, RF 100n and C1 105 C were already done); S-7 (D-133: plain PCA9539 only, never R; already in the part descriptions, to the order BOM with B-3); S-10 (D-195, M-118: IRFL9014TRPBF-BE3, MAX823SEUK+T first source, TLP176AM in stock; SO-239: 83-1R first, 83-798 second, D-196 / M-119); Decide D-148 (closed by D-195: MAX823SEUK+T first source, datasheet filed); Decide creepage (D-197: 2.0 mm accepted for the prototype, IEC 60664 check before product use); Decide RT1 isolation (D-198: accepted, buy all, M-01 on the first RF board); Decide D-43 (M-120: BZT52H-C24 passes the 13-coil pulse, Diotec second source); Decide A-13/D-45 (D-199: Mean Well HDR-30-12 + HDR-15-5, short-circuit current far below 50 A); Decide P-6 to P-13 (D-200: P-6 to P-12 declined, P-13 RF C6/C7 MPN with B-3); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -15,7 +15,6 @@ The table lists only open items. The sections below give the evidence.
 | PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |
 | Case | S-14, S-15 | Hold CNC order W2026102506308334; first buy and measure RT1 ×4, one 83-798, one of each SMA, an XT60/XT30 pair | Case |
 | Decide | | Case: unit 2 ribbon slot, end-plate screws, NPTH for the spacers | Case |
-| Decide | P-6 to P-13 | Optional part merges, each needs a yes | All |
 | Records | S-16 | Update `verify_logic.py` to D-162; re-run and re-file | — |
 | Records | S-17 | Close the 34 design-log rows that later entries closed | — |
 | Records | | Remove the iCloud duplicates ("name 2.ext") | — |
@@ -257,8 +256,8 @@ Kept apart on purpose:
 - BZT52C15 and BZT52C24 (gate clamp and coil clamp).
 - The 74LVC1G gate family (02, 08, 14, 27, 74): each gate is logic-verified; merging gates would mean new verification for one line less.
 
-**Status 2026-10-31: P-1 to P-5 applied (D-190, M-108).** ERC 0, netlists rf15, ctl15, si17; the shack U4/U9 are re-routed with a fixed fan-out; DRC as before plus one harmless RGND island at JP306. P-6 to P-13 open.
+**Status 2026-10-31: P-1 to P-5 applied (D-190, M-108).** ERC 0, netlists rf15, ctl15, si17; the shack U4/U9 are re-routed with a fixed fan-out; DRC as before plus one harmless RGND island at JP306. **Status 2026-11-01: P-6 to P-12 declined; P-13 only for RF C6, C7 (MPN at B-3) (D-200).**
 
-Total: up to 13 order lines fewer. P-1 to P-4 change no circuit and can go in with B-3. P-5 is needed anyway (S-11). P-6 to P-13 each need your yes.
+Total: up to 13 order lines fewer. P-1 to P-4 change no circuit and can go in with B-3. P-5 is needed anyway (S-11). P-6 to P-13: decided by D-200.
 
 Housekeeping found on the way: shack F1 uses `Fuse_1206_3216Metric`, not the HandSolder land used on every other 1206 part (R-07).
