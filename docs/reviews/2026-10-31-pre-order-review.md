@@ -2,9 +2,9 @@
 
 Scope: all three boards before the PCB, parts and CNC case orders. Read-only review: no schematic, layout or BOM was changed. Base: commit dd1f485 (main), netlists rf14.xml, ctl14.xml, si16.xml, KiCad 10.0.5.
 
-## Status (2026-11-01, after PRs #12 to #17)
+## Status (2026-11-01, after PRs #12 to #18)
 
-Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -12,7 +12,6 @@ The table lists only open items. The sections below give the evidence.
 |---|---|---|---|
 | Blocker | B-3 | Order BOMs with MPN, maker and second source on every line | RF, shack |
 | Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
-| PCB | S-12 | Check the display on IO2/IO9; if unsure, move CS/DC off IO9 | Shack |
 | PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |
 | BOM | S-4 | `BSS138BK,215` (Nexperia); the ROHM pin order differs | RF, shack |
 | BOM | S-5 | Name J14: gold, post length ≥ 5.8 mm | RF |
@@ -121,7 +120,6 @@ PCB changes (cheap now, rework or respin later):
 | S-8 | Shack | The board is 160.0 mm wide in slots with 0.2 mm play (M-92). JLC outline tolerance is about ±0.2 mm | outline 160 × 161 | Trim to 159.6 mm |
 | S-9 | Controller | The production zip is stale: In2, F_Mask and F_Cu differ from a fresh export. The ORDER sheet swaps the 0.8 and 1.0 mm hole labels | `controller-board/production/` | Regenerate after S-1 and S-2 |
 | S-11 | Shack | U4, U9 74LVC1G74 are still in the TI-only DCT package. D-154 fixed this on the controller only | si16; R-10, D-154 | VSSOP-8 as in D-154, or a documented exception with spares |
-| S-12 | Shack | Display SPI on the boot strap pins IO2 and IO9. D-180 assumes the display inputs are high impedance. Nobody has checked this | D-180, D-66/67; shack-interface-rev-a.md:32 is stale | Read the Waveshare 2" schematic (pulls, backlight). If unsure, move CS/DC off IO9 |
 | S-13 | RF, shack | XT60/XT30 pad polarity is not confirmed (pad 1 GND, pad 2 +). A reversed supply damages the board | A-07, M-02 | Amass drawing or one part in hand; fix the silkscreen |
 
 Parts and BOM:
@@ -158,7 +156,7 @@ Result: match. No finding makes a board fail.
 - D-58 link polarity: idle = loop current = mark, in both directions. Both receivers pull low on current. Both firmwares invert RX (with a pull-up) and send TX without inversion (box main.rs:268-276, shack main.rs:339-347). A cut cable or a sender in reset reads as a break. Correct.
 - SAFE/KILL, supervisor, latch, DevKit header (ENABLE, RST, strap pins) agree. R52/R53 DNP is consistent with R2/R3_K0 as outputs.
 
-Can wait: stale text about IO2/IO9 (shack-interface-rev-a.md:32, D-83); RUST-2 needs a firmware rebuild and its LED pin is not confirmed; the box ROM boot log goes out on GPIO21 (link TX) for about 1 s per box reset (include a box reset in the link test); display SPI mode 0 against mode 3 for CS-less ST7789 modules; two 3.3 V rails on the box I2C bus (scope the back-feed at power-up); ESP32-C3 reset pull states on GPIO0/3/4/5/6 are not checked (the datasheet is not filed; an internal pull-up against the 100k pull-downs would give about 2.3 V on a PERMIT line during reset). File the C3 datasheet and close this before the bench.
+Can wait: RUST-2 needs a firmware rebuild and its LED pin is not confirmed; the box ROM boot log goes out on GPIO21 (link TX) for about 1 s per box reset (include a box reset in the link test); display SPI mode 0 against mode 3 for CS-less ST7789 modules; two 3.3 V rails on the box I2C bus (scope the back-feed at power-up); ESP32-C3 reset pull states on GPIO0/3/4/5/6 are not checked (the datasheet is not filed; an internal pull-up against the 100k pull-downs would give about 2.3 V on a PERMIT line during reset). File the C3 datasheet and close this before the bench.
 
 ## 5. Firmware, and hardware with firmware, against the spec
 
@@ -244,7 +242,7 @@ Can wait for the bench: R-12, A-02, A-03, A-14, A-15, A-17, A-18, A-20, A-31, C-
 ## 9. Housekeeping (no impact on the boards)
 
 - The repo has many iCloud duplicates ("name 2.ext"), for example `rf-board 2.kicad_pcb` and `verify_logic 2.py`. They are gitignored. Still, a tool or a person can open the wrong file. Remove them before the production export.
-- Two pin-map docs are stale (S-12, section 4).
+- Pin-map text: shack-interface-rev-a.md fixed (M-114). D-83 still says IO2/IO9 unused; D-180 supersedes it.
 
 ## 10. Part reuse (added 2026-10-31, Prins's request)
 
