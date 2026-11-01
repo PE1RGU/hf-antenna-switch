@@ -101,8 +101,9 @@ for k, (x, y) in enumerate(path):
         if free_at(j, i): put(xs[i], ys[j]); n_edge += 1; acc = 0.0; break
 print("edge fence vias", n_edge)
 
-# 3. grid stitching, 5 mm
+# 3. grid stitching, 5 mm; none in the bias-T drain cells (S-3: B.Cu there is the drain pour, not GND)
 n_grid = 0
+for (a_, b_, c_, d_) in CFG.get("stitch_no_grid", []): ok &= ~((Xg >= a_) & (Xg <= c_) & (Yg >= b_) & (Yg <= d_))
 off = [(dj, di) for dj in range(-10, 11) for di in range(-10, 11)]; off.sort(key=lambda d: d[0] ** 2 + d[1] ** 2)
 for gy in np.arange(5.0, Y1 - 2, 5.0):
     for gx in np.arange(5.0, X1 - 2, 5.0):

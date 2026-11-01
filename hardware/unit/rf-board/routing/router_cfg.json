@@ -232,5 +232,31 @@
  "pad_clear_skip": [
   "unconnected-(K*-Pad12)"
  ],
- "_doc_pad_clear_skip": "D-189: the relay NC pads keep rf_clear per layer (2.0 mm outer, 0.5 mm inner, D-12 and D-117) instead of rf_pad_clear on all layers, so the drive lines keep their inner channels through the relay field"
+ "_doc_pad_clear_skip": "D-189: the relay NC pads keep rf_clear per layer (2.0 mm outer, 0.5 mm inner, D-12 and D-117) instead of rf_pad_clear on all layers, so the drive lines keep their inner channels through the relay field",
+ "stitch_no_grid": [
+  [
+   16.5,
+   181.0,
+   29.375,
+   209.0
+  ],
+  [
+   29.375,
+   181.0,
+   42.25,
+   209.0
+  ],
+  [
+   42.25,
+   181.0,
+   55.125,
+   209.0
+  ],
+  [
+   55.125,
+   181.0,
+   68.0,
+   209.0
+  ]
+ ]
 }
