@@ -134,7 +134,7 @@ Desk checks on the schematic; nothing is measured yet.
 ## 7. Open items
 
 - Unit 2 is postponed until it is needed. One I2C controller only on the ESP32-C3: a unit 2 bus later needs a software bus or a mux (D-55).
-- EXP ribbon passage through the case wall (D-53): slot with clamp or panel-mount header.
+- EXP ribbon passage through the case wall (D-53): slot about 32 × 3 mm with grommet or clamp, in the first CNC order (D-201). Place the EXP header to match the slot.
 - R-14: the DevKit USB end points to the right board edge; checked in gen_controller_pcb.py (assert) and in the 3D fit (M-52, M-54).
 - Bench tests on the first board: slow 3V3 ramp with RLY_EN on a scope (A-14), KILL order and coil decay (M-10), ESP32-C3 boot time (C-19), loop current spread (C-24).
 
