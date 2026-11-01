@@ -4659,7 +4659,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Clamp zener, 24 V, SOD-123 (D-35, D-37): drain peak 12.6 + 24 + 0.9 = 37.5 V against 0.7 x 60 V. Part to confirm. Row and K1 coils"
+		(property "Description" "Clamp zener 24 V, SOD-123F on the SOD-123 land (D-35, D-37, D-43): drain peak 12.6 + 25.6 (VZ max) + 0.9 = 39.1 V against 0.7 x 60 V. Nexperia BZT52H-C24,115: PZSM about 16 W at 0.5 ms (Fig 1) against 11.5 W for 13 coils. Second source Diotec BZT52C24 (no surge rating stated). Row and K1 coils"
 			(at 139.7 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -4671,7 +4671,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BZT52C24"
+		(property "MPN" "BZT52H-C24,115"
 			(at 139.7 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -4755,7 +4755,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Clamp zener, 24 V, SOD-123 (D-35, D-37): drain peak 12.6 + 24 + 0.9 = 37.5 V against 0.7 x 60 V. Part to confirm. Parallel to D2"
+		(property "Description" "Clamp zener 24 V, SOD-123F on the SOD-123 land (D-35, D-37, D-43): drain peak 12.6 + 25.6 (VZ max) + 0.9 = 39.1 V against 0.7 x 60 V. Nexperia BZT52H-C24,115: PZSM about 16 W at 0.5 ms (Fig 1) against 11.5 W for 13 coils. Second source Diotec BZT52C24 (no surge rating stated). Parallel to D2"
 			(at 154.94 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -4767,7 +4767,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BZT52C24"
+		(property "MPN" "BZT52H-C24,115"
 			(at 154.94 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5045,7 +5045,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Clamp zener, 24 V, SOD-123 (D-35, D-37): drain peak 12.6 + 24 + 0.9 = 37.5 V against 0.7 x 60 V. Part to confirm. K0 coils"
+		(property "Description" "Clamp zener 24 V, SOD-123F on the SOD-123 land (D-35, D-37, D-43): drain peak 12.6 + 25.6 (VZ max) + 0.9 = 39.1 V against 0.7 x 60 V. Nexperia BZT52H-C24,115: PZSM about 16 W at 0.5 ms (Fig 1) against 11.5 W for 13 coils. Second source Diotec BZT52C24 (no surge rating stated). K0 coils"
 			(at 40.64 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -5057,7 +5057,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BZT52C24"
+		(property "MPN" "BZT52H-C24,115"
 			(at 40.64 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -5141,7 +5141,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Clamp zener, 24 V, SOD-123 (D-35, D-37): drain peak 12.6 + 24 + 0.9 = 37.5 V against 0.7 x 60 V. Part to confirm. Parallel to D3"
+		(property "Description" "Clamp zener 24 V, SOD-123F on the SOD-123 land (D-35, D-37, D-43): drain peak 12.6 + 25.6 (VZ max) + 0.9 = 39.1 V against 0.7 x 60 V. Nexperia BZT52H-C24,115: PZSM about 16 W at 0.5 ms (Fig 1) against 11.5 W for 13 coils. Second source Diotec BZT52C24 (no surge rating stated). Parallel to D3"
 			(at 55.88 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -5153,7 +5153,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BZT52C24"
+		(property "MPN" "BZT52H-C24,115"
 			(at 55.88 101.6 0)
 			(hide yes)
 			(show_name no)
