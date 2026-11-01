@@ -29,7 +29,7 @@ Status: all sheets drawn (M-13 to M-17): link, power, MCU, SAFE, radio port (one
 - Housing: own board in an aluminium housing, connectors on panels (D-70); 7805 in TO-220 on the housing wall (D-82).
 
 ## MCU pin map (D-83, D-92)
-Direct: IO0 PERMIT_R1, IO1 WDI, IO3 LATCH_CLR, IO4 PERMIT_R2, IO5 PERMIT_R3, IO6 DATA_TX, IO20 DATA_RX, IO21 SAFE_LOST (1k series). I2C: SDA IO10 (RUST-1) or IO7 (RUST-2) by JP61, SCL IO8. IO2, IO9 unused (strapping). Header pins 17, 18 not connected.
+Direct: IO0 PERMIT_R1, IO1 WDI, IO3 LATCH_CLR, IO4 PERMIT_R2, IO5 PERMIT_R3, IO6 DATA_TX, IO20 DATA_RX, IO21 SAFE_LOST (1k series). I2C: SDA IO10 (RUST-1) or IO7 (RUST-2) by JP61, SCL IO8. Display SPI (D-180): SCK IO2, MOSI IO9 (both strapping; the display adds no pull, M-114). Header pins 17, 18 not connected.
 PCA9539 0x74 (D-92): IO0_0 SW_STOP_N (out), IO0_1 R1_TX, IO0_2 KEY_R1 (out), IO0_3 BAND_D, IO0_4 BAND_A, IO0_5 BAND_B, IO0_6 BAND_C, IO0_7 LED_R1 (out), IO1_0 KEY_R2 (out), IO1_1 R2_TX, IO1_2 LED_R2 (out), IO1_3 KEY_R3 (out), IO1_4 R3_TX, IO1_5 LED_R3 (out), IO1_6 KILL_S, IO1_7 LATCHED. Unmarked = input. RESET = RESET_N, INT not used. Write outputs 0 before configuring (F1).
 Schematic: the DevKit (DevKit-RUST-1 Rev 1.2a in use) is one board symbol A1 with the esp-rs pad numbers: left 1..16, right 28..17 top to bottom; footprint ESP32-C3-DevKit-RUST_Socket, gold Sullins socket headers PPPC161LFBN-RC and PPPC121LFBN-RC, DevKit 11.05 mm above the board (D-95); net labels at its pins (D-93). SDA select JP61: 1-2 bridged by copper = RUST-1 (SDA IO10, pad 17); RUST-2 (SDA IO7, pad 12): cut 1-2, bridge 2-3 (D-94, D-192). USB D-/D+ on pads 20/19 (IO18/IO19), also to the own USB-C J14 at the housing wall with ESD array U61 USBLC6-2SC6 and CC pull-downs 5.1k (D-96).
 
