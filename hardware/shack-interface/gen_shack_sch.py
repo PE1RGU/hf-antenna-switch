@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "shack-interface"
 DATE = "2026-10-19"
-GENERATOR_REV = "a19-sda-bridged"
+GENERATOR_REV = "a20-mpn"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -459,7 +459,7 @@ def loop_source(S, k, y0, en, pull):
     if en is None:
         S.power("GND", RB["2"])
         return Q1["2"]
-    QE = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", n + 3), "BSS138BK", SOT23, 93.98, R2(y0 + 27.94), mpn="BSS138BK", desc=QN_D,
+    QE = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", n + 3), "BSS138BK", SOT23, 93.98, R2(y0 + 27.94), mpn="BSS138BK,215", desc=QN_D,
                 rp=(6.35, -3.81))
     assert QE["3"] == RB["2"] and QE["1"] == (88.9, R2(y0 + 27.94)), QE
     S.power("GND", QE["2"])

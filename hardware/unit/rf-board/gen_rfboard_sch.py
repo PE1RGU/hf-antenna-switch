@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12c-reuse"
+GENERATOR_REV = "v12d-mpn"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -282,7 +282,7 @@ def coil_driver(S, a, k, net_in, clamp, h=20.32, side=-1, dnp=False):
     M, N = (ax, R2(ay + h - 5.08)), (ax, R2(ay + h))
     gy = R2(ay + h + 5.08)
     S.wire(a, M); S.wire(M, N)
-    Q = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", kq), "BSS138BK", SOT23, R2(ax + side * 2.54), gy, desc=QN_D, mpn="BSS138BK", dnp=dnp,
+    Q = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", kq), "BSS138BK", SOT23, R2(ax + side * 2.54), gy, desc=QN_D, mpn="BSS138BK,215", dnp=dnp,
                mirror=None if side < 0 else "y", rp=(side * 2.54, -6.35, "right"))   # mirror flips the justification
     assert Q["3"] == N, (Q, N)
     S.power("GND", Q["2"])
@@ -450,7 +450,7 @@ def coil_supply(S):
     R2_ = S.part("Device:R", ("R", 2), "2k2", R0603, 81.28, 67.31, rp=(-1.27, -1.27, "right"),
                  desc="Q1 gate series: VGS about 10.3 V at 12.6 V with R1 (D-38); limits the D6 current")
     S.wire((81.28, 60.96), R2_["1"])
-    Q2 = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", 2), "BSS138BK", SOT23, 78.74, 78.74, mpn="BSS138BK", desc="Q1 gate driver. " + QN_D)
+    Q2 = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", 2), "BSS138BK", SOT23, 78.74, 78.74, mpn="BSS138BK,215", desc="Q1 gate driver. " + QN_D)
     S.wire(R2_["2"], Q2["3"]); S.power("GND", Q2["2"])
     S.wire(Q2["1"], (71.12, 78.74), (60.96, 78.74)); S.label("H", "RLY_EN", 60.96, 78.74, 180)
     R3 = S.part("Device:R", ("R", 3), "100k", R0603, 71.12, 82.55, desc="RLY_EN pull-down: no signal = relays off (D-39)")
@@ -749,7 +749,7 @@ def bias_channel(S, k, ox, yl):
     RG = S.part("Device:R", ("R", n + 3), "47k", R0603, X(40.64), R2(yg - 3.81), rp=(1.27, -1.27),
                 desc="Gate drive series resistor: limits VGS with R2 and sets the current the limiter must take over")
     gt = min(RG["1"], RG["2"], key=lambda q: q[1])
-    QN = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", n + 3), "BSS138BK", SOT23, X(60.96), R2(yg - 2.54), mirror="y", mpn="BSS138BK", desc=QN_D,
+    QN = S.part("Transistor_FET:Q_NMOS_GSD", ("Q", n + 3), "BSS138BK", SOT23, X(60.96), R2(yg - 2.54), mirror="y", mpn="BSS138BK,215", desc=QN_D,
                 rp=(2.54, -8.89))
     assert QN["3"] == (X(58.42), R2(yg - 7.62)) and QN["2"] == (X(58.42), R2(yg + 2.54)), QN
     S.wire(gt, QN["3"]); S.power("GND", QN["2"])

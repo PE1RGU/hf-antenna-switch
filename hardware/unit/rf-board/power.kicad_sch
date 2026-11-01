@@ -3790,7 +3790,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 78.74 78.74 0)
 			(hide yes)
 			(show_name no)
