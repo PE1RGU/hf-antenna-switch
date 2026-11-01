@@ -140,7 +140,7 @@ Desk checks on the schematic; nothing is measured yet.
 
 Review against hardware-design-rules v2.2 (M-41) and the open points of 2026-10-22:
 
-- Closed on the desk (2026-10-22): 3V3 load and LDO heat, about 79 mA worst case (C-37, CT-02); DevKit buck held off, no back-feed into the board (C-38, CT-03); supervisor second sources proposed (D-148, CT-11); Cat6 wire width 1.016 mm (D-147, C-36); CHASSIS plane (D-145).
+- Closed on the desk (2026-10-22): 3V3 load and LDO heat, about 79 mA worst case (C-37, CT-02); DevKit buck held off, no back-feed into the board (C-38, CT-03); supervisor second sources proposed (D-148, CT-11), decided 2026-11-01 with MAX823SEUK+T as first source (D-195); Cat6 wire width 1.016 mm (D-147, C-36); CHASSIS plane (D-145).
 - Surge level R-17: 4 kV 10/700 us line to earth (Prins, 2026-10-22). Parts checked in C-39: GDT 0.5, copper 0.12, 47R, 220R, SMBJ15CA and VO2611 LED within the factors.
 - Cat6 chokes (D-149, M-65): own footprint from the TDK ACT45B land, long axis vertical, P winding right and N left, both enter at the top; the common-mode sense is now correct. Murata DLW43SH and Coilcraft 1812CAN fit the same land by position (D-151).
 - GDT second source (D-149): Littelfuse SL1003A090R-001 on the same three holes; GDTs of pairs 3 and 1 moved toward J1 for the larger body.

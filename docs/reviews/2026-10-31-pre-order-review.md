@@ -2,9 +2,9 @@
 
 Scope: all three boards before the PCB, parts and CNC case orders. Read-only review: no schematic, layout or BOM was changed. Base: commit dd1f485 (main), netlists rf14.xml, ctl14.xml, si16.xml, KiCad 10.0.5.
 
-## Status (2026-11-01, after PRs #12 to #24)
+## Status (2026-11-01, after PRs #12 to #25)
 
-Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); S-4 (M-115: MPN BSS138BK,215 on all 45 BSS138BK, RF and shack); S-5 (M-116: RF J14 = Samtec TSW-112-07-L-D, post 5.84 mm, engagement 4.89 mm); S-6 (M-117: LM2901DR, JST B2B/B4B-XH-A(LF)(SN), shack 1 nF GRM1885C1H102JA01D; PC817X, RF 100n and C1 105 C were already done); S-7 (D-133: plain PCA9539 only, never R; already in the part descriptions, to the order BOM with B-3); S-10 (D-195, M-118: IRFL9014TRPBF-BE3, MAX823SEUK+T first source, TLP176AM in stock; SO-239: 83-1R first, 83-798 second, D-196 / M-119); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
+Done: B-1, B-2 (D-189, M-107); S-1 (D-191, M-109: FAULT to IO6, box fault 11, host `clearfault`); S-2 (D-192, M-110: SDA jumpers bridged for RUST-1 by copper); S-3 (D-193, M-111: 0.64 in² drain copper per bias-T FET on F.Cu + B.Cu, held-short test on the prototype); S-8 (D-194, M-112: shack board 159.6 mm wide, 0.2 mm off each side); S-9 (M-113: controller production zip c-s7, ORDER sheet hole labels fixed); S-12 (M-114: the display adds no pull on IO2/IO9, no board change, boot check on the prototype); S-4 (M-115: MPN BSS138BK,215 on all 45 BSS138BK, RF and shack); S-5 (M-116: RF J14 = Samtec TSW-112-07-L-D, post 5.84 mm, engagement 4.89 mm); S-6 (M-117: LM2901DR, JST B2B/B4B-XH-A(LF)(SN), shack 1 nF GRM1885C1H102JA01D; PC817X, RF 100n and C1 105 C were already done); S-7 (D-133: plain PCA9539 only, never R; already in the part descriptions, to the order BOM with B-3); S-10 (D-195, M-118: IRFL9014TRPBF-BE3, MAX823SEUK+T first source, TLP176AM in stock; SO-239: 83-1R first, 83-798 second, D-196 / M-119); Decide D-148 (closed by D-195: MAX823SEUK+T first source, datasheet filed); P-1 to P-5 (D-190, M-108), which also closes S-11; firmware F-1 to F-4 (PR #13).
 
 The table lists only open items. The sections below give the evidence.
 
@@ -18,7 +18,6 @@ The table lists only open items. The sections below give the evidence.
 | Decide | | RT1 isolation at HF: accept, or test 4 relays first | RF |
 | Decide | D-43 | BZT52C24 coil clamp energy | RF |
 | Decide | A-13, D-45 | Name the PSU; check its short-circuit current against the 50 A fuse | System |
-| Decide | D-148 | Confirm the TPS3823 second source (MAX823 or APX823) | Controller |
 | Decide | | Case: unit 2 ribbon slot, end-plate screws, NPTH for the spacers | Case |
 | Decide | P-6 to P-13 | Optional part merges, each needs a yes | All |
 | Records | S-16 | Update `verify_logic.py` to D-162; re-run and re-file | — |
@@ -221,7 +220,6 @@ Blocks ordering (covered above or with their own closing action):
 | A-05, M-03, D-105 and A-21, D-110, D-174: 83-798 rear dimensions and SMA contact length, scaled from drawings | Buy one of each and measure |
 | D-43 (still "proposed"): BZT52C24 clamp pulse energy, 100k | Coil-energy calc against the surge curve; decide |
 | A-13, D-45: PSU short-circuit current against the 50 A fuse breaking capacity; derating at 55 °C | Name the PSU; read the fuse curve |
-| D-148, CT-11: TPS3823A-33 second source only proposed | Confirm MAX823/APX823; file the MAX823 datasheet |
 | Review items 8 to 10, D-121: about 25 parts not stock-checked | Stock and second-source sweep with B-3 |
 | D-160: choke interwinding capacitance | ACT45B datasheet check (low risk) |
 | A-27: end-plate screws; A-29: SMD spacers without NPTH | Pan-head screws or a JLC countersink; a solder test, or add the NPTH now |
