@@ -10,7 +10,7 @@
 		(rev "C")
 		(company "PE1RGU - Shack Relay Matrix")
 		(comment 1 "Design: Prins Doornekamp, PE1RGU")
-		(comment 2 "RT1 RTD14012F x37, SO-239 Amphenol 83-798 x7, SMA EXP x3, XT60 x2, XT30")
+		(comment 2 "RT1 RTD14012F x37, SO-239 Amphenol 83-1R x7, SMA EXP x3, XT60 x2, XT30")
 		(comment 3 "Crossbar: rows on L1, columns on L6. Unit 1 = 3 radios x 4 antennas + EXP")
 		(comment 4 "JLC06161H-7628A, 1.6 mm, 6 layers. RF: CPWG W 0.975 / gap 2.0 mm, 50 ohm")
 	)
