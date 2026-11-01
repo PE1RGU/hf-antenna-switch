@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "shack-interface"
 DATE = "2026-10-19"
-GENERATOR_REV = "a20-mpn"
+GENERATOR_REV = "a21-order"
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
     u = str(uuid.uuid4()); GEN.add(u); return u
@@ -848,7 +848,7 @@ def port_sheet():
         T = S.part("Device:D_TVS", ("D", 10 + n), "PESD15VL1BA", "Diode_SMD:D_SOD-323_HandSoldering", XT, R2(y + 3.81), rot=90, mpn="PESD15VL1BA",
                    rp=(-1.27, 1.27, "right"), desc="ESD clamp, bidirectional, VRWM 15 V, VBR min 17.1 V, 30 kV (Nexperia PESD15VL1BA). Second source Bourns CDSOD323-T15C")
         C = S.part("Device:C", ("C", 10 + n), "1n C0G", C0603, XC, R2(y + 3.81), rp=(1.27, 1.27),
-                   desc="RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)")
+                   desc="RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)", mpn="GRM1885C1H102JA01D")
         assert T["2"] == (XT, y) and C["1"] == (XC, y), (T, C)
         S.power("RGND", T["1"]); S.power("RGND", C["2"])
     def to_din(name, y, *pts, cl=True):
@@ -999,7 +999,7 @@ def root_sheet():
     S.wire(H1["1"], (93.98, slot(9)), (99.06, slot(9)), (LX, slot(9))); S.power("CHASSIS", (93.98, slot(9)), rp=(-7.62, 1.27, "right"))
     S.power("CHASSIS", (99.06, slot(9)), flag=True, rp=(0, -6.35, "center"))      # CHASSIS has no source: the lug to the shack earth
     JK = S.part("Connector_Generic:Conn_01x02", ("J", 2), "KILL switch", "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
-                83.82, slot(11), mirror="y", rp=(-2.54, 0, "left"), desc="Front-panel KILL switch (latching, normally closed = run), in series with the SAFE loop (D-62). Part to select")
+                83.82, slot(11), mirror="y", rp=(-2.54, 0, "left"), desc="Front-panel KILL switch (latching, normally closed = run), in series with the SAFE loop (D-62). Part to select", mpn="B2B-XH-A(LF)(SN)")
     assert JK["1"] == (88.9, slot(11)) and JK["2"] == (88.9, slot(12)), JK
     S.wire(JK["1"], (LX, slot(11))); S.wire(JK["2"], (LX, slot(12)))
     # MCU block: the link signals wire straight across (same slots); port signals leave on the bottom edge
@@ -1034,12 +1034,12 @@ def root_sheet():
     S.wire((152.4, slot(0)), (152.4, YT), (R2(SX + 2.54), YT), (R2(SX + 2.54), LY))
     # KILL state connector (second pole of the KILL switch)
     JK2 = S.part("Connector_Generic:Conn_01x02", ("J", 7), "KILL state", "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
-                 231.14, 114.3, mirror="y", rp=(-2.54, 0, "left"), desc="Second pole of the front-panel KILL switch, closed = run (KILL_S low)")
+                 231.14, 114.3, mirror="y", rp=(-2.54, 0, "left"), desc="Second pole of the front-panel KILL switch, closed = run (KILL_S low)", mpn="B2B-XH-A(LF)(SN)")
     assert JK2["1"] == (236.22, 114.3), JK2
     S.wire(JK2["1"], (238.76, 114.3), (238.76, slot(13))); S.wire(JK2["2"], (241.3, 116.84)); S.power("GND", (241.3, 116.84))
     # front panel: RESET button, SAFE and LATCHED LEDs
     JF = S.part("Connector_Generic:Conn_01x04", ("J", 6), "Front panel", "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
-                304.8, R2(slot(2) + 2.54), rp=(2.54, -5.08), desc="Front panel: 1 RESET button (to pin 4), 2 SAFE LED anode, 3 LATCHED LED anode, 4 GND")
+                304.8, R2(slot(2) + 2.54), rp=(2.54, -5.08), desc="Front panel: 1 RESET button (to pin 4), 2 SAFE LED anode, 3 LATCHED LED anode, 4 GND", mpn="B4B-XH-A(LF)(SN)")
     assert JF["1"] == (299.72, slot(2)), JF
     for i in (2, 3, 4): S.wire((R2(SX + SW), slot(i)), JF[str(i - 1)])
     S.wire(JF["4"], (294.64, JF["4"][1])); S.power("GND", (294.64, JF["4"][1]))
