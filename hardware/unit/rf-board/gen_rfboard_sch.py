@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12e-j14"
+GENERATOR_REV = "v12f-order"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -583,7 +583,7 @@ def rf_detect_sheet():
     for p0, p1 in zip(taps, taps[1:]): S.wire(p0, p1)
     for i, y in enumerate(ys):
         k = i + 1
-        U = S.part("Comparator:LM2901", ("U", 1), "LM2901", "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm", 127.0, y, unit=k, mpn="LM2901",
+        U = S.part("Comparator:LM2901", ("U", 1), "LM2901", "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm", 127.0, y, unit=k, mpn="LM2901DR",
                    desc="Quad comparator, -40 to 125 C, inputs to 36 V, open collector (D-47). TI, ST, onsemi, Diodes", rp=(-5.08, 7.62))
         pin = {v: n for n, v in {n: (q[0], q[1]) for n, q in U.items()}.items()}
         inp, inm, out = (119.38, R2(y - 2.54)), (119.38, R2(y + 2.54)), (134.62, y)

@@ -2112,6 +2112,18 @@
 				(justify left)
 			)
 		)
+		(property "MPN" "B2B-XH-A(LF)(SN)"
+			(at 83.82 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "1"
 			(uuid "76cf5a48-a562-590e-9fa2-dcbdf37d77f6")
 		)
@@ -3130,6 +3142,18 @@
 				(justify left)
 			)
 		)
+		(property "MPN" "B2B-XH-A(LF)(SN)"
+			(at 231.14 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "1"
 			(uuid "8d43559c-47a5-5b5f-a9f9-cc56fbe6eff0")
 		)
@@ -3313,6 +3337,18 @@
 			)
 		)
 		(property "Description" "Front panel: 1 RESET button (to pin 4), 2 SAFE LED anode, 3 LATCHED LED anode, 4 GND"
+			(at 304.8 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "MPN" "B4B-XH-A(LF)(SN)"
 			(at 304.8 60.96 0)
 			(hide yes)
 			(show_name no)

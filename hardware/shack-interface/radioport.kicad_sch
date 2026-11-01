@@ -3509,6 +3509,18 @@
 				(justify left)
 			)
 		)
+		(property "MPN" "GRM1885C1H102JA01D"
+			(at 353.06 82.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "1"
 			(uuid "95c2ecd5-a852-5130-aa64-d3aaa28f5a1d")
 		)
@@ -4513,6 +4525,18 @@
 			)
 		)
 		(property "Description" "RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)"
+			(at 353.06 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "MPN" "GRM1885C1H102JA01D"
 			(at 353.06 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5539,6 +5563,18 @@
 				(justify left)
 			)
 		)
+		(property "MPN" "GRM1885C1H102JA01D"
+			(at 353.06 52.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "1"
 			(uuid "dcd51b0b-e10a-576d-8617-b1716f1f5790")
 		)
@@ -6536,6 +6572,18 @@
 			)
 		)
 		(property "Description" "RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)"
+			(at 353.06 123.19 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "MPN" "GRM1885C1H102JA01D"
 			(at 353.06 123.19 0)
 			(hide yes)
 			(show_name no)
@@ -8508,6 +8556,18 @@
 			)
 		)
 		(property "Description" "RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)"
+			(at 353.06 161.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "MPN" "GRM1885C1H102JA01D"
 			(at 353.06 161.29 0)
 			(hide yes)
 			(show_name no)
@@ -11537,6 +11597,18 @@
 				(justify left)
 			)
 		)
+		(property "MPN" "GRM1885C1H102JA01D"
+			(at 353.06 194.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "1"
 			(uuid "e7758093-b4b3-54d5-92fc-406343144171")
 		)
@@ -12465,6 +12537,18 @@
 			)
 		)
 		(property "Description" "RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)"
+			(at 353.06 214.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "MPN" "GRM1885C1H102JA01D"
 			(at 353.06 214.63 0)
 			(hide yes)
 			(show_name no)

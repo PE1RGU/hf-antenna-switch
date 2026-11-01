@@ -1915,7 +1915,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "LM2901"
+		(property "MPN" "LM2901DR"
 			(at 127.0 50.8 0)
 			(hide yes)
 			(show_name no)
@@ -2513,7 +2513,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "LM2901"
+		(property "MPN" "LM2901DR"
 			(at 127.0 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -3111,7 +3111,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "LM2901"
+		(property "MPN" "LM2901DR"
 			(at 127.0 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -3709,7 +3709,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "LM2901"
+		(property "MPN" "LM2901DR"
 			(at 127.0 142.24 0)
 			(hide yes)
 			(show_name no)
