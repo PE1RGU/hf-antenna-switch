@@ -3533,7 +3533,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 109.22 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -5354,7 +5354,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 109.22 116.84 0)
 			(hide yes)
 			(show_name no)
@@ -7175,7 +7175,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 109.22 180.34 0)
 			(hide yes)
 			(show_name no)

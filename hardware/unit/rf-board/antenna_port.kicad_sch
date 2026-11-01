@@ -4007,7 +4007,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 149.86 116.84 0)
 			(hide yes)
 			(show_name no)

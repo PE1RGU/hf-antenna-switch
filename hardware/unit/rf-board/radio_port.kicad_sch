@@ -1881,7 +1881,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 73.66 238.76 0)
 			(hide yes)
 			(show_name no)
@@ -3065,7 +3065,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 93.98 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -3937,7 +3937,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 144.78 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -4809,7 +4809,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 195.58 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -5681,7 +5681,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 246.38 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -6553,7 +6553,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 297.18 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -7464,7 +7464,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 93.98 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -8336,7 +8336,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 144.78 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -9208,7 +9208,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 195.58 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -10080,7 +10080,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 246.38 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -10952,7 +10952,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "BSS138BK"
+		(property "MPN" "BSS138BK,215"
 			(at 297.18 172.72 0)
 			(hide yes)
 			(show_name no)
