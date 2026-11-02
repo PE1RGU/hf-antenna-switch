@@ -10,7 +10,7 @@ The table lists only open items. The sections below give the evidence.
 
 | Group | # | Open item | Board |
 |---|---|---|---|
-| Blocker | B-4 | Order-readiness pass: Gerbers, drill, position, JLC DFM, sign-off of the new RF routing | RF, shack |
+| Blocker | B-4 | Files ready (M-123): Gerbers, drill, position, order sheets, read back. Open: JLC DFM upload of both zips (A-26) and your sign-off of the RF routing | RF, shack |
 | PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |
 | Case | S-14, S-15 | Hold CNC order W2026102506308334; first buy and measure RT1 ×4, one 83-798, one of each SMA, an XT60/XT30 pair; add the D-201 ribbon slot in the CAD update | Case |
 | Records | S-16 | Update `verify_logic.py` to D-162; re-run and re-file | — |
@@ -94,6 +94,8 @@ The parity field warnings are all "MPN/Description missing in the footprint". Th
 
 - Evidence: the controller has its production set and the M-67 pass. The RF board items are still "for review" (D-117, D-161; M-76 lists "open: stitching vias, aggressor/victim check, silkscreen p3"). The shack layout and plates are "for review" (M-85 to M-105, D-182 to D-187). Neither board has a production folder.
 - Fix: after B-1 and B-2, do the same pass as M-67 on both boards. That means Gerbers, drill, position and BOM, a JLC DFM upload (it also closes A-26), and your sign-off.
+
+**Status 2026-11-02: files ready (M-123).** Both production folders hold the zip, the order BOM and an order sheet. Drill and Gerbers read back against the boards. RF rev is now p3-c1206. Open: the JLC DFM upload and your sign-off. Do not re-run gen_rfboard_pcb.py on the board (M-123 finding).
 
 ## 3. Should fix before order
 
