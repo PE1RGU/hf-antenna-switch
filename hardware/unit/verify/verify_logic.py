@@ -151,10 +151,11 @@ check_safe(lambda: all(rf_raw_parts[c][0] == "47u 25V polymer" and {rf_raw_pin[(
 check_safe(lambda: all(rf_raw_parts[c][0] == "1u 50V X7R" and {rf_raw_pin[(c, "1")], rf_raw_pin[(c, "2")]} == {"+12V_SW", "GND"} for c in ("C101", "C201", "C301")), "+12V_SW: 1 uF 50 V X7R at each radio block (C101, C201, C301) (D-127)")
 check_safe(lambda: all(rf_raw_parts[c][0] == "1u 16V X7R" for c in ("C901", "C902", "C903", "C1001", "C802")), "IC decoupling one value: 1 uF X7R at U901 to U903, U1001, U801 (D-127)")
 check_safe(lambda: all(rf_raw_parts[u][0] == "PCA9539" for u in ("U901", "U902", "U903", "U1001")), "Expanders U901 to U903, U1001 = PCA9539 (TSSOP-24, three makers, D-133)")
-check_safe(lambda: all(rf_raw_pin[(f"S{i}", "1")] == rf_raw_pin[("H1", "1")] and rf_raw_pin[("H1", "1")].endswith("CHASSIS")
-                       and f"C{7 + i}" in rf_dnp and {rf_raw_pin[(f"C{7 + i}", "1")], rf_raw_pin[(f"C{7 + i}", "2")]} == {rf_raw_pin[("H1", "1")], "GND"}
-                       for i in range(1, 7)),
-           "Supports S1 to S6 plated on CHASSIS (with H1), each with one bond option footprint C8 to C13 (DNP) to GND (D-132)")
+check_safe(lambda: rf_raw_pin[("H1", "1")].endswith("/CHASSIS")
+           and all(rf_raw_pin[(f"S{i}", "1")].endswith(f"/CHASSIS_S{i}") and f"C{7 + i}" in rf_dnp
+                   and {(r, q) for r, q, _ in rf_raw_nets[rf_raw_pin[(f"S{i}", "1")]]} == {(f"S{i}", "1"), (f"C{7 + i}", "1")}
+                   and rf_raw_pin[(f"C{7 + i}", "2")] == "GND" for i in range(1, 7)),
+           "Supports S1 to S6 each on its own net CHASSIS_S1 to CHASSIS_S6 with only its bond option C8 to C13 (DNP) to GND; H1 on CHASSIS (D-162)")
 cn = ct_raw_nets
 def cmem(net): return {(r, q) for r, q, _ in cn[net]}
 def cpn(r, q): return ct_raw_pin.get((r, q))
