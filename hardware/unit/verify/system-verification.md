@@ -39,6 +39,7 @@ Shack interface (gen_shack_sch.py) and controller board (gen_controller_sch.py).
 | Box READY switch U6 (TLP176AM, form A) in series with the loop, between the U3 LED and R32 (D-62, D-101) | pass |
 | READY LED: U16 output through R35 240R to U6 LED, cathode to GND | pass |
 | U16 = AND(READY_ON, RF_A2_N): RF_A2_N from J2 pin 17 (RF board A2 detector), R36 100k pull-down: J2 open = READY open (D-104) | pass |
+| SDA select JP61: pad 1 (bridged to 2 by copper) = SDA_IO10 = DevKit pad 17, the RUST-1 default the firmware uses (D-192) | pass |
 | READY_ON = NOR(MCU_EN_N, FAULT) (U15); KILL is not an input, so the loop can start | pass |
 
 
