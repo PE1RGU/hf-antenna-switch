@@ -2678,7 +2678,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAT16-103J4LF; second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)"
+		(property "Description" "10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAY16-103J4LF (CAT16 is concave); second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)"
 			(at 99.06 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -2690,7 +2690,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "CAT16-103J4LF"
+		(property "MPN" "CAY16-103J4LF"
 			(at 99.06 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -4064,7 +4064,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAT16-103J4LF; second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)"
+		(property "Description" "10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAY16-103J4LF (CAT16 is concave); second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)"
 			(at 213.36 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -4076,7 +4076,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "CAT16-103J4LF"
+		(property "MPN" "CAY16-103J4LF"
 			(at 213.36 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -5450,7 +5450,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAT16-103J4LF; second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)"
+		(property "Description" "10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAY16-103J4LF (CAT16 is concave); second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)"
 			(at 327.66 124.46 0)
 			(hide yes)
 			(show_name no)
@@ -5462,7 +5462,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "CAT16-103J4LF"
+		(property "MPN" "CAY16-103J4LF"
 			(at 327.66 124.46 0)
 			(hide yes)
 			(show_name no)

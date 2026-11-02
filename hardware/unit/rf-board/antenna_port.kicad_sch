@@ -2041,7 +2041,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1812_4532Metric_Pad1.57x3.40mm_HandSolder"
+		(property "Footprint" "rf-board:C_1206_3216Metric_RFgap2.0"
 			(at 40.64 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -2065,7 +2065,19 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Detector tap, series. 1 kV C0G: about 160 V peak across it at 100 W, SWR 3 (0.16). Spacing per the RF gap rule"
+		(property "Description" "Detector tap, series. 1 kV C0G: about 160 V peak across it at 100 W, SWR 3 (0.16). Knowles 1206J1K04P70CCT on a 1206 land with a 2.0 mm pad gap (RF gap rule, D-202); no stocked 4.7 pF 1 kV part in 1812"
+			(at 40.64 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "MPN" "1206J1K04P70CCT"
 			(at 40.64 66.04 0)
 			(hide yes)
 			(show_name no)

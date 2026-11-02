@@ -14,7 +14,7 @@ import json, math, os, re, uuid
 
 PROJECT = "rf-board"
 DATE = "2026-10-23"
-GENERATOR_REV = "v12i-zener"
+GENERATOR_REV = "v12j-c4-1206"
 RX_ONLY = {"2"}   # receive-only antenna columns (unit 1: A2 RX loop). Their TX relays and drivers are not fitted (D-103, SR-01)
 GEN = set()   # uuids made by U(): replaced by stable uuid5 values when the files are written (Git-friendly)
 def U():
@@ -271,7 +271,7 @@ C0805 = "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 QN_D = "Coil driver, N-MOSFET 60 V, RDS(on) specified at VGS 2.5 V. Second source Diotec MMFTN138K (same limits and pin-out, D-134)"
 TP_FP = "TestPoint:TestPoint_Pad_D1.5mm"
 RPACK_FP = "Resistor_SMD:R_Array_Convex_4x0603"
-RPACK_D = ("10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAT16-103J4LF; "
+RPACK_D = ("10k x4 array, convex 4x0603 (1206 body), 62.5 mW per element. Bourns CAY16-103J4LF (CAT16 is concave); "
            "second source Yageo YC164-JR-0710KL (D-121, to confirm on DigiKey)")
 def coil_driver(S, a, k, net_in, clamp, h=20.32, side=-1, dnp=False):
     """Low-side driver under coil pin A2 at a: N-MOSFET, gate pull-down, clamp diode to the shared clamp net.
@@ -369,8 +369,8 @@ def antenna_sheet():
     S.label("H", "ANT", 30.48, Y, 180)
     S.wire((30.48, Y), (40.64, Y), (50.8, Y))
     # detector: capacitive tap on the column side, BAS70-04 voltage doubler (D-47, D-48), DET to the comparator sheet
-    C4 = S.part("Device:C", ("C", 4), "4.7p 1kV C0G", "Capacitor_SMD:C_1812_4532Metric_Pad1.57x3.40mm_HandSolder", 40.64, 66.04,
-                rp=(-2.54, -1.27, "right"), desc="Detector tap, series. 1 kV C0G: about 160 V peak across it at 100 W, SWR 3 (0.16). Spacing per the RF gap rule")
+    C4 = S.part("Device:C", ("C", 4), "4.7p 1kV C0G", "rf-board:C_1206_3216Metric_RFgap2.0", 40.64, 66.04, mpn="1206J1K04P70CCT",
+                rp=(-2.54, -1.27, "right"), desc="Detector tap, series. 1 kV C0G: about 160 V peak across it at 100 W, SWR 3 (0.16). Knowles 1206J1K04P70CCT on a 1206 land with a 2.0 mm pad gap (RF gap rule, D-202); no stocked 4.7 pF 1 kV part in 1812")
     C5 = S.part("Device:C", ("C", 5), "47p 50V C0G", C0603, 40.64, 77.47, rp=(-2.54, -1.27, "right"), desc="Detector tap, shunt: ratio about 1:12 with C4")
     S.wire((40.64, Y), C4["1"]); S.wire(C4["2"], (40.64, 71.12), C5["1"]); S.power("GND", C5["2"])
     D1 = S.part("rf-board:BAS70-04", ("D", 1), "BAS70-04", SOT23, 55.88, 76.2, mirror="x", mpn="BAS70-04", rp=(-3.81, 6.35),
@@ -636,7 +636,7 @@ def pulldowns(S, n, spare):
         nc = {str(1 + i): "NC" for i in range(used, 4)}
         nc.update({str(8 - i): "NC" for i in range(used, 4)})
         P = S.part("Device:R_Pack04", ("RN", n + j // 4), "10k x4", RPACK_FP, R2(x0 + 5.08), R2(grp[0][1] + 5.08), nc, rot=270,
-                   mpn="CAT16-103J4LF", desc=RPACK_D, rp=(15.24, -1.27))
+                   mpn="CAY16-103J4LF", desc=RPACK_D, rp=(15.24, -1.27))
         for i, (qx, qy) in enumerate(grp):
             l, r = P[str(1 + i)], P[str(8 - i)]
             assert l == (x0, qy) and r[1] == qy, (l, r, qy)

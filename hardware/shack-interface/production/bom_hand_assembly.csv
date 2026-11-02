@@ -1,0 +1,70 @@
+Qty per board,References,Value,Footprint,First source,Second source,Specification / note
+1,A1,ESP32-C3-DevKit-RUST-1,ESP32-C3-DevKit-RUST_Socket,Espressif ESP32-C3-DevKit-RUST-1,"Espressif ESP32-C3-DevKit-RUST-2 (JP61 cut 1-2, bridge 2-3)","MCU board; sockets on the lines below (D-55, D-95, D-192)"
+1,C1,47u 35V,CP_Radial_D6.3mm_P2.50mm,Wurth 860080573003,Panasonic EEU-FR1V680 (68 uF),"Aluminium 47 uF 35 V radial D 6.3 mm, pitch 2.5 mm, 105 C, >= 2000 h; 12.5 mm high, below the L7805 (D-200)"
+1,C2,330n 50V X7R,C_0805_2012Metric_Pad1.18x1.45mm_HandSolder,Murata GRM21BR71H334KA01L,Samsung CL21B334KBFNNNE,"MLCC 330 nF 50 V X7R 0805, L7805 input"
+3,C3 C64 C71,100n 50V X7R,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71H104KA93D,Samsung CL10B104KB8NNNC,MLCC 100 nF 50 V X7R 0603
+2,C4 C5,10u 16V X7R,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,Murata GRM31CR71C106KAC7L,Samsung CL31B106KOHNNNE,MLCC 10 uF 16 V X7R 1206
+1,C6,22u 16V X7R,C_1210_3225Metric_Pad1.33x2.70mm_HandSolder,Murata GRM32ER71C226KE18L,Samsung CL32B226KOJNNNE,"MLCC 22 uF 16 V X7R 1210, LD1117 output (>= 10 uF effective)"
+16,C7 C61 C62 C63 C72 C73 C74 C75 C76 C77 C201 C202 C301 C302 C401 C402,1u 16V X7R,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM188R71C105KA12D,Samsung CL10B105KO8NNNC,MLCC 1 uF 16 V X7R 0603 (D-127)
+3,C205 C305 C405,10n 1kV,C_1206_3216Metric_Pad1.33x1.80mm_HandSolder,Yageo CC1206KKX7RCBB103,Kyocera AVX KGF31AR73A103KU,"MLCC 10 nF 1 kV X7R 1206, radio GND to CHASSIS bond"
+21,C211 C212 C213 C214 C216 C217 C218 C311 C312 C313 C314 C316 C317 C318 C411 C412 C413 C414 C416 C417 C418,1n C0G,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,Murata GRM1885C1H102JA01D,Samsung CL10C102JB8NNNC,MLCC 1 nF 50 V C0G 0603 (M-117)
+1,D1,SS34,D_SMC,Vishay SS34-M3/57T,onsemi SS34,"Schottky 3 A 40 V SMC, reverse polarity"
+1,D2,SMBJ16A,D_SMB,Littelfuse SMBJ16A,ST SMBJ16A-TR,"TVS 600 W unidirectional, VRM 16 V, SMB"
+4,D11 D21 D31 D41,SMBJ15CA,D_SMB,ST SMBJ15CA-TR,Littelfuse SMBJ15CA,"TVS 600 W bidirectional, VRM 15 V, SMB (D-58)"
+6,D33 D43 D71 D201 D301 D401,1N4148W,D_SOD-123,Diodes 1N4148W-7-F,"Nexperia 1N4148W,115",Small-signal diode SOD-123
+3,D202 D302 D402,BZX384-C5V1,D_SOD-323_HandSoldering,Vishay BZX384C5V1-E3-08,"Nexperia BZX384-C5V1,115 / onsemi MM3Z5V1T1G",Zener 5.1 V SOD-323 (A-18)
+21,D211 D212 D213 D214 D216 D217 D218 D311 D312 D313 D314 D316 D317 D318 D411 D412 D413 D414 D416 D417 D418,PESD15VL1BA,D_SOD-323_HandSoldering,Littelfuse SD15C-01FTG,Bourns CDSOD323-T15C,"ESD diode bidirectional, VRWM 15 V, SOD-323; capacitance negligible beside the 1 nF C0G on each line. PESD15VL1BA discontinued at DigiKey"
+1,F1,500mA T,Fuse_1206_3216Metric,Bourns SF-1206S050-2,Littelfuse 0468.500NR,"Fuse 500 mA slow 1206, 63 V, 50 A breaking; short at 14.4 V gives at most 32 A (M-121)"
+4,GD1 GD2 GD3 GD4,2036-09-B2LF,GDT_3Pin_P4.40mm_Bourns-2036-B2_Littelfuse-SL1003A-R,Bourns 2036-09-B2LF,Littelfuse SL1003A090R-001,"3-electrode GDT 90 V (D-58, D-149)"
+1,J1,RJ45 LINK,RJ45_8P8C_Unshielded_TabDown,Wurth 615008137121,Molex 95501-2881,"RJ45 8P8C unshielded, tab down (D-138)"
+1,J2,KILL switch,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,JST B2B-XH-A(LF)(SN),-,"JST XH 2-pin header, vertical (M-117)"
+1,J3,13.8 V IN,AMASS_XT60PW-M_1x02_P7.20mm_Horizontal,Amass XT60PW-M,-,"XT60 male, PCB right angle (single maker)"
+1,J6,Front panel,JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical,JST B4B-XH-A(LF)(SN),-,"JST XH 4-pin header, vertical (M-117)"
+1,J7,KILL state,JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical,JST B2B-XH-A(LF)(SN),-,"JST XH 2-pin header, vertical (M-117)"
+1,J11,R1 mini-DIN,MiniDIN-8_SameSky_MD-80SM_Horizontal,Same Sky MD-80SM,Kycon KMDGX-8S-BS,"Mini-DIN 8 socket, right angle, shielded (M-28)"
+1,J12,R2 mini-DIN,MiniDIN-8_SameSky_MD-80SM_Horizontal,Same Sky MD-80SM,Kycon KMDGX-8S-BS,"Mini-DIN 8 socket, right angle, shielded (M-28)"
+1,J13,R3 mini-DIN,MiniDIN-8_SameSky_MD-80SM_Horizontal,Same Sky MD-80SM,Kycon KMDGX-8S-BS,"Mini-DIN 8 socket, right angle, shielded (M-28)"
+1,J14,USB4105-GF-A,USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal,GCT USB4105-GF-A,Same Sky UJ20-C-H-G-SMT-1-P16-TR,USB-C receptacle 16P (D-96)
+1,J15,DISPLAY,PinHeader_1x08_P2.54mm_Vertical,Wurth 61300811121,Samtec TSW-108-07-G-S,"Pin header 1 x 8, 2.54 mm, vertical, gold"
+3,JP201 JP301 JP401,INH LEVEL,PinHeader_1x03_P2.54mm_Vertical,Wurth 61300311121,Samtec TSW-103-07-G-S,"Pin header 1 x 3, 2.54 mm, vertical, gold"
+3,JP205 JP305 JP405,SENSE A,PinHeader_1x03_P2.54mm_Vertical,Wurth 61300311121,Samtec TSW-103-07-G-S,"Pin header 1 x 3, 2.54 mm, vertical, gold"
+3,JP206 JP306 JP406,SENSE K,PinHeader_1x03_P2.54mm_Vertical,Wurth 61300311121,Samtec TSW-103-07-G-S,"Pin header 1 x 3, 2.54 mm, vertical, gold"
+4,L1 L2 L3 L4,51u CMC,L_CMC_TDK_ACT45B,TDK ACT45B-510-2P-TL003,Murata DLW43SH510XK2L / Coilcraft 1812CAN-513NRC,"Common-mode choke 51 uH 1812 (D-149, D-151)"
+4,Q11 Q21 Q31 Q41,BCP53-16,SOT-223-3_TabPin2,onsemi BCP53-16T1G,"Nexperia BCP53-16,115",PNP 80 V 1 A SOT-223
+4,Q12 Q22 Q32 Q42,BC857B,SOT-23,Diodes BC857B-7-F,"Nexperia BC857B,215",PNP 45 V SOT-23
+3,Q13 Q23 Q33,BSS138BK,SOT-23,"Nexperia BSS138BK,215",Diotec MMFTN138K,N-MOSFET 60 V (D-134)
+2,Q34 Q44,BC847B,SOT-23,"Nexperia BC847B,215",Diodes BC847B-7-F,NPN 45 V SOT-23
+2,R5 R6,0R,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,generic,generic,"0R 0R jumper 1206 (Yageo RC1206JR-070RL, any maker)"
+8,R11 R12 R21 R22 R31 R32 R41 R42,47R,R_MELF_MMB-0207,Vishay MMB02070C4709FB200,TE Neohm SMA-A 0207 47R 1 %,"Thin-film MELF 0207 1 W, pulse (D-58)"
+4,R13 R23 R33 R43,56R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"56R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+4,R14 R24 R34 R44,22k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"22k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+11,R15 R25 R35 R63 R72 R201 R202 R301 R302 R401 R402,100k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"100k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+2,R36 R46,100R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"100R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+17,R37 R47 R61 R62 R71 R210 R211 R212 R213 R310 R311 R312 R313 R410 R411 R412 R413,1k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"1k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+17,R38 R48 R207 R214 R215 R216 R217 R307 R314 R315 R316 R317 R407 R414 R415 R416 R417,10k,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"10k Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+2,R64 R65,5k1,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"5k1 Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+2,R73 R74,680R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"680R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+4,R75 R204 R304 R404,2k2,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"2k2 Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+6,R203 R205 R303 R305 R403 R405,240R,R_0603_1608Metric_Pad0.98x0.95mm_HandSolder,generic,generic,"240R Thick film 0603 1 % 0.1 W (Yageo RC0603FR-07, Vishay CRCW0603, any maker)"
+3,R206 R306 R406,2k2,R_1206_3216Metric_Pad1.30x1.75mm_HandSolder,generic,generic,"2k2 thick film 1206 1 % 0.25 W (79 mW at 14.4 V, C-23)"
+1,U1,L7805CV,TO-220-3_Vertical,ST L7805CV,TI UA7805CKCT / onsemi MC7805CTG,"5 V regulator TO-220, insulating pad on the wall (D-82)"
+1,U2,LD1117S33CTR,SOT-223-3_TabPin2,ST LD1117S33CTR,Diodes AZ1117CH-3.3TRG1,LDO 3.3 V 800 mA SOT-223 (D-81)
+2,U3 U6,TPS3823A-33,SOT-23-5,ADI MAX823SEUK+T,TI TPS3823A-33DBVR / Diodes APX823-29W5G-7,"Supervisor and watchdog (D-148, D-195)"
+2,U4 U9,74LVC1G74,VSSOP-8_2.3x2mm_P0.5mm,TI SN74LVC1G74DCUR,"Nexperia 74LVC1G74DC,125","D flip-flop, VSSOP-8 0.5 mm (D-154, D-190)"
+1,U5,PCA9539,TSSOP-24_4.4x7.8mm_P0.65mm,"NXP PCA9539PW,118",TI TCA9539PWR / Diodes PI4IOE5V9539LEX,"I/O expander. Plain PCA9539 only, never PCA9539R (D-133)"
+2,U7 U10,74LVC1G14,SOT-23-5,"Nexperia 74LVC1G14GV,125",TI SN74LVC1G14DBVR,Schmitt inverter
+7,U8 U201 U202 U301 U302 U401 U402,74LVC1G08,SOT-23-5,"Nexperia 74LVC1G08GV,125",TI SN74LVC1G08DBVR,2-input AND
+1,U11,74LVC1G02,SOT-23-5,"Nexperia 74LVC1G02GV,125",TI SN74LVC1G02DBVR,2-input NOR
+1,U61,USBLC6-2SC6,SOT-23-6,ST USBLC6-2SC6,UMW USBLC6-2SC6,ESD array USB (C-26)
+3,U203 U303 U403,TLP4176G,SOP-4_P2.54mm_PhotoRelay_LongPad,Panasonic AQY412S,"Toshiba TLP4176G(TP,M,F)","Photorelay form B, TX INH, common long-pad footprint. TLP4176G out of stock at DigiKey; AQY412S 60 V 0.5 A"
+3,U204 U304 U404,TLP176AM,SOP-4_P2.54mm_PhotoRelay_LongPad,"Toshiba TLP176AM(TPL,E)",Panasonic AQY212G3HS,Photorelay form A 60 V (D-101)
+3,U205 U305 U405,PC817X,DIP-4_W7.62mm,Sharp PC817X2NSZ9F,Lite-On LTV-817B / Everlight EL817(B),"Opto, CTR rank B or better, DIP-4 (D-78)"
+1,A1 sockets,,,Sullins PPPC161LFBN-RC,-,"Female header 1 x 16 gold, DevKit left side (D-95)"
+1,A1 sockets,,,Sullins PPPC121LFBN-RC,-,"Female header 1 x 12 gold, DevKit right side (D-95)"
+9,JP201-JP406 shunts,,,Wurth 60900213421,Samtec SNT-100-BK-G,"Jumper shunt 2.54 mm, one per 1 x 3 header"
+2,J2 J7 mating,,,JST XHP-2,-,"Housing 2-pin, wiring to the KILL switch (not on the board)"
+1,J6 mating,,,JST XHP-4,-,"Housing 4-pin, wiring to the front panel (not on the board)"
+8,J2 J6 J7 crimps,,,JST SXH-001T-P0.6,-,"Crimp contact XH, 26 to 22 AWG (8 needed, order spares)"
+
+Not fitted (DNP): C22 C23 C24 C25 C26 C27 C28 C29 R218 R219 R220 R221 R318 R319 R320 R321 R418 R419 R420 R421
+"No part (pads, holes, solder jumpers): H1 JP61 JP202 JP203 JP204 JP302 JP303 JP304 JP402 JP403 JP404 TP1 TP2 TP3 TP201 TP202 TP203 TP204 TP206 TP207 TP208 TP301 TP302 TP303 TP304 TP306 TP307 TP308 TP401 TP402 TP403 TP404 TP406 TP407 TP408"
