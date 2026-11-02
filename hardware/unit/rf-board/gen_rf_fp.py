@@ -11,7 +11,10 @@
   round pads 2.7 mm (= RF line width), pitch 7.62 mm, pad clearance 2.0 mm.
 - GDT_Axial_P15.24mm: footprint for the not-fitted GDT GD401 to GD701 (D-07, D-109); not used since D-114 (GDT removed). Pads 1 and 3 (KiCad Device:GDT_2Pin),
   drill 1.0 mm, pitch 15.24 mm, body outline 8 x 6 mm (axial 600 V class, part to select; check the land at the part choice).
-No 3D models."""
+- C_1206_3216Metric_RFgap2.0: detector tap C404 to C704 (D-202). Knowles 1206J1K04P70CCT (4.7 pF 1 kV C0G); no stocked
+  4.7 pF 1 kV part exists in 1812. Pads 1.25 mm wide at +-1.625 mm: gap 2.0 mm (RF gap, D-12). Pad 1 (ANT) 3.4 mm high as the old 1812
+  land so the 2.7 mm RF track still ends on it; pad 2 (detector) 2.0 mm high, clear of the bias via beside C404. No pad clearance: the RF netclass sets the 2.0 mm on the ANT side (as the 1812). The 1206 terminations (1.1 to 1.6 mm from the centre) sit fully on the pads.
+No 3D models, except C_1206_3216Metric_RFgap2.0 (KiCad C_1206_3216Metric.step)."""
 import uuid
 
 class FP:
@@ -83,5 +86,18 @@ def gdt():
     f.rect(-1.25, -4.37, 16.49, 4.37, "F.CrtYd", 0.05)
     return f.write()
 
-for fn in (sma, link, gdt):
+def cap1206():
+    f = FP("C_1206_3216Metric_RFgap2.0")
+    f.head("Capacitor 1206 on a 2.0 mm pad gap (RF gap rule, D-12): pad 1 1.25 x 3.4 mm, pad 2 1.25 x 2.0 mm, pitch 3.25 mm. Detector tap 4.7 pF 1 kV, D-202",
+           "capacitor 1206 RF gap high voltage", -2.6, 2.6)
+    f.s = f.s.replace("(attr through_hole)", "(attr smd)")
+    for num, x, h in (("1", -1.625, 3.4), ("2", 1.625, 2.0)):
+        f.pad(num, "smd", "roundrect", x, 0, (1.25, h), layers='"F.Cu" "F.Mask" "F.Paste"', extra=" (roundrect_rratio 0.2)")
+    f.rect(-1.6, -0.8, 1.6, 0.8, "F.Fab", 0.1)
+    f.line((-0.5, -1.85), (0.5, -1.85), "F.SilkS", 0.12); f.line((-0.5, 1.85), (0.5, 1.85), "F.SilkS", 0.12)
+    f.rect(-2.5, -1.95, 2.5, 1.95, "F.CrtYd", 0.05)
+    f.s += '\t(model "${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.step")\n'
+    return f.write()
+
+for fn in (sma, link, gdt, cap1206):
     print("written", fn.__name__, "pads", fn())

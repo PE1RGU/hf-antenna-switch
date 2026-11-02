@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 import pcbnew
 
 REV = "p3-drain"
-BOARD, PRO, NETLIST = "rf-board.kicad_pcb", "rf-board.kicad_pro", "../verify/rf15.xml"
+BOARD, PRO, NETLIST = "rf-board.kicad_pcb", "rf-board.kicad_pro", "../verify/rf16.xml"
 OX, OY, BW, BH = 20.0, 20.0, 268.0, 230.0            # board origin on the sheet, board size (C-12)
 FPLIB = "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints"
 mm = pcbnew.FromMM

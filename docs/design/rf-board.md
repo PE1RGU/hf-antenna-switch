@@ -59,7 +59,7 @@ All connectors sit on the root sheet (D-33): radio SO-239 J1 to J3, EXP SMA J4 t
 - K1: COM to the antenna, NO to the column, NC to GND through the 1 MΩ high-voltage bleed (D-32). Coil off = antenna parked on the bleed.
 - DC block footprint and 0R link on the column side; bias-T feed point on the matrix side of K1 (D-28). Choke and capacitor not fitted until a port needs bias.
 - No GDT on the board: the CS-400R at the box entry takes the surge (D-07, D-114).
-- RF detector tap: C4 4.7 pF 1 kV C0G in series, C5 47 pF to GND; BAS70-04 voltage doubler into a 10 nF hold capacitor with 2 × 47k load; DETk to the RF detect sheet (D-47, D-48).
+- RF detector tap: C4 4.7 pF 1 kV C0G in series (Knowles 1206J1K04P70CCT on a 1206 land with a 2.0 mm pad gap, D-202), C5 47 pF to GND; BAS70-04 voltage doubler into a 10 nF hold capacitor with 2 × 47k load; DETk to the RF detect sheet (D-47, D-48).
 
 ### 2.5 RF detect
 
