@@ -12,7 +12,7 @@ The table lists only open items. The sections below give the evidence.
 |---|---|---|---|
 | Blocker | B-4 | Files ready (M-123): Gerbers, drill, position, order sheets, read back. Open: JLC DFM upload of both zips (A-26) and your sign-off of the RF routing | RF, shack |
 | PCB | S-13 | Confirm the XT60/XT30 pad polarity | RF, shack |
-| Case | S-14, S-15 | Hold CNC order W2026102506308334; first buy and measure RT1 ×4, one 83-798, one of each SMA, an XT60/XT30 pair; add the D-201 ribbon slot in the CAD update | Case |
+| Case | S-14, S-15 | Hold CNC order W2026102506308334; first buy and measure RT1 ×4, one 83-798, one of each SMA, an XT60/XT30 pair; add the D-201 ribbon slot in the CAD update. **Parts ordered 2026-11-02 (DigiKey, TME):** RT1, 83-1R (first source, D-196), Cinch 142-0701-631, XT60PW-M, XT30PW-M with XT60H-F and XT30U-F plugs, Kycon KMDGX-8S-BS and AQY412S (B-3 land checks), Waveshare 2inch display (D-187 fit, D-180 boot check). Measure on arrival | Case |
 
 Suggested order: B-4, with the S-items of each board in its pass.
 
