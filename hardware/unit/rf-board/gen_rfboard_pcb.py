@@ -13,7 +13,7 @@ import json, math, os, re, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p3-c1206"
+REV = "p3-case"
 BOARD, PRO, NETLIST = "rf-board.kicad_pcb", "rf-board.kicad_pro", "../verify/rf16.xml"
 OX, OY, BW, BH = 20.0, 20.0, 268.0, 230.0            # board origin on the sheet, board size (C-12)
 FPLIB = "/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints"
@@ -155,7 +155,7 @@ for r in range(3):                             # radio blocks R1 to R3, 48 mm ea
 for k in range(4):                             # K1 antenna relays, upright, left of the column (study)
     relay(f"K{4+k}01", ALINE[k] - 19, 189, 90)       # NO at the top, next to the column link (p1b)
 
-for i, x in enumerate((12, 42, 72)):           # radio SO-239 on the bottom edge (D-21)
+for i, x in enumerate((18, 45, 72)):           # radio SO-239 on the bottom edge (D-21; R1, R2 moved for the case corner, D-203)
     place(f"J{1+i}", x, BH); placed.add(f"J{1+i}")
 for k, x in enumerate(ALINE):                  # antenna SO-239 under the columns; J10 boss on the left (D-105)
     place(f"J{7+k}", x, BH); placed.add(f"J{7+k}")
