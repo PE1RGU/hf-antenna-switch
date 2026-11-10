@@ -48,7 +48,7 @@ class FP:
 def sma():
     f = FP("SMA_901-9215_StrapPad")
     f.head("Strap land for an Amphenol RF 901-9215 (or 132142) SMA panel jack in the case wall pocket: RF pad on both layers with "
-           "3 vias, 2.0 mm RF clearance; plated M3 hole to the GND boss at -9 mm, 4 mm from the edge (solid). Origin = axis on the board edge. D-110",
+           "3 vias, 2.0 mm RF clearance; plated M3 hole to the GND boss at -13 mm, 3.5 mm from the edge (solid; D-204: tool access to the SMA pin, clear of the EXP relay pins). Origin = axis on the board edge. D-110",
            "SMA 901-9215 132142 strap case wall", -7.0, 1.5)
     PW, PL, EDGE = 3.5, 4.0, 0.5
     PY = -(EDGE + PL / 2)
@@ -56,7 +56,7 @@ def sma():
         f.pad("1", "smd", "rect", 0, PY, (PW, PL), layers=f'"{ly}.Cu" "{ly}.Mask"', extra=" (clearance 2.0)")
     for x in (-1.2, 0.0, 1.2):
         f.pad("1", "thru_hole", "circle", x, round(PY - 1.3, 2), (1.0, 1.0), 0.6, '"*.Cu"', " (clearance 2.0)")
-    f.pad("2", "thru_hole", "circle", -9.0, -4.0, (6.0, 6.0), 3.2, extra=" (zone_connect 2)")
+    f.pad("2", "thru_hole", "circle", -13.0, -3.5, (6.0, 6.0), 3.2, extra=" (zone_connect 2)")   # D-204 (was -9, -4)
     f.line((-13.0, 0), (6.5, 0), "F.Fab", 0.1, "dash"); f.text("board edge", 2.5, 0.9, "F.Fab")
     f.rect(-6.35, 0.0, 6.35, 4.0, "F.Fab", 0.1); f.text("SMA in the wall", 0, 2.4, "F.Fab")
     f.rect(-1.5, -1.4, 1.5, -3.0, "F.Fab", 0.08); f.text("strap", 0, -5.6, "F.Fab")

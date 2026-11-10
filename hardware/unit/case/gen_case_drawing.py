@@ -19,21 +19,23 @@ PNG = sys.argv[4] if len(sys.argv) > 4 else None
 ASM_PNG = sys.argv[5] if len(sys.argv) > 5 else ''
 A2 = (594.0, 420.0)
 MM = 1 / 25.4
-DATE = "2026-10-25"
-TITLE = "Shack Relay Matrix rev C - RF unit case"
+DATE = "2026-11-07"
+TITLE = "Shack Relay Matrix rev D - RF unit case"
 DWG = "RF-CASE-01"
-REV = "B"
+REV = "D"
 
 # ---------------- model data (mirrors rf-case.solidcraft parameters) ----------------
 W, H, D, WALL, FLOOR, LID = 288.0, 250.0, 66.0, 6.0, 5.0, 3.0
 TRAY_H = D - LID
-SO_X = [22, 52, 82, 149, 187, 225, 263]; SO_N = ["R1", "R2", "R3", "A1", "A2", "A3", "A4"]; SO_Z = FLOOR + 16
+SO_X = [28, 55, 82, 149, 187, 225, 263]; SO_N = ["R1", "R2", "R3", "A1", "A2", "A3", "A4"]; SO_Z = FLOOR + 16   # R1, R2 moved (D-203)
 SO_SQ = 18.24
-LID_PTS = [(6, 6), (282, 6), (282, 244), (6, 244), (67, 4.5), (128, 4.5), (206, 4.5), (224, 245.5)] + \
+LID_PTS = [(6, 6), (282, 6), (282, 244), (6, 244), (68, 4.5), (128, 4.5), (206, 4.5), (224, 245.5)] + \
           [(x, y) for x in (4.5, 283.5) for y in (45, 107.5, 155.5, 210)]
 LUGS = [p for p in LID_PTS[4:]]
-BOSS_X = [36, 66, 96, 163, 201, 239, 249]
-SMA_BOSS_Y = [188.5, 140.5, 92.5]   # GND bosses beside the EXP SMAs (RF board J4..J6), case x 14
+BOSS_X = [42, 69, 96, 163, 201, 239, 249]   # R1, R2 bosses moved (D-203)
+SMA_BOSS_Y = [192.5, 144.5, 96.5]   # GND bosses beside the EXP SMAs (RF board J4..J6), case x 13.5, Ø8 (D-204)
+SMA_BOSS_X = 13.5
+PAD_H = 10.0                          # M5 pads (D-204)
 STANDOFF = [("S1", 15, 236), ("S2", 159, 236), ("S3", 273, 236), ("S4", 56, 124.5), ("S5", 109, 124.5), ("S6", 273, 124.5)]
 MOUNT = [("TL", 30, 230), ("TR", 258, 230), ("BL", 30, 35), ("BR", 258, 35)]
 SMA_Y = [("EXP R1", 179.5), ("EXP R2", 131.5), ("EXP R3", 83.5)]; SMA_Z = FLOOR + 16.1; SMA_SQ = 8.64
@@ -59,13 +61,15 @@ def add(prefix, items, desc, size, depth, view, note=""):
         FEAT.append(dict(id=f"{prefix}{i}", desc=desc, size=size, depth=depth, view=view, p=p, note=note))
 
 add("A", [(x, y, TRAY_H) for x, y in LID_PTS], "Lid screw", "M3", "8", "plan", "tap drill 2.5, max 10 deep")
-add("B", [(x, 16, FLOOR + 13) for x in BOSS_X] + [(14, y, FLOOR + 13) for y in SMA_BOSS_Y], "GND boss Ø10, free-standing (board RF bond)", "M3", "8", "plan",
+add("B", [(x, 16, FLOOR + 13) for x in BOSS_X] + [(SMA_BOSS_X, y, FLOOR + 13) for y in SMA_BOSS_Y], "GND boss (B1..B7 Ø10, B8..B10 Ø8), joined to the wall", "M3", "8", "plan",
     "boss top = board seat; tap drill 2.5, max 9 deep")
 add("C", [(x, y, FLOOR + 13) for _, x, y in STANDOFF], "Support boss S1..S6, Ø8", "M3", "8", "plan", "boss top = board seat; tap drill 2.5, max 9 deep")
-add("D", [(x, y, 0) for _, x, y in MOUNT], "Mounting, from the back", "M5", "8", "back", "tap drill 4.2, max 9 deep (0.5 mm must remain)")
+add("D", [(x, y, 0) for _, x, y in MOUNT], "Mounting, from the back", "M5", "THRU", "back", "tapped through floor + pad (15), exits 1 into the pocket")
+for f in FEAT:
+    if f["id"].startswith("D"): f["tmin"] = FLOOR + PAD_H
 add("E", [(x, 0, SO_Z) for x in SO_X], "SO-239 bore (Amphenol 83-798)", "Ø16.7", "THRU", "bottom")
 add("F", [(x + dx * SO_SQ / 2, 0, SO_Z + dz * SO_SQ / 2) for x in SO_X for dx, dz in ((-1, -1), (1, -1), (1, 1), (-1, 1))],
-    "SO-239 flange screw", "M3", "THRU", "bottom", "tapped through the wall 6")
+    "SO-239 flange screw", "M3", "THRU", "bottom", "tapped 7 from outside; blind where it ends in a web")
 for f in FEAT:
     if f["id"].startswith("F"): f["tmin"] = WALL
 add("G", [EARTH], "Earth strap", "M5", "THRU", "bottom", "tapped through wall + boss (15)")
@@ -73,13 +77,15 @@ FEAT[-1]["tmin"] = WALL + 9
 add("H", [(0, y, SMA_Z) for _, y in SMA_Y], "EXP SMA (901-9215): pocket 13 × 13 × 2 deep (corner R ≤ 1); centre bore", "Ø3.0", "THRU", "left",
     "bore = 52 Ω air line around the Ø1.27 pin")
 add("J", [(0, y + dy * SMA_SQ / 2, SMA_Z + dz * SMA_SQ / 2) for _, y in SMA_Y for dy, dz in ((-1, -1), (1, -1), (1, 1), (-1, 1))],
-    "SMA flange screw (in pocket floor)", "M2", "THRU", "left", "from pocket floor, tapped through the wall 4")
+    "SMA flange screw (in pocket floor)", "M2", "THRU", "left", "upper pair tapped through (4); lower pair blind 3.5, ends 0.5 before the inner face")
 for f in FEAT:
-    if f["id"].startswith("J"): f["tmin"] = WALL - 2
+    if f["id"].startswith("J"): f["tmin"] = WALL - 2.5
 add("K", [(x, H, z) for _, x, z, _, _ in CUTS], "", "", "THRU", "top")
 for f, c in zip([f for f in FEAT if f["id"].startswith("K")], CUTS):
     f["desc"] = f"Cutout {c[0]}, corners R1.5"; f["size"] = f"{c[3]:g} × {c[4]:g}"
-add("L", [(x, H, 30) for x in EXP_SCREWS], "EXP plate screw", "M3", "5", "top", "tap drill 2.5, max 5.5 deep (wall 6)")
+add("L", [(x, H, 30) for x in EXP_SCREWS], "EXP plate screw", "M3", "THRU", "top", "tapped through the wall 6")
+for f in FEAT:
+    if f["id"].startswith("L"): f["tmin"] = WALL
 
 
 # ---------------- checks against the model ----------------
@@ -241,9 +247,9 @@ def main():
         sh.dim(T(144, 6), T(144, 244), 0.01, "238 (pocket)", "v")
         sh.note(T(10.5, 241), (T(10.5, 241)[0] + 8, T(10.5, 241)[1] + 24), "Pocket corners R10\nOuter corners R6")
         sh.note(T(4.5 + 3.5, 107.5), (T(30, 95)[0], T(30, 95)[1]), "12 lugs Ø7, full height\n(floor to wall top, no undercut)")
-        sh.note(T(30 + 8, 230), (T(46, 214)[0], T(46, 214)[1]), "4 pads Ø16 × 5 high\n(M5 from the back, D1..D4)")
+        sh.note(T(30 + 8, 230), (T(46, 214)[0], T(46, 214)[1]), "4 pads Ø16 × 10 high, in the corner fill\n(M5 through from the back, D1..D4)")
         sh.note(T(273 - 4, 124.5), (T(222, 140)[0], T(222, 140)[1]), "6 support bosses Ø8 × 13 high,\nboard seat (C1..C6)")
-        sh.note(T(36, 21), (T(30, 45)[0], T(30, 45)[1]), "10 GND bosses Ø10, free-standing,\ntop 13 above floor (B1..B10)")
+        sh.note(T(42, 21), (T(36, 45)[0], T(36, 45)[1]), "10 GND bosses joined to the wall\nby the milled fill, top 13 above floor (B1..B10)")
         sh.note(T(115.5, 15), (T(100, 45)[0], T(100, 45)[1]), "Earth boss 10 × 9 × 11 high")
         sh.text(40, 80, "Floor 5 thick, walls 6, tray height 63. Tapped holes A, B, C: positions in the hole table (sheet 7), datum 0,0 = outer corner shown.", 2.5)
         vb = sh.view(tray, "back", 360, 220, 0.5, hidden=False)
@@ -269,7 +275,7 @@ def main():
         # sheet 3: sections -----------------------------------------------------
         sh = Sheet(pdf, 3, TOTAL, "Tray: sections", "1:1")
         cuts = [("A-A", 0, 30.0, "+", ((-1, 0, 0), (0, -1, 0)), "SECTION A-A  (x = 30: mounting pads, floor, walls)", 40, 300),
-                ("B-B", 0, 36.0, "+", ((-1, 0, 0), (0, -1, 0)), "SECTION B-B  (x = 36: GND boss B1, free-standing, SO-239 wall)", 40, 195),
+                ("B-B", 0, 42.0, "+", ((-1, 0, 0), (0, -1, 0)), "SECTION B-B  (x = 42: GND boss B1 joined to the SO-239 wall)", 40, 195),
                 ("C-C", 1, 236.0, "-", ((0, 1, 0), (-1, 0, 0)), "SECTION C-C  (y = 236: support bosses S1..S3, lugs)", 40, 90)]
         for nm, axis, at, keep, (n, vx), ttl, ox, oy in cuts:
             part = hlr.halfspace_cut(tray, axis, at, keep)
@@ -282,9 +288,10 @@ def main():
             sh.dim(Ts(vs["umin"], vs["vmin"]), Ts(vs["umax"], vs["vmin"]), -6, f"{vs['umax'] - vs['umin']:.0f}")
         sh.text(360, 380, "Section faces shaded.", 2.5)
         sh.text(360, 372, "Floor 5, walls 6, lugs Ø7 full height to the wall top.", 2.5)
-        sh.text(360, 364, "Mount pads 5 high (floor + pad = 10 for M5 × 8).", 2.5)
+        sh.text(360, 364, "Mount pads 10 high (floor + pad = 15, M5 tapped through).", 2.5)
         sh.text(360, 356, "Support bosses and GND bosses 13 high (board seat).", 2.5)
-        sh.text(360, 348, "Concave vertical edges lug/boss to wall: R ≤ 2 allowed.", 2.5)
+        sh.text(360, 348, "Concave vertical edges in the pocket: R ≥ 6.5 (Ø12 cutter, D-204).", 2.5)
+        sh.text(360, 340, "Floor edges sharp; R ≤ 1 from a corner-radius cutter accepted.", 2.5)
         sh.save()
 
         # sheet 4: lid ----------------------------------------------------------
@@ -388,14 +395,14 @@ def main():
         stack(390, 140, 2.0, "MOUNTING STACK D1..D4  (2:1)",
               [(-10, -8, 7, "printed washer Ø14 x 2", "pla"), (-8, -5, 12, "RVS back plate 3, hole Ø10 (spacer spigot Ø9.6 inside)", "plate"),
                (-7.5, -5, 4.8, "", "pla"), (-5, 0, 8, "printed spacer Ø16 x 5", "pla"),
-               (0, 5, 12, "floor 5", "alu"), (5, 10, 8, "pad Ø16 x 5, M5 x 8 deep", "alu")],
+               (0, 5, 12, "floor 5", "alu"), (5, 15, 8, "pad Ø16 x 10, M5 through", "alu")],
               screw_bot=(-10, 16, "M5 x 16 ISO 4762 A4"),
               note="Spring washer under the head. Tray isolated from the plate; bond only via G1.")
         # GND boss and lid
-        sh.text(20, 120, "GND BOSS B1..B10 (7 SO-239, 3 SMA), free-standing Ø10: RF board seated on the boss top (z 18), M3 x 6 from the board top.", 2.4)
+        sh.text(20, 120, "GND BOSS B1..B10 (7 SO-239 Ø10, 3 SMA Ø8), joined to the wall: RF board seated on the boss top (z 18), M3 x 6 from the board top.", 2.4)
         sh.text(20, 113, "LID: M3 x 10 countersunk ISO 10642 into A1..A16 (thread 8, lid 3, head flush with Ø6.9 countersink).", 2.4)
         sh.text(20, 106, "SO-239 83-798: flange outside wall 1, 4 x M3 x 6 into F (tapped through). SMA 901-9215: flange in pocket H, 4 x M2 x 4 into J (through).", 2.4)
-        sh.text(20, 99, "EXP plate: 2 x M3 x 6 into L. Earth: M5 x 16 with braid lug into G1 (tapped through wall + boss, 15).", 2.4)
+        sh.text(20, 99, "EXP plate: 2 x M3 x 6 into L (tapped through). Earth: M5 x 16 with braid lug into G1 (tapped through wall + boss, 15).", 2.4)
         sh.text(20, 92, "Heights: RF board underside z 18, controller underside z 39.6, DevKit top about z 57.2, lid inside z 63.", 2.4)
         sh.save()
 
@@ -445,9 +452,10 @@ def main():
             "3  Finish: conductive conversion coating (JLCCNC: Conductive anodizing, natural),",
             "    MIL-DTL-5541 Type II Class 3 equivalent, all surfaces. No insulating anodising.",
             "4  General tolerances ISO 2768-mK. Hole positions ±0.1 for E, F, H, J (connector flanges).",
-            "5  Threads ISO metric coarse 6H. F, G, J tapped through. Blind holes (A, B, C, D, L): keep the max drill",
-            "    depth in the note column; never break through into the pocket or the outside face.",
-            "6  Internal radii: pocket R10, cutouts R1.5, concave edges at lugs/bosses R ≤ 2. Bosses free-standing.",
+            "5  Threads ISO metric coarse 6H. D, G, L tapped through; F, J tapped as modelled (blind where they end in a web).",
+            "    Blind holes A, B, C: keep the max drill depth in the note column; never break through into the outside face.",
+            "6  Internal radii: pocket R10, every concave vertical edge inside the pocket R ≥ 6.5 (Ø12 end mill, 58 deep), cutouts R1.5.",
+            "    Floor edges (floor to wall, boss, pad, lug) sharp as modelled; a corner-radius end mill up to R1 is accepted.",
             "7  Break all sharp edges 0.2 to 0.4, except the lid seat (flat, sharp, conductive).",
             "8  Engrave the lid 0.5 deep as modelled (Arial bold).",
             "9  Deburr the SO-239, SMA and cutout edges inside and outside (RF and cable contact).",

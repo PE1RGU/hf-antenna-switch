@@ -20,7 +20,7 @@ Relays: one type for all 37 positions, TE RT1 RTD14012F (D-06). Unit 1 fits 34: 
 
 Connectors (D-14, D-33):
 
-- Bottom wall: radio SO-239 R1 to R3 (30 mm pitch) and antenna SO-239 A1 to A4 (38 mm pitch, under the columns). Amphenol RF 83-798, PTFE insulator (D-10).
+- Bottom wall: radio SO-239 R1 to R3 (27 mm pitch, D-203) and antenna SO-239 A1 to A4 (38 mm pitch, under the columns). Amphenol RF 83-798, PTFE insulator (D-10).
 - Left wall: 3 SMA EXP, one per radio block: bulkhead jack with a 4-hole flange, strap to a land at the board edge, as the SO-239 (D-108).
 - Top wall: XT60PW-M +12V RLY, XT60PW-M +12V AUX, XT30PW-M +5V (D-17). RJ45 LINK and the EXP ribbon passage are on the controller board (D-51, D-53).
 - J14, 2 × 12 header to the controller board, 3.3 V logic (D-52). Odd pins: 1 SCL, 3 SDA, 5 EXP_INT, 7 RLY_EN, 9 TX_ANY, 11 to 15 R1..R3_K0_DRV, 17 A2_RFDET (D-104), 19 to 23 spare. Even pins: 2, 4 +5V; 6 to 24 GND.
@@ -147,7 +147,8 @@ Placement study: hardware/unit/relay-placement-study.svg (generator gen_relay_pl
 - Crossbar: rows (radio TX and RX lines) horizontal on L1; columns (antenna lines) and radio feeds vertical on L6. The THT relay pins make the layer change. L2 and L5 are solid GND under the whole board, except the antipads (D-115, D-117, D-156); L3 and L4 carry the coil and logic routing.
 - Column pitch 38 mm = antenna SO-239 pitch (board x 139, 177, 215, 253). Column line 6 mm from the relay body, so the 9 mm band clears the relays. Radio block 48 mm (TX band 24, RX band 24).
 - Left: EXP relays (SMA on the left wall at each radio block) and K0.
-- Radio SO-239 at x 12, 42, 72 (30 mm pitch, D-21). R3 feed straight up at x 72; R1 and R2 feeds at x 81 and 90, with their jogs on top copper near the bottom edge. No parallel run between feeds (D-24).
+- Radio SO-239 at x 18, 45, 72 (27 mm pitch, D-203; was 12, 42, 72, D-21), GND holes at x 32, 59, 86. R3 feed straight up at x 72; R1 and R2 feeds at x 81 and 90, with their jogs on top copper near the bottom edge. No parallel run between feeds (D-24).
+- Case DFM (D-204, board p3-case): EXP SMA GND holes J4 to J6 pad 2 at board (3.5, 48.5 / 96.5 / 144.5), 13 mm above the SMA axis (was (4.0, 52.5 / 100.5 / 148.5)); +3V3 and EXP_INT rerouted around them on In2/In3. CASE_KO rule areas on F.Cu and B.Cu (no vias, no pour; tracks and pads allowed) where the milled case fill touches the board underside near S1, S2, S3 and S6. DRC 0 violations, 30 known unconnected. Production zip made again for p3-case (M-130).
 - Top 32 mm: logic zone, power entry; controller board above.
 - Antenna port zone 34 mm above the strap zone: K1 left of each column; bleed and detector right of it, 2.0 mm from the column line (no GDT, D-114).
 - Board supports (D-102, D-132, C-29, M-32): six M3 standoffs S1 to S6, 13 mm, plated holes, each on its own net CHASSIS_S1 to CHASSIS_S6 with its local bond option footprint (C8 to C13, DNP; no board copper between supports, D-162), 8 mm keep-out; plus the seven M3 screws to the SO-239 GND bosses at y 225 (the RF bond). Positions in case.md.
