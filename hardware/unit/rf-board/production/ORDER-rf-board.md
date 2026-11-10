@@ -1,11 +1,11 @@
 # RF board: order sheet (JLCPCB)
 
-Board: Shack Relay Matrix rev C, RF board, layout p3-c1206, netlist ../../verify/rf16.xml. Includes B-1 and B-2 (D-189), S-3 drain copper (D-193) and the 1206 detector tap land (D-202).
+Board: Shack Relay Matrix rev C, RF board, layout p3-case, netlist ../../verify/rf16.xml. Includes B-1 and B-2 (D-189), S-3 drain copper (D-193), the 1206 detector tap land (D-202), the radio SO-239 move (D-203) and the case DFM changes: J4 to J6 GND holes and CASE_KO areas (D-204).
 Order: together with the other boards of the project (D-153). Parts: ordered by Prins, hand assembly.
 
 ## Files
 
-- Gerbers and drill: `Shack_Relay_Matrix_rev_C_RF_board_p3-c1206.zip` (Fabrication Toolkit, M-123). 6 copper layers
+- Gerbers and drill: `Shack_Relay_Matrix_rev_C_RF_board_p3-case.zip` (Fabrication Toolkit, M-130; first made as p3-c1206 in M-123). 6 copper layers
   (L1 F.Cu, L2 In1.Cu to L5 In4.Cu, L6 B.Cu), mask, silk and paste both sides, Edge.Cuts, PTH and NPTH drill files.
 - BOM for the parts order: `bom_hand_assembly.csv` (gen_bom.py, M-122). `bom.csv` and `positions.csv` are for JLC assembly only; not used.
 
@@ -27,9 +27,9 @@ Order: together with the other boards of the project (D-153). Parts: ordered by 
 | Mark on PCB | Remove mark (no order number on the board) |
 | Remove order number, castellated holes, edge plating, gold fingers | No extras |
 
-## Checks done (M-123)
+## Checks done (M-130, p3-case)
 
-- Drill files: PTH 0.3 mm x 4196 (vias), 0.6 mm x 30 plus 4 slots, 0.8 mm x 20, 1.0 mm x 34, 1.3 mm x 296 (relays),
+- Drill files: PTH 0.3 mm x 4175 (vias), 0.6 mm x 30 plus 4 slots, 0.8 mm x 20, 1.0 mm x 34, 1.3 mm x 296 (relays),
   1.9 mm x 2, 2.7 mm x 4, 3.2 mm x 17 (plated supports, D-102). No NPTH. Counts per tool match the board (read back by script).
 - Gerber file functions L1 Top, L2 to L5 Inner, L6 Bottom; outline 268.0 x 230.0 mm.
 - DRC (all severities, zones refilled) 0 violations; 30 unconnected items, all relay pad-12 pairs joined inside the relay (known); ERC 0.
