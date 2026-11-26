@@ -1,0 +1,1706 @@
+{
+"_doc": "D-217 crossing corridors, candidate set r3 (2026-11-16), made by mk_corridors.py from the p2c routing (board frame, mm). Inside a corridor the RF line is 0.975 mm wide, the near plane stays solid (In1 under F.Cu rows, In4 under B.Cu columns) and logic on In2/In3 may cross. Outside the corridors In1 to In3 (rows) or In2 to In4 (columns) are cut 2.975 mm each side of the line centre and the router keeps In2/In3 out. Corridors the routes do not use are removed after routing. Entries with kind narrow: short pad-adjacent pieces where a 1.95 mm line would come closer than 2.0 mm to other copper; same treatment as a corridor (D-217 r2). r2: corridors sized 0.7 mm per crossing net + 2 x 1.25 mm, at most 5 nets per corridor (r1: 0.5 mm, 9 nets; the router did not converge, 18 to 24 failed connections per pass). r3: every corridor 6 mm (r2: 8 nets failed after 10 passes, +12V_SW, A1/A2_BIAS, D602-A among them). Pruned 2026-11-20 after routing r4 (D-218): corridors with no In2/In3 copper within 2.975 mm of the line removed (list in 'dropped'). Then each kept corridor trimmed to the copper in it plus 1.0 mm each side (at least 1.5 mm).",
+"corridors": [
+{
+"layer": "B",
+"net": "/R3_EXP",
+"p0": [
+19.085,
+157.5
+],
+"p1": [
+13.085,
+157.5
+],
+"len": 6.0,
+"nets": [
+"+3V3",
+"/IO expanders/A1_RFDET",
+"/SCL",
+"Net-(D311-A"
+],
+"id": "C01",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R3_EXP",
+"p0": [
+9.727,
+157.5
+],
+"p1": [
+6.673,
+157.5
+],
+"len": 3.05,
+"nets": [
+"+12V_SW",
+"/EXP_INT",
+"/RLY_EN",
+"/SDA"
+],
+"id": "C02",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/RXBUS",
+"p0": [
+93.505,
+176.5
+],
+"p1": [
+99.505,
+176.5
+],
+"len": 6.0,
+"nets": [
+"+12V_AUX",
+"/A2_RFDET",
+"/IO expanders/A3_RFDET"
+],
+"id": "C03",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/RXBUS",
+"p0": [
+110.973,
+176.5
+],
+"p1": [
+116.805,
+176.5
+],
+"len": 5.83,
+"nets": [
+"+5V",
+"/IO expanders/A4_RFDET",
+"Net-(D402-A"
+],
+"id": "C04",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/RXBUS",
+"p0": [
+222.673,
+176.5
+],
+"p1": [
+224.545,
+176.5
+],
+"len": 1.87,
+"nets": [
+"Net-(D602-A"
+],
+"id": "C05",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/RXBUS",
+"p0": [
+183.873,
+176.5
+],
+"p1": [
+186.545,
+176.5
+],
+"len": 2.67,
+"nets": [
+"Net-(D502-A"
+],
+"id": "C07",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/ANT1",
+"p0": [
+139.0,
+60.045
+],
+"p1": [
+139.0,
+62.554
+],
+"len": 2.51,
+"nets": [
+"+12V_SW"
+],
+"id": "C09",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/RXBUS",
+"p0": [
+225.645,
+128.5
+],
+"p1": [
+230.127,
+128.5
+],
+"len": 4.48,
+"nets": [
+"+12V_SW",
+"Net-(D305-A",
+"Net-(D310-A",
+"Net-(D602-A"
+],
+"id": "C10",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/RXBUS",
+"p0": [
+187.345,
+128.5
+],
+"p1": [
+192.527,
+128.5
+],
+"len": 5.18,
+"nets": [
+"+12V_SW",
+"Net-(D304-A",
+"Net-(D309-A",
+"Net-(D502-A"
+],
+"id": "C11",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/RXBUS",
+"p0": [
+143.246,
+128.5
+],
+"p1": [
+148.545,
+128.5
+],
+"len": 5.3,
+"nets": [
+"+12V_AUX",
+"+12V_SW",
+"Net-(D303-A",
+"Net-(D308-A",
+"Net-(D402-A"
+],
+"id": "C12",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/RXBUS",
+"p0": [
+93.505,
+128.5
+],
+"p1": [
+99.505,
+128.5
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"/A2_RFDET",
+"/IO expanders/A3_RFDET"
+],
+"id": "C13",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/RXBUS",
+"p0": [
+111.705,
+128.5
+],
+"p1": [
+117.705,
+128.5
+],
+"len": 6.0,
+"nets": [
+"+5V",
+"/IO expanders/A4_RFDET",
+"Net-(D302-A",
+"Net-(D307-A"
+],
+"id": "C14",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/RXBUS",
+"p0": [
+46.245,
+128.5
+],
+"p1": [
+51.827,
+128.5
+],
+"len": 5.58,
+"nets": [
+"+12V_RLY",
+"/SCL",
+"Net-(D301-A"
+],
+"id": "C15",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R2_EXP",
+"p0": [
+19.085,
+109.5
+],
+"p1": [
+13.085,
+109.5
+],
+"len": 6.0,
+"nets": [
+"+3V3",
+"/IO expanders/A1_RFDET",
+"Net-(D306-A",
+"Net-(D311-A"
+],
+"id": "C17",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R2_EXP",
+"p0": [
+13.085,
+109.5
+],
+"p1": [
+7.485,
+109.5
+],
+"len": 5.6,
+"nets": [
+"+12V_SW",
+"/EXP_INT",
+"/RLY_EN",
+"/SDA",
+"Net-(D211-A"
+],
+"id": "C18",
+"kind": "corridor",
+"note": "shortened: ends where C17 starts",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+181.373,
+56.5
+],
+"p1": [
+186.545,
+56.5
+],
+"len": 5.17,
+"nets": [
+"+12V_SW",
+"Net-(D109-A",
+"Net-(D502-A"
+],
+"id": "C20",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+191.845,
+56.5
+],
+"p1": [
+197.227,
+56.5
+],
+"len": 5.38,
+"nets": [
+"Net-(D204-A",
+"Net-(D209-A",
+"Net-(D304-A",
+"Net-(D309-A"
+],
+"id": "C21",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+219.246,
+56.5
+],
+"p1": [
+224.545,
+56.5
+],
+"len": 5.3,
+"nets": [
+"+12V_SW",
+"Net-(D210-A",
+"Net-(D602-A"
+],
+"id": "C22",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+228.045,
+56.5
+],
+"p1": [
+234.045,
+56.5
+],
+"len": 6.0,
+"nets": [
+"Net-(D110-A",
+"Net-(D205-A",
+"Net-(D305-A",
+"Net-(D310-A"
+],
+"id": "C23",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+45.645,
+56.5
+],
+"p1": [
+51.645,
+56.5
+],
+"len": 6.0,
+"nets": [
+"+12V_RLY",
+"/IO expanders/A3_RFDET",
+"/SCL",
+"Net-(D201-A",
+"Net-(D301-A"
+],
+"id": "C24",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+30.845,
+44.373
+],
+"p1": [
+30.845,
+46.627
+],
+"len": 2.25,
+"nets": [
+"/R1_RX3_DRV"
+],
+"id": "C25",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+101.085,
+56.5
+],
+"p1": [
+107.085,
+56.5
+],
+"len": 6.0,
+"nets": [
+"+12V_RLY",
+"+12V_SW",
+"/A2_RFDET",
+"Net-(D107-A"
+],
+"id": "C27",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+114.273,
+56.5
+],
+"p1": [
+119.885,
+56.5
+],
+"len": 5.61,
+"nets": [
+"+5V",
+"Net-(D202-A",
+"Net-(D207-A",
+"Net-(D302-A",
+"Net-(D307-A"
+],
+"id": "C28",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+143.246,
+56.5
+],
+"p1": [
+148.545,
+56.5
+],
+"len": 5.3,
+"nets": [
+"+12V_AUX",
+"+12V_SW",
+"Net-(D108-A",
+"Net-(D402-A"
+],
+"id": "C29",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/TXBUS",
+"p0": [
+153.945,
+56.5
+],
+"p1": [
+159.227,
+56.5
+],
+"len": 5.28,
+"nets": [
+"Net-(D203-A",
+"Net-(D208-A",
+"Net-(D303-A",
+"Net-(D308-A"
+],
+"id": "C30",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/ANT2",
+"p0": [
+177.0,
+132.045
+],
+"p1": [
+177.0,
+134.354
+],
+"len": 2.31,
+"nets": [
+"+12V_SW"
+],
+"id": "C31",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/ANT3",
+"p0": [
+215.0,
+60.045
+],
+"p1": [
+215.0,
+62.354
+],
+"len": 2.31,
+"nets": [
+"+12V_SW"
+],
+"id": "C33",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/A4_ANTENNA",
+"p0": [
+253.0,
+204.145
+],
+"p1": [
+253.0,
+208.327
+],
+"len": 4.18,
+"nets": [
+"/A4_BIAS"
+],
+"id": "C34",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_EXP",
+"p0": [
+27.625,
+61.5
+],
+"p1": [
+19.685,
+61.5
+],
+"len": 7.94,
+"nets": [
+"/IO expanders/A1_RFDET",
+"Net-(D206-A",
+"Net-(D306-A"
+],
+"id": "C35",
+"kind": "corridor",
+"note": "extended over the narrow piece at K111.12; trim kept the narrow span",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_EXP",
+"p0": [
+16.185,
+61.5
+],
+"p1": [
+10.985,
+61.5
+],
+"len": 5.2,
+"nets": [
+"+12V_SW",
+"/RLY_EN",
+"Net-(D211-A",
+"Net-(D311-A"
+],
+"id": "C36",
+"kind": "corridor",
+"note": "shortened: ends where C37 starts",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_EXP",
+"p0": [
+10.985,
+61.5
+],
+"p1": [
+6.273,
+61.5
+],
+"len": 4.71,
+"nets": [
+"+3V3",
+"/EXP_INT",
+"/SDA",
+"Net-(D111-A"
+],
+"id": "C37",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_EXP",
+"p0": [
+35.885,
+44.373
+],
+"p1": [
+35.885,
+46.627
+],
+"len": 2.25,
+"nets": [
+"/R1_RX3_DRV"
+],
+"id": "C38",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+105.805,
+80.5
+],
+"p1": [
+111.805,
+80.5
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"+5V",
+"/A2_RFDET",
+"/IO expanders/A4_RFDET"
+],
+"id": "C39",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+115.905,
+80.5
+],
+"p1": [
+121.905,
+80.5
+],
+"len": 6.0,
+"nets": [
+"Net-(D202-A",
+"Net-(D207-A",
+"Net-(D302-A",
+"Net-(D307-A"
+],
+"id": "C40",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+219.246,
+80.5
+],
+"p1": [
+224.545,
+80.5
+],
+"len": 5.3,
+"nets": [
+"+12V_SW",
+"Net-(D210-A",
+"Net-(D602-A"
+],
+"id": "C41",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+228.045,
+80.5
+],
+"p1": [
+234.045,
+80.5
+],
+"len": 6.0,
+"nets": [
+"Net-(D205-A",
+"Net-(D305-A",
+"Net-(D310-A"
+],
+"id": "C42",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+143.246,
+80.5
+],
+"p1": [
+145.754,
+80.5
+],
+"len": 2.51,
+"nets": [
+"+12V_AUX",
+"+12V_SW",
+"Net-(D402-A"
+],
+"id": "C43",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+153.945,
+80.5
+],
+"p1": [
+159.227,
+80.5
+],
+"len": 5.28,
+"nets": [
+"Net-(D203-A",
+"Net-(D208-A",
+"Net-(D303-A",
+"Net-(D308-A"
+],
+"id": "C44",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+46.546,
+80.5
+],
+"p1": [
+51.645,
+80.5
+],
+"len": 5.1,
+"nets": [
+"+12V_RLY",
+"/IO expanders/A3_RFDET",
+"/SCL",
+"Net-(D201-A",
+"Net-(D301-A"
+],
+"id": "C45",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+181.246,
+80.5
+],
+"p1": [
+186.545,
+80.5
+],
+"len": 5.3,
+"nets": [
+"+12V_SW",
+"Net-(D309-A",
+"Net-(D502-A"
+],
+"id": "C46",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+191.845,
+80.5
+],
+"p1": [
+197.227,
+80.5
+],
+"len": 5.38,
+"nets": [
+"Net-(D204-A",
+"Net-(D209-A",
+"Net-(D304-A"
+],
+"id": "C47",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/Radio port R1/RXBUS",
+"p0": [
+55.805,
+60.095
+],
+"p1": [
+55.805,
+66.095
+],
+"len": 6.0,
+"nets": [
+"+12V_RLY",
+"+12V_SW",
+"/IO expanders/A4_RFDET",
+"/R2_RX4_DRV",
+"CLAMP_SW"
+],
+"id": "C49",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/Antenna port A3/PARK",
+"p0": [
+219.373,
+200.585
+],
+"p1": [
+223.095,
+200.585
+],
+"len": 3.72,
+"nets": [
+"/A3_BIAS",
+"Net-(D602-A"
+],
+"id": "C50",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/A2_ANTENNA",
+"p0": [
+177.0,
+204.245
+],
+"p1": [
+177.0,
+210.245
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"/A3_BIAS",
+"/A4_BIAS",
+"/A4_DET"
+],
+"id": "C51",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/Antenna port A2/PARK",
+"p0": [
+180.63,
+200.585
+],
+"p1": [
+185.095,
+200.585
+],
+"len": 4.46,
+"nets": [
+"Net-(D502-A"
+],
+"id": "C52",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+220.445,
+104.5
+],
+"p1": [
+226.445,
+104.5
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"Net-(D210-A",
+"Net-(D305-A",
+"Net-(D310-A",
+"Net-(D602-A"
+],
+"id": "C55",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+187.345,
+104.5
+],
+"p1": [
+193.345,
+104.5
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"Net-(D209-A",
+"Net-(D304-A",
+"Net-(D309-A",
+"Net-(D502-A"
+],
+"id": "C56",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+143.246,
+104.5
+],
+"p1": [
+145.754,
+104.5
+],
+"len": 2.51,
+"nets": [
+"+12V_AUX",
+"+12V_SW",
+"Net-(D402-A"
+],
+"id": "C57",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+153.945,
+104.5
+],
+"p1": [
+159.227,
+104.5
+],
+"len": 5.28,
+"nets": [
+"Net-(D208-A",
+"Net-(D303-A",
+"Net-(D308-A"
+],
+"id": "C58",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+46.245,
+104.5
+],
+"p1": [
+51.827,
+104.5
+],
+"len": 5.58,
+"nets": [
+"+12V_RLY",
+"/IO expanders/A3_RFDET",
+"/SCL",
+"Net-(D301-A"
+],
+"id": "C59",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+96.535,
+104.5
+],
+"p1": [
+107.085,
+104.5
+],
+"len": 10.55,
+"nets": [
+"+12V_SW",
+"/A2_RFDET",
+"/IO expanders/A4_RFDET"
+],
+"id": "C60",
+"kind": "corridor",
+"note": "merged with N11",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R2/TXBUS",
+"p0": [
+115.885,
+104.5
+],
+"p1": [
+121.227,
+104.5
+],
+"len": 5.34,
+"nets": [
+"+5V",
+"Net-(D207-A",
+"Net-(D302-A",
+"Net-(D307-A"
+],
+"id": "C61",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/A1_ANTENNA",
+"p0": [
+139.0,
+204.245
+],
+"p1": [
+139.0,
+210.245
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"/A2_DET",
+"/A4_DET"
+],
+"id": "C62",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/TXBUS",
+"p0": [
+219.246,
+152.5
+],
+"p1": [
+224.545,
+152.5
+],
+"len": 5.3,
+"nets": [
+"+12V_SW",
+"Net-(D310-A",
+"Net-(D602-A"
+],
+"id": "C63",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/TXBUS",
+"p0": [
+143.246,
+152.5
+],
+"p1": [
+148.545,
+152.5
+],
+"len": 5.3,
+"nets": [
+"+12V_AUX",
+"+12V_SW",
+"Net-(D308-A",
+"Net-(D402-A"
+],
+"id": "C64",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/TXBUS",
+"p0": [
+93.585,
+152.5
+],
+"p1": [
+99.585,
+152.5
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"/A2_RFDET",
+"/IO expanders/A3_RFDET"
+],
+"id": "C65",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/TXBUS",
+"p0": [
+110.785,
+152.5
+],
+"p1": [
+116.785,
+152.5
+],
+"len": 6.0,
+"nets": [
+"+5V",
+"/IO expanders/A4_RFDET",
+"Net-(D307-A"
+],
+"id": "C66",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/Radio port R3/TXBUS",
+"p0": [
+181.246,
+152.5
+],
+"p1": [
+186.545,
+152.5
+],
+"len": 5.3,
+"nets": [
+"+12V_SW",
+"Net-(D309-A",
+"Net-(D502-A"
+],
+"id": "C67",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R3_RADIO",
+"p0": [
+72.0,
+194.054
+],
+"p1": [
+72.0,
+188.5
+],
+"len": 5.55,
+"nets": [
+"+3V3",
+"/A3_BIAS",
+"/A4_BIAS"
+],
+"id": "C70",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R3_RADIO",
+"p0": [
+72.0,
+184.554
+],
+"p1": [
+72.0,
+181.646
+],
+"len": 2.91,
+"nets": [
+"+12V_AUX",
+"/A1_BIAS",
+"/A2_BIAS",
+"/IO expanders/A1_RFDET"
+],
+"id": "C71",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/Antenna port A4/PARK",
+"p0": [
+257.373,
+200.585
+],
+"p1": [
+259.627,
+200.585
+],
+"len": 2.25,
+"nets": [
+"/A4_BIAS",
+"Net-(D702-A"
+],
+"id": "C72",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "F",
+"net": "/A3_ANTENNA",
+"p0": [
+215.0,
+204.245
+],
+"p1": [
+215.0,
+210.245
+],
+"len": 6.0,
+"nets": [
+"+12V_SW",
+"/A3_BIAS",
+"/A4_BIAS",
+"/A4_DET"
+],
+"id": "C74",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_RADIO",
+"p0": [
+90.0,
+195.127
+],
+"p1": [
+90.0,
+190.0
+],
+"len": 5.13,
+"nets": [
+"+3V3",
+"/A2_RFDET",
+"/A4_BIAS"
+],
+"id": "C76",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_RADIO",
+"p0": [
+90.0,
+186.0
+],
+"p1": [
+90.0,
+183.446
+],
+"len": 2.55,
+"nets": [
+"/A1_BIAS",
+"/A2_BIAS",
+"/A3_BIAS",
+"/IO expanders/A1_RFDET"
+],
+"id": "C77",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R1_RADIO",
+"p0": [
+90.0,
+66.0
+],
+"p1": [
+90.0,
+60.0
+],
+"len": 6.0,
+"nets": [
+"+12V_AUX",
+"+12V_RLY",
+"/IO expanders/A3_RFDET",
+"/IO expanders/A4_RFDET"
+],
+"id": "C78",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R2_RADIO",
+"p0": [
+81.0,
+191.5
+],
+"p1": [
+81.0,
+185.5
+],
+"len": 6.0,
+"nets": [
+"+3V3",
+"/A3_BIAS",
+"/A4_BIAS",
+"/IO expanders/A1_RFDET"
+],
+"id": "C79",
+"kind": "corridor",
+"trimmed": true
+},
+{
+"layer": "B",
+"net": "/R3_EXP",
+"p0": [
+32.365,
+157.5
+],
+"p1": [
+29.325,
+157.5
+],
+"len": 3.04,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K311.11",
+"id": "N01"
+},
+{
+"layer": "B",
+"net": "/R3_EXP",
+"p0": [
+27.325,
+157.5
+],
+"p1": [
+24.285,
+157.5
+],
+"len": 3.04,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K311.12",
+"id": "N02"
+},
+{
+"layer": "B",
+"net": "/R2_EXP",
+"p0": [
+32.365,
+109.5
+],
+"p1": [
+29.325,
+109.5
+],
+"len": 3.04,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K211.11",
+"id": "N03"
+},
+{
+"layer": "B",
+"net": "/R2_EXP",
+"p0": [
+27.325,
+109.5
+],
+"p1": [
+24.285,
+109.5
+],
+"len": 3.04,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K211.12",
+"id": "N04"
+},
+{
+"layer": "B",
+"net": "/R1_EXP",
+"p0": [
+32.365,
+61.5
+],
+"p1": [
+29.325,
+61.5
+],
+"len": 3.04,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K111.11",
+"id": "N05"
+},
+{
+"layer": "F",
+"net": "/ANT1",
+"p0": [
+132.125,
+182.885
+],
+"p1": [
+133.125,
+182.885
+],
+"len": 1.0,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of C404.2",
+"id": "N07"
+},
+{
+"layer": "F",
+"net": "/ANT2",
+"p0": [
+170.125,
+182.885
+],
+"p1": [
+171.125,
+182.885
+],
+"len": 1.0,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of C504.2",
+"id": "N08"
+},
+{
+"layer": "F",
+"net": "/ANT3",
+"p0": [
+208.125,
+182.885
+],
+"p1": [
+209.125,
+182.885
+],
+"len": 1.0,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of C604.2",
+"id": "N09"
+},
+{
+"layer": "F",
+"net": "/ANT4",
+"p0": [
+246.125,
+182.885
+],
+"p1": [
+247.125,
+182.885
+],
+"len": 1.0,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of C704.2",
+"id": "N10"
+},
+{
+"layer": "B",
+"net": "/R3_RADIO",
+"p0": [
+67.65,
+149.5
+],
+"p1": [
+64.12,
+149.5
+],
+"len": 3.53,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K301.14",
+"id": "N12"
+},
+{
+"layer": "B",
+"net": "/R2_RADIO",
+"p0": [
+67.65,
+101.5
+],
+"p1": [
+64.12,
+101.5
+],
+"len": 3.53,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K201.14",
+"id": "N13"
+},
+{
+"layer": "B",
+"net": "/R1_RADIO",
+"p0": [
+67.65,
+53.5
+],
+"p1": [
+64.12,
+53.5
+],
+"len": 3.53,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of K101.14",
+"id": "N14"
+},
+{
+"layer": "F",
+"net": "/R1_RADIO",
+"p0": [
+29.34,
+219.5
+],
+"p1": [
+34.66,
+219.5
+],
+"len": 5.32,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of J1.2",
+"id": "N15"
+},
+{
+"layer": "F",
+"net": "/R1_RADIO",
+"p0": [
+56.34,
+219.5
+],
+"p1": [
+61.66,
+219.5
+],
+"len": 5.32,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of J2.2",
+"id": "N16"
+},
+{
+"layer": "F",
+"net": "/R1_RADIO",
+"p0": [
+83.34,
+219.5
+],
+"p1": [
+88.66,
+219.5
+],
+"len": 5.32,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of J3.2",
+"id": "N17"
+},
+{
+"layer": "F",
+"net": "/R1_RADIO",
+"p0": [
+40.7,
+219.5
+],
+"p1": [
+49.3,
+219.5
+],
+"len": 8.6,
+"kind": "narrow",
+"reason": "1.95 mm line within 2.0 mm of R2_RADIO jog at x 45",
+"id": "N18"
+},
+{
+"id": "N19",
+"layer": "F",
+"net": "/R2_RADIO",
+"p0": [
+45.0,
+216.0
+],
+"p1": [
+45.0,
+214.4
+],
+"len": 1.6,
+"kind": "narrow",
+"reason": "1.95 mm line 1.55 mm from R1_RADIO at y 219.5"
+}
+],
+"pruned": true,
+"routes": "routing/routes.json",
+"dropped": [
+"C06",
+"C08",
+"C16",
+"C19",
+"C26",
+"C32",
+"C48",
+"C53",
+"C54",
+"C68",
+"C69",
+"C73",
+"C75",
+"C80"
+]
+}
