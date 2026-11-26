@@ -2,7 +2,70 @@
 
 Newest first. Board revisions follow the design log IDs.
 
+## 2026-11-26
+- M-142: shack interface p8g on the bench: smoke test P-01 (except step 2, reverse polarity: 7 mA, open), MCU bring-up P-02, front panel and KILL switch P-03, display P-04 pass. Report docs/test/reports/shack-interface-p8g.md; test-spec TC-13 and procedure P-01.
+
+## 2026-11-20
+- D-218: logic may use B.Cu inside the top logic region only (expander fan-out room after D-217); case seat faces are keep-outs on B.Cu.
+- M-141: RF board p4-400w routed (168 nets, 0 failed); 66 corridors kept, 0.975 mm line on 9.8 % of the RF length; CASE_KO case keep-outs restored in the generator; DRC 0 violations, 30 known unconnected (relay pad 12).
+
+## 2026-11-16
+- D-217: logic crosses the 400 W RF lines only in crossing corridors (near plane kept, line narrowed to 0.975 mm there).
+- M-140: D-217 in the RF board generator (1.95 mm lines, RF_CUT plane cuts, corridors.json, narrow pieces at 18 tight spots), router keep-out for In2/In3 and wider search windows; re-route in progress.
+
+## 2026-11-15
+- D-216: power design points from the Dutch licence (400 W PEP to 29.7 MHz, 120 W PEP on 50 MHz); D-215 use limit superseded. R-01 updated.
+- D-215: RF board stays on FR-4 at 400 W; use limit for long carriers on 50 MHz; C-47 to calibrate on the first board.
+- C-47: RF line loss and heating model at 400 W: dielectric loss of FR-4 dominates at 54 MHz; worst-case key-down rise 42 to 64 K at 54 MHz, 24 to 36 K at 30 MHz.
+- D-214: EXP SMA kept at 400 W (ratio 0.73, close to the factor).
+- D-213: detector tap 2 x 10 pF 1 kV in series and 100 pF to GND for 400 W.
+- C-43 to C-46: 400 W checks: detector fails with the present parts (proposal 2 x 10 pF + 100 pF); port parts pass except the EXP SMA (0.73); impulse behind the 1000 V tube needs a 2 kV tap; line heating estimate 25 to 60 K at key-down.
+- D-212: antenna entry arrestor Alpha Delta ATT3G50UHP (1000 V tube, 2 kW) for 400 W; impulse recheck of the antenna-port parts open.
+- D-211: RF gap stays 2.0 mm; RF board conformal-coated (IEC 60664-3) for 400 W.
+- C-42: own 2D field solver: 50 ohm on L1 over L5 at W about 1.95 mm (gap 2.0 mm); solver checked against the JLC value of C-30. D-210 gate passed.
+- D-210: RF board stays 6-layer; RF lines referenced to a deeper plane (L1 to L5, L6 to L2) with plane cut-outs, about 1.9 mm wide; field-solver check before layout.
+- R-01 now 400 W at SWR 3:1 (D-209); C-41: 4.9 A rms, 346 V peak.
+- D-209: RF board to be redesigned for a 400 W linear (Prins); design point and stackup open. R-01 marked for change.
+- D-208: RF connector ground return through the case and the milled GND bosses stays as drawn; check by M-01 (S11 and port-to-port S21).
+
+## 2026-11-10
+- M-139: DigiKey cart for one shack unit (28 lines, EUR 155.06, all in stock). D-207 (proposed): RESET E-Switch 700SP7B10M1REH and SAFE LED 5581301023F for parts on backorder. bom_to_order_shack.csv for one unit, with DigiKey PNs.
+- M-138: JLC order W2026111102588281: shack interface p8g (5 boards, PCBA of 2) and both end plates. Placement rotations corrected in the JLC viewer; J1, J14 and L1 to L4 checked by Prins. New production/bom_to_order_shack.csv: hand parts, housing, screws, wiring and cables.
+- D-206, M-137: shack interface p8g: USB fan-out without vias (D- U under the receptacle), so no 0.2 mm via and no JLC high-precision class; DRC as before; new zip.
+- M-136 scope (Prins): JLC Standard PCBA places 223 parts (SMD plus the stocked THT parts); D-205: D1 as Vishay SS34-E3/57T, halogen exception for one part. Order sheet updated with the JLC assembly section.
+- M-136: JLC assembly check of the shack interface: 204 SMD parts (42 lines) in stock at JLC; files production/jlc_assembly_bom.csv and jlc_assembly_cpl.csv. By hand: U203/U303/U403 (no stock), A1 and all THT parts.
+- Both end plates in the JLC cart (front Y74, rear Y75), settings as ORDER-end-plates.md; not paid.
+- M-104 accepted by Prins. M-122: AQY412S land check closed (D-106 values against the common photorelay land); both open checks of M-122 closed.
+- Sign-off by Prins of D-182, D-183, D-184, D-186, D-187 and M-102. M-134, A-31 closed: the front window lies inside the black glass of the real 2inch module; no change. M-135: shack interface p8f, CAT6 ENTRY silk frame level with POWER and the radio ports (silk only; copper, pads and drill as p8e); new production zip, p8e zip to production/superseded/. silk_section.py brought up to date with the generator.
+- M-132: order files for both shack end plates (rev a8): Gerber zips in hardware/shack-interface/endplates/production/, read back, order sheet ORDER-end-plates.md (2 layers, 1.6 mm, black mask, white silk, ENIG); DRC 0 on both. JLC DFM upload open.
+- M-133: parts in hand checked by Prins: Kycon KMDGX-8S-BS fits the MD-80SM land; 2inch display holes, cell ring widths and header as the STEP, printed frame fits. Display window position to confirm (A-31).
+
+## 2026-11-09
+- M-130: RF production files p3-case after D-203 and D-204; DRC 0 violations, drill read back.
+- M-131: XT60/XT30 polarity confirmed on the real parts (+ on the flat side, pad 2) on all four footprints; closes S-13.
+
+## 2026-11-08
+- M-129: fit-print STLs of the RF case: lid letter artefacts traced to the engraved lid STEP tolerances; STLs made again.
+
+## 2026-11-07
+- D-204, M-127, M-128: RF case tray designed for milling (JLCCNC rules: concave edges R 6.5 or more, milled fill per z band, 2 mm webs between close pieces).
+
+## 2026-11-05
+- D-203, M-125, M-126: RF board SO-239 R1 and R2 moved for the case pocket corner (pitch 27 mm); board patched (p3-so239), case CAD updated.
+
+## 2026-11-02
+- D-202: RF detector tap C404 to C704 on a 1206 land with a 2.0 mm gap (Knowles 4.7 pF 1 kV C0G).
+- M-122, M-123, M-124: order BOMs for the RF board and the shack interface (first and second source, DigiKey sweep); order-readiness pass on both boards (shack p8e zip, order sheet); verify_logic.py and verify_system.py records updated. JLC DFM upload and RF routing sign-off open.
+
+## 2026-11-01
+- D-193 to D-201: bias-T drain copper (M-111); shack board 159.6 mm wide (D-194, M-112); MAX823SEUK+T first source for the supervisors (D-195, M-118); SO-239 Amphenol 83-1R first source (D-196, M-119); RF creepage 2.0 mm accepted for the prototype (D-197); RT1 isolation accepted without a coupon (D-198); Mean Well HDR-30-12 and HDR-15-5 for the unit (D-199); part merges P-6 to P-12 declined (D-200); case items: pan-head plate screws, spacers without NPTH, ribbon slot (D-201).
+- M-113 to M-121: controller production zip, display strap check, MPN and order-code updates, RF J14 header, clamp zener and shack fuse checks.
+
+## 2026-10-31
+- Pre-order review (docs/reviews/2026-10-31-pre-order-review.md). D-189 (RF copper under the case seats and relay NC pads, M-107), D-190 (part reuse P-1 to P-5, M-108; shack U4/U9 to VSSOP-8), D-191 (controller FAULT to GPIO6, M-109), D-192 (SDA jumpers bridged by copper, M-110).
+
 ## 2026-10-29
+- D-188: firmware rule F15, alarm and software stop on TX sense without permit.
 - M-106: full SolidCraft render of the shack interface (housing, board p8b, plates a8, controls, 2inch display and frame) in hardware/shack-interface/case/render-full/.
 - README: new section 'Inside the shack interface' with an open-case view (docs/images/shack-interface-open.png, SolidCraft snapshot with the cover hidden).
 
