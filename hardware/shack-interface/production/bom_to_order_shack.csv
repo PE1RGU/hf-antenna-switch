@@ -1,0 +1,42 @@
+Group,Item,Qty per unit,Order qty (1 unit + spares),In hand,Maker / MPN,Second source / note,Where,DigiKey PN,In DigiKey cart 2026-11-10,Ref / decision
+"A board, by hand",U1 5 V regulator TO-220,1,2,,ST L7805CV,TI UA7805CKCT / onsemi MC7805CTG; trim leads to 3 mm or less,DigiKey,497-1443-5-ND,yes,"D-82, M-92"
+"A board, by hand",U203 U303 U403 photorelay form B (TX INH),3,4,,Panasonic AQY412S,Toshiba TLP4176G (no stock); no JLC stock,DigiKey,255-2697-ND,yes,"D-106, M-136"
+"A board, by hand",C1 47 uF 35 V radial D6.3 P2.5,1,2,,Wurth 860080573003,Panasonic EEU-FR1V680 (68 uF),DigiKey,732-9095-1-ND,yes,D-200
+"A board, by hand","J2, J7 JST XH 2-pin header vertical",2,3,,JST B2B-XH-A,single maker,DigiKey,455-B2B-XH-A-ND,yes,M-117
+"A board, by hand",J6 JST XH 4-pin header vertical,1,2,,JST B4B-XH-A,single maker,DigiKey,455-B4B-XH-A-ND,yes,M-117
+"A board, by hand","J11 J12 J13 mini-DIN 8 socket, right angle, shielded",3,3,Kycon KMDGX-8S-BS (count to check),Same Sky MD-80SM,Kycon KMDGX-8S-BS fits the land (M-133),DigiKey,CP-2280-ND,yes,"D-85, D-100"
+"A board, by hand",A1 MCU board,1,0,2,Espressif ESP32-C3-DevKit-RUST-1,not ordered: 2 in hand (Prins),-,1965-ESP32-C3-DEVKIT-RUST-1-ND,no,D-95
+"A board, by hand",A1 socket 1 x 16 gold,1,1,,Sullins PPPC161LFBN-RC,no JLC stock,DigiKey,S7049-ND,yes,D-95
+"A board, by hand",A1 socket 1 x 12 gold,1,1,,Sullins PPPC121LFBN-RC,no JLC stock,DigiKey,S7045-ND,yes,D-95
+"A board, by hand",Jumper shunt 2.54 mm (JP201 to JP406),9,10,,Wurth 60900213421,Samtec SNT-100-BK-G,DigiKey,732-2678-ND,yes,D-90
+B front panel,"KILL emergency stop, 32 mm head, 2 NC, gold",1,1,,EAO 84-5340.0020,DigiKey: SWITCH ESTOP TWIST RESET (complete unit),DigiKey,1948-84-5340.0020-ND,yes,D-181
+B front panel,"RESET push button SPDT on-mom, 0.4 VA 20 V, 6.35 mm cut-out, solder lugs",1,1,,E-Switch 700SP7B10M1REH (replaces C&K 8125SHZBE),"C&K 8125SHZBE backorder to 2027-02; same class (0.4 VA, gold rating). To check: body and lug depth against M-100, gold contacts on the datasheet",DigiKey,EG2593-ND,yes,"D-182, D-207"
+B front panel,"LED SAFE, 3 mm panel snap-in, green, 2 mA, 6 in leads",1,2,,Dialight 5581301023F,"5581301007F (14 in leads) backorder to 2027-12; same LED, shorter leads (152 mm)",DigiKey,350-2978-ND,yes,"D-182, A-28"
+B front panel,"LED LATCHED, 3 mm panel snap-in, red, 2 mA, 14 in leads",1,2,,Dialight 5581101007F,try on the 1.6 mm plate first (A-28),DigiKey,350-2774-ND,yes,"D-182, A-28"
+B front panel,Display 2inch LCD module with PH2.0 8-pin cable,1,0,1,Waveshare 2inch LCD Module,-,-,-,no,D-187
+B front panel,"Display frame, printed",1,0,1,own: display-frame/display-frame.stl,-,own printer,-,no,D-184
+B front panel,"SMD steel spacer M2.5, OD 5.1, L 5.5 mm (SP1 to SP4)",4,6,,Wurth WA-SMSI 9774055151R,not at DigiKey; 2 extra for the A-29 test plate,Wurth eShop / Mouser,-,no,"D-187, A-29"
+B front panel,Heat-set insert M2 x 3 (frame bosses),4,6,,"generic brass, for M2, length 3 mm",no suitable DigiKey part found,Bol / generic,-,no,D-187
+B front panel,"Screw M2 x 5 pan head Phillips, zinc steel (display to frame)",4,100 (pack),,BFirst MPMS 002 0005 PH,sold per 100,DigiKey,H738-ND,yes,D-187
+B front panel,Screw M2.5 x 6 pan head slotted (frame to spacers),4,6,,Keystone 29301,length to confirm (frame 2.5 mm + spacer 5.5 mm),DigiKey,36-29301-ND,yes,D-184
+C housing,"Enclosure, extruded aluminium, 160 mm board, natural",1,1,,Hammond 1455T1601,end panels not used; keep bezels and gaskets,DigiKey,HM903-ND,yes,"D-171, D-178"
+C housing,"End plates, PCB (front and rear)",2,in JLC order,,"JLC Y74 front, Y75 rear",order W2026111102588281,JLC,-,no,"D-179, M-138"
+C housing,"End plate screw, pan head self-tapping ST3.5 x 9.5 (x 8 if found)",8,10,,"DIN 7981 C, A2 or zinc-plated",not at DigiKey; Hammond screws are countersunk (A-27),Bol / generic,-,no,"D-201, A-27"
+C housing,"Rubber feet, self-adhesive",4,4,,"generic, about 12 x 4 mm",optional; DigiKey only in large packs,Bol / generic,-,no,-
+D 7805 and earth,"TO-220 insulating pad, Sil-Pad 900S 0.23 mm",1,2,,Bergquist SP900S-0.009-00-54,fills the 0.34 mm to the wall fins (A-25),DigiKey,BER175-ND,yes,D-82
+D 7805 and earth,Shoulder washer nylon #4 (in the 7805 tab hole),1,3,,Keystone 3049,check that the M3 shank passes,DigiKey,36-3049-ND,yes,D-82
+D 7805 and earth,"Screw M3 x 10 pan head, stainless, self-sealing (screw from outside the wall)",1,2,,APM Hexseal RM3X10MM 2701,O-ring under the head; length to check against the wall,DigiKey,335-1148-ND,yes,D-82
+D 7805 and earth,"Nut M3 nyloc, zinc steel (7805 and H1)",2,100 (pack),,REV Robotics REV-41-1361-PK100,pack of 100,DigiKey,6078-REV-41-1361-PK100-ND,yes,"D-82, D-179"
+D 7805 and earth,"Washer flat M3, zinc steel",3,100 (pack),,BFirst MFWZ 003,sold per 100,DigiKey,H767-ND,yes,D-82
+D 7805 and earth,"H1 earth wire ring lug M3, insulated, 18-22 AWG",2,3,,Panduit PMV1-3RB-CY,route and screw point to confirm,DigiKey,298-20179-ND,yes,D-179
+D 7805 and earth,"Screw M3 x 6 pan head slotted, zinc steel (H1)",1,2,,Keystone 29311,-,DigiKey,36-29311-ND,yes,D-179
+E internal wiring,"JST XH housing 2-pin (J2, J7)",2,10,,JST XHP-2,10 for the price break,DigiKey,455-2266-ND,yes,M-117
+E internal wiring,JST XH housing 4-pin (J6),1,2,,JST XHP-4,-,DigiKey,455-2267-ND,yes,M-117
+E internal wiring,JST XH crimp contact 22 to 28 AWG,8,100 (pack),,JST SXH-001T-P0.6,pack of 100,DigiKey,455-1135-100-ND,yes,M-117
+E internal wiring,"Faston receptacle 2.8 x 0.5, fully insulated, 18-22 AWG (EAO terminals)",4,5,,Molex 0190030024 (InsulKrimp),"2 NC poles: J2 on one pole, J7 on the other",DigiKey,WM18760-ND,yes,D-181
+E internal wiring,"Stranded wire 0.35 mm2 (22 AWG), 2 colours",1,2 x 2 m,,generic,22 AWG fits both the XH crimp and the Faston range,Bol / generic,-,no,-
+E internal wiring,Heat-shrink tube 1.6 and 3.2 mm,1,1 m each,,generic,"LED leads, RESET lugs",Bol / generic,-,no,-
+F external cables,"Cat6 UTP patch cable, T568B",1,1,,generic,Cat6 #1 to the box (D-130),Bol,-,no,D-130
+F external cables,"Radio cable mini-DIN 8 male to male, straight 1:1, all 8 cores (FT-710 TUNER/LINEAR to J11; the port has the FT-710 pin-out)",1,1,,DAP Audio MiniDin 8 - MiniDin 8 150 cm (Bol 9200000021019309),check 1:1 and 8 cores with a meter; other radios need an adapter cable (D-71),Bol,-,no,"D-71, D-85"
+F external cables,13.8 V lead with XT60 female,1,1,,Amass XT60H-F with 1.5 mm2 lead,not at DigiKey,Bol / TME,-,no,D-171
+F external cables,USB-C cable to the Mac (through the Delock 64226),1,1,check,generic USB 2.0,Delock 64226 in hand?,Bol,-,no,"D-68, D-186"

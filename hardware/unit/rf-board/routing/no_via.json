@@ -1,0 +1,10 @@
+{
+ "_doc": "GND via places the generator must not use: KiCad DRC via_dangling after zone refill (D-217 plane cuts). Board frame, mm: [x, y, radius].",
+ "vias": [
+  [
+   41.5,
+   213.5,
+   1.5
+  ]
+ ]
+}

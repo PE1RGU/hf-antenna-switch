@@ -40,6 +40,9 @@ for (cx_, cy_) in ((5, 5), (X1 - 5, 5), (5, Y1 - 5), (X1 - 5, Y1 - 5)):         
     corner = ((Xg < 5) | (Xg > X1 - 5)) & ((Yg < 5) | (Yg > Y1 - 5))
     ok &= ~(corner & (np.hypot(Xg - cx_, Yg - cy_) > 5 - 0.8) & (np.abs(Xg - cx_) < 5.01) & (np.abs(Yg - cy_) < 5.01))
 ok &= ~GNDKO                                                                             # support keep-outs (D-189)
+import os                                                                                # places with a DRC via_dangling (D-217, no_via.json)
+for q in (json.load(open("no_via.json"))["vias"] if os.path.exists("no_via.json") else []):
+    ok &= np.hypot(Xg - q[0], Yg - q[1]) >= (q[2] if len(q) > 2 else 0.3)
 gv = [(v["x"], v["y"]) for v in geo["vias"] + rj["vias"] if v["net"] == "GND"]          # fixed GND vias and the return vias of the router
 new = []
 def free_at(j, i):

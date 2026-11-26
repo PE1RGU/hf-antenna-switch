@@ -12,7 +12,7 @@ import collections, json, math, os, sys
 import xml.etree.ElementTree as ET
 import pcbnew
 
-REV = "p8e"
+REV = "p8g"
 BOARD, NETLIST = "shack-interface.kicad_pcb", "../unit/verify/si18.xml"
 OX, OY = 20.0, 20.0                                  # page offset of the board frame origin
 BW, BH, RC = 160.0, 159.0, 1.0                       # board (D-171): 160 mm slot width; length 159 mm in the 160 +-0.5 mm extrusion (A-25, to confirm on the STEP model)
@@ -277,7 +277,7 @@ for ref, x in (("J6", 8.0), ("J2", 21.8), ("J7", 31.6)):    # footprint origin a
 fix("J15", 124.2, 120.5, 0)
 
 # ---- 6. function zones (D-172) ----
-Z = {"power": (SIDE, 20.0, 22.0, 70.0), "entry": (22.0, 19.0, 55.0, 71.0), "loops": (SIDE, 72.0, 55.0, 100.0),
+Z = {"power": (SIDE, 20.0, 22.0, 70.0), "entry": (22.0, 20.0, 55.0, 70.0), "loops": (SIDE, 72.0, 55.0, 100.0),
      "latch": (SIDE, 102.0, 54.5, 145.0), "exp": (88.0, 72.0, BW - SIDE, 88.0), "mcu": (56.0, 90.0, BW - SIDE, 120.5)}
 PORT = [(62.0, 15.0, 93.7, 70.0), (94.0, 15.0, 125.7, 70.0), (126.0, 15.0, BW - SIDE, 70.0)]   # D-186: 32 mm pitch
 # power: fuse, reverse diode, TVS and bulk at the XT60, then the 7805 and the LD1117 with their parts and links
@@ -579,8 +579,8 @@ def edge_ok(x, y, n_):
 # USB-C fan-out (p3, M-89): the USB4105 has one row of 0.5 mm pitch pads, and the A and B data pads alternate
 # (B7 D-, A6 D+, A7 D-, B6 D+). The pads are too close for the router (clearance plus margin), so the fan-out is fixed
 # copper here and the router ends on terminals (routing/terminals.json, read by export_geom.py), as U13 on the
-# controller board (D-154). D+ joins A6 and B6 with a U over A7 (0.15 mm tracks); A7 drops into the U on a 0.4/0.2 via
-# and runs on In2 to a second via at the end of the B7 stub (D- joined on In2). VBUS A9/B4 goes straight up to C64 pad 1;
+# controller board (D-154). D+ joins A6 and B6 with a U over A7 (0.15 mm tracks); D- joins A7 and B7 with a U on the
+# connector side of the pad row (p8g, D-206; was two 0.4/0.2 vias and an In2 link). VBUS A9/B4 goes straight up to C64 pad 1;
 # VBUS A4/B9, CC1 and CC2 get straight stubs up to their terminals. 45-degree corners (D-158).
 def chamfer(pts, leg=0.3):
     q = [pts[0]]
@@ -605,11 +605,13 @@ def jx(num): return JP_[num][0][0]
 JY, NDP, NDN = JP_["A6"][0][1], JP_["A6"][1], JP_["A7"][1]
 assert NDP == JP_["B6"][1] and NDN == JP_["B7"][1] and min(jx("B6"), jx("A6")) < jx("A7") < max(jx("B6"), jx("A6")), JP_
 # J14 turned 180 at the rear edge (D-186): the fan-out runs in +y (into the board); same pattern as p3 to p6
-YU, YV1, YV2 = JY + 1.85, JY + 1.15, JY + 3.2             # U top, via inside the U, via at the end of the B7 stub
+# p8g (D-206): no vias in the fan-out. D+ joins A6 and B6 with a U inward (over A7, which has no inward track); D- joins
+# A7 and B7 with a U toward the board edge, under the receptacle body on F.Cu (mask between track and shell), below the
+# A6 pad end; then a straight B7 stub inward to the router terminal. Both U on the GND notch (D-186)
+YU, YD, YV2 = JY + 1.85, JY - 1.0, JY + 3.2                # D+ U top, D- U bottom, end of the B7 stub
 ftrack2([(jx("A6"), JY), (jx("A6"), YU), (jx("B6"), YU), (jx("B6"), JY)], NDP, 0.15)
-ftrack2([(jx("A7"), JY), (jx("A7"), YV1)], NDN, 0.15); svia(jx("A7"), YV1, NDN)
-ftrack2([(jx("B7"), JY), (jx("B7"), YV2)], NDN, 0.15); svia(jx("B7"), YV2, NDN)
-ftrack2([(jx("A7"), YV1), (jx("A7"), YV2), (jx("B7"), YV2)], NDN, 0.15, pcbnew.In2_Cu)
+ftrack2([(jx("A7"), JY), (jx("A7"), YD), (jx("B7"), YD), (jx("B7"), JY)], NDN, 0.15)
+ftrack2([(jx("B7"), JY), (jx("B7"), YV2)], NDN, 0.15)
 # VBUS: both pad pairs (A4/B9, A9/B4) get a straight 0.3 mm stub inward; the router joins them to C64 and U61 pin 5
 VB = JP_["A9"][1]
 YVB, YT = JY + 2.05, JY + 2.6
@@ -624,7 +626,7 @@ for n_ in ("A1", "A12"):
 ftrack2([(jx("A5"), JY), (jx("A5"), YT)], JP_["A5"][1], 0.15)
 ftrack2([(jx("B5"), JY), (jx("B5"), YT)], JP_["B5"][1], 0.15)
 TERM_J14 = {"A6": [jx("A6") / 2 + jx("B6") / 2, YU, ["F"]], "B6": [jx("A6") / 2 + jx("B6") / 2, YU, ["F"]],
-            "A7": [jx("B7"), YV2, ["F", "B"]], "B7": [jx("B7"), YV2, ["F", "B"]],
+            "A7": [jx("B7"), YV2, ["F"]], "B7": [jx("B7"), YV2, ["F"]],
             "A9": [jx("A9"), YVB, ["F"]], "B4": [jx("A9"), YVB, ["F"]],
             "A4": [jx("A4"), YVB, ["F"]], "B9": [jx("A4"), YVB, ["F"]],
             "A5": [jx("A5"), YT, ["F"]], "B5": [jx("B5"), YT, ["F"]]}
@@ -723,6 +725,8 @@ if os.path.exists(ROUTES) and "--no-routes" not in sys.argv:
     LYR = {"F": pcbnew.F_Cu, "In2": pcbnew.In2_Cu, "B": pcbnew.B_Cu, "In1": pcbnew.In1_Cu}
     for t in rj["tracks"]:
         if abs(t["x2"] - t["x1"]) + abs(t["y2"] - t["y1"]) < 1e-6: continue   # zero-length pieces at terminals (p7)
+        if t["net"] == NDN and t["layer"] == "In2" and max(abs(t["x1"] - jx("B7")), abs(t["y1"] - YV2), abs(t["x2"] - jx("B7")), abs(t["y2"] - YV2)) < 0.15:
+            continue                                      # p8g: In2 stub at the old D- terminal via (routes from p8e)
         tr = pcbnew.PCB_TRACK(b); tr.SetStart(P(t["x1"], t["y1"])); tr.SetEnd(P(t["x2"], t["y2"])); tr.SetWidth(mm(t["w"]))
         tr.SetLayer(LYR[t["layer"]]); tr.SetNet(net(t["net"])); b.Add(tr); KEEP.append(tr)
     for v in rj["vias"]:

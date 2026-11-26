@@ -268,7 +268,15 @@ _kos = CFG.get("keepout", []) + (json.load(open(CFG["keepout_file"]))["keepout"]
 if _kos:
     _X, _Y = np.meshgrid(xs, ys); _pts = np.c_[_X.ravel(), _Y.ravel()]
     for kr in _kos:
-        m_ = Path(kr["poly"]).contains_points(_pts).reshape(_Y.shape)
+        if "polys" in kr:                        # D-217: many small areas in one keep-out; test only the points in each box
+            m_ = np.zeros(_Y.shape, dtype=bool)
+            for pg in kr["polys"]:
+                pa = np.array(pg); i0 = max(0, int(np.searchsorted(xs, pa[:, 0].min())) - 1); i1 = int(np.searchsorted(xs, pa[:, 0].max())) + 1
+                j0 = max(0, int(np.searchsorted(ys, pa[:, 1].min())) - 1); j1 = int(np.searchsorted(ys, pa[:, 1].max())) + 1
+                sx_, sy_ = np.meshgrid(xs[i0:i1], ys[j0:j1])
+                m_[j0:j1, i0:i1] |= Path(pg).contains_points(np.c_[sx_.ravel(), sy_.ravel()]).reshape(sx_.shape)
+        else:
+            m_ = Path(kr["poly"]).contains_points(_pts).reshape(_Y.shape)
         for h_ in kr.get("holes", []): m_ &= ~Path(h_).contains_points(_pts).reshape(_Y.shape)
         KO.append((m_, {NID[n] for n in kr["except"] if n in NID}, {LAY.index(x) for x in kr["layers"]} if "layers" in kr else None,
                    ndimage.distance_transform_edt(~m_) < (VIA_D / 2 + MARGIN) / G))     # last: via centres whose copper would enter
@@ -566,12 +574,16 @@ def route_edge(S, a, b):
     if d2 is None: pa, pb = A[0], Bs[0]
     else: ia, ib = np.unravel_index(np.argmin(d2), d2.shape); pa, pb = A[ia], Bs[ib]
     w = S.w; s_end = -1
-    for wstep in CFG["window_steps"]:
+    # D-218: after the windows around the nearest cells, windows around the two pads of the connection (the nearest cells
+    # of two long trees can lie far from the open path, for example +12V_SW K102.A1 to K103.A1 over the top of the matrix)
+    pca, pcb = (0,) + tuple(S.centre[a]), (0,) + tuple(S.centre[b])
+    WIN = [(pa, pb, ws) for ws in CFG["window_steps"]] + [(pca, pcb, ws) for ws in CFG.get("pad_window_steps", [])]
+    for (pa, pb, wstep) in WIN:
         PW = int(wstep / G)
         j0 = max(0, min(pa[1], pb[1]) - PW); j1 = min(NY, max(pa[1], pb[1]) + PW + 1)
         i0 = max(0, min(pa[2], pb[2]) - PW); i1 = min(NX, max(pa[2], pb[2]) + PW + 1)
         H, Wd = j1 - j0, i1 - i0
-        if len(RL) * H * Wd * 10 > CFG["max_states"]: break
+        if len(RL) * H * Wd * 10 > CFG["max_states"]: continue
         smd, allow, brk, ownpad, corr = S.local(j0, j1, i0, i1)
         while True:
             free, via_ok = masks(S.nid, w, S.clr, j0, j1, i0, i1, allow, S.centre, ownpad, corr, PAIR.get(S.net, ()))

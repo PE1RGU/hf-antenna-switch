@@ -12,11 +12,13 @@
  "window": 10.0,
  "window_steps": [
   10.0,
-  25.0
+  25.0,
+  60.0,
+  100.0
  ],
  "max_states": 150000000,
  "breakout": 1.5,
- "passes": 10,
+ "passes": 15,
  "layers": [
   {
    "name": "F",
@@ -35,8 +37,8 @@
   },
   {
    "name": "B",
-   "dir": null,
-   "route": false
+   "dir": "H",
+   "route": true
   }
  ],
  "fixed_nets": [
@@ -117,6 +119,17 @@
     ]
    ],
    "box_margin": 1.0,
+   "pad_breakout": 1.5
+  },
+  "B": {
+   "rects": [
+    [
+     0,
+     0,
+     268.0,
+     36.0
+    ]
+   ],
    "pad_breakout": 1.5
   }
  },
@@ -258,5 +271,12 @@
    68.0,
    209.0
   ]
- ]
+ ],
+ "_doc_window_steps": "D-217: steps 60 and 100 mm, so that a connection can go round an RF line to the next corridor or over the top (the window is centred on the nearest cell pair of the two components, which can lie far from the open path)",
+ "_doc_B": "D-218 (Prins 2026-11-20): logic may use B.Cu inside the top logic region only (rect 0,0 to 268,36), as F.Cu; reference L5 (In4). Elsewhere B.Cu carries the RF columns and the GND pour, no logic",
+ "pad_window_steps": [
+  10.0,
+  25.0
+ ],
+ "_doc_pad_window_steps": "D-218: windows around the two pads of a connection, tried after window_steps"
 }

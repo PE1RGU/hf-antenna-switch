@@ -5,7 +5,25 @@
 import math, fnmatch, os, json
 for t in list(b.GetTracks()): b.Remove(t); REMOVED.append(t)   # made new on every run; REMOVED keeps the proxies alive
 for z in list(b.Zones()): b.Remove(z); REMOVED.append(z)
-W, GAPO, FEN, FPITCH = 0.975, 2.0, 3.05, 2.54          # RF width, outer gap, fence offset from the line centre, fence pitch
+W, GAPO, FEN, FPITCH = 1.95, 2.0, 3.55, 2.54           # RF width, outer gap, fence offset from the line centre, fence pitch (D-209/D-210:
+                                                       # 400 W, 50 ohm to the far plane; fence: cut edge 2.975 + 0.2 + via 0.3 + 0.05)
+WC, HWC = 0.975, 1.95 / 2 + 2.0                        # D-217: width in a crossing corridor (50 ohm to the near plane); half-width of the
+                                                       # inner-plane cut along a line (In1 to In3 under F.Cu, In2 to In4 under B.Cu)
+_CJ = json.load(open("routing/corridors.json")) if os.path.exists("routing/corridors.json") else {"corridors": []}
+CORR = _CJ["corridors"]
+# D-217: after routing, the unused corridors are removed (corridors.json "pruned": true). The generator then places fence and
+# return vias where those corridors were, so it keeps them clear of the routed logic (routes.json, all layers: through vias)
+ROUTED = []; USE_ROUTED = False
+if _CJ.get("pruned") and os.path.exists(_CJ.get("routes", "routing/routes.json")):
+    _rj = json.load(open(_CJ.get("routes", "routing/routes.json")))
+    ROUTED = [(t["x1"], t["y1"], t["x2"], t["y2"], t["w"] / 2) for t in _rj["tracks"]] + \
+             [(v["x"], v["y"], v["x"], v["y"], v["d"] / 2) for v in _rj["vias"]]
+RBUCK = {}                                             # ROUTED by 5 mm cell (each item in every cell it comes within 1.5 mm of)
+for it_ in ROUTED:
+    for gx_ in range(int((min(it_[0], it_[2]) - 1.5) // 5), int((max(it_[0], it_[2]) + 1.5) // 5) + 1):
+        for gy_ in range(int((min(it_[1], it_[3]) - 1.5) // 5), int((max(it_[1], it_[3]) + 1.5) // 5) + 1):
+            RBUCK.setdefault((gx_, gy_), []).append(it_)
+RFPC = []                                              # D-217: RF pieces (lay, xa, ya, xb, yb, net, in_corridor) for the plane cuts
 VRF_D, VRF_DR, VG_D, VG_DR = 1.2, 0.8, 0.6, 0.3        # RF transition via, GND via
 LAY = {"F": pcbnew.F_Cu, "B": pcbnew.B_Cu}
 T = pcbnew.ToMM
@@ -34,12 +52,28 @@ def chamfer(pts):
         leg = min(CH, 0.45 * l1, 0.45 * l2)
         q += [(round(xb - u1[0] * leg, 4), round(yb - u1[1] * leg, 4)), (round(xb + u2[0] * leg, 4), round(yb + u2[1] * leg, 4))]
     return q + [pts[-1]]
+def corr_split(lay, xa, ya, xb, yb, netname):
+    """D-217: split a straight piece at the corridors that lie on it: [(xa, ya, xb, yb, in_corridor)]."""
+    L = math.hypot(xb - xa, yb - ya); ux, uy = (xb - xa) / L, (yb - ya) / L; cuts = []
+    for c in CORR:
+        if c["layer"] != lay or c["net"] != netname: continue
+        ts = [((px - xa) * ux + (py - ya) * uy, abs((px - xa) * uy - (py - ya) * ux)) for px, py in (c["p0"], c["p1"])]
+        if all(d < 0.01 and -0.01 < t < L + 0.01 for t, d in ts): cuts.append(tuple(sorted(t for t, _ in ts)))
+    out, t0 = [], 0.0
+    for a, b_ in sorted(cuts):
+        if a > t0 + 1e-6: out.append((t0, a, False))
+        out.append((a, b_, True)); t0 = b_
+    if t0 < L - 1e-6: out.append((t0, L, False))
+    return [(round(xa + ux * a, 4), round(ya + uy * a, 4), round(xa + ux * b_, 4), round(ya + uy * b_, 4), k) for a, b_, k in out]
 def tr(lay, pts, netname, w=W):
     pts = chamfer(pts)
-    for (xa, ya), (xb, yb) in zip(pts, pts[1:]):
-        if abs(xa - xb) < 1e-6 and abs(ya - yb) < 1e-6: continue
-        t = pcbnew.PCB_TRACK(b); t.SetStart(P(xa, ya)); t.SetEnd(P(xb, yb)); t.SetWidth(mm(w)); t.SetLayer(LAY[lay])
-        t.SetNet(net(netname)); t.SetLocked(True); b.Add(t); KEEP.append(t); RFSEG.append((lay, xa, ya, xb, yb, w, netname))
+    for (xa0, ya0), (xb0, yb0) in zip(pts, pts[1:]):
+        if abs(xa0 - xb0) < 1e-6 and abs(ya0 - yb0) < 1e-6: continue
+        for xa, ya, xb, yb, inc in corr_split(lay, xa0, ya0, xb0, yb0, netname):
+            wp = WC if inc else w
+            t = pcbnew.PCB_TRACK(b); t.SetStart(P(xa, ya)); t.SetEnd(P(xb, yb)); t.SetWidth(mm(wp)); t.SetLayer(LAY[lay])
+            t.SetNet(net(netname)); t.SetLocked(True); b.Add(t); KEEP.append(t); RFSEG.append((lay, xa, ya, xb, yb, wp, netname))
+            RFPC.append((lay, xa, ya, xb, yb, netname, inc))
 def rfvia(x, y, netname):
     v = pcbnew.PCB_VIA(b); v.SetPosition(P(x, y)); v.SetWidth(mm(VRF_D)); v.SetDrill(mm(VRF_DR)); v.SetNet(net(netname)); v.SetLocked(True)
     b.Add(v); KEEP.append(v); RFVIA.append((x, y, VRF_D, netname))
@@ -122,6 +156,63 @@ for k in range(4):
     assert abs(bl[1] - nc[1][1]) < 0.001, (bl, nc)
     tr("B", [nc[0], nc[1], bl], park)                                       # ends at the bleed pad centre
     CHANGES += no + com + [(lx, l1y), (lx, l2y), (sx, sy)]
+
+# ---- D-217 inner-plane cuts: rule areas (name RF_CUT, no zone fill) HWC each side of every RF piece outside the corridors.
+# F.Cu rows: In1 to In3 cut (reference In4); B.Cu columns: In2 to In4 cut (reference In1). Where a row and a column cross, only
+# the near plane of each is cut, so In2 and In3 stay as a shield between them. Inside a corridor no plane is cut (reference
+# In1 or In4 at 0.512 mm, line WC). A piece end that joins a non-collinear RF piece gets HWC more length (corners, T points).
+# routing/export_geom.py turns these areas into one router keep-out for In2 and In3.
+CUT_L = {"F": [pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.In3_Cu], "B": [pcbnew.In2_Cu, pcbnew.In3_Cu, pcbnew.In4_Cu]}
+NEAR_L = {"F": [pcbnew.In1_Cu], "B": [pcbnew.In4_Cu]}
+def _pd(px, py, x1, y1, x2, y2):
+    dx, dy = x2 - x1, y2 - y1; l2 = dx * dx + dy * dy
+    t = 0.0 if l2 == 0 else max(0.0, min(1.0, ((px - x1) * dx + (py - y1) * dy) / l2))
+    return math.hypot(px - x1 - t * dx, py - y1 - t * dy)
+def _colin(a, c):
+    return abs((a[3] - a[1]) * (c[4] - c[2]) - (a[4] - a[2]) * (c[3] - c[1])) < 1e-6 * max(1.0, math.hypot(a[3] - a[1], a[4] - a[2]) * math.hypot(c[3] - c[1], c[4] - c[2]))
+RFCUT = []                                             # (layer names, polygon) for the report and the router keep-out
+RFCUT_L = []                                           # layer ids of each cut (plane_cut_all)
+def cut_area(lids, poly):
+    ka = pcbnew.ZONE(b); ka.SetIsRuleArea(True); ls_ = pcbnew.LSET()
+    for lid in lids: ls_.AddLayer(lid)
+    ka.SetLayerSet(ls_); ka.SetZoneName("RF_CUT"); ka.SetDoNotAllowZoneFills(True); ka.SetDoNotAllowTracks(False)
+    ka.SetDoNotAllowVias(False); ka.SetDoNotAllowPads(False); ka.SetDoNotAllowFootprints(False)
+    o = ka.Outline(); o.NewOutline()
+    for x, y in poly: o.Append(mm(OX + x), mm(OY + y))
+    b.Add(ka); KEEP.append(ka); RFCUT.append(([pcbnew.LayerName(l) for l in lids], poly)); RFCUT_L.append(set(lids))
+for pc in RFPC:
+    lay, xa, ya, xb, yb, nn, inc = pc
+    L = math.hypot(xb - xa, yb - ya)
+    if inc or L < 1e-6: continue
+    ux, uy = (xb - xa) / L, (yb - ya) / L
+    def joined(px, py): return any(q is not pc and not _colin(pc, q) and _pd(px, py, *q[1:5]) < 0.01 for q in RFPC)
+    a0 = -HWC if joined(xa, ya) else 0.0; b0 = L + (HWC if joined(xb, yb) else 0.0)
+    xs_ = []
+    for q in RFPC:                                     # crossings with a piece of another net on the other outer layer
+        if q[0] == lay or q[5] == nn: continue
+        x3, y3, x4, y4 = q[1:5]; den = (xb - xa) * (y4 - y3) - (yb - ya) * (x4 - x3)
+        if abs(den) < 1e-9: continue
+        t = ((x3 - xa) * (y4 - y3) - (y3 - ya) * (x4 - x3)) / den; u = ((x3 - xa) * (yb - ya) - (y3 - ya) * (xb - xa)) / den
+        if -0.01 <= u <= 1.01 and -HWC <= t * L <= L + HWC: xs_.append((t * L - HWC, t * L + HWC))
+    parts, t0 = [], a0
+    for c0, c1 in sorted(xs_):
+        c0, c1 = max(c0, a0), min(c1, b0)
+        if c1 <= t0: continue
+        if c0 > t0: parts.append((t0, c0, CUT_L[lay]))
+        parts.append((max(c0, t0), c1, NEAR_L[lay])); t0 = c1
+    if t0 < b0: parts.append((t0, b0, CUT_L[lay]))
+    for a, c, lids in parts:
+        if c - a < 1e-3: continue
+        cut_area(lids, [(round(xa + ux * a - uy * HWC * sd, 4), round(ya + uy * a + ux * HWC * sd, 4)) for sd in (1, -1)] +
+                       [(round(xa + ux * c - uy * HWC * sd, 4), round(ya + uy * c + ux * HWC * sd, 4)) for sd in (-1, 1)])
+print("RF plane cuts", len(RFCUT), "| corridors", len(CORR), "| RF pieces in corridors", sum(1 for q in RFPC if q[6]))
+CBOX = []                                              # D-217: no via in a corridor and its approach (fence row and 1 mm beyond)
+for c in CORR:
+    (x0_, y0_), (x1_, y1_) = c["p0"], c["p1"]; L = math.hypot(x1_ - x0_, y1_ - y0_); ux, uy = (x1_ - x0_) / L, (y1_ - y0_) / L
+    CBOX.append((x0_ - ux * 0.3, y0_ - uy * 0.3, x1_ + ux * 0.3, y1_ + uy * 0.3, FEN + 1.0))
+def in_cbox(x, y, r):
+    return any(_pd(x, y, xa, ya, xb, yb) < hw + r and -r - 1e-6 <= ((x - xa) * (xb - xa) + (y - ya) * (yb - ya)) / math.hypot(xb - xa, yb - ya)
+               <= math.hypot(xb - xa, yb - ya) + r for xa, ya, xb, yb, hw in CBOX)
 
 # ---- geometry for the checks: exact pad copper per outer layer, bucketed on a 5 mm grid ----
 def seg_pt(px, py, x1, y1, x2, y2):
@@ -212,9 +303,46 @@ for sx, sy in SUP:
     for k_ in range(48):
         o.Append(mm(OX + sx + R_SUP * math.cos(2 * math.pi * k_ / 48)), mm(OY + sy + R_SUP * math.sin(2 * math.pi * k_ / 48)))
     b.Add(ka); KEEP.append(ka)
+# ---- case fill keep-outs CASE_KO (D-204): where the milled fill of the tray touches the board underside: no via, no pour.
+# Polygons in case_ko.json (board frame, mm), taken 2026-11-20 from the p3-case board (they were added there by a patch, M-125
+# and D-204, and were not in this generator). D-218: logic copper on B.Cu keeps 0.5 mm from them (routing/export_geom.py).
+CASE_KO = json.load(open("case_ko.json")) if os.path.exists("case_ko.json") else []
+for pts_ in CASE_KO:
+    ka = pcbnew.ZONE(b); ka.SetIsRuleArea(True)
+    ls_ = pcbnew.LSET(); ls_.AddLayer(pcbnew.F_Cu); ls_.AddLayer(pcbnew.B_Cu); ka.SetLayerSet(ls_)
+    ka.SetZoneName("CASE_KO"); ka.SetDoNotAllowTracks(False); ka.SetDoNotAllowVias(True); ka.SetDoNotAllowZoneFills(True)
+    ka.SetDoNotAllowPads(False); ka.SetDoNotAllowFootprints(False)
+    o = ka.Outline(); o.NewOutline()
+    for x_, y_ in pts_: o.Append(mm(OX + x_), mm(OY + y_))
+    b.Add(ka); KEEP.append(ka)
+_CUTB = [(RFCUT_L[i], poly, min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly))
+         for i, (lids, poly) in enumerate(RFCUT)]
+# places where KiCad reported a dangling GND via (no fill on two layers after the refill), board frame: routing/no_via.json
+NO_VIA = json.load(open("routing/no_via.json"))["vias"] if os.path.exists("routing/no_via.json") else []
+def plane_cut_all(x, y):
+    cut = set()
+    for lids, poly, x0_, y0_, x1_, y1_ in _CUTB:
+        if x0_ - 0.5 <= x <= x1_ + 0.5 and y0_ - 0.5 <= y <= y1_ + 0.5 and (inside(x, y, poly) or
+                min(_pd(x, y, xa, ya, xb, yb) for (xa, ya), (xb, yb) in zip(poly, poly[1:] + poly[:1])) < VG_D / 2 + 0.2):
+            cut.update(lids)
+    n = len({pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.In3_Cu, pcbnew.In4_Cu} - cut)
+    if n >= 2: return False
+    for ln in ("F", "B"):                                  # the outer GND pour counts where it keeps its 2.0 mm gap to RF copper
+        if all(_pd(x, y, xa, ya, xb, yb) >= w_ / 2 + GAPO + VG_D / 2 + 0.25 for (l_, xa, ya, xb, yb, w_, nn_) in RFSEG if l_ == ln): n += 1
+    return n < 2                                           # a GND via must join two copper layers at least (DRC via_dangling)
+def in_case_ko(x, y, r):
+    for pts_ in CASE_KO:
+        if inside(x, y, [tuple(q) for q in pts_]): return True
+        if min(_pd(x, y, xa, ya, xb, yb) for (xa, ya), (xb, yb) in zip(pts_, pts_[1:] + pts_[:1])) < r + 0.5: return True
+    return False
 def via_ok(x, y):
     if not (1.0 <= x <= BW - 1.0 and 1.0 <= y <= BH - 1.0): return False
     if any(math.hypot(x - sx, y - sy) < R_SUP + VG_D / 2 for sx, sy in SUP): return False
+    if in_cbox(x, y, VG_D / 2): return False                                    # D-217 corridors
+    if in_case_ko(x, y, VG_D / 2): return False                                 # D-204 case fill
+    if any(math.hypot(x - q[0], y - q[1]) < (q[2] if len(q) > 2 else 0.3) for q in NO_VIA): return False   # DRC via_dangling list
+    if plane_cut_all(x, y): return False                                        # D-217: fewer than two inner planes left (via dangling)
+    if USE_ROUTED and any(_pd(x, y, xa, ya, xb, yb) < hw + 0.2 + 0.05 + VG_D / 2 for xa, ya, xb, yb, hw in RBUCK.get((int(x // 5), int(y // 5)), ())): return False   # routed logic
     for cx_, cy_ in ((5, 5), (BW - 5, 5), (5, BH - 5), (BW - 5, BH - 5)):          # corner radius 5 mm (D-113)
         if (x < 5 or x > BW - 5) and (y < 5 or y > BH - 5) and math.hypot(x - cx_, y - cy_) > 4.0: return False
     r = VG_D / 2
@@ -233,6 +361,7 @@ def via_ok(x, y):
 def gvia(x, y):
     v = pcbnew.PCB_VIA(b); v.SetPosition(P(x, y)); v.SetWidth(mm(VG_D)); v.SetDrill(mm(VG_DR)); v.SetNet(net("GND")); v.SetLocked(True)
     b.Add(v); KEEP.append(v); GVIA.append((x, y))
+USE_ROUTED = True                                     # D-217 pruned: return and fence vias keep off the routed logic
 n_ret = 0
 for (cx_, cy_) in sorted(set((round(x, 3), round(y, 3)) for x, y in CHANGES)):
     got = 0
@@ -242,6 +371,7 @@ for (cx_, cy_) in sorted(set((round(x, 3), round(y, 3)) for x, y in CHANGES)):
             x, y = round(cx_ + rr * math.cos(math.radians(ang)), 3), round(cy_ + rr * math.sin(math.radians(ang)), 3)
             if any(math.hypot(x - gx, y - gy) < 2.0 for gx, gy in GVIA): continue      # spread them around the pin
             if via_ok(x, y): gvia(x, y); got += 1; n_ret += 1
+USE_ROUTED = False                                    # own-net vias (decoupling, terminals, fan-out, plane vias) keep their places
 # bottom-side decoupling C101, C201, C301 (D-127): the 2.0 mm pour cannot reach their GND pad between the coil pins
 # (starved thermal); each GND pad gets its own via to the planes with a short B.Cu track
 for r in range(3):
@@ -307,6 +437,7 @@ os.makedirs("routing", exist_ok=True)
 json.dump(TERM, open("routing/terminals.json", "w"), indent=1)
 # plane vias (skill: own via per SMD plane pad): every SMD GND pad on F.Cu gets its own via next to the pad, outward from the
 # part centre first, with a short F.Cu track. Placed before the fence, so that the fence fills in around them.
+USE_ROUTED = True                                     # plane vias keep off the routed logic too (D-217 pruned)
 n_pv = 0; NOPV = []
 for ref, f in fps.items():
     fx, fy = T(f.GetPosition().x) - OX, T(f.GetPosition().y) - OY
@@ -328,9 +459,11 @@ for ref, f in fps.items():
         gvia(*spot); n_pv += 1
         t = pcbnew.PCB_TRACK(b); t.SetStart(P(px, py)); t.SetEnd(P(*spot)); t.SetWidth(mm(0.3)); t.SetLayer(pcbnew.F_Cu)
         t.SetNet(net("GND")); t.SetLocked(True); b.Add(t); KEEP.append(t)
-        if fnmatch.fnmatch(ref, "C[4-7]02"):          # bias decoupling in the RF area: the 2.0 mm pour gap leaves one spoke;
+        if fnmatch.fnmatch(ref, "C[4-7]02") or ref == "C12":   # C12: next to the R2 TXBUS narrow piece (D-217), one spoke only          # bias decoupling in the RF area: the 2.0 mm pour gap leaves one spoke;
             pd.SetLocalZoneConnection(pcbnew.ZONE_CONNECTION_NONE)     # the own via joins the pad (as C101, M-77)
 print("GND pad vias", n_pv, "no place:", NOPV)
+USE_ROUTED = False
+USE_ROUTED = True
 n_fen = 0
 for (ln, xa, ya, xb, yb, w, nn) in RFSEG:
     L = math.hypot(xb - xa, yb - ya)

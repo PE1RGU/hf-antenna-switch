@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/drc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-11-01T00:35:50",
+    "date": "2026-11-10T19:19:53",
     "ignored_checks": [
         {
             "description": "Footprint has no courtyard defined",
@@ -30,3064 +30,10 @@
         "exclusion"
     ],
     "kicad_version": "10.0.5",
-    "schematic_parity": [
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Plated M3 lug: short wire to the shack earth. GDT surge path')",
-            "items": [
-                {
-                    "description": "Footprint H1",
-                    "pos": {
-                        "x": 47.0,
-                        "y": 26.0
-                    },
-                    "uuid": "9ce0d4cc-9828-412a-8b33-edcba3032f45"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint J1",
-                    "pos": {
-                        "x": 58.5,
-                        "y": 25.88
-                    },
-                    "uuid": "4434b731-5046-429d-aaa7-0cdcdd76afe7"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Front-panel KILL switch (latching, normally closed = run), in series with the SAFE loop (D-62). Part to select')",
-            "items": [
-                {
-                    "description": "Footprint J2",
-                    "pos": {
-                        "x": 41.8,
-                        "y": 166.5
-                    },
-                    "uuid": "0cb9f361-51df-447b-b6ce-002efbec2b79"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint J3",
-                    "pos": {
-                        "x": 31.5,
-                        "y": 34.35
-                    },
-                    "uuid": "02a452e7-8586-4fcd-9cea-9ecc4e8a9812"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Front panel: 1 RESET button (to pin 4), 2 SAFE LED anode, 3 LATCHED LED anode, 4 GND')",
-            "items": [
-                {
-                    "description": "Footprint J6",
-                    "pos": {
-                        "x": 28.0,
-                        "y": 166.5
-                    },
-                    "uuid": "84258973-acb9-45f3-9ac9-8282720fcacc"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Second pole of the front-panel KILL switch, closed = run (KILL_S low)')",
-            "items": [
-                {
-                    "description": "Footprint J7",
-                    "pos": {
-                        "x": 51.6,
-                        "y": 166.5
-                    },
-                    "uuid": "4179b87f-52f3-4371-bbf5-402606279ae1"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint J11",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 18.0
-                    },
-                    "uuid": "9b7fd0b6-b4c2-43f2-866e-8488a0e5d8cb"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint J12",
-                    "pos": {
-                        "x": 128.5,
-                        "y": 18.0
-                    },
-                    "uuid": "383d6635-c599-4f5c-8a46-1105a7b572c4"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint J13",
-                    "pos": {
-                        "x": 160.5,
-                        "y": 18.0
-                    },
-                    "uuid": "a4b77808-a520-4345-9599-741465abde87"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint J14",
-                    "pos": {
-                        "x": 79.5,
-                        "y": 21.67
-                    },
-                    "uuid": "f2113a10-878b-48d6-aaab-fb27b23f1c18"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C22",
-                    "pos": {
-                        "x": 61.025,
-                        "y": 63.6
-                    },
-                    "uuid": "4f2bbf60-342d-4df3-8576-fe70b48d5a01"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'N wire to CHASSIS behind the choke, footprint only (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C23",
-                    "pos": {
-                        "x": 64.224999,
-                        "y": 63.6
-                    },
-                    "uuid": "fdc8d20a-d309-438e-af2f-dab3b189183f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C24",
-                    "pos": {
-                        "x": 69.275,
-                        "y": 63.6
-                    },
-                    "uuid": "6c80a029-1bf8-495f-9569-89a17b4137c3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'N wire to CHASSIS behind the choke, footprint only (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C25",
-                    "pos": {
-                        "x": 72.475,
-                        "y": 63.6
-                    },
-                    "uuid": "bcbe0e92-2f2d-469d-86e8-3286504247e3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C26",
-                    "pos": {
-                        "x": 52.775,
-                        "y": 63.6
-                    },
-                    "uuid": "07eef309-2894-4459-a6d4-3d10fa354f8f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'N wire to CHASSIS behind the choke, footprint only (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C27",
-                    "pos": {
-                        "x": 55.975,
-                        "y": 63.6
-                    },
-                    "uuid": "e7621ce3-ba14-41df-9435-27c904c1f2ce"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'P wire to CHASSIS behind the choke, footprint only: fit on the bench if the loops pick up HF (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C28",
-                    "pos": {
-                        "x": 44.525,
-                        "y": 63.6
-                    },
-                    "uuid": "39fce6a1-b1f1-4ddd-8110-bdbf6a415df6"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'N wire to CHASSIS behind the choke, footprint only (D-130)')",
-            "items": [
-                {
-                    "description": "Footprint C29",
-                    "pos": {
-                        "x": 47.725,
-                        "y": 63.6
-                    },
-                    "uuid": "aba44383-7b1c-4142-a780-a206d39617d1"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D11",
-                    "pos": {
-                        "x": 62.625,
-                        "y": 79.0
-                    },
-                    "uuid": "8352c929-8322-4b75-b6d7-d5bd60a703d8"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D21",
-                    "pos": {
-                        "x": 70.875,
-                        "y": 79.0
-                    },
-                    "uuid": "8d861d6e-3997-4ed2-b5e4-aab3b768ac8c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D31",
-                    "pos": {
-                        "x": 54.375,
-                        "y": 79.0
-                    },
-                    "uuid": "6c432b6d-b2a7-441c-8da0-66a467978c50"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D33",
-                    "pos": {
-                        "x": 43.5,
-                        "y": 118.5
-                    },
-                    "uuid": "bdb224a6-f30f-4d2c-ad26-0954343268d5"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D41",
-                    "pos": {
-                        "x": 46.125,
-                        "y": 79.0
-                    },
-                    "uuid": "e9195148-b295-4e8d-ac77-f1c4fe80841f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D43",
-                    "pos": {
-                        "x": 32.0,
-                        "y": 118.5
-                    },
-                    "uuid": "3355ca71-e6af-408a-89f2-cc94d5ab4ae0"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint GD1",
-                    "pos": {
-                        "x": 62.625,
-                        "y": 47.0
-                    },
-                    "uuid": "a846cce4-0120-4106-a0db-880197fbc25c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint GD2",
-                    "pos": {
-                        "x": 70.875,
-                        "y": 47.0
-                    },
-                    "uuid": "b931cd27-ec0d-413e-b1ee-bd2addf42b38"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint GD3",
-                    "pos": {
-                        "x": 54.375,
-                        "y": 47.0
-                    },
-                    "uuid": "434d3cd8-ab9a-46f5-9d1f-8f534dd07dce"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint GD4",
-                    "pos": {
-                        "x": 46.125,
-                        "y": 47.0
-                    },
-                    "uuid": "a032a6b4-4ec4-40f1-8466-93c61fd46d51"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint L1",
-                    "pos": {
-                        "x": 62.625,
-                        "y": 57.5
-                    },
-                    "uuid": "10a7cd19-ef44-473b-873c-b6a02638006f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint L2",
-                    "pos": {
-                        "x": 70.875,
-                        "y": 57.5
-                    },
-                    "uuid": "f3214523-59cc-4501-9b0a-f8e73dc8b10e"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint L3",
-                    "pos": {
-                        "x": 54.375,
-                        "y": 57.5
-                    },
-                    "uuid": "93e634d4-9e56-4522-a380-0a040470e2f3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint L4",
-                    "pos": {
-                        "x": 46.125,
-                        "y": 57.5
-                    },
-                    "uuid": "06b8758e-fbe1-421e-aece-8b081d0ece18"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q11",
-                    "pos": {
-                        "x": 58.5,
-                        "y": 97.0
-                    },
-                    "uuid": "fc699182-b092-464e-a918-40e909fc6c0b"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q12",
-                    "pos": {
-                        "x": 55.0,
-                        "y": 104.0
-                    },
-                    "uuid": "9054219b-11f1-4a02-80ef-aef922038e99"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q13",
-                    "pos": {
-                        "x": 55.0,
-                        "y": 109.0
-                    },
-                    "uuid": "518a6059-20c3-4e22-af4f-72f14d04b2d3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q21",
-                    "pos": {
-                        "x": 70.0,
-                        "y": 97.0
-                    },
-                    "uuid": "2de5da20-bcdf-4ecb-ab2c-6f758051ba5b"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q22",
-                    "pos": {
-                        "x": 66.5,
-                        "y": 104.0
-                    },
-                    "uuid": "f67d8def-4eb6-4f6d-bf02-ee48f25106f5"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q23",
-                    "pos": {
-                        "x": 66.5,
-                        "y": 109.0
-                    },
-                    "uuid": "50bd2601-be10-4796-9ca8-c5acaa891a0c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q31",
-                    "pos": {
-                        "x": 47.0,
-                        "y": 97.0
-                    },
-                    "uuid": "89be5905-e6e8-4c91-bc87-eac5638588bd"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q32",
-                    "pos": {
-                        "x": 43.5,
-                        "y": 104.0
-                    },
-                    "uuid": "3ccbd000-e18d-4ee2-913b-47359b08abf1"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q33",
-                    "pos": {
-                        "x": 43.5,
-                        "y": 109.0
-                    },
-                    "uuid": "33e86d1c-be6f-4f27-ae2b-9249f7990249"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q34",
-                    "pos": {
-                        "x": 43.5,
-                        "y": 114.0
-                    },
-                    "uuid": "da3d94d7-76e6-4040-b2bf-9dc6f8bd9622"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q41",
-                    "pos": {
-                        "x": 35.5,
-                        "y": 97.0
-                    },
-                    "uuid": "5bed0825-049c-47c1-b9e7-8d38a73914a0"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q42",
-                    "pos": {
-                        "x": 32.0,
-                        "y": 104.0
-                    },
-                    "uuid": "0f9be32d-024a-474c-b691-aa06b558dc45"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint Q44",
-                    "pos": {
-                        "x": 32.0,
-                        "y": 114.0
-                    },
-                    "uuid": "48b6ef7d-0141-4212-b311-feafbe580755"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pulse-proof series resistor (thin-film MELF 0207): the GDT fires first. Same as the box (D-58)')",
-            "items": [
-                {
-                    "description": "Footprint R11",
-                    "pos": {
-                        "x": 60.875,
-                        "y": 71.0
-                    },
-                    "uuid": "1fc9bdce-bba6-47ac-becc-7d423e307d33"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'As R above, N wire')",
-            "items": [
-                {
-                    "description": "Footprint R12",
-                    "pos": {
-                        "x": 64.375,
-                        "y": 71.0
-                    },
-                    "uuid": "e5375fc2-669d-4951-b5a2-c130c40baa55"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Current set: I = VBE(Q2) / 56R = 9.5 to 13.2 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R13",
-                    "pos": {
-                        "x": 59.0,
-                        "y": 104.0
-                    },
-                    "uuid": "2e23d9b1-eaf6-4ea8-ba6e-2c2bd3041408"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Base drive: 0.5 mA, above IB = 13.2 mA / hFE 63 = 0.21 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R14",
-                    "pos": {
-                        "x": 61.5,
-                        "y": 104.0
-                    },
-                    "uuid": "ad7f8b52-6cc4-415b-972d-fd58153f818f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Gate pull-down: source off (loop open) while the MCU is not running')",
-            "items": [
-                {
-                    "description": "Footprint R15",
-                    "pos": {
-                        "x": 59.0,
-                        "y": 109.0
-                    },
-                    "uuid": "daa9abe9-52f0-41dd-b244-551330f754cf"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pulse-proof series resistor (thin-film MELF 0207): the GDT fires first. Same as the box (D-58)')",
-            "items": [
-                {
-                    "description": "Footprint R21",
-                    "pos": {
-                        "x": 69.125,
-                        "y": 71.0
-                    },
-                    "uuid": "637a2d59-b7ab-42a1-81c8-4c01894e4b52"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'As R above, N wire')",
-            "items": [
-                {
-                    "description": "Footprint R22",
-                    "pos": {
-                        "x": 72.625,
-                        "y": 71.0
-                    },
-                    "uuid": "688fc384-3d1f-4b3b-81a5-a222beef06f5"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Current set: I = VBE(Q2) / 56R = 9.5 to 13.2 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R23",
-                    "pos": {
-                        "x": 70.5,
-                        "y": 104.0
-                    },
-                    "uuid": "bb03f6a7-275b-474f-9883-ff7241f25251"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Base drive: 0.5 mA, above IB = 13.2 mA / hFE 63 = 0.21 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R24",
-                    "pos": {
-                        "x": 73.0,
-                        "y": 104.0
-                    },
-                    "uuid": "41b05ce0-4861-459a-9032-2d8cd808f87f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Gate pull-down: source off (loop open) while the MCU is not running')",
-            "items": [
-                {
-                    "description": "Footprint R25",
-                    "pos": {
-                        "x": 70.5,
-                        "y": 109.0
-                    },
-                    "uuid": "da228065-57a1-4fb7-9384-ab068f77cb6d"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pulse-proof series resistor (thin-film MELF 0207): the GDT fires first. Same as the box (D-58)')",
-            "items": [
-                {
-                    "description": "Footprint R31",
-                    "pos": {
-                        "x": 52.625,
-                        "y": 71.0
-                    },
-                    "uuid": "ec25b8b0-51a7-4c3c-be7f-24bfe1db834e"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'As R above, N wire')",
-            "items": [
-                {
-                    "description": "Footprint R32",
-                    "pos": {
-                        "x": 56.125,
-                        "y": 71.0
-                    },
-                    "uuid": "30029c45-3c1c-440a-9bbe-3d8fc613a18f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Current set: I = VBE(Q2) / 56R = 9.5 to 13.2 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R33",
-                    "pos": {
-                        "x": 47.5,
-                        "y": 104.0
-                    },
-                    "uuid": "7f744272-49cb-4741-9a82-b0af2a4e9f55"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Base drive: 0.5 mA, above IB = 13.2 mA / hFE 63 = 0.21 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R34",
-                    "pos": {
-                        "x": 50.0,
-                        "y": 104.0
-                    },
-                    "uuid": "68b23d51-c1fd-4dc6-a310-e6a5148060f1"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Gate pull-up: SAFE source on while the expander pin is an input (power-up, reset). SW_STOP_N low opens the loop')",
-            "items": [
-                {
-                    "description": "Footprint R35",
-                    "pos": {
-                        "x": 47.5,
-                        "y": 109.0
-                    },
-                    "uuid": "5c38ec67-a897-4e7b-8c57-dedf66052bc0"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Loop sense: 0.95 to 1.32 V at 9.5 to 13.2 mA; NPN threshold about 0.6 V = about 6 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R36",
-                    "pos": {
-                        "x": 48.6,
-                        "y": 118.5
-                    },
-                    "uuid": "2f2a35f0-aef7-4dd1-9046-7d516a9b7852"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Base series resistor')",
-            "items": [
-                {
-                    "description": "Footprint R37",
-                    "pos": {
-                        "x": 47.5,
-                        "y": 114.0
-                    },
-                    "uuid": "3f008914-9ca6-4047-91c7-66ae0ce9dd0d"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Collector pull-up to 3.3 V')",
-            "items": [
-                {
-                    "description": "Footprint R38",
-                    "pos": {
-                        "x": 50.0,
-                        "y": 114.0
-                    },
-                    "uuid": "455bee86-3469-461a-84fe-7dfc820e65e2"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pulse-proof series resistor (thin-film MELF 0207): the GDT fires first. Same as the box (D-58)')",
-            "items": [
-                {
-                    "description": "Footprint R41",
-                    "pos": {
-                        "x": 44.375,
-                        "y": 71.0
-                    },
-                    "uuid": "977626e2-fd54-47cb-b86d-5cd8ad042fb2"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'As R above, N wire')",
-            "items": [
-                {
-                    "description": "Footprint R42",
-                    "pos": {
-                        "x": 47.875,
-                        "y": 71.0
-                    },
-                    "uuid": "f638c909-2f2c-4c84-a0e8-c36c291752e6"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Current set: I = VBE(Q2) / 56R = 9.5 to 13.2 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R43",
-                    "pos": {
-                        "x": 36.0,
-                        "y": 104.0
-                    },
-                    "uuid": "d6adc79b-559e-416f-b9e1-82f74f0b1c7f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Base drive: 0.5 mA, above IB = 13.2 mA / hFE 63 = 0.21 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R44",
-                    "pos": {
-                        "x": 38.5,
-                        "y": 104.0
-                    },
-                    "uuid": "5c1ea465-55cd-4bea-acc6-868a94fceb71"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Loop sense: 0.95 to 1.32 V at 9.5 to 13.2 mA; NPN threshold about 0.6 V = about 6 mA (C-24)')",
-            "items": [
-                {
-                    "description": "Footprint R46",
-                    "pos": {
-                        "x": 37.1,
-                        "y": 118.5
-                    },
-                    "uuid": "1cc9f7b1-b16c-4607-b642-9a717fe52d65"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Base series resistor')",
-            "items": [
-                {
-                    "description": "Footprint R47",
-                    "pos": {
-                        "x": 36.0,
-                        "y": 114.0
-                    },
-                    "uuid": "4cd49778-2492-4529-b6ed-120c3e817540"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Collector pull-up to 3.3 V')",
-            "items": [
-                {
-                    "description": "Footprint R48",
-                    "pos": {
-                        "x": 38.5,
-                        "y": 114.0
-                    },
-                    "uuid": "4348eef0-0693-4b35-a924-00a44fd36411"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Input bulk, 105 C long-life aluminium (35 V: above the TVS clamp)')",
-            "items": [
-                {
-                    "description": "Footprint C1",
-                    "pos": {
-                        "x": 28.8,
-                        "y": 56.6
-                    },
-                    "uuid": "e794fe9e-6a23-41c1-9930-e6ab4292815d"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'L7805 input capacitor 0.33 uF (ST)')",
-            "items": [
-                {
-                    "description": "Footprint C2",
-                    "pos": {
-                        "x": 28.8,
-                        "y": 62.6375
-                    },
-                    "uuid": "13d3ecd2-4763-41a9-b2ca-c2b833499d43"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'L7805 output capacitor 0.1 uF (ST)')",
-            "items": [
-                {
-                    "description": "Footprint C3",
-                    "pos": {
-                        "x": 30.0,
-                        "y": 42.0
-                    },
-                    "uuid": "ff95086c-4e40-49b8-8230-6b349cbcd681"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: '5 V rail bulk')",
-            "items": [
-                {
-                    "description": "Footprint C4",
-                    "pos": {
-                        "x": 40.5,
-                        "y": 46.0
-                    },
-                    "uuid": "da164cd7-3609-490e-8a51-10164134b29e"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'LD1117 input capacitor')",
-            "items": [
-                {
-                    "description": "Footprint C5",
-                    "pos": {
-                        "x": 30.5,
-                        "y": 77.5
-                    },
-                    "uuid": "c308f569-facc-428c-953d-9682d4419a5a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'LD1117 output: at least 10 uF effective at 3.3 V (ST: 10 uF minimum for stability)')",
-            "items": [
-                {
-                    "description": "Footprint C6",
-                    "pos": {
-                        "x": 40.0,
-                        "y": 72.0
-                    },
-                    "uuid": "03be8edb-b79d-4b5c-9ac1-a4f8fc06c07e"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: '3.3 V rail decoupling: one value (D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C7",
-                    "pos": {
-                        "x": 27.5,
-                        "y": 66.0
-                    },
-                    "uuid": "fa719510-e791-44f5-b0d8-676b8c0a69cf"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D1",
-                    "pos": {
-                        "x": 35.0,
-                        "y": 52.0
-                    },
-                    "uuid": "7011e12c-4bb1-40aa-9cf8-dab1ee3f2941"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D2",
-                    "pos": {
-                        "x": 34.0,
-                        "y": 61.5
-                    },
-                    "uuid": "511383a1-5e12-40b2-b17b-5313d4615480"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint F1",
-                    "pos": {
-                        "x": 34.0,
-                        "y": 44.0
-                    },
-                    "uuid": "cd51639c-a4cb-4ec7-8eef-5663ed8dec0c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: '+5V current-measurement link: lift to measure the 5 V load (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint R5",
-                    "pos": {
-                        "x": 29.5,
-                        "y": 46.0
-                    },
-                    "uuid": "4622c831-ced5-4e28-ac8e-a48864530d54"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: '+3V3 current-measurement link: lift to measure the 3.3 V load (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint R6",
-                    "pos": {
-                        "x": 25.5,
-                        "y": 70.0
-                    },
-                    "uuid": "937809e0-f58f-4246-ac4a-bf34ee5327b5"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point +13V8 (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP1",
-                    "pos": {
-                        "x": 40.5,
-                        "y": 58.5
-                    },
-                    "uuid": "fcb8a205-9365-4b40-a5a1-399ceadffbf4"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point +5V (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP2",
-                    "pos": {
-                        "x": 40.5,
-                        "y": 51.5
-                    },
-                    "uuid": "a50d61e1-5c76-44a9-a2eb-9a75e6bf4d73"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point +3V3 (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP3",
-                    "pos": {
-                        "x": 25.5,
-                        "y": 63.0
-                    },
-                    "uuid": "3ff70111-9be4-4230-ab7c-253a644ca35a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U1",
-                    "pos": {
-                        "x": 25.8,
-                        "y": 48.0
-                    },
-                    "uuid": "98ee9e7e-ad42-4b73-ae8d-d6cddfafec0e"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U2",
-                    "pos": {
-                        "x": 33.0,
-                        "y": 72.0
-                    },
-                    "uuid": "cc6e816c-ba4e-425b-a8ea-b2e02650b576"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'ESP32-C3 Rust board pushed into gold-flash socket headers Sullins PPPC161LFBN-RC (1x16) and PPPC121LFBN-RC (1x12), rows 20.32 mm apart (D-55, D-66, D-93, D-95). RUST-1 Rev 1.2a fitted; RUST-2 fits with JP61 1-2 cut and 2-3 bridged')",
-            "items": [
-                {
-                    "description": "Footprint A1",
-                    "pos": {
-                        "x": 109.5,
-                        "y": 154.0
-                    },
-                    "uuid": "693f106b-85bb-4af9-bf2a-89cc74694ac8"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Pad net (Net-(A1-IO21/TXD)) doesn't match net given by schematic (Net-(A1-IO21{slash}TXD))",
-            "items": [
-                {
-                    "description": "PTH pad 14 [Net-(A1-IO21/TXD)] of A1",
-                    "pos": {
-                        "x": 96.8,
-                        "y": 143.84
-                    },
-                    "uuid": "7b56f948-75e3-480b-b2e3-6c5aacdbb423"
-                }
-            ],
-            "severity": "warning",
-            "type": "net_conflict"
-        },
-        {
-            "description": "Pad net (unconnected-(A1-IO8/SCL-Pad18)) doesn't match net given by schematic (unconnected-(A1-IO8{slash}SCL-Pad18))",
-            "items": [
-                {
-                    "description": "PTH pad 18 [unconnected-(A1-IO8/SCL-Pad18)] of A1",
-                    "pos": {
-                        "x": 94.26,
-                        "y": 164.16
-                    },
-                    "uuid": "00b80697-2f07-444c-ae24-356f2625bab9"
-                }
-            ],
-            "severity": "warning",
-            "type": "net_conflict"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U3 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C61",
-                    "pos": {
-                        "x": 124.0,
-                        "y": 96.0
-                    },
-                    "uuid": "67a8b613-0614-47ff-a94e-af6b17e02ec9"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U4 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C62",
-                    "pos": {
-                        "x": 117.5,
-                        "y": 113.5
-                    },
-                    "uuid": "94c68a80-82ce-40b4-8e23-c5e7153114ae"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U5 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C63",
-                    "pos": {
-                        "x": 115.5,
-                        "y": 120.0
-                    },
-                    "uuid": "ed692ec2-5e23-4c4a-a15e-293698545cda"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'VBUS bypass at the ESD array (ST USBLC6-2 layout note)')",
-            "items": [
-                {
-                    "description": "Footprint C64",
-                    "pos": {
-                        "x": 83.1,
-                        "y": 29.95
-                    },
-                    "uuid": "a1d72507-cbc2-45f8-8e4f-412a7be255d4"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Waveshare 1.9inch LCD Module (ST7789V2, 170 x 320) cable: 1 BL, 2 RST, 3 DC, 4 CS (GND), 5 CLK, 6 DIN, 7 GND, 8 VCC 3.3 V (module: RT9193-33, TXS0108, backlight about 40 mA max). SPI mode 0 on IO2/IO9, DC/RST/BL on the PCA9539 (D-180)')",
-            "items": [
-                {
-                    "description": "Footprint J15",
-                    "pos": {
-                        "x": 144.2,
-                        "y": 140.5
-                    },
-                    "uuid": "e52cd3b6-b304-477d-9ff6-68d82f3f7ca2"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'SDA select (D-94, D-192): 1-2 bridged by copper = DevKit-RUST-1 (SDA GPIO10, pad 17). DevKit-RUST-2 (SDA GPIO7, pad 12): cut 1-2, bridge 2-3. Firmware SDA pin must match')",
-            "items": [
-                {
-                    "description": "Footprint JP61",
-                    "pos": {
-                        "x": 102.0,
-                        "y": 138.0
-                    },
-                    "uuid": "cf87260a-2638-4891-9f58-4567cd7ac027"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Series resistor: IO21 is the boot-ROM UART TX; limits the current into the loop 3 sense transistor during boot')",
-            "items": [
-                {
-                    "description": "Footprint R61",
-                    "pos": {
-                        "x": 95.0,
-                        "y": 138.0
-                    },
-                    "uuid": "807ca5ad-dbde-4433-830f-4794ab1a2ff1"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Pad net (Net-(A1-IO21/TXD)) doesn't match net given by schematic (Net-(A1-IO21{slash}TXD))",
-            "items": [
-                {
-                    "description": "Pad 2 [Net-(A1-IO21/TXD)] of R61 on F.Cu",
-                    "pos": {
-                        "x": 95.9125,
-                        "y": 138.0
-                    },
-                    "uuid": "5d25e224-a91d-495d-b29f-9047eea81e22"
-                }
-            ],
-            "severity": "warning",
-            "type": "net_conflict"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'WDI pull-down: a floating WDI would disable the watchdog (TPS3823 7.3.4)')",
-            "items": [
-                {
-                    "description": "Footprint R62",
-                    "pos": {
-                        "x": 123.0,
-                        "y": 123.5
-                    },
-                    "uuid": "eda36b5e-2309-4013-bbcb-61be021bd60c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'LATCH_CLR pull-down: no clock edge while the MCU is in reset')",
-            "items": [
-                {
-                    "description": "Footprint R63",
-                    "pos": {
-                        "x": 124.0,
-                        "y": 116.2
-                    },
-                    "uuid": "f1efa0a8-1680-4e9e-8be3-163494e6eccb"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'CC1 pull-down Rd 5.1k: the host sees a device and enables the port (USB Type-C)')",
-            "items": [
-                {
-                    "description": "Footprint R64",
-                    "pos": {
-                        "x": 83.1,
-                        "y": 33.35
-                    },
-                    "uuid": "6b8e9dab-2edd-436d-8f2f-26bf47756484"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'CC2 pull-down Rd 5.1k: the host sees a device and enables the port (USB Type-C)')",
-            "items": [
-                {
-                    "description": "Footprint R65",
-                    "pos": {
-                        "x": 75.9,
-                        "y": 29.95
-                    },
-                    "uuid": "a6f4fbb8-6af1-44cc-a19a-a7a4dc4d6a27"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U3",
-                    "pos": {
-                        "x": 120.0,
-                        "y": 120.0
-                    },
-                    "uuid": "f2eed24c-0202-463d-99b1-cd1c55adc8ab"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U4",
-                    "pos": {
-                        "x": 119.262499,
-                        "y": 116.2
-                    },
-                    "uuid": "c84aae9f-7f5b-436b-8a6c-20157cc14b56"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U5",
-                    "pos": {
-                        "x": 130.0,
-                        "y": 100.0
-                    },
-                    "uuid": "122745af-a293-4ad7-91e9-27644e298395"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U61",
-                    "pos": {
-                        "x": 79.5,
-                        "y": 32.75
-                    },
-                    "uuid": "14de7125-d5c3-46af-8604-d8eb0ada60f3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Debounce capacitor: press discharges in 0.1 ms')",
-            "items": [
-                {
-                    "description": "Footprint C71",
-                    "pos": {
-                        "x": 41.062499,
-                        "y": 146.0625
-                    },
-                    "uuid": "e7820ab6-e38e-445e-81a8-0b30e6b26af3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U6 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C72",
-                    "pos": {
-                        "x": 32.5,
-                        "y": 140.85
-                    },
-                    "uuid": "050b87c3-a792-4701-9566-036bcb21dc85"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U7 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C73",
-                    "pos": {
-                        "x": 32.5,
-                        "y": 131.85
-                    },
-                    "uuid": "cda35623-cb75-4ee0-9a7d-84f6bbcb4324"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U8 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C74",
-                    "pos": {
-                        "x": 41.5,
-                        "y": 131.85
-                    },
-                    "uuid": "5b72ec50-9734-48f2-812f-65249937b0ab"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U9 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C75",
-                    "pos": {
-                        "x": 50.5,
-                        "y": 128.6
-                    },
-                    "uuid": "484b58df-cf99-4335-aa60-444a207ea444"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U10 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C76",
-                    "pos": {
-                        "x": 44.5,
-                        "y": 140.85
-                    },
-                    "uuid": "ac476c57-276f-466b-ad50-447cde7e7166"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U11 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C77",
-                    "pos": {
-                        "x": 63.5,
-                        "y": 131.85
-                    },
-                    "uuid": "d5bbb54a-3ff6-4a09-a58a-1e516daef8c8"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D71",
-                    "pos": {
-                        "x": 41.0,
-                        "y": 151.0
-                    },
-                    "uuid": "c1ca8fcb-14de-4e71-b68c-f0190478954f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Button series resistor: limits the discharge current and, with the 100n, filters ESD on the panel wire')",
-            "items": [
-                {
-                    "description": "Footprint R71",
-                    "pos": {
-                        "x": 36.0,
-                        "y": 148.5
-                    },
-                    "uuid": "6153626f-13ec-4017-93f4-2eea86c0a2fc"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Button node pull-up: release recharges in 10 ms')",
-            "items": [
-                {
-                    "description": "Footprint R72",
-                    "pos": {
-                        "x": 37.949999,
-                        "y": 145.0
-                    },
-                    "uuid": "1b77af3b-75e3-4b85-b200-fafcdcc50d19"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'SAFE LED, about 2 mA')",
-            "items": [
-                {
-                    "description": "Footprint R73",
-                    "pos": {
-                        "x": 28.0,
-                        "y": 162.0
-                    },
-                    "uuid": "253e4732-7350-4759-af11-f5f41ca5f9ff"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'LATCHED LED, about 2 mA')",
-            "items": [
-                {
-                    "description": "Footprint R74",
-                    "pos": {
-                        "x": 33.0,
-                        "y": 162.0
-                    },
-                    "uuid": "7984e864-4eb2-43c1-b232-b49c83c22b12"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'KILL_S pull-up: open (KILL pressed or switch unplugged) reads high. 2k2 gives 1.5 mA, above the 1 mA contact minimum of the EAO 84 (D-181)')",
-            "items": [
-                {
-                    "description": "Footprint R75",
-                    "pos": {
-                        "x": 49.5,
-                        "y": 162.0
-                    },
-                    "uuid": "4422d99f-cf9a-49a6-a6ab-4123dffdf827"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U6",
-                    "pos": {
-                        "x": 29.0,
-                        "y": 141.0
-                    },
-                    "uuid": "0652713c-3fd8-4489-b0a6-b193d78cc5cc"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U7",
-                    "pos": {
-                        "x": 29.0,
-                        "y": 132.0
-                    },
-                    "uuid": "988d80b3-5f9f-48c6-9aba-07ca8cbdfbe8"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U8",
-                    "pos": {
-                        "x": 38.0,
-                        "y": 132.0
-                    },
-                    "uuid": "8a184931-b2f5-40cd-8c58-eb3211f17633"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U9",
-                    "pos": {
-                        "x": 48.5,
-                        "y": 132.0
-                    },
-                    "uuid": "0ad9a982-7115-4d71-99b2-3eb39ed57764"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U10",
-                    "pos": {
-                        "x": 41.0,
-                        "y": 141.0
-                    },
-                    "uuid": "3952c037-1c71-4ed1-9861-5ffe3888aaeb"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U11",
-                    "pos": {
-                        "x": 60.0,
-                        "y": 132.0
-                    },
-                    "uuid": "e3cb9a6c-bb5b-41c4-a18d-7c7c3ffcdb01"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U1 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C201",
-                    "pos": {
-                        "x": 92.4,
-                        "y": 88.3
-                    },
-                    "uuid": "f233352a-a2a4-4445-8c57-da945d000222"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U2 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C202",
-                    "pos": {
-                        "x": 85.7,
-                        "y": 88.3
-                    },
-                    "uuid": "1f9c66db-fa4b-49a7-8d68-75b4be876702"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF and ESD bond, radio GND to CHASSIS (X7R 1 kV): the ESD current of a floating port goes to the shield, not across the board')",
-            "items": [
-                {
-                    "description": "Footprint C205",
-                    "pos": {
-                        "x": 112.0,
-                        "y": 40.0
-                    },
-                    "uuid": "da10dffb-bb09-4f05-9cb6-57f8e4451ce9"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C211",
-                    "pos": {
-                        "x": 84.5,
-                        "y": 42.5
-                    },
-                    "uuid": "4b80563a-e4ae-477a-b517-1d38bb30650a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C212",
-                    "pos": {
-                        "x": 88.5,
-                        "y": 42.5
-                    },
-                    "uuid": "fe48b4f5-ebb9-4377-814e-c5e7092ffc96"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C213",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 42.5
-                    },
-                    "uuid": "99d819dc-d83c-4f0b-b265-69b951d057cd"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C214",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 42.5
-                    },
-                    "uuid": "dc73b6bf-25f0-419c-98c3-1fd1f2d3c55e"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C216",
-                    "pos": {
-                        "x": 100.5,
-                        "y": 42.5
-                    },
-                    "uuid": "828b3517-765f-4c08-aec2-2f8113ed8bb0"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C217",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 42.5
-                    },
-                    "uuid": "2bfb3640-5613-4b3e-a6d2-2635e91ada72"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C218",
-                    "pos": {
-                        "x": 108.5,
-                        "y": 42.5
-                    },
-                    "uuid": "69e70e55-a95c-4902-8b15-2c681753fb63"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D201",
-                    "pos": {
-                        "x": 106.0,
-                        "y": 65.0
-                    },
-                    "uuid": "c871edc6-39de-4a76-a7cf-e539d620c4b1"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D202",
-                    "pos": {
-                        "x": 100.5,
-                        "y": 71.5
-                    },
-                    "uuid": "285ffd5d-77ea-42ed-987b-87a74a223138"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D211",
-                    "pos": {
-                        "x": 84.5,
-                        "y": 38.0
-                    },
-                    "uuid": "c1498ef3-3f58-4325-b897-011c6f2c494c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D212",
-                    "pos": {
-                        "x": 88.5,
-                        "y": 38.0
-                    },
-                    "uuid": "2a139e40-559a-40fd-a560-6136061507b3"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D213",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 38.0
-                    },
-                    "uuid": "002837d8-04e2-45cf-a403-8378689c95fc"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D214",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 38.0
-                    },
-                    "uuid": "f6122c7a-72e3-4a4f-9b32-790753992b71"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D216",
-                    "pos": {
-                        "x": 100.5,
-                        "y": 38.0
-                    },
-                    "uuid": "749017f1-8dd5-4e6a-b0be-9a43de805093"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D217",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 38.0
-                    },
-                    "uuid": "77b699eb-b597-4dfd-97fe-f926ebcbe6c7"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D218",
-                    "pos": {
-                        "x": 108.5,
-                        "y": 38.0
-                    },
-                    "uuid": "1ae9ce87-2b36-4eb6-8e99-f288503d27bf"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'TX INH level jumper: 1-2 HIGH (contact to 5.1 V from the radio supply pin), 2-3 LOW (contact to radio GND), removed = TX INH not used (D-71, D-90)')",
-            "items": [
-                {
-                    "description": "Footprint JP201",
-                    "pos": {
-                        "x": 97.4,
-                        "y": 67.0
-                    },
-                    "uuid": "865f0efd-1f44-4fb4-95d0-bc13919bf220"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Mini-DIN pin 1: bridge 2-1 = KEY (R2, R3), 2-3 = BAND D input (R1, FT-710) (D-86)')",
-            "items": [
-                {
-                    "description": "Footprint JP202",
-                    "pos": {
-                        "x": 84.5,
-                        "y": 51.5
-                    },
-                    "uuid": "b4847d50-de34-4094-b8c2-fde4297ff758"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'CONTACT feed: bridge 2-1 = radio +13V OUT (pin 6, port stays floating), 2-3 = interface +13V8 (close the GND bond too)')",
-            "items": [
-                {
-                    "description": "Footprint JP203",
-                    "pos": {
-                        "x": 101.8,
-                        "y": 63.5
-                    },
-                    "uuid": "b17ead60-f428-4656-b789-e52ce8fcd8f7"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Radio GND (pin 5) to interface GND. Close on R1 (BAND data needs a common reference) and in CONTACT mode with the interface feed')",
-            "items": [
-                {
-                    "description": "Footprint JP204",
-                    "pos": {
-                        "x": 88.6,
-                        "y": 78.6
-                    },
-                    "uuid": "57a31fc2-1cb7-432e-acf3-0762a4eebd5d"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'TX sense, LED resistor source: 1-2 CONTACT (feed), 2-3 VOLTAGE (radio TX output on pin 8)')",
-            "items": [
-                {
-                    "description": "Footprint JP205",
-                    "pos": {
-                        "x": 111.5,
-                        "y": 56.58
-                    },
-                    "uuid": "8471e72d-8fb4-479d-ab8a-99ab1b559b44"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'TX sense, LED cathode: 1-2 CONTACT (to pin 8, the radio closes it to its GND), 2-3 VOLTAGE (to radio GND)')",
-            "items": [
-                {
-                    "description": "Footprint JP206",
-                    "pos": {
-                        "x": 111.5,
-                        "y": 61.0
-                    },
-                    "uuid": "ead01e83-e51b-4cfc-b9f3-fd03f04c31f4"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'PERMIT pull-down: inhibit while the MCU pin floats (reset, boot)')",
-            "items": [
-                {
-                    "description": "Footprint R201",
-                    "pos": {
-                        "x": 96.7,
-                        "y": 84.5
-                    },
-                    "uuid": "83782402-c15d-4ca0-b461-1471dc93f963"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'KEY pull-down: expander pins are inputs after reset')",
-            "items": [
-                {
-                    "description": "Footprint R202",
-                    "pos": {
-                        "x": 90.0,
-                        "y": 84.5
-                    },
-                    "uuid": "a25c35e8-a370-4896-ab78-a8fd572888cd"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'OptoMOS LED drive about 7 mA from 3.3 V (C-22)')",
-            "items": [
-                {
-                    "description": "Footprint R203",
-                    "pos": {
-                        "x": 91.13,
-                        "y": 79.5
-                    },
-                    "uuid": "0919d633-4325-4abb-a49a-25763360b9dd"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'HIGH level source from the radio +13V OUT: (14.4 - 5.1) V / 2k2 = 4.2 mA, 39 mW (0.39). Not fitted for radios with a LOW inhibit (saves 4 mA from pin 6)')",
-            "items": [
-                {
-                    "description": "Footprint R204",
-                    "pos": {
-                        "x": 100.5,
-                        "y": 67.0
-                    },
-                    "uuid": "e4900359-0481-44db-93f4-d1361b4e9d94"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Photorelay LED drive about 7 mA from 3.3 V')",
-            "items": [
-                {
-                    "description": "Footprint R205",
-                    "pos": {
-                        "x": 85.13,
-                        "y": 79.5
-                    },
-                    "uuid": "d8c41620-e747-4087-889a-97915bac1db5"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'TX sense LED resistor: 5.7 mA at 13.8 V (C-23); 79 mW at 14.4 V, 1206 (0.32). Value per radio in VOLTAGE mode')",
-            "items": [
-                {
-                    "description": "Footprint R206",
-                    "pos": {
-                        "x": 112.0,
-                        "y": 72.0
-                    },
-                    "uuid": "fc961e77-4f47-466a-8381-64935ce53c44"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Emitter resistor: TX output active high (emitter follower)')",
-            "items": [
-                {
-                    "description": "Footprint R207",
-                    "pos": {
-                        "x": 106.672499,
-                        "y": 79.72
-                    },
-                    "uuid": "4feebc65-03c5-4335-af2d-f4486a539a14"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Series resistor: limits the current into the PCA9539 input (5.5 V tolerant, to confirm)')",
-            "items": [
-                {
-                    "description": "Footprint R210",
-                    "pos": {
-                        "x": 85.8,
-                        "y": 55.5
-                    },
-                    "uuid": "5c573d50-e8f6-4b72-be56-62053f5bf4a2"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Series resistor: limits the current into the PCA9539 input (5.5 V tolerant, to confirm)')",
-            "items": [
-                {
-                    "description": "Footprint R211",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 51.5
-                    },
-                    "uuid": "007a3213-4e29-49c4-861d-11ca38967e14"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Series resistor: limits the current into the PCA9539 input (5.5 V tolerant, to confirm)')",
-            "items": [
-                {
-                    "description": "Footprint R212",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 51.5
-                    },
-                    "uuid": "5be76e6b-4e93-457c-9c1d-57a898bb0cdc"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Series resistor: limits the current into the PCA9539 input (5.5 V tolerant, to confirm)')",
-            "items": [
-                {
-                    "description": "Footprint R213",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 51.5
-                    },
-                    "uuid": "e33f3b81-4560-45fb-be96-c4c49b18be40"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-up to 3.3 V: serves open-collector and push-pull band outputs (FC-40: radio outputs with 47k pull-ups in the tuner). No radio = 1111')",
-            "items": [
-                {
-                    "description": "Footprint R214",
-                    "pos": {
-                        "x": 85.8,
-                        "y": 59.5
-                    },
-                    "uuid": "5bec5315-31c3-47db-b930-4a6d80a17aa9"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-up to 3.3 V: serves open-collector and push-pull band outputs (FC-40: radio outputs with 47k pull-ups in the tuner). No radio = 1111')",
-            "items": [
-                {
-                    "description": "Footprint R215",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 55.5
-                    },
-                    "uuid": "28eeb53a-e8d6-46d5-b660-3c06f4324c29"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-up to 3.3 V: serves open-collector and push-pull band outputs (FC-40: radio outputs with 47k pull-ups in the tuner). No radio = 1111')",
-            "items": [
-                {
-                    "description": "Footprint R216",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 55.5
-                    },
-                    "uuid": "f7d070fa-bb5e-4e33-844e-cac4e5b3a47a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-up to 3.3 V: serves open-collector and push-pull band outputs (FC-40: radio outputs with 47k pull-ups in the tuner). No radio = 1111')",
-            "items": [
-                {
-                    "description": "Footprint R217",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 55.5
-                    },
-                    "uuid": "5776d7cb-d140-43cb-aa8c-f430f33ae39a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-down footprint, not fitted (only for a radio that needs a low default)')",
-            "items": [
-                {
-                    "description": "Footprint R218",
-                    "pos": {
-                        "x": 85.8,
-                        "y": 63.5
-                    },
-                    "uuid": "bd226284-9cd2-4db7-b5db-61901403af95"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-down footprint, not fitted (only for a radio that needs a low default)')",
-            "items": [
-                {
-                    "description": "Footprint R219",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 59.5
-                    },
-                    "uuid": "58078064-cae0-4257-a573-a1c054e9030c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-down footprint, not fitted (only for a radio that needs a low default)')",
-            "items": [
-                {
-                    "description": "Footprint R220",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 59.5
-                    },
-                    "uuid": "c7a879f4-00db-402c-826d-660c960b6450"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Pull-down footprint, not fitted (only for a radio that needs a low default)')",
-            "items": [
-                {
-                    "description": "Footprint R221",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 59.5
-                    },
-                    "uuid": "03318b23-ad23-43b9-b96d-3242542e9902"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN1, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP201",
-                    "pos": {
-                        "x": 84.5,
-                        "y": 47.0
-                    },
-                    "uuid": "cde833a9-6feb-46eb-ac55-203a21544412"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN2, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP202",
-                    "pos": {
-                        "x": 88.5,
-                        "y": 47.0
-                    },
-                    "uuid": "84e41331-c54c-4339-b9dc-8564fc92b9b6"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN3, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP203",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 47.0
-                    },
-                    "uuid": "27359c04-917c-4029-a332-a9760cab1e52"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN4, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP204",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 47.0
-                    },
-                    "uuid": "da6e11e7-16f9-4e52-9e17-56cb173314de"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN6, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP206",
-                    "pos": {
-                        "x": 100.5,
-                        "y": 47.0
-                    },
-                    "uuid": "d7880414-be2a-4c31-b1ab-be733b2c4c6a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN7, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP207",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 47.0
-                    },
-                    "uuid": "6f033496-fdc0-431a-af8b-bc6ecfe0a592"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Test point DIN8, radio side (D-120)')",
-            "items": [
-                {
-                    "description": "Footprint TP208",
-                    "pos": {
-                        "x": 108.5,
-                        "y": 47.0
-                    },
-                    "uuid": "44be89be-2d29-4a8b-bbdf-494d8701661b"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U201",
-                    "pos": {
-                        "x": 93.4,
-                        "y": 84.5
-                    },
-                    "uuid": "415d3bde-c412-49be-97fe-68c78e326f44"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U202",
-                    "pos": {
-                        "x": 86.7,
-                        "y": 84.5
-                    },
-                    "uuid": "c31ed554-d4f8-4f17-b0f2-956a676afc5d"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U203",
-                    "pos": {
-                        "x": 92.4,
-                        "y": 72.0
-                    },
-                    "uuid": "e9b55ea2-dcfa-440a-ac15-c31e25684325"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U204",
-                    "pos": {
-                        "x": 86.4,
-                        "y": 72.0
-                    },
-                    "uuid": "ddc2fb12-20d5-4ebe-a486-8fdba352ec77"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint U205",
-                    "pos": {
-                        "x": 108.5,
-                        "y": 69.5
-                    },
-                    "uuid": "5127a468-c9b8-4ded-875d-bbea88a1a467"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U1 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C301",
-                    "pos": {
-                        "x": 124.4,
-                        "y": 88.3
-                    },
-                    "uuid": "bef0c7b7-936e-4669-ae84-5a3796977d13"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'U2 decoupling, at the part (one value, D-127)')",
-            "items": [
-                {
-                    "description": "Footprint C302",
-                    "pos": {
-                        "x": 117.7,
-                        "y": 88.3
-                    },
-                    "uuid": "6ec4c20a-6526-42ce-8a6f-4c3fd80c42cf"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF and ESD bond, radio GND to CHASSIS (X7R 1 kV): the ESD current of a floating port goes to the shield, not across the board')",
-            "items": [
-                {
-                    "description": "Footprint C305",
-                    "pos": {
-                        "x": 144.0,
-                        "y": 40.0
-                    },
-                    "uuid": "62c8e3f0-7445-420b-ab65-ecb732482d5a"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C311",
-                    "pos": {
-                        "x": 116.5,
-                        "y": 42.5
-                    },
-                    "uuid": "c82baddb-0704-4e6f-abab-d2cbbbba8af2"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C312",
-                    "pos": {
-                        "x": 120.5,
-                        "y": 42.5
-                    },
-                    "uuid": "09dfbe76-4068-4f5b-b55e-20a59b354320"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C313",
-                    "pos": {
-                        "x": 124.5,
-                        "y": 42.5
-                    },
-                    "uuid": "a9296249-fd18-4ea3-b1f9-5b9aca67d569"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C314",
-                    "pos": {
-                        "x": 128.5,
-                        "y": 42.5
-                    },
-                    "uuid": "2ef2caf1-7afa-41f6-80fb-2ea2de34526c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C316",
-                    "pos": {
-                        "x": 132.5,
-                        "y": 42.5
-                    },
-                    "uuid": "3464da8a-a7f0-4e2e-b8be-d4c556c08b82"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C317",
-                    "pos": {
-                        "x": 136.5,
-                        "y": 42.5
-                    },
-                    "uuid": "e8818de3-c837-4735-9506-fff296117a9f"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'RF bypass at the connector, 50 V C0G (14.4 / 50 = 0.29)')",
-            "items": [
-                {
-                    "description": "Footprint C318",
-                    "pos": {
-                        "x": 140.5,
-                        "y": 42.5
-                    },
-                    "uuid": "9121e606-784f-4a6f-a5b7-695b346b5ff4"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D301",
-                    "pos": {
-                        "x": 138.0,
-                        "y": 65.0
-                    },
-                    "uuid": "124dc673-b607-4144-81c2-95e6dae9cded"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D302",
-                    "pos": {
-                        "x": 132.5,
-                        "y": 71.5
-                    },
-                    "uuid": "430f15b6-cf73-4da1-9e32-516407ec9f58"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D311",
-                    "pos": {
-                        "x": 116.5,
-                        "y": 38.0
-                    },
-                    "uuid": "6a1e44e6-ff31-4d96-aaba-1a935479200b"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D312",
-                    "pos": {
-                        "x": 120.5,
-                        "y": 38.0
-                    },
-                    "uuid": "2bc4a7ec-32b5-48d5-9616-b541784004af"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D313",
-                    "pos": {
-                        "x": 124.5,
-                        "y": 38.0
-                    },
-                    "uuid": "696f8654-1a91-4235-97ca-1ee842f7c3be"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D314",
-                    "pos": {
-                        "x": 128.5,
-                        "y": 38.0
-                    },
-                    "uuid": "e76d12b9-783a-4ff3-80ee-16e6b70da221"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D316",
-                    "pos": {
-                        "x": 132.5,
-                        "y": 38.0
-                    },
-                    "uuid": "5eed6e77-db20-4f46-89b7-fb066ba2e2be"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D317",
-                    "pos": {
-                        "x": 136.5,
-                        "y": 38.0
-                    },
-                    "uuid": "df673410-fb5a-4d10-a7d6-d7aabd97ae0b"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Missing symbol field 'MPN' in footprint",
-            "items": [
-                {
-                    "description": "Footprint D318",
-                    "pos": {
-                        "x": 140.5,
-                        "y": 38.0
-                    },
-                    "uuid": "a0236d87-6685-463f-95cf-6ca1a5c6692c"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'TX INH level jumper: 1-2 HIGH (contact to 5.1 V from the radio supply pin), 2-3 LOW (contact to radio GND), removed = TX INH not used (D-71, D-90)')",
-            "items": [
-                {
-                    "description": "Footprint JP301",
-                    "pos": {
-                        "x": 129.4,
-                        "y": 67.0
-                    },
-                    "uuid": "cb64cc37-d5e7-4133-a19b-54a34b97e351"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        },
-        {
-            "description": "Field 'Description' differs (PCB: '', Schematic: 'Mini-DIN pin 1: bridge 2-1 = KEY (R2, R3), 2-3 = BAND D input (R1, FT-710) (D-86)')",
-            "items": [
-                {
-                    "description": "Footprint JP302",
-                    "pos": {
-                        "x": 116.5,
-                        "y": 51.5
-                    },
-                    "uuid": "5ff68803-1890-4bd8-83dd-f95f25a036c2"
-                }
-            ],
-            "severity": "warning",
-            "type": "footprint_symbol_field_mismatch"
-        }
-    ],
+    "schematic_parity": [],
     "source": "shack-interface.kicad_pcb",
     "unconnected_items": [],
     "violations": [
-        {
-            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1944 mm)",
-            "items": [
-                {
-                    "description": "Pad A1 [GND] of J14 on F.Cu",
-                    "pos": {
-                        "x": 82.7,
-                        "y": 25.35
-                    },
-                    "uuid": "00628ec7-521f-4068-8c9f-885bc351eeed"
-                },
-                {
-                    "description": "NPTH pad of J14",
-                    "pos": {
-                        "x": 82.39,
-                        "y": 24.275
-                    },
-                    "uuid": "6ab5dc30-8c77-4a41-9843-36f4b6d21c7e"
-                }
-            ],
-            "severity": "error",
-            "type": "hole_clearance"
-        },
         {
             "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1944 mm)",
             "items": [
@@ -3097,7 +43,7 @@
                         "x": 82.7,
                         "y": 25.35
                     },
-                    "uuid": "d3908ce6-2259-4dc3-8964-1fc89da2498c"
+                    "uuid": "ad65d43b-5be0-4535-a0d0-a47d7b33809c"
                 },
                 {
                     "description": "NPTH pad of J14",
@@ -3105,7 +51,7 @@
                         "x": 82.39,
                         "y": 24.275
                     },
-                    "uuid": "6ab5dc30-8c77-4a41-9843-36f4b6d21c7e"
+                    "uuid": "3b72d533-fbea-44f6-8c7b-9403bd25fda5"
                 }
             ],
             "severity": "error",
@@ -3115,20 +61,20 @@
             "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1944 mm)",
             "items": [
                 {
-                    "description": "Pad B1 [GND] of J14 on F.Cu",
+                    "description": "Pad A1 [GND] of J14 on F.Cu",
                     "pos": {
-                        "x": 76.3,
+                        "x": 82.7,
                         "y": 25.35
                     },
-                    "uuid": "039f5211-5ec0-44e5-bb53-926b05ff3e12"
+                    "uuid": "e659d660-0bce-4025-9b4c-3ecbf305c5d7"
                 },
                 {
                     "description": "NPTH pad of J14",
                     "pos": {
-                        "x": 76.61,
+                        "x": 82.39,
                         "y": 24.275
                     },
-                    "uuid": "f1c87120-1664-4d1e-a1ac-85a33e21e895"
+                    "uuid": "3b72d533-fbea-44f6-8c7b-9403bd25fda5"
                 }
             ],
             "severity": "error",
@@ -3143,7 +89,7 @@
                         "x": 76.3,
                         "y": 25.35
                     },
-                    "uuid": "157cbfa5-dd0b-4923-bc3a-1ecc633d5061"
+                    "uuid": "c70f175c-c6d2-446e-9258-f05ec7449d84"
                 },
                 {
                     "description": "NPTH pad of J14",
@@ -3151,7 +97,30 @@
                         "x": 76.61,
                         "y": 24.275
                     },
-                    "uuid": "f1c87120-1664-4d1e-a1ac-85a33e21e895"
+                    "uuid": "8e71e377-e25e-47b1-8f24-1aca2f737028"
+                }
+            ],
+            "severity": "error",
+            "type": "hole_clearance"
+        },
+        {
+            "description": "Hole clearance violation (board setup constraints hole clearance 0.2500 mm; actual 0.1944 mm)",
+            "items": [
+                {
+                    "description": "Pad B1 [GND] of J14 on F.Cu",
+                    "pos": {
+                        "x": 76.3,
+                        "y": 25.35
+                    },
+                    "uuid": "21659fdf-6fd2-49b4-a646-998aa9983c6f"
+                },
+                {
+                    "description": "NPTH pad of J14",
+                    "pos": {
+                        "x": 76.61,
+                        "y": 24.275
+                    },
+                    "uuid": "8e71e377-e25e-47b1-8f24-1aca2f737028"
                 }
             ],
             "severity": "error",
@@ -3166,145 +135,7 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R221 on F.Cu",
-                    "pos": {
-                        "x": 92.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "f0dd9063-cc2f-4d56-b258-b80c63b74fc9"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R418 on F.Cu",
-                    "pos": {
-                        "x": 149.8,
-                        "y": 64.4125
-                    },
-                    "uuid": "e63efbf1-f5c0-4d9b-9c3e-f1e6260cd481"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R319 on F.Cu",
-                    "pos": {
-                        "x": 136.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "bd9376d2-93d6-4f84-b225-32c9a3d73b5f"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R318 on F.Cu",
-                    "pos": {
-                        "x": 117.8,
-                        "y": 64.4125
-                    },
-                    "uuid": "e8c8b77a-0c60-4b90-8007-c59ff205ba87"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R219 on F.Cu",
-                    "pos": {
-                        "x": 104.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "7f6fd8f0-5d03-4cd4-a6da-7bbfefd73e6c"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R420 on F.Cu",
-                    "pos": {
-                        "x": 160.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "27bdac7a-d347-4980-a8ed-cfdde7c59a7a"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
                 },
                 {
                     "description": "Pad 2 [GND] of R419 on F.Cu",
@@ -3312,7 +143,7 @@
                         "x": 168.5,
                         "y": 60.4125
                     },
-                    "uuid": "a9681272-52d0-4fcd-9565-14e385db6c8e"
+                    "uuid": "9b8d07d5-b17f-482d-8ba1-35851f5af638"
                 }
             ],
             "severity": "error",
@@ -3327,99 +158,7 @@
                         "x": 20.0,
                         "y": 20.0
                     },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R218 on F.Cu",
-                    "pos": {
-                        "x": 85.8,
-                        "y": 64.4125
-                    },
-                    "uuid": "8e2887db-08c2-49b4-96ef-b546e844c17c"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R220 on F.Cu",
-                    "pos": {
-                        "x": 96.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "9925f476-eac1-4716-9720-b3f464d74397"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R321 on F.Cu",
-                    "pos": {
-                        "x": 124.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "f626cd9f-a12f-4d86-9ce9-4b0108054421"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
-                },
-                {
-                    "description": "Pad 2 [GND] of R320 on F.Cu",
-                    "pos": {
-                        "x": 128.5,
-                        "y": 60.4125
-                    },
-                    "uuid": "78de7925-cc38-493d-afee-d234e757c352"
-                }
-            ],
-            "severity": "error",
-            "type": "starved_thermal"
-        },
-        {
-            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
-            "items": [
-                {
-                    "description": "Zone [GND] on F.Cu, priority 0",
-                    "pos": {
-                        "x": 20.0,
-                        "y": 20.0
-                    },
-                    "uuid": "a405263c-efaf-45c5-aa58-35c58cd40790"
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
                 },
                 {
                     "description": "Pad 2 [GND] of R421 on F.Cu",
@@ -3427,7 +166,237 @@
                         "x": 156.5,
                         "y": 60.4125
                     },
-                    "uuid": "4a243555-15f3-4588-8d1c-80e05532f434"
+                    "uuid": "dcc24fce-1e2e-4425-8926-2c546b3fc682"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R420 on F.Cu",
+                    "pos": {
+                        "x": 160.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "8f8d9014-ba7c-4355-993f-252397d0d650"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R319 on F.Cu",
+                    "pos": {
+                        "x": 136.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "ef9a4ef8-5dd5-44e7-a0de-a5b913121628"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R320 on F.Cu",
+                    "pos": {
+                        "x": 128.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "4945dacc-2861-4214-8e44-5a5e27aef0dd"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R321 on F.Cu",
+                    "pos": {
+                        "x": 124.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "cb8e6bc0-da91-4fba-9c81-dd657ba05b29"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R318 on F.Cu",
+                    "pos": {
+                        "x": 117.8,
+                        "y": 64.4125
+                    },
+                    "uuid": "030060d2-c39f-4026-9b11-ff78559cda83"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R220 on F.Cu",
+                    "pos": {
+                        "x": 96.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "2710e931-c0a4-4a6b-addf-8ad21b4a8180"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R219 on F.Cu",
+                    "pos": {
+                        "x": 104.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "77349b34-98a6-426c-a68a-7c62ef59f824"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R218 on F.Cu",
+                    "pos": {
+                        "x": 85.8,
+                        "y": 64.4125
+                    },
+                    "uuid": "a036e6d4-ee4b-4704-b6c9-833669ebb342"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R221 on F.Cu",
+                    "pos": {
+                        "x": 92.5,
+                        "y": 60.4125
+                    },
+                    "uuid": "e9a01e87-a28f-4ae3-80b7-f8551e883a9b"
+                }
+            ],
+            "severity": "error",
+            "type": "starved_thermal"
+        },
+        {
+            "description": "Thermal relief connection to zone incomplete (layer F.Cu; zone min spoke count 2; actual 1)",
+            "items": [
+                {
+                    "description": "Zone [GND] on F.Cu, priority 0",
+                    "pos": {
+                        "x": 20.0,
+                        "y": 20.0
+                    },
+                    "uuid": "f5a3ec6c-8ffd-4da7-8e90-3abb2e636275"
+                },
+                {
+                    "description": "Pad 2 [GND] of R418 on F.Cu",
+                    "pos": {
+                        "x": 149.8,
+                        "y": 64.4125
+                    },
+                    "uuid": "3f399da1-fcc9-4ad1-868e-92b39026c6a3"
                 }
             ],
             "severity": "error",
@@ -3442,22 +411,7 @@
                         "x": 31.5,
                         "y": 34.35
                     },
-                    "uuid": "02a452e7-8586-4fcd-9cea-9ecc4e8a9812"
-                }
-            ],
-            "severity": "warning",
-            "type": "lib_footprint_mismatch"
-        },
-        {
-            "description": "Footprint 'MiniDIN-8_SameSky_MD-80SM_Horizontal' does not match copy in library 'shack-interface'",
-            "items": [
-                {
-                    "description": "Footprint J12",
-                    "pos": {
-                        "x": 128.5,
-                        "y": 18.0
-                    },
-                    "uuid": "383d6635-c599-4f5c-8a46-1105a7b572c4"
+                    "uuid": "4de8144e-5473-4452-8553-95dd21fdcb53"
                 }
             ],
             "severity": "warning",
@@ -3472,7 +426,22 @@
                         "x": 96.5,
                         "y": 18.0
                     },
-                    "uuid": "9b7fd0b6-b4c2-43f2-866e-8488a0e5d8cb"
+                    "uuid": "9c4663b7-9379-44bf-a8c6-c104c71abf56"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_mismatch"
+        },
+        {
+            "description": "Footprint 'MiniDIN-8_SameSky_MD-80SM_Horizontal' does not match copy in library 'shack-interface'",
+            "items": [
+                {
+                    "description": "Footprint J12",
+                    "pos": {
+                        "x": 128.5,
+                        "y": 18.0
+                    },
+                    "uuid": "a9647a07-d816-406e-8a8c-d966454cd7b6"
                 }
             ],
             "severity": "warning",
@@ -3487,7 +456,7 @@
                         "x": 160.5,
                         "y": 18.0
                     },
-                    "uuid": "a4b77808-a520-4345-9599-741465abde87"
+                    "uuid": "e1c33792-f9fb-4c69-bc05-efa19d6d545f"
                 }
             ],
             "severity": "warning",
