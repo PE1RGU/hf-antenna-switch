@@ -423,8 +423,12 @@ async fn main(_spawner: Spawner) -> ! {
             ));
             next_tick = now + TICK;
             // A `#` log line for people (host-protocol.md section 3), between the
-            // lines of the logic.
-            if let Some(line) = diag.report(now) {
+            // lines of the logic. Only with `--features diag`: in normal use the
+            // 10 s report is noise in the operator's terminal (Prins, 2026-11-26).
+            // The measurement itself always runs.
+            if let Some(line) = diag.report(now)
+                && cfg!(feature = "diag")
+            {
                 hw.usb_write(b"# ");
                 hw.usb_write(line.as_bytes());
                 hw.usb_write(b"\n");
