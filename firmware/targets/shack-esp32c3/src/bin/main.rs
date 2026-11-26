@@ -367,9 +367,13 @@ async fn main(_spawner: Spawner) -> ! {
         .with_tx(p.GPIO6)
         .with_rx(rx_signal);
 
+    // Display SPI (D-219): mode 3, 10 MHz. CS is tied low, and the ST7789VW
+    // showed nothing in mode 0 at 40 MHz. A full frame takes about 0.12 s.
     let spi = Spi::new(
         p.SPI2,
-        SpiConfig::default().with_frequency(Rate::from_mhz(40)),
+        SpiConfig::default()
+            .with_frequency(Rate::from_mhz(10))
+            .with_mode(esp_hal::spi::Mode::_3),
     )
     .unwrap()
     .with_sck(p.GPIO2)
