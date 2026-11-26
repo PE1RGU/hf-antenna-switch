@@ -709,11 +709,11 @@ def mcu_sheet():
     # display control from the expander (D-180): short stub and a net label at each pin
     for nm in ("DISP_BL", "DISP_DC", "DISP_RST"):
         x, y = io[nm]; S.wire((x, y), (R2(x - 2.54), y)); S.label("L", nm, R2(x - 2.54), y, 180)
-    # display connector J15: the Waveshare 1.9" LCD module cable (P2 order BL, RST, DC, CS, CLK, DIN, GND, VCC), CS tied low
+    # display connector J15: the Waveshare 1.9" LCD module cable (P2 order BL, RST, DC, CS, CLK, DIN, GND, VCC), CS tied low; 2inch module (D-187)
     S.text("Display J15 (D-180)", 25.4, 205.74)
     JD = S.part("Connector_Generic:Conn_01x08", ("J", 15), "DISPLAY", "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical",
-                55.88, 223.52, desc="Waveshare 1.9inch LCD Module (ST7789V2, 170 x 320) cable: 1 BL, 2 RST, 3 DC, 4 CS (GND), 5 CLK, 6 DIN, 7 GND, "
-                "8 VCC 3.3 V (module: RT9193-33, TXS0108, backlight about 40 mA max). SPI mode 0 on IO2/IO9, DC/RST/BL on the PCA9539 (D-180)")
+                55.88, 223.52, desc="Waveshare 2inch LCD Module (ST7789VW, 240 x 320, D-187) cable: 1 BL, 2 RST, 3 DC, 4 CS (GND), 5 CLK, 6 DIN, 7 GND, "
+                "8 VCC 3.3 V. SPI mode 3 at 10 MHz on IO2/IO9 (D-219), DC/RST/BL on the PCA9539 (D-180)")
     jp = {n: JD[str(n)] for n in range(1, 9)}
     assert all(jp[n][0] == jp[1][0] for n in jp) and round(jp[2][1] - jp[1][1], 3) == 2.54, jp
     for n, nm in ((1, "DISP_BL"), (2, "DISP_RST"), (3, "DISP_DC"), (5, "DISP_SCK"), (6, "DISP_MOSI")):

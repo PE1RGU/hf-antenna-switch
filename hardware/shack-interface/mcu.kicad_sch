@@ -6715,7 +6715,7 @@
 				(justify left)
 			)
 		)
-		(property "Description" "Waveshare 1.9inch LCD Module (ST7789V2, 170 x 320) cable: 1 BL, 2 RST, 3 DC, 4 CS (GND), 5 CLK, 6 DIN, 7 GND, 8 VCC 3.3 V (module: RT9193-33, TXS0108, backlight about 40 mA max). SPI mode 0 on IO2/IO9, DC/RST/BL on the PCA9539 (D-180)"
+		(property "Description" "Waveshare 2inch LCD Module (ST7789VW, 240 x 320, D-187) cable: 1 BL, 2 RST, 3 DC, 4 CS (GND), 5 CLK, 6 DIN, 7 GND, 8 VCC 3.3 V. SPI mode 3 at 10 MHz on IO2/IO9 (D-219), DC/RST/BL on the PCA9539 (D-180)"
 			(at 55.88 223.52 0)
 			(hide yes)
 			(show_name no)
