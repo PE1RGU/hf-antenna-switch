@@ -99,7 +99,7 @@ use host_proto::SelfTestState;
 use link_proto::{Ms, Radio};
 use shack_core::board::gpio;
 use shack_core::hw::ShackHw;
-use shack_core::shack::{Event, Shack, TICK};
+use shack_core::shack::{BootCause, Event, Shack, TICK};
 use sim_core::SimTime;
 use sim_core::hal::{Board, Shared, SimI2c, shared};
 use sim_models::shack::ShackBoard;
@@ -277,6 +277,16 @@ impl ShackSim {
             host_partial: String::new(),
             powered: true,
         }
+    }
+
+    /// Reset of the MCU alone, the board stays powered (FW-1): espflash, USB, a
+    /// crash. The firmware starts from boot with this cause; the latches, the
+    /// expander and the stored settings keep their state.
+    pub fn mcu_reset(&mut self, boot: BootCause) {
+        self.shack = Shack::with_boot(boot);
+        self.mcu_running = true;
+        self.next_tick = self.now() + 1;
+        self.host_partial.clear();
     }
 
     /// Present virtual time in ms (the board time).

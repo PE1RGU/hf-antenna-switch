@@ -32,6 +32,7 @@ use esp_hal::Blocking;
 use esp_hal::clock::CpuClock;
 use esp_hal::gpio::{AnyPin, Input, InputConfig, Level, Output, OutputConfig, Pull};
 use esp_hal::i2c::master::{Config as I2cConfig, I2c};
+use esp_hal::rtc_cntl::SocResetReason;
 use esp_hal::spi::master::{Config as SpiConfig, Spi};
 use esp_hal::time::Rate;
 use esp_hal::timer::timg::TimerGroup;
@@ -44,7 +45,7 @@ use link_proto::Radio;
 use shack_core::board::{DevKit, gpio};
 use shack_core::config::CONFIG_MAX;
 use shack_core::hw::ShackHw;
-use shack_core::shack::{Shack, TICK};
+use shack_core::shack::{BootCause, Shack, TICK};
 use static_cell::ConstStaticCell;
 
 // This creates a default app-descriptor required by the esp-idf bootloader.
@@ -396,7 +397,24 @@ async fn main(_spawner: Spawner) -> ! {
 
     stack::paint();
     let mut diag = Diag::default();
-    let mut shack = Shack::new();
+    // FW-1: the SAFE latch check runs only when the latch can be set (power-up).
+    // A panic halts (esp-backtrace) and the internal watchdogs are off, so an
+    // MCU-only reset comes from outside; any other reason keeps the full test.
+    let reason = esp_hal::system::reset_reason();
+    let boot = match reason {
+        Some(SocResetReason::ChipPowerOn) => BootCause::PowerOn,
+        Some(SocResetReason::CoreUsbUart | SocResetReason::CoreUsbJtag) => BootCause::External,
+        _ => BootCause::Other,
+    };
+    {
+        let mut line: heapless::String<64> = heapless::String::new();
+        let _ = core::fmt::Write::write_fmt(
+            &mut line,
+            format_args!("# reset {reason:?}: {boot:?}\r\n"),
+        );
+        hw.usb_write(line.as_bytes());
+    }
+    let mut shack = Shack::with_boot(boot);
     // 1 ms loop: the USB pump every pass, the logic every TICK (10 ms).
     let mut ticker = Ticker::every(Duration::from_millis(1));
     let mut next_tick = 0;

@@ -45,6 +45,7 @@ fn demo() -> UiState {
         warnings,
         stop: None,
         fault: false,
+        selftest_fail: None,
         antenna_names: ["G5RV", "Loop", "spare", "spare", "unit2"].map(|n| Name::new(n).unwrap()),
         radio_names: ["FT-710", "WSPR", "spare"].map(|n| Name::new(n).unwrap()),
     }

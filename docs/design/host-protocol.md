@@ -113,19 +113,19 @@ Sent on every change (when events are on). One line each.
 | `!route <radio> <tx col> <rx col>` | Route as read back from the box |
 | `!host timeout` | Host keep-alive missed: TX ended (section 8) |
 | `!selftest pass` / `!selftest fail <item>` | The power-up self-test ended (section 6a). After a fail, TX stays blocked until a power cycle. Items: `expander`, `latch`, `watchdog` |
-| `!selftest warn <item>` | Unexpected at start-up, TX not blocked: `txsense <radio>` (TX sense active), `i2c <address>` (SHTC3 0x70 or IMU 0x68 did not answer) |
+| `!selftest warn <item>` | Unexpected at start-up, TX not blocked: `txsense <radio>` (TX sense active), `i2c <address>` (SHTC3 0x70 or IMU 0x68 did not answer), `latch` (SAFE latch clear after an external MCU reset, not checked: section 6a) |
 
 ## 6a. Power-up self-test
 
 Decided by Prins, 2026-10-31. The shack tests its own safety hardware after power-up, before TX can be enabled. No radio is keyed and no permit goes out during the test.
 
 1. Expander: the PCA9539 must answer and read back (F1 set-up) within 1 s of power-up. Fail: `expander`.
-2. SAFE latch: it must read set (POR_N holds it set at power-up, D-84). Fail: `latch`.
+2. SAFE latch: it must read set (POR_N holds it set at power-up, D-84). Fail: `latch`. Exception (FW-1, Prins 2026-11-26): after an external reset of the MCU alone (chip reset reason USB UART or USB JTAG: espflash, USB) the latch can be clear from normal use, so a clear latch gives the warning `latch` and the test goes on. Every other reset reason (power-on, DevKit EN pin, internal watchdog, brown-out, unknown) keeps the fail. At boot a `#` line names the reset reason, for example `# reset Some(CoreUsbJtag): External`.
 3. Start-up inputs, warnings only: TX sense of each radio inactive; the DevKit parts SHTC3 (0x70) and IMU (0x68) answer.
-4. Watchdog: the WDI kicks stop. The supervisor must trip, which resets the expander, between 0.5 s and 3 s after the last kick (TPS3823 time-out 0.9 to 2.5 s, C-19). Fail: `watchdog`. With R64 open (watchdog off, D-123) this always fails.
+4. Watchdog: the WDI kicks run for 50 ms (so the supervisor timer restarts from a known kick; after an external reset the supervisor still runs from before it), then stop. The supervisor must trip, which resets the expander, between 0.5 s and 3 s after the last kick (TPS3823 time-out 0.9 to 2.5 s, C-19). Fail: `watchdog`. With R64 open (watchdog off, D-123) this always fails.
 5. The kicks resume. When the expander answers again (RESET_N high), the shack gives its one LATCH_CLR edge (D-59 rule 2) and the test has passed.
 
-The test takes 1 to 3 s. A fail means no LATCH_CLR edge: the fault latch keeps TX_EN low in hardware until a power cycle, the shack gives no permit, and `clearfault` does not apply. The display shows the colour bars test pattern (eight bars, 1 s) the first time it starts; it has no read-back, so this check is for the eye. The display shows a fault after a failed test.
+The test takes 1 to 3 s. A fail means no LATCH_CLR edge: the fault latch keeps TX_EN low in hardware until a power cycle, the shack gives no permit, and `clearfault` does not apply. After a reset of the MCU alone the fault latch can still be clear from the last power-up, so after an `expander` or `latch` fail the kicks stop once (FW-3): the supervisor trips, RESET_N sets the fault latch and resets the expander (`!expander lost`, `!expander ready`), then the kicks resume, at the latest 3 s after the fail. A `# self-test fail: supervisor trip sets the fault latch` line says so. A `watchdog` fail keeps the kicks on. The Fault screen names the failed item and says to switch the power off and on (FW-2). The display shows the colour bars test pattern (eight bars, 1 s) the first time it starts; it has no read-back, so this check is for the eye. The display shows a fault after a failed test.
 
 The box runs its own self-test (link-protocol.md section 4.2, fault codes 7 to 10); the shack shows its result as `boxfault`.
 

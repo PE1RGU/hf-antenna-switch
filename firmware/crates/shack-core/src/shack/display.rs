@@ -304,6 +304,10 @@ impl Shack {
             warnings,
             stop,
             fault: self.fault_known || matches!(self.selftest, host_proto::SelfTestState::Fail(_)),
+            selftest_fail: match self.selftest {
+                host_proto::SelfTestState::Fail(item) => Some(item),
+                _ => None,
+            },
             antenna_names: self.config.antenna_names,
             radio_names: self.config.radio_names,
         }
