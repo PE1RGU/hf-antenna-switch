@@ -8,6 +8,11 @@ version      = "0.1.0"
 name = "shack-esp32c3"
 path = "./src/bin/main.rs"
 
+[features]
+# The 10 s `# diag` line on USB (loop time, stack use). Off by default:
+# cargo run --release --features diag
+diag = []
+
 [dependencies]
 esp-hal = { version = "~1.2.2", features = ["esp32c3", "log-04", "unstable"] }
 

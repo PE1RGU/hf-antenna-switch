@@ -254,10 +254,8 @@ impl Shack {
 
         let mut warnings = heapless::Vec::new();
         // The most severe first: the toast shows the first warning.
-        for i in 0..3 {
-            if self.nopermit[i] {
-                let _ = warnings.push(Warning::TxWithoutPermit(i));
-            }
+        for (i, _) in self.nopermit.iter().enumerate().filter(|(_, on)| **on) {
+            let _ = warnings.push(Warning::TxWithoutPermit(i));
         }
         if !self.link.is_up() {
             let _ = warnings.push(Warning::LinkDown);
@@ -272,10 +270,8 @@ impl Shack {
                 let _ = warnings.push(Warning::BoxFault(s.fault.0));
             }
         }
-        for i in 0..3 {
-            if self.sense_fault[i] {
-                let _ = warnings.push(Warning::TxSense(i));
-            }
+        for (i, _) in self.sense_fault.iter().enumerate().filter(|(_, on)| **on) {
+            let _ = warnings.push(Warning::TxSense(i));
         }
 
         // Causes in the shack first (KILL, software stop), then the box (link-lost
@@ -308,6 +304,10 @@ impl Shack {
             warnings,
             stop,
             fault: self.fault_known || matches!(self.selftest, host_proto::SelfTestState::Fail(_)),
+            selftest_fail: match self.selftest {
+                host_proto::SelfTestState::Fail(item) => Some(item),
+                _ => None,
+            },
             antenna_names: self.config.antenna_names,
             radio_names: self.config.radio_names,
         }

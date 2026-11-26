@@ -171,7 +171,10 @@ pub struct UiState {
     /// Some: the SAFE latch is set.
     pub stop: Option<StopCause>,
     /// Supervisor fault known after start-up (C-2): TX blocked until `clearfault`.
+    /// Also set when the self-test failed.
     pub fault: bool,
+    /// The self-test item that failed (FW-2). TX stays blocked until a power cycle.
+    pub selftest_fail: Option<host_proto::SelfTestItem>,
     /// A1 to A4, EXP.
     pub antenna_names: [Name; 5],
     /// R1 to R3 names, from the stored settings.

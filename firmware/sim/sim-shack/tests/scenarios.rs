@@ -79,7 +79,13 @@ fn start_up_order() {
     assert_eq!(s.shack.self_test(), SelfTestState::Pass);
     let reset_up = rising(&s, "RESET_N");
     assert_eq!(reset_up.len(), 2, "power-up and the watchdog trip");
-    assert!(clr[0] > reset_up[1], "LATCH_CLR after the trip");
+    // The same ms is allowed: the sim steps in 1 ms, and the board moves before
+    // the tick. On the board the edge comes after the I2C set-up of the expander,
+    // so RESET_N has been high for hundreds of us by then.
+    assert!(
+        clr[0] >= reset_up[1],
+        "LATCH_CLR after the trip: {clr:?} {reset_up:?}"
+    );
     let fault = b.trace.signal("FAULT");
     assert_eq!(fault.last().map(|x| x.1), Some(false));
     assert!(b.signals().latched, "LATCHED waits for the operator");

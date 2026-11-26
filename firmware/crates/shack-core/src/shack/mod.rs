@@ -56,6 +56,10 @@ pub const TX_NOPERMIT_DEBOUNCE: Ms = 50;
 /// Self-test: the expander must answer this long after the first tick (the
 /// supervisor holds it in reset for td, 300 ms at most).
 pub const SELFTEST_EXPANDER_WAIT: Ms = 1000;
+/// Self-test: kick this long before the watchdog step, so the supervisor timer
+/// restarts from a known kick. After an external reset the expander can answer
+/// on the first tick while the supervisor still runs from before the reset.
+pub const SELFTEST_PRIME: Ms = 50;
 /// Self-test: the supervisor trip must not come earlier than this after the last
 /// WDI kick (TPS3823 time-out 0.9 s at least, C-19).
 pub const SELFTEST_WDT_MIN: Ms = 500;
@@ -143,10 +147,15 @@ pub enum Event {
 enum SelfTestStep {
     /// Waiting for the expander after power-up.
     WaitExpander,
+    /// Kicks on until `until`, then the watchdog step (SELFTEST_PRIME).
+    Prime { until: Ms },
     /// No WDI kicks since `since`: the supervisor must trip.
     Watchdog { since: Ms },
     /// Tripped at `since`; kicks again; waiting for the expander to come back.
     Recover { since: Ms },
+    /// Failed: kicks off until the supervisor trips and sets the fault latch
+    /// (FW-3), at most until `since` + SELFTEST_WDT_MAX.
+    Trip { since: Ms },
     /// Passed or failed.
     Done,
 }
@@ -195,6 +204,24 @@ impl Inputs {
     }
 }
 
+/// Why the MCU started (FW-1). The target reads it from the chip.
+///
+/// The SAFE latch is set only by a power-up (POR_N, D-84). After a reset of the
+/// MCU alone the latch can be clear, so the latch check of the self-test means
+/// nothing then.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum BootCause {
+    /// Power-up or the DevKit EN pin: the full self-test.
+    #[default]
+    PowerOn,
+    /// A reset from outside with the board powered: espflash, USB. The latch
+    /// check is skipped and reported as a warning; the rest of the self-test runs.
+    External,
+    /// Any other reset (internal watchdog, panic, brown-out, unknown): the full
+    /// self-test, so a clear latch fails it and needs a power cycle.
+    Other,
+}
+
 /// The shack interface state machine.
 ///
 /// Make one with [`Shack::new`] and call [`Shack::tick`] every 10 ms. Requests
@@ -206,6 +233,8 @@ pub struct Shack {
     latch_cleared: bool,
     /// First tick, for the self-test time-outs.
     boot_at: Option<Ms>,
+    /// Why the MCU started (FW-1).
+    boot: BootCause,
     selftest: SelfTestState,
     selftest_step: SelfTestStep,
     /// WDI kicks on (off only in the watchdog step of the self-test).
@@ -262,6 +291,7 @@ impl Shack {
             expander_ready: false,
             latch_cleared: false,
             boot_at: None,
+            boot: BootCause::PowerOn,
             selftest: SelfTestState::Running,
             selftest_step: SelfTestStep::WaitExpander,
             kick: true,
@@ -293,6 +323,14 @@ impl Shack {
             config_dirty: None,
             restore: [false; 4],
             display: display::Display::new(),
+        }
+    }
+
+    /// As [`Shack::new`], after a start for this reason (FW-1).
+    pub fn with_boot(boot: BootCause) -> Self {
+        Shack {
+            boot,
+            ..Shack::new()
         }
     }
 
@@ -414,6 +452,7 @@ impl Shack {
         self.safe_lost = hw.safe_lost();
         self.load_config(hw);
         let boot_at = *self.boot_at.get_or_insert(now);
+        self.self_test_trip_end(now, false);
 
         if !self.expander_ready {
             // F1: `init` writes the output word before the configuration.
@@ -438,18 +477,33 @@ impl Shack {
             Some(i) => {
                 self.ever_unlatched |= !i.latched;
                 self.inputs = Some(i);
+                if let SelfTestStep::Prime { until } = self.selftest_step
+                    && now >= until
+                {
+                    // The last kick was one tick ago: the time-out counts from it.
+                    self.kick = false;
+                    self.selftest_step = SelfTestStep::Watchdog { since: now };
+                }
                 if let SelfTestStep::Watchdog { since } = self.selftest_step
                     && now - since > SELFTEST_WDT_MAX
                 {
-                    self.self_test_fail(SelfTestItem::Watchdog);
+                    self.self_test_fail(now, SelfTestItem::Watchdog);
                 }
             }
             None => {
+                // FW-3: the supervisor tripped, so the fault latch is set.
+                self.self_test_trip_end(now, true);
+                if let SelfTestStep::Prime { .. } = self.selftest_step {
+                    // The supervisor tripped from its time before our kicks (an
+                    // external reset): wait for the expander again, from now.
+                    self.selftest_step = SelfTestStep::WaitExpander;
+                    self.boot_at = Some(now);
+                }
                 if let SelfTestStep::Watchdog { since } = self.selftest_step {
                     // The supervisor tripped: RESET_N reset the expander.
                     self.kick = true;
                     if now - since < SELFTEST_WDT_MIN {
-                        self.self_test_fail(SelfTestItem::Watchdog);
+                        self.self_test_fail(now, SelfTestItem::Watchdog);
                     } else {
                         self.selftest_step = SelfTestStep::Recover { since: now };
                     }
@@ -523,7 +577,7 @@ impl Shack {
             _ => false,
         };
         if late {
-            self.self_test_fail(SelfTestItem::Expander);
+            self.self_test_fail(now, SelfTestItem::Expander);
         }
     }
 
@@ -534,9 +588,14 @@ impl Shack {
                 let Some(i) = self.read_expander(hw) else {
                     return;
                 };
-                // POR_N holds the SAFE latch set at power-up (D-84).
+                // POR_N holds the SAFE latch set at power-up (D-84). After an
+                // external reset of the MCU alone the latch can be clear: no test
+                // then, but a warning, so the log shows it was not checked (FW-1).
                 if !i.latched {
-                    return self.self_test_fail(SelfTestItem::Latch);
+                    if self.boot != BootCause::External {
+                        return self.self_test_fail(now, SelfTestItem::Latch);
+                    }
+                    self.event(Event::SelfTestWarn(SelfTestItem::Latch));
                 }
                 for r in Radio::ALL {
                     if i.tx_sense[r.index()] {
@@ -548,8 +607,9 @@ impl Shack {
                         self.event(Event::SelfTestWarn(SelfTestItem::I2c(addr)));
                     }
                 }
-                self.kick = false;
-                self.selftest_step = SelfTestStep::Watchdog { since: now };
+                self.selftest_step = SelfTestStep::Prime {
+                    until: now + SELFTEST_PRIME,
+                };
             }
             SelfTestStep::Recover { .. } => {
                 // The expander answers again, so RESET_N is high: the latch takes
@@ -568,11 +628,34 @@ impl Shack {
 
     /// The self-test failed: no LATCH_CLR edge, so the fault latch keeps TX_EN low
     /// in hardware until a power cycle.
-    fn self_test_fail(&mut self, item: SelfTestItem) {
-        self.kick = true;
+    ///
+    /// FW-3: after a reset of the MCU alone the fault latch can still be clear from
+    /// the last power-up. So the kicks stop once: the supervisor trips and RESET_N
+    /// sets the fault latch, which then holds TX_EN low in hardware. A watchdog
+    /// fail cannot use the supervisor, so it keeps the kicks on.
+    fn self_test_fail(&mut self, now: Ms, item: SelfTestItem) {
         self.selftest = SelfTestState::Fail(item);
-        self.selftest_step = SelfTestStep::Done;
+        if item == SelfTestItem::Watchdog {
+            self.kick = true;
+            self.selftest_step = SelfTestStep::Done;
+        } else {
+            self.kick = false;
+            self.selftest_step = SelfTestStep::Trip { since: now };
+            self.host
+                .log("self-test fail: supervisor trip sets the fault latch");
+        }
         self.event(Event::SelfTest(self.selftest));
+    }
+
+    /// End of the FW-3 trip: kicks on again. The fault latch stays set: no
+    /// LATCH_CLR edge after a fail.
+    fn self_test_trip_end(&mut self, now: Ms, tripped: bool) {
+        if let SelfTestStep::Trip { since } = self.selftest_step
+            && (tripped || now - since > SELFTEST_WDT_MAX)
+        {
+            self.kick = true;
+            self.selftest_step = SelfTestStep::Done;
+        }
     }
 
     fn load_config<H: ShackHw>(&mut self, hw: &mut H) {

@@ -7,25 +7,39 @@
 use crate::{ANTENNA_LABELS, StopCause, UiState, Warning};
 use core::fmt::Write;
 use heapless::String;
+use host_proto::SelfTestItem;
 
 /// Radio labels, by radio index (0 = R1). The names come with the state.
 pub const RADIO_LABELS: [&str; 3] = ["R1", "R2", "R3"];
 
 /// Title and subtitle of the Safe stop (or Fault) screen.
 ///
-/// "Safe stop" while the SAFE latch is set; "Fault" when only a supervisor fault
-/// is known (C-2).
+/// A failed self-test comes first: RESET does not clear it, only a power cycle
+/// (FW-2). Then "Safe stop" while the SAFE latch is set; "Fault" when only a
+/// supervisor fault is known (C-2).
 pub fn stop_title(s: &UiState) -> (&'static str, &'static str) {
-    if s.stop.is_some() {
+    if s.selftest_fail.is_some() {
+        ("Fault", "Self-test failed · TX blocked")
+    } else if s.stop.is_some() {
         ("Safe stop", "All radios inhibited · relays released")
     } else {
         ("Fault", "Supervisor reset · TX blocked")
     }
 }
 
-/// The cause line of the Safe stop screen, from [`UiState::stop`]. Without a
-/// stop cause the screen is the Fault screen: a watchdog or brown-out reset.
+/// The cause line of the Safe stop screen, from [`UiState::stop`]. A failed
+/// self-test names its item (FW-2). Without either, the screen is the Fault
+/// screen: a watchdog or brown-out reset.
 pub fn cause(s: &UiState) -> &'static str {
+    if let Some(item) = s.selftest_fail {
+        return match item {
+            SelfTestItem::Latch => "Self-test fail: SAFE latch",
+            SelfTestItem::Expander => "Self-test fail: expander",
+            SelfTestItem::Watchdog => "Self-test fail: watchdog",
+            // Warnings only; never a fail.
+            SelfTestItem::TxSense(_) | SelfTestItem::I2c(_) => "Self-test fail",
+        };
+    }
     match s.stop {
         Some(StopCause::PowerUp) => "Power-up",
         Some(StopCause::Kill) => "KILL switch pressed",
@@ -39,6 +53,9 @@ pub fn cause(s: &UiState) -> &'static str {
 
 /// What the operator does, in order.
 pub fn steps(s: &UiState) -> &'static [&'static str] {
+    if s.selftest_fail.is_some() {
+        return &["Check the log", "Switch the power off and on"];
+    }
     match s.stop {
         Some(StopCause::Kill) => &["Release the KILL switch", "Press RESET"],
         Some(StopCause::SoftwareStop) => &["Host: stop off", "Press RESET"],

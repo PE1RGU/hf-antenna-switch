@@ -3,8 +3,21 @@
 
 use host_proto::{SelfTestItem, SelfTestState};
 use link_proto::{Col, Radio, Route};
+use shack_core::shack::BootCause;
+use shack_ui::wording;
 use sim_models::tps3823::Corner;
 use sim_shack::ShackSim;
+
+fn rising(s: &ShackSim, name: &str) -> Vec<u64> {
+    s.board
+        .borrow()
+        .trace
+        .signal(name)
+        .into_iter()
+        .filter(|(_, v)| *v)
+        .map(|(t, _)| t.as_ms())
+        .collect()
+}
 
 /// Run until the self-test ends; its result.
 fn result(s: &mut ShackSim) -> SelfTestState {
@@ -136,4 +149,85 @@ fn an_early_expander_loss_is_no_watchdog_trip() {
         s.shack.self_test(),
         SelfTestState::Fail(SelfTestItem::Watchdog)
     );
+}
+
+/// Pass, then RESET: the SAFE latch is clear, as in normal use.
+fn running_with_latch_clear() -> ShackSim {
+    let mut s = ShackSim::new();
+    assert_eq!(result(&mut s), SelfTestState::Pass);
+    s.run_until(1000, |s| s.shack.link_up()).expect("link up");
+    s.press_reset();
+    s.run(100);
+    assert!(!s.shack.ui_state().latched, "latch clear");
+    s
+}
+
+#[test]
+fn external_mcu_reset_skips_the_latch_check() {
+    // FW-1: espflash or a USB reset with the board powered. The latch stays
+    // clear, so its check means nothing: a warning, and the rest of the test runs.
+    let mut s = running_with_latch_clear();
+    let from = s.host_lines.len();
+    s.mcu_reset(BootCause::External);
+    assert_eq!(result(&mut s), SelfTestState::Pass);
+    assert!(s.host_seen(from, "!selftest warn latch").is_some());
+    s.run_until(1000, |s| s.shack.link_up()).expect("link up");
+    s.press_reset();
+    s.run(100);
+    assert!(
+        s.board.borrow().signals().tx_en,
+        "TX_EN after the watchdog step"
+    );
+}
+
+#[test]
+fn other_mcu_reset_keeps_the_latch_check() {
+    // FW-1: an internal watchdog, panic or unknown reset keeps the full test, and
+    // so does the DevKit EN pin (the chip reports a power-on reset). FW-2: the
+    // Fault screen names the item.
+    for boot in [BootCause::Other, BootCause::PowerOn] {
+        let mut s = running_with_latch_clear();
+        let t_reset = s.now();
+        s.mcu_reset(boot);
+        assert_eq!(
+            result(&mut s),
+            SelfTestState::Fail(SelfTestItem::Latch),
+            "{boot:?}"
+        );
+        let ui = s.shack.ui_state();
+        assert_eq!(ui.selftest_fail, Some(SelfTestItem::Latch));
+        assert_eq!(wording::cause(&ui), "Self-test fail: SAFE latch");
+        assert_eq!(wording::stop_title(&ui).1, "Self-test failed · TX blocked");
+        assert_eq!(
+            wording::steps(&ui),
+            ["Check the log", "Switch the power off and on"]
+        );
+        // FW-3: the fail stops the kicks once, the supervisor trips and sets the
+        // fault latch, so TX_EN stays low in hardware too, and RESET does not help.
+        s.run(3500);
+        assert!(
+            rising(&s, "FAULT").iter().any(|&t| t > t_reset),
+            "{boot:?}: fault latch set again"
+        );
+        tx_stays_blocked(&mut s);
+        let wdi = s.board.borrow().trace.signal("WDI");
+        assert!(
+            wdi.last().is_some_and(|e| e.0.as_ms() + 50 > s.now()),
+            "{boot:?}: kicks on again"
+        );
+    }
+}
+
+#[test]
+fn external_reset_after_a_long_stop_passes() {
+    // Bench 2026-11-26: espflash stops the MCU for seconds, so the supervisor
+    // trips and restarts on its own. When the firmware starts, its watchdog step
+    // must not begin before its own kicks have restarted the supervisor timer.
+    for off in (0..3000).step_by(70) {
+        let mut s = running_with_latch_clear();
+        s.mcu_running = false;
+        s.run(off);
+        s.mcu_reset(BootCause::External);
+        assert_eq!(result(&mut s), SelfTestState::Pass, "MCU off for {off} ms");
+    }
 }
